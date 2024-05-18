@@ -45,11 +45,18 @@ export default class Login extends Component {
                 </div>
 
               </div>
-              <div>
-                <a href='#'>Register an account</a>
-                <a href='#'>Forget PassWord?</a>
+              <div className='other'>
+                <div>
+                  <a href='#'>Register an account</a>
+                </div>
+                <div className='other'>
+                  <a href='#'>Forget Password?</a>
+                </div>
               </div>
+
               <input type='submit' value='Log In' />
+
+
             </form>
           </div>
 
