@@ -1,14 +1,25 @@
 CREATE DATABASE MilkShop
 USE MilkShop
 DROP DATABASE MilkShop
+
+CREATE TABLE Roles(
+	role_id VARCHAR(10) PRIMARY KEY,
+	role_name VARCHAR(50),
+)
+
 CREATE TABLE Users (
     user_id INT IDENTITY(1,1) PRIMARY KEY,
     username VARCHAR(50) NOT NULL,
     password VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
-    role VARCHAR(10) CHECK (role IN ('guest', 'member', 'staff', 'admin')) NOT NULL,
-    points INT DEFAULT 0
+    role_id VARCHAR(10) NOT NULL REFERENCES Roles(role_id),
 );
+
+CREATE TABLE Customer (
+	customer_id INT IDENTITY(1,1) PRIMARY KEY REFERENCES Users(user_id),
+	loyalty_points INT DEFAULT 0
+)
+
 
 CREATE TABLE Category (
 	category_id INT IDENTITY(1,1) PRIMARY KEY,
@@ -39,7 +50,7 @@ CREATE TABLE Orders (
     order_id INT IDENTITY(1,1) PRIMARY KEY,
     user_id INT,
     order_date DATETIME,
-    status VARCHAR(10) CHECK (status IN ('pending', 'confirmed', 'shipped', 'delivered', 'cancelled')),
+    status VARCHAR(10),
     total_amount DECIMAL(10, 2),
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
@@ -82,9 +93,30 @@ CREATE TABLE Payments (
     payment_method_id INT,
     transaction_date DATETIME NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
-    transaction_status VARCHAR(20) CHECK (transaction_status IN ('pending', 'completed', 'failed')) NOT NULL,
+    transaction_status VARCHAR(20) NOT NULL,
     payment_details TEXT,
     FOREIGN KEY (order_id) REFERENCES Orders(order_id),
     FOREIGN KEY (payment_method_id) REFERENCES Payment_Methods(payment_method_id)
 );
+
+CREATE TABLE Preorders (
+    preorder_id INT IDENTITY(1,1) PRIMARY KEY,
+    user_id INT,
+    product_id INT,
+    request_date DATETIME,
+	total_amount INT,
+    status VARCHAR(10),
+    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    FOREIGN KEY (product_id) REFERENCES Products(product_id)
+);
+
+CREATE TABLE Preorder_Items (
+	preorder_item_id INT IDENTITY(1,1) PRIMARY KEY,
+    preorder_id INT,
+    product_id INT,
+    quantity INT,
+    price DECIMAL(10, 2),
+    FOREIGN KEY (preorder_id) REFERENCES Preorders(preorder_id),
+    FOREIGN KEY (product_id) REFERENCES Products(product_id)
+)
 
