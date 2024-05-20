@@ -1,75 +1,73 @@
-import React, { Component } from "react";
-import "./login.scss";
+import React, { useState } from 'react'
+import './login.scss'
 import { FaUser } from "react-icons/fa";
 import { FaLock } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
+import { IoEyeSharp } from "react-icons/io5";
 
-export default class Login extends Component {
-  state = {
-    UserID: "",
-    Password: "",
+function Login() {
+
+  const [userID, setUserID] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleOnchangeUserID = (event) => {
+    setUserID(event.target.value);
   };
 
-  handleOnchangeUserID = (event) => {
-    this.setState({
-      UserID: event.target.value,
-    });
+  const handleOnchangePassWord = (event) => {
+    setPassword(event.target.value);
   };
 
-  handleOnchangePassWord = (event) => {
-    this.setState({
-      Password: event.target.value,
-    });
-  };
-
-  render() {
-    return (
-      <>
-        <div className="login_container">
-          <div className="login_column">
-            <h2>Log In</h2>
-
-            <form>
-              <div className="login_info">
-                <div className="login_detail">
-                  <FaUser />
-                  <input
-                    type="text"
-                    value={this.state.UserID}
-                    placeholder="Email or Phone Number"
-                    onChange={(event) => {
-                      this.handleOnchangeUserID(event);
-                    }}
-                    required
-                  />
-                </div>
-
-                <div className="login_detail">
-                  <FaLock />
-                  <input
-                    type="password"
-                    value={this.state.Password}
-                    placeholder="PassWord"
-                    onChange={(event) => {
-                      this.handleOnchangePassWord(event);
-                    }}
-                    required
-                  />
-                </div>
-              </div>
-              <div className="other">
-                <div>
-                  <a href="/register">Register an account</a>
-                </div>
-                <div className="other">
-                  <a href="#">Forget Password?</a>
-                </div>
-              </div>
-
-              <input type="submit" value="Log In" />
-            </form>
-          </div>
-        </div>
-      </>
-    );
+  const handleShowPass = () => {
+    setShowPassword(!showPassword)
   }
+
+  return (
+    <>
+      <div className='container'>
+        <div className='column'>
+          <h2>Log In</h2>
+
+          <form>
+            <div className='login_info'>
+              <div className='login_detail'>
+                <FaUser />
+                <input type='text' value={userID} placeholder='Email or Phone Number'
+                  onChange={handleOnchangeUserID} required />
+              </div>
+
+              <div className='login_detail'>
+                <FaLock />
+                <input type={showPassword === false ? 'password' : 'text'}
+                  value={password} placeholder='PassWord'
+                  onChange={handleOnchangePassWord} required
+                />
+                <span className='eyes' onClick={handleShowPass}>
+                  {showPassword === true ? <FaEyeSlash /> : <IoEyeSharp />}
+                </span>
+              </div>
+
+            </div>
+            <div className='other'>
+              <div>
+                <a href='#'>Register an account</a>
+              </div>
+              <div>
+                <a href='#'>Forget Password?</a>
+              </div>
+            </div>
+
+            <input type='submit' value='Log In' />
+
+
+          </form>
+        </div>
+
+      </div>
+    </>
+  )
 }
+
+
+export default Login
