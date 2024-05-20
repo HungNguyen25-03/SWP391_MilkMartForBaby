@@ -25,6 +25,7 @@ body {
 
 .login_detail {
     margin: 20px 0;
+    position: relative;
 }
 
 .login_info .login_detail input {
@@ -54,4 +55,12 @@ body {
 .other a {
     text-decoration: none;
     color: rgb(34, 87, 168);
+}
+
+.eyes {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
 }
