@@ -53,7 +53,7 @@ function Login() {
               <div>
                 <a href='#'>Register an account</a>
               </div>
-              <div className='other'>
+              <div>
                 <a href='#'>Forget Password?</a>
               </div>
             </div>
