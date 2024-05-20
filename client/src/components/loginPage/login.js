@@ -24,8 +24,8 @@ export default class Login extends Component {
   render() {
     return (
       <>
-        <div className="container">
-          <div className="column">
+        <div className="login_container">
+          <div className="login_column">
             <h2>Log In</h2>
 
             <form>
@@ -58,7 +58,7 @@ export default class Login extends Component {
               </div>
               <div className="other">
                 <div>
-                  <a href="#">Register an account</a>
+                  <a href="/register">Register an account</a>
                 </div>
                 <div className="other">
                   <a href="#">Forget Password?</a>
