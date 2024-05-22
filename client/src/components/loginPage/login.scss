@@ -66,3 +66,74 @@
   transform: translateY(-50%);
   cursor: pointer;
 }
+
+@media only screen and (min-width: 1535px) {
+  .login_container {
+    display: flex;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    background: url(baby.png) no-repeat;
+    background-size: cover;
+  }
+  
+  .column {
+    width: 26%;
+    height: 10%;
+    border: 1px solid rgba(255, 3, 3, 0.2);
+    border-radius: 10px;
+    margin: 9.75% auto;
+    backdrop-filter: blur(20px);
+    background: transparent;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .login_info {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0px;
+  }
+  
+  .login_detail {
+    margin: 20px 0;
+    position: relative;
+  }
+  
+  .login_info .login_detail input {
+    padding: 8px 160px 5px 4px;
+    margin-left: 10px;
+    border: none;
+    border: 2px solid rgba(184, 32, 32, 0.2);
+    border-radius: 10px;
+    outline: none;
+  }
+  
+  .column [type="submit"] {
+    border-radius: 20px;
+    background-color: palevioletred;
+    padding: 15px 50px;
+    color: antiquewhite;
+    margin: 50px 0;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  
+  .other {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 40px;
+  }
+  
+  .other a {
+    text-decoration: none;
+    color: rgb(34, 87, 168);
+  }
+  
+  .eyes {
+    position: absolute;
+    top: 52%;
+    right: 30px;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+}
