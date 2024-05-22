@@ -99,24 +99,12 @@ CREATE TABLE Payments (
     FOREIGN KEY (payment_method_id) REFERENCES Payment_Methods(payment_method_id)
 );
 
-CREATE TABLE Preorders (
-    preorder_id INT IDENTITY(1,1) PRIMARY KEY,
-    user_id INT,
-    product_id INT,
-    request_date DATETIME,
-	total_amount INT,
-    status VARCHAR(10),
-    FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    FOREIGN KEY (product_id) REFERENCES Products(product_id)
-);
-
-CREATE TABLE Preorder_Items (
-	preorder_item_id INT IDENTITY(1,1) PRIMARY KEY,
-    preorder_id INT,
-    product_id INT,
-    quantity INT,
-    price DECIMAL(10, 2),
-    FOREIGN KEY (preorder_id) REFERENCES Preorders(preorder_id),
-    FOREIGN KEY (product_id) REFERENCES Products(product_id)
+CREATE TABLE Posts(
+	post_id int IDENTITY(1,1) PRIMARY KEY,
+	user_id int,
+	FOREIGN KEY (user_id) REFERENCES Users(user_id),
+	content text,
+	post_date DATETIME,
+	product_id int,
+	FOREIGN KEY (product_id) REFERENCES Products(product_id)
 )
-
