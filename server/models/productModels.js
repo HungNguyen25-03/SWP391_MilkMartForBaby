@@ -1,4 +1,4 @@
-const { sql, poolPromise } = require("./database");
+const {poolPromise } = require("./database");
 
 
 

@@ -12,7 +12,7 @@ router.get("/getProduct", async (req, res) => {
         res.json({ message: result.message }); 
     }
    } catch (error) {
-    console.log("Faillll");
+    console.log("Faill");
    }
 }
 );
