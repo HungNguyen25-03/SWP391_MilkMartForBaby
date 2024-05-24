@@ -46,7 +46,7 @@ function Login() {
                 <input
                   type={showPassword === false ? "password" : "text"}
                   value={password}
-                  placeholder="PassWord"
+                  placeholder="Password"
                   onChange={handleOnchangePassWord}
                   required
                 />
