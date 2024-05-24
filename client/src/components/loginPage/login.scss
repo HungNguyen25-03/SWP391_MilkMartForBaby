@@ -76,7 +76,7 @@
     background: url(baby.png) no-repeat;
     background-size: cover;
   }
-  
+
   .column {
     width: 26%;
     height: 10%;
@@ -87,18 +87,18 @@
     background: transparent;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   }
-  
+
   .login_info {
     display: flex;
     flex-direction: column;
     margin: 20px 0px;
   }
-  
+
   .login_detail {
     margin: 20px 0;
     position: relative;
   }
-  
+
   .login_info .login_detail input {
     padding: 8px 160px 5px 4px;
     margin-left: 10px;
@@ -107,7 +107,7 @@
     border-radius: 10px;
     outline: none;
   }
-  
+
   .column [type="submit"] {
     border-radius: 20px;
     background-color: palevioletred;
@@ -117,18 +117,18 @@
     font-size: 15px;
     cursor: pointer;
   }
-  
+
   .other {
     display: flex;
     justify-content: space-around;
     margin-top: 40px;
   }
-  
+
   .other a {
     text-decoration: none;
     color: rgb(34, 87, 168);
   }
-  
+
   .eyes {
     position: absolute;
     top: 52%;
