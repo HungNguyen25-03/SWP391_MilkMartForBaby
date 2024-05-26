@@ -44,7 +44,7 @@ function Login() {
     console.log(response);
     if (response.status === 200) {
       console.log(response.message);
-      nav("/register");
+      nav("/home");
     } else {
       console.log(response.message);
     }
