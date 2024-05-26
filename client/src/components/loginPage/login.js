@@ -1,17 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./login.scss";
 import { FaUser } from "react-icons/fa";
 import { FaLock } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { IoEyeSharp } from "react-icons/io5";
+import { MainAPI } from "../API";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const [userID, setUserID] = useState("");
+  const nav = useNavigate();
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleOnchangeUserID = (event) => {
-    setUserID(event.target.value);
+  const handleOnchangeEmail = (event) => {
+    setEmail(event.target.value);
   };
 
   const handleOnchangePassWord = (event) => {
@@ -22,21 +25,46 @@ function Login() {
     setShowPassword(!showPassword);
   };
 
+  const login = async () => {
+    const data = await fetch(`${MainAPI}user/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    }).then((res) => {
+      return res.json();
+    });
+    return data;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const response = await login();
+    console.log(response);
+    if (response.status === 200) {
+      console.log(response.message);
+      nav("/home");
+    } else {
+      console.log(response.message);
+    }
+  };
+
   return (
     <>
       <div className="login_container">
         <div className="column">
           <h2>Log In</h2>
 
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="login_info">
               <div className="login_detail">
                 <FaUser />
                 <input
                   type="text"
-                  value={userID}
-                  placeholder="Email or Phone Number"
-                  onChange={handleOnchangeUserID}
+                  value={email}
+                  placeholder="Email"
+                  onChange={handleOnchangeEmail}
                   required
                 />
               </div>
@@ -46,7 +74,7 @@ function Login() {
                 <input
                   type={showPassword === false ? "password" : "text"}
                   value={password}
-                  placeholder="PassWord"
+                  placeholder="Password"
                   onChange={handleOnchangePassWord}
                   required
                 />
@@ -64,7 +92,7 @@ function Login() {
               </div>
             </div>
 
-            <input type="submit" value="Log In" />
+            <button type="submit" value="Log In"></button>
           </form>
         </div>
       </div>
