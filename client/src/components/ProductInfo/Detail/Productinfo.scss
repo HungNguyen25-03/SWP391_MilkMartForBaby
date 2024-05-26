@@ -28,7 +28,50 @@
     .price{
         margin: 30px 0px;
     }
+
+    .quantity {
+        margin: 30px 0px;
+    }
+
+    .add_buy{
+        margin: 30px 0px;
+
+        .btn_add{
+            margin-right:60px ;
+            padding: 25px 50px;
+            border: 1px solid;
+            border-radius: 10px;
+            outline: none;
+            background-color: rgba(245, 136, 41, 0.948);
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .btn_add:hover {
+            background-color: rgb(239, 129, 32);
+        }
+
+        .btn_buy{
+            padding: 25px 75px;
+            border: 1px solid;
+            border-radius: 10px;
+            outline: none;
+            background-color: rgba(243, 64, 64, 0.948);
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .btn_buy:hover {
+            background-color: rgb(249, 3, 3);
+        }
+    }
     
+}
+
+.other_detail {
+    margin: 30px 200px;
 }
 
 .btn {
