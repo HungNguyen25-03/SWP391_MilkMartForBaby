@@ -28,7 +28,8 @@
     .cart-product-line {
       display: flex;
       justify-content: space-between;
-      margin-top: 25px;
+      margin-top: 20px;
+      padding-bottom: 20px;
       border-bottom: 1px solid #e0e0e0;
 
       .block-cart-first {
@@ -37,8 +38,8 @@
         margin-right: 10px;
 
         .product-img {
-          width: 30%;
-          height: 30%;
+          width: 15%;
+          height: 15%;
           margin-right: 10px;
 
           img {
@@ -52,27 +53,40 @@
 
         .item-cart-price {
           margin-right: 65px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
 
         .item-cart-quantity {
           display: flex;
           margin-right: 65px;
           text-align: center;
+          justify-content: center;
+          align-items: center;
 
-          button {
-            background-color: none;
-            border: none;
-            height: 20%;
-            text-align: center;
+          .btn {
             margin: 0 5px;
+
+            button {
+              background-color: white;
+              border-radius: 5px;
+              border: 1px solid #e0e0e0;
+            }
           }
         }
         .item-cart-total {
           margin-right: 35px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
 
         .btn-delete {
           margin-right: 30px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
       }
     }

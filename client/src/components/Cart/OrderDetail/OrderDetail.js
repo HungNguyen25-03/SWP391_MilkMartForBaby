@@ -23,15 +23,19 @@ export default function OrderDetail() {
             <div className="block-cart-end">
               <div className="item-cart-price">{product.price}</div>
               <div className="item-cart-quantity">
-                <button>-</button>
+                <div className="btn">
+                  <button>-</button>
+                </div>
                 {product.quantity}
-                <button>+</button>
+                <div className="btn">
+                  <button>+</button>
+                </div>
               </div>
               <div className="item-cart-total">
                 {product.price * product.quantity}
               </div>
-              <div>
-                <a className="btn-delete">
+              <div className="btn-delete">
+                <a>
                   <MdDelete />
                 </a>
               </div>
