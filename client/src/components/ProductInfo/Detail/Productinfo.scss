@@ -1,0 +1,36 @@
+.productInfo_container {
+    display: flex;
+}
+
+.ptc {
+    display: block;
+    margin: 30px 150px;
+}
+
+.ptc img{
+    width: 20%;
+}
+
+.info {
+    margin: 30px 200px;
+    .brand{
+        margin: 30px 0px;
+    }
+
+    .name{
+        margin: 30px 0px;
+    }
+
+    .feed_rate{
+        margin: 30px 0px;
+    }
+
+    .price{
+        margin: 30px 0px;
+    }
+    
+}
+
+.btn {
+    margin: 0px 20px;
+}
