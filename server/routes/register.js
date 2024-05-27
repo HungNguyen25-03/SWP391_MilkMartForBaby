@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { sql, poolPromise } = require('./database');
+const router = express.Router();
 
 const app = express();
 const port = 3000;
@@ -36,7 +37,7 @@ app.post('/register', async (req, res) => {
       .input('password', sql.VarChar, password)
       .input('email', sql.VarChar, email)
       .query(`INSERT INTO Users (username, password, email, role_id) VALUES 
-      ('${username}', '${password}', '${email}'), customer`);
+      ('${username}', '${password}', '${email}', customer)`);
 
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
