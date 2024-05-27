@@ -1,9 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const router = express.Router();
 
+const router = express.Router();
+const { registerUser } = require('../models/userModels');
 const app = express();
-const port = 3000;
 
 // Middlewares
 app.use(bodyParser.json());
@@ -24,6 +24,5 @@ router.post('/register', async (req, res) => {
   }
 });
 
-
-
+// Export the router
 module.exports = router;
