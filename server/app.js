@@ -14,6 +14,10 @@ app.use("/api/user", userRoutes);
 const productRoutes = require("./routes/showProduct");
 app.use("/api/product", productRoutes);
 
+//api register
+const registerRoutes = require("./routes/register");
+app.use("/api/register", registerRoutes);
+
 app.listen(4000, () => {
   console.log("Server is running on port 4000");
 });
