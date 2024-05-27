@@ -1,5 +1,6 @@
 const { sql, poolPromise } = require("./database");
 
+
 async function registerUser(username, password, email) {
   try {
     const pool = await poolPromise;
