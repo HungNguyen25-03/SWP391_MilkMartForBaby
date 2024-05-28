@@ -1,0 +1,39 @@
+.dashboard_container {
+  display: flex;
+
+  .content {
+    margin: 20px;
+
+    .row {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+
+      .col {
+        margin: 20px;
+        width: 300px;
+        .card {
+          width: 100%;
+          border: 1px solid black;
+          border-radius: 10px;
+          padding: 10px;
+        }
+      }
+
+      .chart-col-vertical {
+        width: 900px;
+        height: 400px;
+
+        .chart {
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .chart-col-horizontal {
+        width: 500px;
+        height: 400px;
+      }
+    }
+  }
+}

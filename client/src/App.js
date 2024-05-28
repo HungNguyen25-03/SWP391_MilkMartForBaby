@@ -1,4 +1,6 @@
 import "./App.css";
+import Dashboard from "./components/Admin/Dashboard/Dashboard";
+
 import NavBar from "./components/Admin/NavBar/NavBar";
 import UserManagement from "./components/Admin/UserManagement/UserManagement";
 import Login from "./components/loginPage/login";
@@ -14,6 +16,7 @@ function App() {
           <Route path="/register" element={<Register />}></Route>
           <Route path="/admin" element={<NavBar />}></Route>
           <Route path="/admin/user" element={<UserManagement />}></Route>
+          <Route path="/admin/dashboard" element={<Dashboard />}></Route>
         </Routes>
       </BrowserRouter>
     </>

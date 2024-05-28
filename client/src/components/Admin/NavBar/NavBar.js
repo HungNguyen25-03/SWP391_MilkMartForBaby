@@ -3,11 +3,11 @@ import "./NavBar.scss";
 
 export default function NavBar() {
   return (
-    <nav className="navbar">
+    <nav className="navbar-container">
       <div className="navbar-logo">Admin Panel</div>
       <ul className="navbar-menu">
         <li>
-          <a href="#dashboard">Dashboard</a>
+          <a href="/admin/dashboard">Dashboard</a>
         </li>
         <li>
           <a href="/admin/user">Users</a>
