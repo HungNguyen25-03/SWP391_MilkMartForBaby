@@ -1,4 +1,4 @@
-.navbar-container {
+.navbar {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -7,10 +7,9 @@
   width: 200px;
   height: 100vh;
   color: #fff;
-  position: absolute;
 
   .navbar-logo {
-    font-size: 2.5em;
+    font-size: 1.5em;
     font-weight: bold;
     margin-bottom: 20px;
   }
@@ -32,8 +31,6 @@
       display: block;
       width: 100%;
       transition: background-color 0.3s;
-      font-size: medium;
-      cursor: pointer;
     }
 
     a:hover {
