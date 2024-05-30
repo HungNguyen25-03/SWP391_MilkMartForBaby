@@ -1,22 +1,27 @@
-.product img{
-    width: 40%;
+.product img {
+  width: 40%;
 }
 
 .star {
-    color: orange;
+  color: orange;
 }
 
 .product_detail {
-    display: flex;
-    margin: 25px 0px;
+  display: flex;
+  margin: 25px 0px;
 }
 
 .fillter_container {
-    display: flex;
-    width: 100%;
+  display: flex;
+  width: 100%;
 }
 
-.type{
-    width: 20%;
-    margin: 10px 11%;
+.type {
+  width: 20%;
+  margin: 10px 11%;
+}
+
+.product {
+  text-decoration: none;
+  color: black;
 }
