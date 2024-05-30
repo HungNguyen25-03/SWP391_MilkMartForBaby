@@ -1,4 +1,7 @@
 import "./App.css";
+import NavBar from "./components/Admin/NavBar/NavBar";
+import UserManagement from "./components/Admin/UserManagement/UserManagement";
+import Cart from "./components/Cart/Cart";
 import HomeScreen from "./components/HomePage/HomeScreen";
 import Login from "./components/loginPage/login";
 import ProductDetail from "./components/ProductInfo/ProductDetail";
@@ -12,8 +15,11 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<Register />}></Route>
+          <Route path="/admin" element={<NavBar />}></Route>
+          <Route path="/admin/user" element={<UserManagement />}></Route>
           <Route path="/home" element={<HomeScreen />}></Route>
           <Route path="/home/productdetail/:id" element={<ProductDetail />}></Route>
+          <Route path="/cart" element={<Cart />}></Route>
         </Routes>
       </BrowserRouter>
     </>
