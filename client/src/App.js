@@ -1,5 +1,6 @@
 import "./App.css";
 import Dashboard from "./components/Admin/Dashboard/Dashboard";
+import Edit from "./components/Admin/Edit/Edit";
 
 import NavBar from "./components/Admin/NavBar/NavBar";
 import UserManagement from "./components/Admin/UserManagement/UserManagement";
@@ -17,6 +18,7 @@ function App() {
           <Route path="/admin" element={<NavBar />}></Route>
           <Route path="/admin/user" element={<UserManagement />}></Route>
           <Route path="/admin/dashboard" element={<Dashboard />}></Route>
+          <Route path="/admin/edit/:id" element={<Edit />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -1,16 +1,31 @@
 import React from "react";
 import "./NavBar.scss";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function NavBar() {
+  const nav = useNavigate();
+
   return (
     <nav className="navbar-container">
       <div className="navbar-logo">Admin Panel</div>
       <ul className="navbar-menu">
         <li>
-          <a href="/admin/dashboard">Dashboard</a>
+          <a
+            onClick={() => {
+              nav("/admin/dashboard");
+            }}
+          >
+            Dashboard
+          </a>
         </li>
         <li>
-          <a href="/admin/user">Users</a>
+          <a
+            onClick={() => {
+              nav("/admin/user");
+            }}
+          >
+            Users
+          </a>
         </li>
         <li>
           <a href="#settings">Settings</a>
