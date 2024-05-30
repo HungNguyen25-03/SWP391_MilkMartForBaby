@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import NavBar from "../NavBar/NavBar";
 import "./Edit.scss";
-import Select from "react-select";
 
 export default function Edit() {
   const { id } = useParams();
