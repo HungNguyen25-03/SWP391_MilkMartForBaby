@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../NavBar/NavBar";
 import DataTable from "react-data-table-component";
-import { MdDelete, MdModeEdit } from "react-icons/md";
+import { MdModeEdit } from "react-icons/md";
 import "./UserManagement.scss";
 import Modal from "../Modal/Modal";
 import { DeleteIcon } from "../../../utils/Icon/DeleteIcon";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 export default function UserManagement() {
   const nav = useNavigate();
@@ -37,9 +40,11 @@ export default function UserManagement() {
     setData(newData);
   }
 
-  function handleSubmit(newRow) {
-    setRecords([...records, newRow]);
-    setData([...data, newRow]);
+  function handleSubmit(newUser) {
+    console.log(newUser);
+    axios.post("http://localhost:4000/admin/create", newUser).then((res) => {
+      toast.success(res.data.message);
+    });
   }
 
   const column = [
@@ -81,6 +86,7 @@ export default function UserManagement() {
     <div className="userManage_container">
       <NavBar />
       <div className="content">
+        <ToastContainer autoClose={2000} />
         <h1 className="mt-0">User Management</h1>
         <div className="user_manage mt-4">
           <div className="search">

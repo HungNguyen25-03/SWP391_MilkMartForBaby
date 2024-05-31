@@ -1,79 +1,79 @@
 .productInfo_container {
-    display: flex;
+  display: flex;
+  margin-top: 80px;
 }
 
 .ptc {
-    display: block;
-    margin: 30px 150px;
+  display: block;
+  margin: 30px 150px;
 }
 
-.ptc img{
-    width: 20%;
+.ptc img {
+  width: 20%;
 }
 
 .info {
-    margin: 30px 200px;
-    .brand{
-        margin: 30px 0px;
+  margin: 30px 200px;
+  .brand {
+    margin: 30px 0px;
+  }
+
+  .name {
+    margin: 30px 0px;
+  }
+
+  .feed_rate {
+    margin: 30px 0px;
+  }
+
+  .price {
+    margin: 30px 0px;
+  }
+
+  .quantity {
+    margin: 30px 0px;
+  }
+
+  .add_buy {
+    margin: 30px 0px;
+
+    .btn_add {
+      margin-right: 60px;
+      padding: 25px 50px;
+      border: 1px solid;
+      border-radius: 10px;
+      outline: none;
+      background-color: rgba(245, 136, 41, 0.948);
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
     }
 
-    .name{
-        margin: 30px 0px;
+    .btn_add:hover {
+      background-color: rgb(239, 129, 32);
     }
 
-    .feed_rate{
-        margin: 30px 0px;
+    .btn_buy {
+      padding: 25px 75px;
+      border: 1px solid;
+      border-radius: 10px;
+      outline: none;
+      background-color: rgba(243, 64, 64, 0.948);
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
     }
 
-    .price{
-        margin: 30px 0px;
+    .btn_buy:hover {
+      background-color: rgb(249, 3, 3);
     }
-
-    .quantity {
-        margin: 30px 0px;
-    }
-
-    .add_buy{
-        margin: 30px 0px;
-
-        .btn_add{
-            margin-right:60px ;
-            padding: 25px 50px;
-            border: 1px solid;
-            border-radius: 10px;
-            outline: none;
-            background-color: rgba(245, 136, 41, 0.948);
-            color: white;
-            font-size: 15px;
-            cursor: pointer;
-        }
-
-        .btn_add:hover {
-            background-color: rgb(239, 129, 32);
-        }
-
-        .btn_buy{
-            padding: 25px 75px;
-            border: 1px solid;
-            border-radius: 10px;
-            outline: none;
-            background-color: rgba(243, 64, 64, 0.948);
-            color: white;
-            font-size: 15px;
-            cursor: pointer;
-        }
-
-        .btn_buy:hover {
-            background-color: rgb(249, 3, 3);
-        }
-    }
-    
+  }
 }
 
 .other_detail {
-    margin: 30px 200px;
+  margin: 30px 200px;
 }
 
 .btn {
-    margin: 0px 20px;
+  margin: 0px 20px;
 }
