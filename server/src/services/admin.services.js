@@ -1,35 +1,32 @@
-const {poolPromisse}=require("./database.services");
 
 
-async function createUser(username,password,email,role_id){
-try{
-    const pool = await poolPromise;
-    const request = pool.request();
-    
-    // Add input parameters to prevent SQL injection
-    request.input('username', sql.VarChar, username);
-    request.input('password', sql.VarChar, password);
-    request.input('email', sql.VarChar, email);
-    request.input('role_id', sql.VarChar, role_id);
+const { poolPromise,sql } = require("./database.services");
 
-    const result = await request.query(`
-        INSERT INTO Users (username, password, email, role_id)
-        VALUES (@username, @password, @email, @role_id);
-        
-        SELECT SCOPE_IDENTITY() AS userId;
+async function createUser(username, password, email, role_id) {
+    try {
+      const pool = await poolPromise;
+      const result = await pool.request()
+        .input('username', sql.VarChar, username)
+        .input('password', sql.VarChar, password)
+        .input('email', sql.VarChar, email)
+        .input('role_id', sql.VarChar, role_id)
+        .query(`
+          INSERT INTO Users (username, password, email, role_id)
+          VALUES (@username, @password, @email, @role_id);
         `);
-    const create=result.recordset[0].userId;
-    if(create){
-        console.log("Create user Success",create);
-    }else{
-        console.log("Fail to create 2 ");
-    }
+      
+      if (result.rowsAffected && result.rowsAffected[0] > 0) {
+        return { success: true, message: 'User created successfully' };
+      } else {
+        return { success: false, message: 'Failed to create user' };
+      }
+    } catch (error) {
+      console.error('Error creating user:', error);
+      return { success: false, message: 'Failed to create user', error: error.message };
    
-
-
- } catch(error){
-throw error;
 }
-
 }
-module.exports = createUser;
+module.exports = {
+    createUser,
+  };
+  

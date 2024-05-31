@@ -7,10 +7,10 @@ const adminRoutes=express.Router();
 
 adminRoutes.post("/create", async (req, res) => {
   const { username, password, email, role_id } = req.body;
-  
+  console.log(req.body);
     try {
       const result = await createUser(username,password,email,role_id);
-     
+     console.log(result);
       if (result.success) {
         return res
           .status(200)
