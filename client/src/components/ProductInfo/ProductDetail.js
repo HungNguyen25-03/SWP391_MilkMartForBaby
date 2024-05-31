@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom'
 import ProductInfo from "./Detail/ProductInfo";
 import InfoDetail from "./DetailOfProduct/InfoDetail";
-import HeaderProductDetail from "./Header/HeaderProductDetail";
-import FooterProductDetail from "./Footer/FooterProductDetail";
+import HeaderPage from "../../utils/Header/Header";
+import FooterPage from "../../utils/Footer/FooterPage";
 import Rate from "./Rate/Rate";
 
 export default function ProductDetail() {
@@ -34,11 +34,11 @@ export default function ProductDetail() {
 
   return (
     <div>
-      <HeaderProductDetail />
+      <HeaderPage />
       {product && <ProductInfo product={product} />}
       {dataProduct && <InfoDetail dataProduct={dataProduct} />}
       {cus && <Rate cus={cus} />}
-      <FooterProductDetail />
+      <FooterPage />
     </div>
   )
 }

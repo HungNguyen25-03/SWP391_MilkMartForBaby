@@ -8,7 +8,7 @@ export default function HeaderPage() {
   return (
     <div className="header">
       <div className="logo">
-        <img src="assest/images/logo/logo.png" />
+        <img src='https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2FlogoMilk.png?alt=media&token=1bd69b90-459d-45b8-b86a-b0f235f748d9' />
       </div>
 
       <div className="search">
