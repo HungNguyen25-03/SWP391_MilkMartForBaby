@@ -16,8 +16,10 @@ const getProduct = async (req, res) => {
 const {getProductById}=require("../services/products.services");
 
 const getProById=async (req,res)=>{
+  const {product_id}=req.body;
+  console.log(product_id);
   try{
-    const result =await getProById();
+    const result =await getProductById(product_id);
     if(result.success){
       res.json(result.product);
 
