@@ -2,21 +2,30 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import NavBar from "../NavBar/NavBar";
 import "./Edit.scss";
+import { MainAPI } from "../../API";
 
 export default function Edit() {
   const { id } = useParams();
   const nav = useNavigate();
   const [user, setUser] = useState({
-    name: "",
-    role: "",
+    username: "",
+    password: "",
+    email: "",
+    role_id: "",
   });
   const [role, setRole] = useState("");
   useEffect(() => {
-    fetch("http://127.0.0.1:1880/user/1")
+    fetch(`${MainAPI}/admin/getUser/${id}`)
       .then((res) => res.json())
       .then((data) => {
-        setUser({ name: data.name, role: data.role });
-        setRole(data.role);
+        const result = data.user[0];
+        setUser({
+          username: result.username,
+          role: result.role_id,
+          password: result.password,
+          email: result.email,
+        });
+        setRole(result.role_id);
       });
   }, []);
 
@@ -32,17 +41,49 @@ export default function Edit() {
           <div className="w-50 border bg-secondary text-white p-5">
             <form onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="name">Name: </label>
+                <label htmlFor="name">Username: </label>
                 <input
                   type="text"
                   name="name"
                   className="form-control"
                   placeholder="Entername"
-                  value={user.name}
+                  value={user.username}
                   onChange={(e) => {
                     setUser({
                       ...user,
-                      name: e.target.value,
+                      username: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+              <div>
+                <label htmlFor="password">Password: </label>
+                <input
+                  type="text"
+                  name="password"
+                  className="form-control"
+                  placeholder="Enterpassword"
+                  value={user.password}
+                  onChange={(e) => {
+                    setUser({
+                      ...user,
+                      password: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+              <div>
+                <label htmlFor="email">Email: </label>
+                <input
+                  type="text"
+                  name="email"
+                  className="form-control"
+                  placeholder="Enteremail"
+                  value={user.email}
+                  onChange={(e) => {
+                    setUser({
+                      ...user,
+                      email: e.target.value,
                     });
                   }}
                 />
@@ -54,10 +95,9 @@ export default function Edit() {
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
                 >
-                  <option value="engineer">Engineer</option>
-                  <option value="pm">Project Manager</option>
-                  <option value="estimator">Estimator</option>
-                  <option value="surveyor">Surveyor</option>
+                  <option value="admin">Admin</option>
+                  <option value="staff">Staff</option>
+                  <option value="customer">Customer</option>
                 </select>
               </div>
               <br />
