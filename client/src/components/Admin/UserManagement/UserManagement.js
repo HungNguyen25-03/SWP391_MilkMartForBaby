@@ -4,8 +4,11 @@ import DataTable from "react-data-table-component";
 import { MdDelete, MdModeEdit } from "react-icons/md";
 import "./UserManagement.scss";
 import Modal from "../Modal/Modal";
+import { DeleteIcon } from "../../../utils/Icon/DeleteIcon";
+import { useNavigate } from "react-router-dom";
 
 export default function UserManagement() {
+  const nav = useNavigate();
   const [data, setData] = useState([]);
   const [records, setRecords] = useState(data);
   const [modalOpen, setModalOpen] = useState(false);
@@ -53,20 +56,22 @@ export default function UserManagement() {
     {
       cell: (row) => (
         <div className="action">
-          <button
+          <span
+            className="action-btn"
             onClick={() => {
               handleDelete(row.id);
             }}
           >
-            <MdDelete color="red" />
-          </button>
-          <button
+            <DeleteIcon color="red" />
+          </span>
+          <span
+            className="action-btn"
             onClick={() => {
-              handleDelete(row.id);
+              nav(`/admin/edit/${row.id}`);
             }}
           >
             <MdModeEdit color="green" />
-          </button>
+          </span>
         </div>
       ),
     },
@@ -76,9 +81,8 @@ export default function UserManagement() {
     <div className="userManage_container">
       <NavBar />
       <div className="content">
-        <h1>User Management</h1>
-        <h2>Current user</h2>
-        <div className="user_manage">
+        <h1 className="mt-0">User Management</h1>
+        <div className="user_manage mt-4">
           <div className="search">
             <label>Search: </label>
             <input type="text" onChange={handleFilter}></input>
@@ -102,12 +106,13 @@ export default function UserManagement() {
             )}
           </div>
         </div>
-        <div className="table">
+        <div className="table mt-3">
           <DataTable
             columns={column}
             data={records}
             selectableRows
-            fixedHeader
+            pagination
+            paginationRowsPerPageOptions={[6, 10]}
             className="table-content"
           />
         </div>

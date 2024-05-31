@@ -27,8 +27,9 @@ export default function Modal({ closeModal, onSubmit }) {
         if (e.target.className === "modal-container") closeModal();
       }}
     >
-      <div className="modal">
-        <form>
+      <div className="modal-content">
+        <h3>Add new user</h3>
+        <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="name">Name</label>
             <input type="text" name="name" onChange={handleChange} />
@@ -37,9 +38,14 @@ export default function Modal({ closeModal, onSubmit }) {
             <label htmlFor="role">Role</label>
             <input type="text" name="role" onChange={handleChange} />
           </div>
-          <button type="submit" className="btn" onSubmit={handleSubmit}>
-            Submit
-          </button>
+          <div className="d-flex justify-content-space-between ">
+            <button className=" btn bg-secondary" onClick={closeModal}>
+              Close
+            </button>
+            <button type="submit" className="btn">
+              Submit
+            </button>
+          </div>
         </form>
       </div>
     </div>

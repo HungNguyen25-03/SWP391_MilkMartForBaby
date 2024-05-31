@@ -11,7 +11,7 @@ export default function Dashboard() {
       <div className="dashboard_container">
         <NavBar />
         <div className="content">
-          <h1>Dashboard</h1>
+          <h1 className="mt-0">Dashboard</h1>
           <div className="row">
             <div className="col col-4">
               <div className="card card-content">
