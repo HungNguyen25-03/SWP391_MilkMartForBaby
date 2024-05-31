@@ -1,5 +1,5 @@
 const express=require("express");
-const{createUser, getUserById}=require("../services/admin.services");
+const{createUser, getUserById,getAllUser}=require("../services/admin.services");
 const adminRoutes=express.Router();
 
 
@@ -45,8 +45,28 @@ adminRoutes.post("/create", async (req, res) => {
 
   }
 
+
   );
   
+
+
+  adminRoutes.get("/allUsers",async (req,res)=>{
+    try{
+      const result = await getAllUser();
+      
+      if (result.success) {
+        return res.status(200).json({ user: result.user });
+      } else {
+        return res.status(404).json({ message: result.message });
+      }
+    }catch(error){
+      console.log('Fail to get all user', error);
+      res.status(500).json({ message: 'Error getting all user' });
+    }
+
+  }
+
+  );
 
 
 

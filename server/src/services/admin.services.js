@@ -46,10 +46,28 @@ async function getUserById(user_id){
   }
  };
 
- 
+ async function getAllUser(){
+  try {
+    const pool = await  poolPromise;
+         const result = await pool
+         .request()
+         .query(
+          `SELECT * FROM Users`
+         );
+       const user = result.recordset;
+       if(user){
+        return { success: true, user };
+      } else {
+        return { success: false, message: "Fail to get All User" };
+      }
+       
+  } catch (error) {
+    throw error;
+  }
+ }
 
  module.exports = {
   createUser,
-  getUserById
-  
+  getUserById,
+  getAllUser,
 };
