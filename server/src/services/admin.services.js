@@ -66,8 +66,31 @@ async function getUserById(user_id){
   }
  }
 
+ 
+async function DeleteUser(user_id){
+  try {
+   const pool = await  poolPromise;
+   const result = await pool.request()
+   .input('user_id', sql.Int, user_id)
+   .query(`
+     DELETE FROM Users WHERE user_id = @user_id;
+   `);
+       const user = result.rowsAffected[0];
+       console.log(user);
+       console.log(result);
+       if(user != 0){
+         return { success: true, user };
+       } else {
+         return { success: false, message: "Fail to delete User" };
+       }
+  } catch (error) {
+   throw error;
+  }
+ };
+
  module.exports = {
   createUser,
   getUserById,
   getAllUser,
+  DeleteUser,
 };
