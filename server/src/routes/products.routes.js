@@ -9,4 +9,6 @@ productRouters.get("/getProduct", getProduct);
 //get Product By ID
 const{getProById}=require("../controller/products.controller");
 productRouters.get("/getProById",getProById);
+
+
 module.exports = productRouters;

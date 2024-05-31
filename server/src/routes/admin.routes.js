@@ -1,5 +1,5 @@
 const express=require("express");
-const{createUser}=require("../services/admin.services");
+const{createUser, getUserById}=require("../services/admin.services");
 const adminRoutes=express.Router();
 
 
@@ -24,6 +24,31 @@ adminRoutes.post("/create", async (req, res) => {
       console.log("fail to create 1");
     }
   });
+
+  
+  adminRoutes.get("/getUser/:id",async (req, res) => {
+    const user_id= parseInt(req.params.id, 10);
+    console.log(user_id);
+    try {
+      const result = await getUserById(user_id);
+      
+      if (result.success) {
+        return res.status(200).json({ user: result.user });
+      } else {
+        return res.status(404).json({ message: result.message });
+      }
+    } catch (err) {
+      console.log('Fail to get user', err);
+      res.status(500).json({ message: 'Error getting user' });
+    }
+
+
+  }
+
+  );
+  
+
+
 
   module.exports = adminRoutes;
 

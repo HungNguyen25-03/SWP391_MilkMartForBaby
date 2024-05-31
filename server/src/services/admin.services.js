@@ -26,7 +26,30 @@ async function createUser(username, password, email, role_id) {
    
 }
 }
-module.exports = {
-    createUser,
-  };
+
+async function getUserById(user_id){
+  try {
+   const pool = await  poolPromise;
+   const result = await pool.request()
+   .input('user_id', sql.Int, user_id)
+   .query(`
+     SELECT * FROM Users WHERE user_id = @user_id;
+   `);
+       const user = result.recordset;
+       if(user){
+         return { success: true, user };
+       } else {
+         return { success: false, message: "Fail to connect User" };
+       }
+  } catch (error) {
+   throw error;
+  }
+ };
+
+ 
+
+ module.exports = {
+  createUser,
+  getUserById
   
+};
