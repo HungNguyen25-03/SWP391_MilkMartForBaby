@@ -1,10 +1,12 @@
 const express=require("express");
-const{createUser, getUserById,getAllUser}=require("../services/admin.services");
+const{createUser, getUserById,getAllUser,DeleteUser}=require("../services/admin.services");
 const adminRoutes=express.Router();
 
 
 // admin CRUD api
 
+
+//api create User
 adminRoutes.post("/create", async (req, res) => {
   const { username, password, email, role_id } = req.body;
   console.log(req.body);
@@ -25,7 +27,7 @@ adminRoutes.post("/create", async (req, res) => {
     }
   });
 
-  
+  //api get User
   adminRoutes.get("/getUser/:id",async (req, res) => {
     const user_id= parseInt(req.params.id, 10);
     console.log(user_id);
@@ -49,7 +51,7 @@ adminRoutes.post("/create", async (req, res) => {
   );
   
 
-
+// get All User
   adminRoutes.get("/allUsers",async (req,res)=>{
     try{
       const result = await getAllUser();
@@ -69,7 +71,24 @@ adminRoutes.post("/create", async (req, res) => {
   );
 
 
+  // Delete user
 
+  adminRoutes.get("/delete/:id", async (req, res) =>{
+    const user_id= parseInt(req.params.id, 10);
+   console.log(user_id);
+    try {
+      const result = await DeleteUser(user_id);
+      console.log(result);
+      if (result.success) {
+        return res.status(200).json({ message: "Delete successful", status: 200 });
+      } else {
+        return res.status(401).json({ message: "Delete failed", status: 401 });
+      }
+    } catch (err) { 
+      console.error("Error deleting user:", err);
+      return res.status(500).json({ message: "Internal server error", status: 500 });
+    }
+  });
   module.exports = adminRoutes;
 
 
