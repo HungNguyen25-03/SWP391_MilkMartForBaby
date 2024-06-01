@@ -36,9 +36,9 @@ export default function UserManagement() {
   }
 
   function handleDelete(id) {
-    const newData = records.filter((record) => record.id !== id);
-    setRecords(newData);
-    setData(newData);
+    axios.get(`${MainAPI}/admin/delete/${id}`).then((res) => {
+      toast.success(res.data.message);
+    });
   }
 
   function handleSubmit(newUser) {
@@ -123,7 +123,7 @@ export default function UserManagement() {
             data={records}
             selectableRows
             pagination
-            paginationRowsPerPageOptions={[6]}
+            paginationRowsPerPageOptions={[6, 10]}
             className="table-content"
           />
         </div>
