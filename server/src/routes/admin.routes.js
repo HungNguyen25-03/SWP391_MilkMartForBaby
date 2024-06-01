@@ -30,7 +30,7 @@ adminRoutes.post("/create", async (req, res) => {
       });
     }
   } catch (err) {
-    console.log("fail to create 1");
+    console.log("fail to create a user");
   }
 });
 
