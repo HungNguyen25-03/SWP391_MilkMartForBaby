@@ -1,0 +1,32 @@
+.staff_nav {
+    display: flex;
+    flex-direction: column;
+    margin-left: 45px;
+    width: 220px;
+    height: 100vh;
+    border-right: 1px solid black;
+
+    .staff_playout {
+        margin-bottom: 30px;
+        border: 1px solid rgb(175, 164, 164);
+        width: 170px;
+        text-align: center;
+        border-radius: 10px;
+        padding: 6px;
+        background-color: rgb(147, 76, 222);
+    }
+
+    a {
+        text-decoration: none;
+        color: white;
+    }
+
+    .staff_playout:first-child {
+        margin-top: 250px;
+    }
+
+    .staff_playout:hover {
+        background-color:  rgb(201, 80, 214);
+        box-shadow: 0px 4px 15px rgb(172, 164, 164);
+    }
+}

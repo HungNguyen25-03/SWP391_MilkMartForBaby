@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import NavBar from "../NavBar/NavBar";
+import NavBar from "../NavBar/NavBarAdmin";
 import DataTable from "react-data-table-component";
 import { MdDelete, MdModeEdit } from "react-icons/md";
 import "./UserManagement.scss";

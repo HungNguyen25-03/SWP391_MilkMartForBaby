@@ -5,6 +5,7 @@ import { MdOutlineCheckBox } from "react-icons/md";
 import { productList } from "./Product";
 import "./Product.scss";
 import { FaShoppingCart } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 export default function FillterType() {
   const [checkbox, setcheckbox] = useState(false);
@@ -44,8 +45,8 @@ export default function FillterType() {
       <div className="product_detail">
         {productList.map((product) => {
           return (
-            <a
-              href={`/home/ProductDetail/${product.id}`}
+            <Link
+              to={`/home/ProductDetail/${product.id}`}
               className="product"
               key={product.id}
             >
@@ -64,7 +65,7 @@ export default function FillterType() {
               <div>
                 {product.price} <FaShoppingCart />
               </div>
-            </a>
+            </Link>
           );
         })}
       </div>

@@ -1,7 +1,7 @@
-import React from "react";
-import "./NavBar.scss";
+import React from 'react'
+import './NavBarAdmin.scss'
 
-export default function NavBar() {
+export default function NavBarAdmin() {
   return (
     <nav className="navbar">
       <div className="navbar-logo">Admin Panel</div>
@@ -20,5 +20,5 @@ export default function NavBar() {
         </li>
       </ul>
     </nav>
-  );
+  )
 }
