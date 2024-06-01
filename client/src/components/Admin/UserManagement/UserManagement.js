@@ -24,7 +24,7 @@ export default function UserManagement() {
         setData(data.user);
         setRecords(data.user);
       });
-  }, [data]);
+  }, [records]);
 
   function handleFilter(event) {
     const newData = data.filter((record) => {
@@ -42,7 +42,6 @@ export default function UserManagement() {
   }
 
   function handleSubmit(newUser) {
-    console.log(newUser);
     axios.post("http://localhost:4000/admin/create", newUser).then((res) => {
       toast.success(res.data.message);
     });
@@ -124,7 +123,7 @@ export default function UserManagement() {
             data={records}
             selectableRows
             pagination
-            paginationRowsPerPageOptions={[6, 10]}
+            paginationRowsPerPageOptions={[6]}
             className="table-content"
           />
         </div>

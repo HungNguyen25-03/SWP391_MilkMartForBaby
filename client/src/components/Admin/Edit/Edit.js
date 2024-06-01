@@ -3,6 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import NavBar from "../NavBar/NavBar";
 import "./Edit.scss";
 import { MainAPI } from "../../API";
+import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Edit() {
   const { id } = useParams();
@@ -14,6 +17,7 @@ export default function Edit() {
     role_id: "",
   });
   const [role, setRole] = useState("");
+
   useEffect(() => {
     fetch(`${MainAPI}/admin/getUser/${id}`)
       .then((res) => res.json())
@@ -31,6 +35,9 @@ export default function Edit() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    axios.put(`${MainAPI}/admin/update/${id}`, user).then((res) => {
+      toast.success(res.data.message);
+    });
     nav("/admin/user");
   };
   return (
