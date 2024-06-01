@@ -9,8 +9,8 @@ async function createUser(username, password, email, role_id) {
       .input("password", sql.VarChar, password)
       .input("email", sql.VarChar, email)
       .input("role_id", sql.VarChar, role_id).query(`
-          INSERT INTO Users (username, password, email, role_id)
-          VALUES (@username, @password, @email, @role_id);
+          INSERT INTO Users (username, password, email, role_id, status)
+          VALUES (@username, @password, @email, @role_id, 1);
         `);
 
     if (result.rowsAffected && result.rowsAffected[0] > 0) {
@@ -33,7 +33,7 @@ async function getUserById(user_id) {
     const pool = await poolPromise;
     const result = await pool.request().input("user_id", sql.Int, user_id)
       .query(`
-     SELECT * FROM Users WHERE user_id = @user_id;
+     SELECT * FROM Users WHERE user_id = @user_id AND status = 1;
    `);
     const user = result.recordset;
     if (user) {
@@ -49,7 +49,7 @@ async function getUserById(user_id) {
 async function getAllUser() {
   try {
     const pool = await poolPromise;
-    const result = await pool.request().query(`SELECT * FROM Users`);
+    const result = await pool.request().query(`SELECT * FROM Users WHERE status = 1`);
     const user = result.recordset;
     if (user) {
       return { success: true, user };
@@ -66,7 +66,7 @@ async function DeleteUser(user_id) {
     const pool = await poolPromise;
     const result = await pool.request().input("user_id", sql.Int, user_id)
       .query(`
-     DELETE FROM Users WHERE user_id = @user_id;
+     UPDATE Users SET status = 0 WHERE user_id = @user_id;
    `);
     const user = result.rowsAffected[0];
     console.log(user);
@@ -116,7 +116,7 @@ async function updateUser(user_id, username, password, email, role_id) {
     const query = `
       UPDATE Users
       SET ${updateFields.join(', ')}
-      WHERE user_id = @user_id;
+      WHERE user_id = @user_id AND status = 1;
     `;
 
     const result = await request.query(query);
