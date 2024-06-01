@@ -34,12 +34,10 @@ async function registerUser(username, password, email) {
     }
 
     //insert new user
-    await pool
-      .request()
-      .query(
-        `INSERT INTO Users (username, password, email, role_id, status) VALUES 
-        ('${username}', '${password}', '${email}', 'customer', 1)`
-      );
+    await pool.request().query(
+      `INSERT INTO Users (username, password, email, role_id) VALUES 
+        ('${username}', '${password}', '${email}', 'customer' )`
+    );
 
     return { success: true, message: "User registered successfully" };
   } catch (error) {

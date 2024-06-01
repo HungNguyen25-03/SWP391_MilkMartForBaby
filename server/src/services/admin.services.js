@@ -3,14 +3,23 @@ const { poolPromise, sql } = require("./database.services");
 async function createUser(username, password, email, role_id) {
   try {
     const pool = await poolPromise;
+    const userResult = await pool
+      //check if user exists
+      .request()
+      .query(`SELECT * FROM Users WHERE username = '${username}'`);
+
+    if (userResult.recordset.length > 0) {
+      return { success: false, message: "Username already exists" };
+    }
+
     const result = await pool
       .request()
       .input("username", sql.VarChar, username)
       .input("password", sql.VarChar, password)
       .input("email", sql.VarChar, email)
       .input("role_id", sql.VarChar, role_id).query(`
-          INSERT INTO Users (username, password, email, role_id, status)
-          VALUES (@username, @password, @email, @role_id, 1);
+          INSERT INTO Users (username, password, email, role_id)
+          VALUES (@username, @password, @email, @role_id);
         `);
 
     if (result.rowsAffected && result.rowsAffected[0] > 0) {
@@ -49,7 +58,9 @@ async function getUserById(user_id) {
 async function getAllUser() {
   try {
     const pool = await poolPromise;
-    const result = await pool.request().query(`SELECT * FROM Users WHERE status = 1`);
+    const result = await pool
+      .request()
+      .query(`SELECT * FROM Users WHERE status = 1`);
     const user = result.recordset;
     if (user) {
       return { success: true, user };
@@ -85,7 +96,7 @@ async function updateUser(user_id, username, password, email, role_id) {
   try {
     const pool = await poolPromise;
     const request = pool.request().input("user_id", user_id);
-    
+
     let updateFields = [];
 
     if (username) {
@@ -115,7 +126,7 @@ async function updateUser(user_id, username, password, email, role_id) {
 
     const query = `
       UPDATE Users
-      SET ${updateFields.join(', ')}
+      SET ${updateFields.join(", ")}
       WHERE user_id = @user_id AND status = 1;
     `;
 

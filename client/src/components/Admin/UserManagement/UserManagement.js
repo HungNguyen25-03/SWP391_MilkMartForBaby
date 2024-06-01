@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { MainAPI } from "../../API";
 
 export default function UserManagement() {
   const nav = useNavigate();
@@ -17,17 +18,17 @@ export default function UserManagement() {
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:1880/user")
+    fetch(`${MainAPI}/admin/allUsers`)
       .then((res) => res.json())
       .then((data) => {
-        setData(data);
-        setRecords(data);
+        setData(data.user);
+        setRecords(data.user);
       });
-  }, []);
+  }, [records]);
 
   function handleFilter(event) {
     const newData = data.filter((record) => {
-      return record.name
+      return record.username
         .toLowerCase()
         .includes(event.target.value.toLowerCase());
     });
@@ -35,13 +36,12 @@ export default function UserManagement() {
   }
 
   function handleDelete(id) {
-    const newData = records.filter((record) => record.id !== id);
-    setRecords(newData);
-    setData(newData);
+    axios.get(`${MainAPI}/admin/delete/${id}`).then((res) => {
+      toast.success(res.data.message);
+    });
   }
 
   function handleSubmit(newUser) {
-    console.log(newUser);
     axios.post("http://localhost:4000/admin/create", newUser).then((res) => {
       toast.success(res.data.message);
     });
@@ -50,12 +50,17 @@ export default function UserManagement() {
   const column = [
     {
       name: "Name",
-      selector: (row) => row.name,
+      selector: (row) => row.username,
+      sortable: true,
+    },
+    {
+      name: "Email",
+      selector: (row) => row.email,
       sortable: true,
     },
     {
       name: "Role",
-      selector: (row) => row.role,
+      selector: (row) => row.role_id,
       sortable: true,
     },
     {
@@ -64,7 +69,7 @@ export default function UserManagement() {
           <span
             className="action-btn"
             onClick={() => {
-              handleDelete(row.id);
+              handleDelete(row.user_id);
             }}
           >
             <DeleteIcon color="red" />
@@ -72,7 +77,7 @@ export default function UserManagement() {
           <span
             className="action-btn"
             onClick={() => {
-              nav(`/admin/edit/${row.id}`);
+              nav(`/admin/edit/${row.user_id}`);
             }}
           >
             <MdModeEdit color="green" />
