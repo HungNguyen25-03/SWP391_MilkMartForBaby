@@ -6,7 +6,7 @@ async function loginUser(email, password) {
     const result = await pool
       .request()
       .query(
-        `SELECT * FROM Users WHERE email = '${email}' AND password = '${password}'`
+        `SELECT * FROM Users WHERE email = '${email}' AND password = '${password}' AND status = 1`
       );
     const user = result.recordset[0];
 
@@ -37,7 +37,8 @@ async function registerUser(username, password, email) {
     await pool
       .request()
       .query(
-        `INSERT INTO Users (username, password, email, role_id) VALUES ('${username}', '${password}', '${email}', 'customer')`
+        `INSERT INTO Users (username, password, email, role_id, status) VALUES 
+        ('${username}', '${password}', '${email}', 'customer', 1)`
       );
 
     return { success: true, message: "User registered successfully" };
