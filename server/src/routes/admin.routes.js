@@ -6,32 +6,14 @@ const {
   DeleteUser,
   updateUser,
 } = require("../services/admin.services");
+const { createUserController } = require("../controller/admins.controller");
+const { createUserMiddleware } = require("../middlewares/admin.middlewares");
 const adminRoutes = express.Router();
 
 // admin CRUD api
 
 //api create User
-adminRoutes.post("/create", async (req, res) => {
-  const { username, password, email, role_id } = req.body;
-  console.log(req.body);
-  try {
-    const result = await createUser(username, password, email, role_id);
-    console.log(result);
-    if (result.success) {
-      return res.status(200).json({
-        message: result.message,
-        status: 200,
-      });
-    } else {
-      return res.status(401).json({
-        message: result.message,
-        status: 401,
-      });
-    }
-  } catch (err) {
-    console.log("fail to create a user");
-  }
-});
+adminRoutes.post("/create", createUserMiddleware, createUserController);
 
 //api get User
 adminRoutes.get("/getUser/:id", async (req, res) => {
