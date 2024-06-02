@@ -2,18 +2,10 @@ const { poolPromise, sql } = require("./database.services");
 
 async function createUser(username, password, email, role_id) {
   try {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const pool = await poolPromise;
-    const userResult = await pool
-      //check if user exists
-      .request()
-      .query(`SELECT * FROM Users WHERE username = '${username}'`);
-
-    if (userResult.recordset.length > 0) {
-      return { success: false, message: "Username already exists" };
-    }
     // This part is meant for middleware
     // Check email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email || !emailRegex.test(email)) {
       return {
         success: false,
@@ -35,6 +27,25 @@ async function createUser(username, password, email, role_id) {
         message: "Password must be less than 20 characters long",
         status: 400,
       };
+    } 
+    // End of middleware
+
+    const userResult = await pool
+      //check if user exists
+      .request()
+      .query(`SELECT * FROM Users WHERE username = '${username}'`);
+
+    if (userResult.recordset.length > 0) {
+      return { success: false, message: "Username already exists" };
+    }
+    
+    const userEmailResult = await pool
+      //check if user exists
+      .request()
+      .query(`SELECT * FROM Users WHERE email = '${email}'`);
+
+    if (userEmailResult.recordset.length > 0) {
+      return { success: false, message: "Email already exists" };
     }
 
     const result = await pool
