@@ -16,8 +16,6 @@ export default function Modal({ closeModal, onSubmit }) {
     });
   };
 
-  console.log(form);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(form);
