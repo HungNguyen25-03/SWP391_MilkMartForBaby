@@ -18,13 +18,17 @@ export default function UserManagement() {
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
-    fetch(`${MainAPI}/admin/allUsers`)
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data.user);
-        setRecords(data.user);
-      });
-  }, [records]);
+    async function fetchData() {
+      const response = await fetch(`${MainAPI}/admin/allUsers`)
+        .then((res) => res.json())
+        .then((data) => {
+          return data.user;
+        });
+      console.log(response);
+      setRecords(response);
+    }
+    fetchData();
+  }, []);
 
   function handleFilter(event) {
     const newData = data.filter((record) => {
@@ -36,15 +40,27 @@ export default function UserManagement() {
   }
 
   function handleDelete(id) {
-    axios.get(`${MainAPI}/admin/delete/${id}`).then((res) => {
-      toast.success(res.data.message);
-    });
+    try {
+      axios.get(`${MainAPI}/admin/delete/${id}`).then((res) => {
+        toast.success(res.data.message);
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   function handleSubmit(newUser) {
-    axios.post("http://localhost:4000/admin/create", newUser).then((res) => {
-      toast.success(res.data.message);
-    });
+    axios
+      .post("http://localhost:4000/admin/create", newUser)
+      .then((res) => {
+        if (res.status === 200) {
+          toast.success(res.data.message);
+        } else {
+        }
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+      });
   }
 
   const column = [
