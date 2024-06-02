@@ -19,13 +19,12 @@ adminRoutes.post("/create", async (req, res) => {
     console.log(result);
     if (result.success) {
       return res.status(200).json({
-        message: "Create successful",
         message: result.message,
         status: 200,
       });
     } else {
       return res.status(401).json({
-        message: "Invalid userName,password,email,roleId",
+        message: result.message,
         status: 401,
       });
     }
@@ -40,7 +39,6 @@ adminRoutes.get("/getUser/:id", async (req, res) => {
   console.log(user_id);
   try {
     const result = await getUserById(user_id);
-
     if (result.success) {
       return res.status(200).json({ user: result.user });
     } else {
@@ -97,17 +95,22 @@ adminRoutes.put("/update/:id", async (req, res) => {
   const { username, password, email, role_id } = req.body;
   console.log(req.body);
   try {
-    const result = await updateUser(user_id, username, password, email, role_id);
+    const result = await updateUser(
+      user_id,
+      username,
+      password,
+      email,
+      role_id
+    );
     console.log(result);
     if (result.success) {
       return res.status(200).json({
-        message: "Update successful",
         message: result.message,
         status: 200,
       });
     } else {
       return res.status(401).json({
-        message: "Invalid username, password, email, roleId",
+        message: result.message,
         status: 401,
       });
     }
@@ -115,6 +118,5 @@ adminRoutes.put("/update/:id", async (req, res) => {
     console.log("fail to update 1");
   }
 });
-
 
 module.exports = adminRoutes;
