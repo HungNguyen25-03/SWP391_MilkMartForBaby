@@ -24,15 +24,6 @@ async function loginUser(email, password) {
 async function registerUser(username, password, email) {
   try {
     const pool = await poolPromise;
-    const userResult = await pool
-      //check if user exists
-      .request()
-      .query(`SELECT * FROM Users WHERE username = '${username}'`);
-
-    if (userResult.recordset.length > 0) {
-      return { success: false, message: "Username already exists" };
-    }
-
     //insert new user
     await pool.request().query(
       `INSERT INTO Users (username, password, email, role_id) VALUES 
