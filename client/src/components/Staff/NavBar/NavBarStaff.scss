@@ -4,19 +4,29 @@
 }
 
 .logo_staff img {
-    width: 17%;
+    width: 25%;
+    margin-top: 20px;
+    margin-left: 90px;
+    margin-bottom: 50px;
 }
 
+.user_name {
+    margin: 0px auto;
+}
+
+.staff {
+    border-right: 1px solid black;
+    height: 100vh;
+    width: 260px;
+}
 .staff_nav {
     display: flex;
     flex-direction: column;
     margin-left: 45px;
-    width: 220px;
-    height: 100vh;
-    border-right: 1px solid black;
+    width: 200px;
 
     .staff_playout {
-        margin-bottom: 30px;
+        margin-bottom: 20px;
         border: 1px solid rgb(175, 164, 164);
         width: 170px;
         text-align: center;
@@ -31,11 +41,16 @@
     }
 
     .staff_playout:first-child {
-        margin-top: 250px;
+        margin-top: 90px;
     }
 
     .staff_playout:hover {
         background-color:  rgb(201, 80, 214);
         box-shadow: 0px 4px 15px rgb(172, 164, 164);
     }
+}
+
+.line {
+    margin-top: 25px ;
+    border: 1px solid black;
 }

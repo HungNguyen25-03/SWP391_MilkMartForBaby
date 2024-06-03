@@ -13,6 +13,8 @@ export default function NavBarStaff() {
                 <p><span>User Name:</span>&nbsp; Minh Trí</p>
             </div>
 
+            <div className='line'></div>
+
             <div className='staff_nav'>
                 <div className='staff_playout'>
                     <Link to={'/staff/comfirm_order'}>Confirm Order</Link>
