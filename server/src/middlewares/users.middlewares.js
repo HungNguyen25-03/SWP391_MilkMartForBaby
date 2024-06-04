@@ -3,11 +3,12 @@ const { poolPromise } = require("../services/database.services");
 const registerUserMiddleware = async (req, res, next) => {
   try {
     const errors = [];
-    const { username, password, email, role_id } = req.body;
+    const { username, password, confirmPassword, email, role_id } = req.body;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!username) {
       errors.push({
+        name: "username",
         success: false,
         message: "Username is required",
         status: 400,
@@ -16,6 +17,7 @@ const registerUserMiddleware = async (req, res, next) => {
 
     if (!email) {
       errors.push({
+        name: "email",
         success: false,
         message: "Email is required",
         status: 400,
@@ -24,6 +26,7 @@ const registerUserMiddleware = async (req, res, next) => {
 
     if (!password) {
       errors.push({
+        name: "password",
         success: false,
         message: "Password is required",
         status: 400,
@@ -32,6 +35,7 @@ const registerUserMiddleware = async (req, res, next) => {
 
     if (!emailRegex.test(email)) {
       errors.push({
+        name: "email",
         success: false,
         message: "Invalid email format",
         status: 400,
@@ -40,6 +44,7 @@ const registerUserMiddleware = async (req, res, next) => {
 
     if (password.length < 8 && password.length > 0) {
       errors.push({
+        name: "password",
         success: false,
         message: "Password must be at least 8 characters long",
         status: 400,
@@ -48,8 +53,18 @@ const registerUserMiddleware = async (req, res, next) => {
 
     if (password && password.length > 20) {
       errors.push({
+        name: "password",
         success: false,
         message: "Password must be less than 20 characters long",
+        status: 400,
+      });
+    }
+
+    if (password !== confirmPassword) {
+      errors.push({
+        name: "confirm password",
+        success: false,
+        message: "Passwords do not match",
         status: 400,
       });
     }
@@ -62,6 +77,7 @@ const registerUserMiddleware = async (req, res, next) => {
 
     if (userResult.recordset.length > 0) {
       errors.push({
+        name: "username",
         success: false,
         message: "Username already exists",
         status: 401,
@@ -74,6 +90,7 @@ const registerUserMiddleware = async (req, res, next) => {
 
     if (userEmailResult.recordset.length > 0) {
       errors.push({
+        name: "email",
         success: false,
         message: "Email already exists",
         status: 401,
@@ -90,4 +107,4 @@ const registerUserMiddleware = async (req, res, next) => {
   }
 };
 
-module.exports = { registerUserMiddleware};
+module.exports = { registerUserMiddleware };
