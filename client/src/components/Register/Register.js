@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Register.scss";
 import { FaUser, FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
+import { Link } from "react-router-dom";
 export default function Register() {
+  const [user, setUser] = useState({});
   return (
     <>
-      <div className="register_container">
+      <div className="register_container d-flex justify-content-center align-items-center">
         <div className="column_register">
-          <h2>Sign up</h2>
+          <h2 className="mt-2">Sign up</h2>
 
           <form>
             <div className="register_info">
@@ -64,7 +66,7 @@ export default function Register() {
             </div>
             <div className="other">
               <div>
-                <a href="/login">Already have an account?</a>
+                <Link to="/login">Already have an account?</Link>
               </div>
             </div>
 

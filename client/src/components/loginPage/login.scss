@@ -5,17 +5,17 @@
   padding: 0;
   background: url(baby.png) no-repeat;
   background-size: cover;
-}
 
-.column {
-  width: 26%;
-  height: 10%;
-  border: 1px solid rgba(255, 3, 3, 0.2);
-  border-radius: 10px;
-  margin: 7.2% auto;
-  backdrop-filter: blur(20px);
-  background: transparent;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  .column {
+    // width: 26%;
+    // height: 10%;
+    border: 1px solid rgba(255, 3, 3, 0.2);
+    border-radius: 10px;
+    margin: 6.02rem auto;
+    backdrop-filter: blur(20px);
+    background: transparent;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
 }
 
 .login_info {
@@ -25,7 +25,7 @@
 }
 
 .login_detail {
-  margin: 20px 0;
+  margin: 20px 10px;
   position: relative;
 }
 

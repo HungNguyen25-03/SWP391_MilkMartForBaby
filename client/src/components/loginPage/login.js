@@ -5,7 +5,10 @@ import { FaLock } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { IoEyeSharp } from "react-icons/io5";
 import { MainAPI } from "../API";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 function Login() {
   const nav = useNavigate();
@@ -25,34 +28,27 @@ function Login() {
     setShowPassword(!showPassword);
   };
 
-  const login = async () => {
-    const data = await fetch(`${MainAPI}user/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    }).then((res) => {
-      return res.json();
-    });
-    return data;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await login();
-    console.log(response);
-    if (response.status === 200) {
-      console.log(response.message);
-      nav("/home");
-    } else {
-      console.log(response.message);
-    }
+    axios
+      .post(`${MainAPI}/user/login`, { email, password })
+      .then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          nav("/home");
+        } else {
+        }
+      })
+      .catch((err) => {
+        console.log(err.response.data.message);
+        toast.error(err.response.data.message);
+      });
   };
 
   return (
     <>
-      <div className="login_container">
+      <div className="login_container d-flex justify-content-center align-items-center">
+        <ToastContainer autoClose={2000} />
         <div className="column">
           <h2>Log In</h2>
 
@@ -85,14 +81,14 @@ function Login() {
             </div>
             <div className="other">
               <div>
-                <a href="/register">Register an account</a>
+                <Link to="/register">Register an account</Link>
               </div>
               <div>
                 <a href="#">Forget Password?</a>
               </div>
             </div>
 
-            <button type="submit" value="Log In"></button>
+            <input type="submit" value="Log In"></input>
           </form>
         </div>
       </div>
