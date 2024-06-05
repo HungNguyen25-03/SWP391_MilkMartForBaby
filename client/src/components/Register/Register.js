@@ -2,67 +2,119 @@ import React, { useState } from "react";
 import "./Register.scss";
 import { FaUser, FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { MainAPI } from "../API";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export default function Register() {
-  const [user, setUser] = useState({});
+  const nav = useNavigate();
+  const [user, setUser] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [errors, setErrors] = useState([]);
+
+  const handleChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios
+      .post(`${MainAPI}/user/register`, user)
+      .then((res) => {
+        toast.success(res.data.message);
+        nav("/login");
+      })
+      .catch((err) => {
+        console.log(err.response.data.errors);
+        setErrors(err.response.data.errors);
+      });
+  };
+
+  const specificError = (name) => {
+    return errors.find((err) => {
+      return err.name === name;
+    });
+  };
+  console.log(user);
+
   return (
     <>
       <div className="register_container d-flex justify-content-center align-items-center">
+        <ToastContainer autoClose={2000} />
         <div className="column_register">
           <h2 className="mt-2">Sign up</h2>
-
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="register_info">
               <div className="register_detail">
                 <FaUser />
                 <input
                   type="text"
-                  value=""
+                  value={user.username}
                   placeholder="Username"
-                  onChange={(event) => {
-                    this.handleOnchangeUserID(event);
-                  }}
-                  required
+                  name="username"
+                  onChange={handleChange}
                 />
               </div>
+              {specificError("username") && (
+                <p className="text-danger fw-bold m-0">
+                  {specificError("username").message}
+                </p>
+              )}
 
               <div className="register_detail">
                 <MdEmail />
                 <input
                   type="text"
-                  value=""
+                  value={user.email}
                   placeholder="Email"
-                  onChange={(event) => {
-                    this.handleOnchangePassWord(event);
-                  }}
-                  required
+                  name="email"
+                  onChange={handleChange}
                 />
               </div>
+              {specificError("email") && (
+                <p className="text-danger fw-bold m-0">
+                  {specificError("email").message}
+                </p>
+              )}
 
               <div className="register_detail">
                 <FaLock />
                 <input
                   type="password"
-                  value=""
+                  value={user.password}
                   placeholder="Password"
-                  onChange={(event) => {
-                    this.handleOnchangePassWord(event);
-                  }}
-                  required
+                  name="password"
+                  onChange={handleChange}
                 />
               </div>
+              {specificError("password") && (
+                <p className="text-danger fw-bold m-0">
+                  {specificError("password").message}
+                </p>
+              )}
+
               <div className="register_detail">
                 <FaLock />
                 <input
                   type="password"
-                  value=""
+                  value={user.confirmPassword}
                   placeholder="Confirm password"
-                  onChange={(event) => {
-                    this.handleOnchangePassWord(event);
-                  }}
-                  required
+                  name="confirmPassword"
+                  onChange={handleChange}
                 />
               </div>
+              {specificError("confirm password") && (
+                <p className="text-danger fw-bold m-0">
+                  {specificError("confirm password").message}
+                </p>
+              )}
             </div>
             <div className="other">
               <div>

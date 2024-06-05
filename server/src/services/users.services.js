@@ -1,4 +1,6 @@
+const jwt = require("jsonwebtoken");
 const { poolPromise } = require("./database.services");
+const config = require("../config/auth.config");
 
 async function loginUser(email, password) {
   try {
@@ -8,15 +10,29 @@ async function loginUser(email, password) {
       .query(
         `SELECT * FROM Users WHERE email = '${email}' AND password = '${password}' AND status = 1`
       );
+
     const user = result.recordset[0];
 
     if (user) {
-      return { success: true, user };
+      const token = jwt.sign(
+        user.user_id,
+        config.secret,
+        {
+          algorithm: "HS256",
+          allowInsecureKeySizes: true,
+        },
+        { expiresIn: 86400 }
+      );
+
+      console.log(token);
+
+      const authorize = user.role_id;
+      return { success: true, user, token: token, authorize };
     } else {
       return { success: false, message: "Invalid Email or password" };
     }
   } catch (error) {
-    // console.log("Error logging", error);
+    console.log("Error logging", error);
     throw error;
   }
 }
