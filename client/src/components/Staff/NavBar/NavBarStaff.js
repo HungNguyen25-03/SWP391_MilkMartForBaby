@@ -32,7 +32,7 @@ export default function NavBarStaff() {
                     <Link to={'/staff/track_orders'}>Track Orders</Link>
                 </div>
                 <div className='staff_playout'>
-                    <Link to={'/staff/manage_posts'}>Confirm Order</Link>
+                    <Link to={'/staff/manage_posts'}>Manage Posts</Link>
                 </div>
             </div>
         </div>

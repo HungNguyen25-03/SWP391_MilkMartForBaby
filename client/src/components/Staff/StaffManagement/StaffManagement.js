@@ -1,9 +1,10 @@
 import React from 'react'
 import NavBarStaff from '../NavBar/NavBarStaff'
 import { Route, Routes } from 'react-router-dom'
-import ConfirmOrder from '../ConfirmOrder/ConfirmOrder'
 import GetDetailConfirm from '../ConfirmOrder/GetDetailConfirm'
 import GetInentory from '../ManageInventory/GetInventory'
+import GetManageStaff from '../ManageSatff/GetManageUser'
+import GetVoucher from '../CreateVoucher/GetVoucher'
 
 export default function StaffManagement() {
     return (
@@ -12,9 +13,9 @@ export default function StaffManagement() {
             <Routes>
                 <Route path='/comfirm_order' element={<GetDetailConfirm />}></Route>
                 <Route path='/manage_inventory' element={<GetInentory />}></Route>
-                {/* <Route path='/comfirm_order' element={<ConfirmOrder />}></Route>
-                <Route path='/comfirm_order' element={<ConfirmOrder />}></Route>
-                <Route path='/comfirm_order' element={<ConfirmOrder />}></Route>
+                <Route path='/manage_users' element={<GetManageStaff />}></Route>
+                <Route path='/create_voucher_codes' element={<GetVoucher />}></Route>
+                {/*<Route path='/comfirm_order' element={<ConfirmOrder />}></Route>
                 <Route path='/comfirm_order' element={<ConfirmOrder />}></Route> */}
             </Routes>
         </div>
