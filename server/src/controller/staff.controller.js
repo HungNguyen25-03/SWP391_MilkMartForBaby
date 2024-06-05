@@ -1,5 +1,8 @@
 const {createVoucher} = require('../services/staff.services');
 
+
+
+
 const createVoucherController = async (req, res) => {
     const {discount, expiration_date} = req.body;
     console.log(req.body);
@@ -16,6 +19,11 @@ const createVoucherController = async (req, res) => {
         console.log("fail to create a voucher");
     }
 }
+
+
+
+
+
 
 module.exports = {
     createVoucherController,
