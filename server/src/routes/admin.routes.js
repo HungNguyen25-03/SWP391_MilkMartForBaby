@@ -1,13 +1,13 @@
 const express = require("express");
-const {
-  createUser,
-  getUserById,
-  getAllUser,
-  DeleteUser,
-  updateUser,
-} = require("../services/admin.services");
-const { createUserController } = require("../controller/admins.controller");
-const { createUserMiddleware } = require("../middlewares/admin.middlewares");
+
+const { createUserController, 
+        updateUserController, 
+        deleteUserController, 
+        getAllUserController, 
+        getUserByIdController} = require("../controller/admins.controller");
+
+const { createUserMiddleware, 
+        updateUserMiddleware } = require("../middlewares/admin.middlewares");
 const adminRoutes = express.Router();
 
 // admin CRUD api
@@ -16,89 +16,16 @@ const adminRoutes = express.Router();
 adminRoutes.post("/create", createUserMiddleware, createUserController);
 
 //api get User
-adminRoutes.get("/getUser/:id", async (req, res) => {
-  const user_id = parseInt(req.params.id, 10);
-  console.log(user_id);
-  try {
-    const result = await getUserById(user_id);
-    if (result.success) {
-      return res.status(200).json({ user: result.user });
-    } else {
-      return res.status(404).json({ message: result.message });
-    }
-  } catch (err) {
-    console.log("Fail to get user", err);
-    res.status(500).json({ message: "Error getting user" });
-  }
-});
+adminRoutes.get("/getUser/:id", getUserByIdController);
 
 // get All User
-adminRoutes.get("/allUsers", async (req, res) => {
-  try {
-    const result = await getAllUser();
-
-    if (result.success) {
-      return res.status(200).json({ user: result.user });
-    } else {
-      return res.status(404).json({ message: result.message });
-    }
-  } catch (error) {
-    console.log("Fail to get all user", error);
-    res.status(500).json({ message: "Error getting all user" });
-  }
-});
+adminRoutes.get("/allUsers", getAllUserController);
 
 // Delete user
 
-adminRoutes.get("/delete/:id", async (req, res) => {
-  const user_id = parseInt(req.params.id, 10);
-  console.log(user_id);
-  try {
-    const result = await DeleteUser(user_id);
-    console.log(result);
-    if (result.success) {
-      return res
-        .status(200)
-        .json({ message: "Delete successful", status: 200 });
-    } else {
-      return res.status(401).json({ message: "Delete failed", status: 401 });
-    }
-  } catch (err) {
-    console.error("Error deleting user:", err);
-    return res
-      .status(500)
-      .json({ message: "Internal server error", status: 500 });
-  }
-});
+adminRoutes.get("/delete/:id", deleteUserController);
 
 //api update User
-adminRoutes.put("/update/:id", async (req, res) => {
-  const user_id = parseInt(req.params.id, 10);
-  const { username, password, email, role_id } = req.body;
-  console.log(req.body);
-  try {
-    const result = await updateUser(
-      user_id,
-      username,
-      password,
-      email,
-      role_id
-    );
-    console.log(result);
-    if (result.success) {
-      return res.status(200).json({
-        message: result.message,
-        status: 200,
-      });
-    } else {
-      return res.status(401).json({
-        message: result.message,
-        status: 401,
-      });
-    }
-  } catch (err) {
-    console.log("fail to update 1");
-  }
-});
+adminRoutes.put("/update/:id", updateUserMiddleware,updateUserController);
 
 module.exports = adminRoutes;
