@@ -10,6 +10,7 @@ const userRoutes = require("../server/src/routes/users.routes");
 const productRoutes = require("../server/src/routes/products.routes");
 const orderRoutes = require("../server/src/routes/order.routes");
 const adminRoutes = require("../server/src/routes/admin.routes");
+const staffRoutes = require("../server/src/routes/staff.routes");
 const { errorHandlingMiddleware } = require("../server/src/middlewares/error.middleware");
 //api user
 
@@ -23,6 +24,9 @@ app.use("/order", orderRoutes);
 
 //api to use admin
 app.use("/admin", adminRoutes);
+
+//api to use staff
+app.use("/staff", staffRoutes);
 
 app.use(errorHandlingMiddleware);
 

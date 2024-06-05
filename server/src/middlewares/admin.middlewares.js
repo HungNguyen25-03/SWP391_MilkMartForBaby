@@ -117,4 +117,11 @@ const createUserMiddleware = async (req, res, next) => {
   }
 };
 
-module.exports = { createUserMiddleware };
+const updateUserMiddleware = async (req, res, next) => {
+  createUserMiddleware(req, res, next);
+}
+
+module.exports = {
+  createUserMiddleware,
+  updateUserMiddleware
+};
