@@ -1,4 +1,4 @@
-const {createVoucher,getAllUser, getAllProduct} = require('../services/staff.services');
+const {createVoucher,getAllUser, getAllProduct,getAllOrder} = require('../services/staff.services');
 
 const createVoucherController = async (req, res) => {
     const {discount, expiration_date} = req.body;
@@ -48,9 +48,22 @@ const getAllUserController = async (req, res) => {
   };
 
  
+  const getOrderController = async (req, res) => {
+    try {
+      const result = await getAllOrder();
+      if (result.success) {
+        res.json(result.order);
+      } else {
+        res.json({ message: result.message });
+      }
+    } catch (error) {
+      console.log("Faill to get Order");
+    }
+  };
 
 module.exports = {
     createVoucherController,
     getAllUserController,
-    getAllProductController
+    getAllProductController,
+    getOrderController,
 }
