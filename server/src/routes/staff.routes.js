@@ -11,17 +11,20 @@ staffRouters.post("/createVoucher", createVoucherMiddleware, createVoucherContro
 
 
 // Get Order information
-const {getOrder}=require("../controller/orders.controller")
+const {getOrder}=require("../controller/orders.controller");
 staffRouters.get("/order",getOrder);
 
 
 //Get Product Information
 
-const {getProduct}=require("../controller/products.controller")
+const {getProduct}=require("../controller/products.controller");
 staffRouters.get("/product",getProduct);
 
 
 //Get User Information
-staffRouters.get("");
+const{getAllUsers}=require("../controller/staff.controller");
+staffRouters.get("/user",getAllUsers);
+
+
 
 module.exports = staffRouters;
