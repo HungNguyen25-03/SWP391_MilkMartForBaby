@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from 'react-router-dom'
+import { useParams } from "react-router-dom";
 import ProductInfo from "./Detail/ProductInfo";
 import InfoDetail from "./DetailOfProduct/InfoDetail";
 import HeaderPage from "../../utils/Header/Header";
 import FooterPage from "../../utils/Footer/FooterPage";
 import Rate from "./Rate/Rate";
+import HeaderPage from "../../utils/Header/Header";
+import FooterPage from "../../utils/Footer/FooterPage";
 
 export default function ProductDetail() {
-
-  const { id } = useParams()
+  const { id } = useParams();
 
   const [product, setProduct] = useState();
-  const [dataProduct, setDataProduct] = useState()
+  const [dataProduct, setDataProduct] = useState();
   const [cus, setCus] = useState();
 
   useEffect(() => {
@@ -40,5 +41,5 @@ export default function ProductDetail() {
       {cus && <Rate cus={cus} />}
       <FooterPage />
     </div>
-  )
+  );
 }

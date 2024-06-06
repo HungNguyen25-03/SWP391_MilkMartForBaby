@@ -49,9 +49,9 @@
         margin: 30px 0px;
         font-size: 20px;
     }
-
-    .add_buy{
-        margin: 30px 0px;
+  
+  .add_buy {
+    margin: 30px 0px;
 
         .btn_add{
             margin-right:60px ;
@@ -65,10 +65,9 @@
             cursor: pointer;
         }
 
-        .btn_add:hover {
-            background-color: rgb(239, 129, 32);
-        }
-
+    .btn_add:hover {
+      background-color: rgb(239, 129, 32);
+    }
         .btn_buy{
             padding: 20px 55px;
             border: 1px solid;
@@ -80,17 +79,16 @@
             cursor: pointer;
         }
 
-        .btn_buy:hover {
-            background-color: rgb(249, 3, 3);
-        }
+    .btn_buy:hover {
+      background-color: rgb(249, 3, 3);
     }
-    
+  }
 }
 
 .other_detail {
-    margin: 30px 200px;
+  margin: 30px 200px;
 }
 
 .btn {
-    margin: 0px 20px;
+  margin: 0px 20px;
 }

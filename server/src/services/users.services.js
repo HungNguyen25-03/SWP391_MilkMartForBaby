@@ -1,4 +1,4 @@
-const { poolPromise } = require("./database.services");
+const { poolPromise, sql } = require("./database.services");
 
 async function loginUser(email, password) {
   try {
@@ -6,7 +6,7 @@ async function loginUser(email, password) {
     const result = await pool
       .request()
       .query(
-        `SELECT * FROM Users WHERE email = '${email}' AND password = '${password}'`
+        `SELECT * FROM Users WHERE email = '${email}' AND password = '${password}' AND status = 1`
       );
     const user = result.recordset[0];
 
@@ -24,23 +24,29 @@ async function loginUser(email, password) {
 async function registerUser(username, password, email) {
   try {
     const pool = await poolPromise;
-    const userResult = await pool
-      //check if user exists
-      .request()
-      .query(`SELECT * FROM Users WHERE username = '${username}'`);
-
-    if (userResult.recordset.length > 0) {
-      return { success: false, message: "Username already exists" };
-    }
-
     //insert new user
+    await pool.request().query(
+      `INSERT INTO Users (username, password, email, role_id) VALUES 
+        ('${username}', '${password}', '${email}', 'customer' )`
+    );
+
+    return { success: true, message: "User registered successfully" };
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function applyVoucher(user_id, voucher_id) {
+  try {
+    const pool = await poolPromise;
+    // Get the voucher
     await pool
       .request()
       .query(
-        `INSERT INTO Users (username, password, email, role_id) VALUES ('${username}', '${password}', '${email}', 'customer')`
+        `INSERT INTO User_Vouchers (user_id, voucher_id, used) VALUES ('${user_id}', '${voucher_id}', 1)`
       );
 
-    return { success: true, message: "User registered successfully" };
+    return { success: true, message: "Voucher applied successfully" };
   } catch (error) {
     throw error;
   }
@@ -49,4 +55,5 @@ async function registerUser(username, password, email) {
 module.exports = {
   loginUser,
   registerUser,
+  applyVoucher,
 };

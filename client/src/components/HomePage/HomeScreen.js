@@ -6,16 +6,15 @@ import Brand from './Content/Brand/Brand'
 import UseFull from './Content/Useful/UseFull'
 import FillterType from './Content/Shopping/FillterType'
 
-
 export default function HomeScreen() {
-    return (
-        <div>
-            <HeaderPage />
-            <Advertise />
-            <Brand />
-            <UseFull />
-            <FillterType />
-            <FooterPage />
-        </div>
-    )
+  return (
+    <div>
+      <HeaderPage />
+      <Advertise />
+      <Brand />
+      <UseFull />
+      <FillterType />
+      <FooterPage />
+    </div>
+  );
 }

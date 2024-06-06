@@ -51,21 +51,21 @@
       .block-cart-end {
         display: flex;
 
-        .item-cart-price {
+        .item-cart-price-pro {
           margin-right: 65px;
           display: flex;
           justify-content: center;
           align-items: center;
         }
 
-        .item-cart-quantity {
+        .item-cart-quantity-pro {
           display: flex;
           margin-right: 65px;
           text-align: center;
           justify-content: center;
           align-items: center;
 
-          .btn {
+          .btn-1 {
             margin: 0 5px;
 
             button {

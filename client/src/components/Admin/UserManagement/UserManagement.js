@@ -1,27 +1,38 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../NavBar/NavBar";
 import DataTable from "react-data-table-component";
-import { MdDelete, MdModeEdit } from "react-icons/md";
+import { MdModeEdit } from "react-icons/md";
 import "./UserManagement.scss";
 import Modal from "../Modal/Modal";
+import { DeleteIcon } from "../../../utils/Icon/DeleteIcon";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import { MainAPI } from "../../API";
 
 export default function UserManagement() {
+  const nav = useNavigate();
   const [data, setData] = useState([]);
   const [records, setRecords] = useState(data);
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:1880/user")
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data);
-        setRecords(data);
-      });
+    async function fetchData() {
+      const response = await fetch(`${MainAPI}/admin/allUsers`)
+        .then((res) => res.json())
+        .then((data) => {
+          return data.user;
+        });
+      console.log(response);
+      setRecords(response);
+    }
+    fetchData();
   }, []);
 
   function handleFilter(event) {
     const newData = data.filter((record) => {
-      return record.name
+      return record.username
         .toLowerCase()
         .includes(event.target.value.toLowerCase());
     });
@@ -29,44 +40,64 @@ export default function UserManagement() {
   }
 
   function handleDelete(id) {
-    const newData = records.filter((record) => record.id !== id);
-    setRecords(newData);
-    setData(newData);
+    try {
+      axios.get(`${MainAPI}/admin/delete/${id}`).then((res) => {
+        toast.success(res.data.message);
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
-  function handleSubmit(newRow) {
-    setRecords([...records, newRow]);
-    setData([...data, newRow]);
+  function handleSubmit(newUser) {
+    axios
+      .post("http://localhost:4000/admin/create", newUser)
+      .then((res) => {
+        if (res.status === 200) {
+          toast.success(res.data.message);
+        } else {
+        }
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+      });
   }
 
   const column = [
     {
       name: "Name",
-      selector: (row) => row.name,
+      selector: (row) => row.username,
+      sortable: true,
+    },
+    {
+      name: "Email",
+      selector: (row) => row.email,
       sortable: true,
     },
     {
       name: "Role",
-      selector: (row) => row.role,
+      selector: (row) => row.role_id,
       sortable: true,
     },
     {
       cell: (row) => (
         <div className="action">
-          <button
+          <span
+            className="action-btn"
             onClick={() => {
-              handleDelete(row.id);
+              handleDelete(row.user_id);
             }}
           >
-            <MdDelete color="red" />
-          </button>
-          <button
+            <DeleteIcon color="red" />
+          </span>
+          <span
+            className="action-btn"
             onClick={() => {
-              handleDelete(row.id);
+              nav(`/admin/edit/${row.user_id}`);
             }}
           >
             <MdModeEdit color="green" />
-          </button>
+          </span>
         </div>
       ),
     },
@@ -76,9 +107,9 @@ export default function UserManagement() {
     <div className="userManage_container">
       <NavBar />
       <div className="content">
-        <h1>User Management</h1>
-        <h2>Current user</h2>
-        <div className="user_manage">
+        <ToastContainer autoClose={2000} />
+        <h1 className="mt-0">User Management</h1>
+        <div className="user_manage mt-4">
           <div className="search">
             <label>Search: </label>
             <input type="text" onChange={handleFilter}></input>
@@ -102,12 +133,13 @@ export default function UserManagement() {
             )}
           </div>
         </div>
-        <div className="table">
+        <div className="table mt-3">
           <DataTable
             columns={column}
             data={records}
             selectableRows
-            fixedHeader
+            pagination
+            paginationRowsPerPageOptions={[6, 10]}
             className="table-content"
           />
         </div>

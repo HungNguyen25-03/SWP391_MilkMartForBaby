@@ -1,0 +1,39 @@
+.dashboard_container {
+  // display: flex;
+
+  .content {
+    width: 80%;
+    margin: 0 20px;
+    height: 100%;
+    margin-left: 240px;
+
+    .row {
+      display: flex;
+      width: 100%;
+
+      .col {
+        margin: 20px;
+        width: 300px;
+
+        .card {
+          width: 100%;
+          box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+          border-radius: 10px;
+          padding: 10px;
+        }
+
+        .card-content {
+          display: flex;
+          flex-direction: row;
+
+          .icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+          }
+        }
+      }
+    }
+  }
+}
