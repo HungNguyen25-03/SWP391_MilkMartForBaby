@@ -3,9 +3,7 @@ import { useParams } from "react-router-dom";
 import ProductInfo from "./Detail/ProductInfo";
 import InfoDetail from "./DetailOfProduct/InfoDetail";
 import HeaderPage from "../../utils/Header/Header";
-import FooterPage from "../../utils/Footer/FooterPage";
 import Rate from "./Rate/Rate";
-import HeaderPage from "../../utils/Header/Header";
 import FooterPage from "../../utils/Footer/FooterPage";
 
 export default function ProductDetail() {

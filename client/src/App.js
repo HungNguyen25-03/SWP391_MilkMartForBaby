@@ -9,6 +9,7 @@ import Login from "./components/loginPage/login";
 import ProductDetail from "./components/ProductInfo/ProductDetail";
 import Register from "./components/Register/Register";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import StaffManagement from "./components/Staff/StaffManagement/StaffManagement.js";
 
 function App() {
   return (
@@ -27,10 +28,12 @@ function App() {
             path="/home/productdetail/:id"
             element={<ProductDetail />}
           ></Route>
+          <Route path="/staff/*" element={<StaffManagement />}></Route>
         </Routes>
       </BrowserRouter>
     </>
   );
 }
+
 
 export default App;
