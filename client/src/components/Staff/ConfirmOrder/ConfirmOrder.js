@@ -1,7 +1,23 @@
-import React from 'react'
-import './ConfirmOrder.scss'
+import React, { useState } from 'react';
+import './ConfirmOrder.scss';
 
 export default function ConfirmOrder({ dataConfirm }) {
+    const [action, setAction] = useState(false);
+
+    const getStatusClass = (status) => {
+        console.log(status); // Kiểm tra giá trị của status
+        switch (status.toLowerCase()) {
+            case 'cancel':
+                return 'status-cancel';
+            case 'confirm':
+                return 'status-confirm';
+            case 'pending':
+                return 'status-pending';
+            default:
+                return '';
+        }
+    };
+
     return (
         <>
             <table>
@@ -21,7 +37,10 @@ export default function ConfirmOrder({ dataConfirm }) {
                             <td>{confirm.orderID}</td>
                             <td>{confirm.date}</td>
                             <td>{confirm.cusName}</td>
-                            <td>{confirm.status}</td>
+                            <td className={getStatusClass(confirm.status)}>
+                                <span className="status-dot"></span>
+                                {confirm.status}
+                            </td>
                             <td>{confirm.amount}</td>
                             <td>
                                 <button className="action-btn">▪▪▪</button>
@@ -31,6 +50,5 @@ export default function ConfirmOrder({ dataConfirm }) {
                 </tbody>
             </table>
         </>
-    )
+    );
 }
-

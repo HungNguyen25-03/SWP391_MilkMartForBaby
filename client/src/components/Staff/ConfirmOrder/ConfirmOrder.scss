@@ -53,4 +53,29 @@ tbody tr:hover {
     background-color: #cec7c7;
 }
 
+.status-cancel .status-dot {
+    background-color: red;
+    border-radius: 50%;
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+    margin-right: 5px;
+}
 
+.status-confirm .status-dot {
+    background-color: green;
+    border-radius: 50%;
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+    margin-right: 5px;
+}
+
+.status-pending .status-dot {
+    background-color: yellow;
+    border-radius: 50%;
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+    margin-right: 5px;
+}
