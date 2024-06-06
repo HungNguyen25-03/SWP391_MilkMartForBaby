@@ -63,7 +63,36 @@ async function getAllUser() {
   }
 }
 
+async function getAllProduct() {
+  try {
+    const pool = await poolPromise;
+    const result = await pool.request().query(`
+    SELECT 
+    Products.product_id,
+    Products.product_name,
+    Products.price,
+    Products.stock,
+    Category.category_name
+
+    FROM Products
+    JOIN Category
+    ON Products.category_id=Category.category_id ;
+    `);
+    const product = result.recordset;
+
+    if (product) {
+      return { success: true, product };
+    } else {
+      return { success: false, message: "Fail to show all Products" };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+
 module.exports = {
   createVoucher,
-  getAllUser
+  getAllUser,
+  getAllProduct
 };

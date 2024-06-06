@@ -12,4 +12,8 @@ staffRouters.post("/createVoucher", createVoucherMiddleware, createVoucherContro
 const{getAllUserController}=require("../controller/staff.controller");
 staffRouters.get("/user",getAllUserController);
 
+
+const {getAllProductController}=require("../controller/staff.controller");
+staffRouters.get("/product",getAllProductController);
+
 module.exports = staffRouters;
