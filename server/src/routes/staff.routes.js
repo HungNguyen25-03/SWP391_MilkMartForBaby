@@ -15,4 +15,13 @@ const {getOrder}=require("../controller/orders.controller")
 staffRouters.get("/order",getOrder);
 
 
+//Get Product Information
+
+const {getProduct}=require("../controller/products.controller")
+staffRouters.get("/product",getProduct);
+
+
+//Get User Information
+staffRouters.get("");
+
 module.exports = staffRouters;

@@ -3,6 +3,7 @@ const { getAllProduct } = require("../services/products.services");
 const getProduct = async (req, res) => {
   try {
     const result = await getAllProduct();
+    console.log(result);
     if (result.success) {
       res.json(result.product);
     } else {

@@ -3,7 +3,20 @@ const { poolPromise } = require("./database.services");
 async function getAllProduct() {
   try {
     const pool = await poolPromise;
-    const result = await pool.request().query(`SELECT * FROM Products`);
+    const result = await pool.request().query(`SELECT 
+
+    Products.product_id,
+    Products.product_name,
+    Products.price,
+    Products.stock,
+    Category.category_name
+
+    FROM Products
+    
+    JOIN Category 
+
+    ON Products.category_id=Category.category_id
+    `);
     const product = result.recordset;
 
     if (product) {
