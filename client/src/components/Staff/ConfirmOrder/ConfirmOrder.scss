@@ -1,0 +1,81 @@
+table {
+    width: 140%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-left: 30%;
+    margin-top: 20%;
+}
+
+thead {
+    background-color: #f8f8f8;
+}
+
+thead th {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+}
+
+tbody tr {
+    border-bottom: 1px solid #ddd;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f1eaeac3;
+}
+
+tbody td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+tbody tr:last-child {
+    border-bottom: none;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 18px;
+}
+
+.action-btn:hover {
+    color: #0056b3;
+}
+
+tbody tr:hover {
+    background-color: #cec7c7;
+}
+
+.status-cancel .status-dot {
+    background-color: red;
+    border-radius: 50%;
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+    margin-right: 5px;
+}
+
+.status-confirm .status-dot {
+    background-color: green;
+    border-radius: 50%;
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+    margin-right: 5px;
+}
+
+.status-pending .status-dot {
+    background-color: yellow;
+    border-radius: 50%;
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+    margin-right: 5px;
+}
