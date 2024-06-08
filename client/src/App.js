@@ -12,6 +12,7 @@ import ProductDetail from "./components/ProductInfo/ProductDetail";
 import Register from "./components/Register/Register";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import StaffManagement from "./components/Staff/StaffManagement/StaffManagement.js";
+import UserAccount from "./components/UserAccount/UserAccount.js";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/admin" element={<NavBar />}></Route>
           <Route path="/blogs" element={<Blog />}></Route>
           <Route path="/register" element={<Register />}></Route>
+          <Route path="/customer-account" element={<UserAccount />}></Route>
           <Route path="/admin/user" element={<UserManagement />}></Route>
           <Route path="/blogs/post/:id" element={<Post />}></Route>
           <Route path="/admin/edit/:id" element={<Edit />}></Route>
@@ -39,6 +41,5 @@ function App() {
     </>
   );
 }
-
 
 export default App;
