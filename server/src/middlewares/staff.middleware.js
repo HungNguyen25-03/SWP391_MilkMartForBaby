@@ -102,7 +102,7 @@ const editVoucherMiddleware = async (req, res, next) => {
 
     next();
   } catch (error) {
-    console.error("Error in editVoucherMiddleware:", error);  // Improved logging
+    console.error("Error in editVoucherMiddleware:", error);  
     next(error);
   }
 };

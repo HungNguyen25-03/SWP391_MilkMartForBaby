@@ -155,7 +155,7 @@ const editVoucher = async (voucher_id, discount, expiration_date) => {
       return { success: false, message: "Failed to update voucher" };
     }
   } catch (error) {
-    console.error("Error updating voucher:", error);  // Improved logging
+    console.error("Error updating voucher:", error);  
     throw error;
   }
 };

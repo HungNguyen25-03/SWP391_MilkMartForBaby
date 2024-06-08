@@ -39,11 +39,12 @@ async function registerUser(username, password, email) {
 async function applyVoucher(user_id, voucher_id) {
   try {
     const pool = await poolPromise;
-    // Get the voucher
     await pool
       .request()
+      .input('user_id', sql.Int, user_id)
+      .input('voucher_id', sql.Int, voucher_id)
       .query(
-        `INSERT INTO User_Vouchers (user_id, voucher_id, used) VALUES ('${user_id}', '${voucher_id}', 1)`
+        `UPDATE User_Vouchers SET used = 1 WHERE user_id = @user_id AND voucher_id = @voucher_id`
       );
 
     return { success: true, message: "Voucher applied successfully" };
