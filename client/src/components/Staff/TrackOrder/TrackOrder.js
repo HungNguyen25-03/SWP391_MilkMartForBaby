@@ -1,9 +1,10 @@
 import React from 'react'
+import './TrackOrder.scss'
 
 export default function TrackOrder({ tracks }) {
     return (
         <>
-            <table>
+            <table className='track_order'>
                 <thead>
                     <tr>
                         <th>Order ID</th>

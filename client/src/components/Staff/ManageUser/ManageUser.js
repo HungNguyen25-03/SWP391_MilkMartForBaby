@@ -1,10 +1,10 @@
 import React from 'react'
-import '../ConfirmOrder/ConfirmOrder.scss'
+import './ManageUser.scss'
 
 export default function ManageUser({ users }) {
     return (
         < >
-            <table>
+            <table className='manageuser'>
                 <thead>
                     <tr>
                         <th>User ID</th>

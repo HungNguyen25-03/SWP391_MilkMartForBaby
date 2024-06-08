@@ -1,4 +1,4 @@
-.table_confirm {
+.inventory {
     width: 140%;
     border-collapse: separate;
     border-spacing: 0;
@@ -8,35 +8,35 @@
     margin-top: 20%;
 }
 
-.table_confirm thead {
+.inventory thead {
     background-color: #f8f8f8;
 }
 
-.table_confirm thead th {
+.inventory thead th {
     padding: 12px 15px;
     text-align: left;
     font-weight: bold;
     border-bottom: 1px solid #ddd;
 }
 
-.table_confirm tbody tr {
+.inventory tbody tr {
     border-bottom: 1px solid #ddd;
 }
 
-.table_confirm tbody tr:nth-child(even) {
+.inventory tbody tr:nth-child(even) {
     background-color: #f1eaeac3;
 }
 
-.table_confirm tbody td {
+.inventory tbody td {
     padding: 12px 15px;
     text-align: left;
 }
 
-.table_confirm tbody tr:last-child {
+.inventory tbody tr:last-child {
     border-bottom: none;
 }
 
-.table_confirm .action-btn {
+.inventory .action-btn {
     background: none;
     border: none;
     color: #007bff;
@@ -45,15 +45,15 @@
     font-size: 18px;
 }
 
-.table_confirm .action-btn:hover {
+.inventory .action-btn:hover {
     color: #0056b3;
 }
 
-.table_confirm tbody tr:hover {
+.inventory tbody tr:hover {
     background-color: #cec7c7;
 }
 
-.table_confirm .status-cancel .status-dot {
+.inventory .status-cancel .status-dot {
     background-color: red;
     border-radius: 50%;
     display: inline-block;
@@ -62,7 +62,7 @@
     margin-right: 5px;
 }
 
-.table_confirm .status-confirm .status-dot {
+.inventory .status-confirm .status-dot {
     background-color: green;
     border-radius: 50%;
     display: inline-block;
@@ -71,7 +71,7 @@
     margin-right: 5px;
 }
 
-.table_confirm .status-pending .status-dot {
+.inventory .status-pending .status-dot {
     background-color: yellow;
     border-radius: 50%;
     display: inline-block;
