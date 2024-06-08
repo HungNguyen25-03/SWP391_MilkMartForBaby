@@ -106,7 +106,6 @@ const createUserMiddleware = async (req, res, next) => {
       });
     }
 
-
     if (errors.length > 0) {
       return next(errors);
     }
@@ -118,10 +117,112 @@ const createUserMiddleware = async (req, res, next) => {
 };
 
 const updateUserMiddleware = async (req, res, next) => {
-  createUserMiddleware(req, res, next);
-}
+  try {
+    const errors = [];
+    const { username, password, email, role_id } = req.body;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+    if (!username) {
+      errors.push({
+        name: "username",
+        success: false,
+        message: "Username is required",
+        status: 400,
+      });
+    }
 
+    if (!email) {
+      errors.push({
+        name: "email",
+        success: false,
+        message: "Email is required",
+        status: 400,
+      });
+    }
+
+    if (!password) {
+      errors.push({
+        name: "password",
+        success: false,
+        message: "Password is required",
+        status: 400,
+      });
+    }
+
+    if (!role_id) {
+      errors.push({
+        name: "role_id",
+        success: false,
+        message: "Role is required",
+        status: 400,
+      });
+    }
+
+    if (!emailRegex.test(email)) {
+      errors.push({
+        name: "email",
+        success: false,
+        message: "Invalid email format",
+        status: 400,
+      });
+    }
+
+    if (password.length < 8 && password.length > 0) {
+      errors.push({
+        name: "password",
+        success: false,
+        message: "Password must be at least 8 characters long",
+        status: 400,
+      });
+    }
+
+    if (password && password.length > 20) {
+      errors.push({
+        name: "password",
+        success: false,
+        message: "Password must be less than 20 characters long",
+        status: 400,
+      });
+    }
+
+    const pool = await poolPromise;
+    let userCheckQuery;
+    if (username || email) {
+       userCheckQuery = await pool.request()
+        .query(`SELECT * FROM Users WHERE (username = '${username}' OR email = '${email}') 
+      AND user_id != ${req.params.id}`);
+    }
+    console.log(userCheckQuery.recordset);
+
+    if (userCheckQuery.recordset.length > 0) {
+      const existingUser = userCheckQuery.recordset[0];
+      if (existingUser.username === username) {
+        errors.push({
+          name: "username",
+          success: false,
+          message: "Username already exists",
+          status: 401,
+        });
+      }
+      if (existingUser.email === email) {
+        errors.push({
+          name: "email",
+          success: false,
+          message: "Email already exists",
+          status: 401,
+        });
+      }
+    }
+
+    if (errors.length > 0) {
+      return next(errors);
+    }
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   createUserMiddleware,
