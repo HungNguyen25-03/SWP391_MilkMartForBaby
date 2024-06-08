@@ -187,6 +187,7 @@ const updateUserMiddleware = async (req, res, next) => {
 
     const pool = await poolPromise;
     let userCheckQuery;
+    //check if username or email already exists but if it is the same user it's okay
     if (username || email) {
        userCheckQuery = await pool.request()
         .query(`SELECT * FROM Users WHERE (username = '${username}' OR email = '${email}') 
