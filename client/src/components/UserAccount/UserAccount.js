@@ -1,47 +1,79 @@
-import React from "react";
+import React, { useState } from "react";
 import "./UserAccount.scss";
 import HeaderPage from "../../utils/Header/Header";
 import FooterPage from "../../utils/Footer/FooterPage";
 import { MdDelete } from "react-icons/md";
+import Sidebar from "./Sidebar/Sidebar";
 
 export default function UserAccount() {
+  const [title, setTitle] = useState("Thanh toán");
   return (
     <div style={{ "background-color": "#f5f7fd" }}>
       <HeaderPage />
       <div className="container useraccount-container">
-        <div className="d-flex">
-          <div className="sidebar col-3">
-            <div className="box-block"></div>
-            <div>
-              <div>Thẻ thành viên</div>
-              <div>Tiền tích lũy</div>
-            </div>
-          </div>
+        <div className="d-flex justify-content-around">
+          <Sidebar />
           <div className="account-info col-9">
             <div className="order-list-btn">
               <ul className="nav d-flex justify-content-between">
-                <li className="nav-item">Thanh toán</li>
-                <li className="nav-item">Chờ giao</li>
-                <li className="nav-item">Đang giao</li>
-                <li className="nav-item">Đã giao</li>
-                <li className="nav-item">Đã hủy</li>
+                <li
+                  className="nav-item"
+                  onClick={() => {
+                    setTitle("Thanh toán");
+                  }}
+                >
+                  Thanh toán
+                </li>
+                <li
+                  className="nav-item"
+                  onClick={() => {
+                    setTitle("Chờ giao");
+                  }}
+                >
+                  Chờ giao
+                </li>
+                <li
+                  className="nav-item"
+                  onClick={() => {
+                    setTitle("Đang giao");
+                  }}
+                >
+                  Đang giao
+                </li>
+                <li
+                  className="nav-item"
+                  onClick={() => {
+                    setTitle("Đã giao");
+                  }}
+                >
+                  Đã giao
+                </li>
+                <li
+                  className="nav-item"
+                  onClick={() => {
+                    setTitle("Đã hủy");
+                  }}
+                >
+                  Đã hủy
+                </li>
               </ul>
             </div>
             <div className="tab-content">
-              <h5 className="fw-bold">Đã hủy</h5>
-              <div key="1" className="cart-product-line">
-                <div className="block-cart-first">
-                  <div className="product-img">
-                    <img src="assest/images/product/44604-trans.png" alt="1" />
-                  </div>
+              <h5 className="fw-bold">{title}</h5>
+              <div key="1" className="cart-product-line d-flex ">
+                <div className="product-img">
+                  <img src="assest/images/product/44604-trans.png" alt="1" />
+                </div>
+                <div className="product-info w-100">
                   <div className="item-cart-product-name">
                     Sữa Enfamil A2 NeuroPro số 2 800g Follow Up Formula, 6 - 12
                     tháng tuổi{" "}
                   </div>
-                </div>
-                <div className="block-cart-end d-flex justify-content-end align-items-end">
-                  <div className="item-cart-quantity-pro">x1</div>
-                  <div className="item-cart-price-pro mr-0 ">100000đ</div>
+                  <div className="d-flex w-100 align-center product-info-bottom">
+                    <span style={{ width: 600 }}></span>
+                    <div className="item-cart-quantity-pro">x1</div>
+                    <div className="item-cart-price-pro mr-0 ">100000đ</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -55,11 +87,11 @@ export default function UserAccount() {
                 </span>
                 <span
                   className=" d-flex justify-content-between align-items-end"
-                  style={{ width: 170 }}
+                  style={{ width: 180 }}
                 >
                   <span>Tiền tích lũy</span>
                   <span className="font-bold font-15 line-height-15 cc-pink-primary">
-                    0đ
+                    100000đ
                   </span>
                 </span>
               </span>
@@ -73,7 +105,7 @@ export default function UserAccount() {
                 <span className=" d-flex  align-items-end  justify-content position-relative color-20 font-13">
                   <span
                     className=" d-flex  align-items-end  justify-content position-relative color-20 font-13"
-                    style={{ width: 170 }}
+                    style={{ width: 115 }}
                   >
                     Thành tiền
                   </span>
