@@ -1,4 +1,4 @@
-const {createVoucher,getAllUser, getAllProduct,getAllOrder} = require('../services/staff.services');
+const {createVoucher,getAllUser, getAllProduct,getAllOrder,getAllVoucher} = require('../services/staff.services');
 
 const createVoucherController = async (req, res) => {
     const {discount, expiration_date} = req.body;
@@ -14,37 +14,33 @@ const createVoucherController = async (req, res) => {
         }
     } catch (error) {
         console.log("fail to create a voucher");
-    }
-}
+    };
+};
 
 const getAllUserController = async (req, res) => {
-    try {
-      const result = await getAllUser();
-  
-      if (result.success) {
-        return res.status(200).json({ user: result.user });
-      } else {
-        return res.status(404).json({ message: result.message });
-      }
-    } catch (error) {
-      console.log("Fail to get all user", error);
-      res.status(500).json({ message: "Error getting all user" });
+  try {
+    const result = await getAllUser();
+    if (result.success) {
+      res.json(result.user);
+    } else {
+      res.json({ message: result.message });
     }
+  } catch (error) {
+    console.log("Faill to get User");
+  };
   };
   
   const getAllProductController = async (req, res) => {
     try {
       const result = await getAllProduct();
-  
       if (result.success) {
-        return res.status(200).json({ user: result.product });
+        res.json(result.product);
       } else {
-        return res.status(404).json({ message: result.message });
+        res.json({ message: result.message });
       }
     } catch (error) {
-      console.log("Fail to get all user", error);
-      res.status(500).json({ message: "Error getting all user" });
-    }
+      console.log("Faill to get Product");
+    };
   };
 
  
@@ -58,12 +54,34 @@ const getAllUserController = async (req, res) => {
       }
     } catch (error) {
       console.log("Faill to get Order");
-    }
+    };
   };
+
+
+
+
+
+const getVoucherController = async (req,res) => {
+  
+  try {
+    const result = await getAllVoucher();
+    console.log(result);
+    if (result.success) {
+      res.json(result.vouchers);
+    } else {
+      res.json({ message: result.message });
+    }
+  } catch (error) {
+    console.log("Faill to get Voucher");
+  };
+};
+
+
 
 module.exports = {
     createVoucherController,
     getAllUserController,
     getAllProductController,
     getOrderController,
+    getVoucherController
 }

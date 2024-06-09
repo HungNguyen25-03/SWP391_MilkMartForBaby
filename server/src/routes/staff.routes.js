@@ -21,5 +21,11 @@ staffRouters.get("/product",getAllProductController);
 const{getOrderController}=require("../controller/staff.controller");
 staffRouters.get("/order",getOrderController);
 
+//Get Voucher information by staff
+const{getVoucherController}=require("../controller/staff.controller");
+staffRouters.get("/voucher",getVoucherController);
+
+// Import and export product by staff
+staffRouters.get("/import");
 
 module.exports = staffRouters;
