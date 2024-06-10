@@ -1,6 +1,7 @@
 const { poolPromise, sql } = require("./database.services");
 const bcrypt = require("bcrypt");
 const authJwt = require("../middlewares/authJwt.middlewares");
+const dateHelper = require("../helpers/date.helpers");
 
 async function loginUser(email, password) {
   try {
@@ -10,24 +11,24 @@ async function loginUser(email, password) {
       .query(`SELECT * FROM Users WHERE email = '${email}' AND status = 1`);
     const user = result.recordset[0];
 
-    console.log('User from database:', user);
+    console.log("User from database:", user);
 
     if (user) {
-      const isPasswordValid = (password === user.password);
-      console.log('Password comparison result:', isPasswordValid);
+      const isPasswordValid = password === user.password;
+      console.log("Password comparison result:", isPasswordValid);
 
       if (isPasswordValid) {
         const token = authJwt.generateToken(user.id);
         return { success: true, user, token };
       } else {
-        return { success: false, message: 'Invalid Email or password' };
+        return { success: false, message: "Invalid Email or password" };
       }
     } else {
-      return { success: false, message: 'User not found' };
+      return { success: false, message: "User not found" };
     }
   } catch (error) {
-    console.error('Error in loginUser:', error);
-    throw new Error('Database query failed');
+    console.error("Error in loginUser:", error);
+    throw new Error("Database query failed");
   }
 }
 
@@ -46,7 +47,7 @@ async function registerUser(username, password, email) {
 
     return { success: true, message: "User registered successfully", token };
   } catch (error) {
-    console.error('Error in registerUser:', error);
+    console.error("Error in registerUser:", error);
     throw error;
   }
 }
@@ -71,7 +72,9 @@ async function applyVoucher(user_id, voucher_id) {
 async function showAllVoucher() {
   try {
     const pool = await poolPromise;
-    const result = await pool.request().query(`SELECT * FROM Vouchers`);
+    const result = await pool.request()
+      .query(`SELECT code, discount, FORMAT(expiration_date, 'dd-MM-yyyy') as expiration_date
+    FROM Vouchers;`);
     const vouchers = result.recordset;
     if (vouchers) {
       return { success: true, vouchers: vouchers };
@@ -87,7 +90,7 @@ async function getVoucherByUserId(user_id) {
   try {
     const pool = await poolPromise;
     const result = await pool.request().query(`
-    SELECT v.discount, v.expiration_date, uv.used FROM Vouchers v JOIN 
+    SELECT v.discount, FORMAT(v.expiration_date, 'dd-MM-yyyy') AS expiration_date , uv.used FROM Vouchers v JOIN 
     User_Vouchers uv ON v.voucher_id = uv.voucher_id WHERE uv.user_id = ${user_id} AND uv.used = 0`);
     const vouchers = result.recordset;
     if (vouchers) {
