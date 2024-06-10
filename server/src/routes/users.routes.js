@@ -12,20 +12,37 @@ const {
   applyVoucherMiddleware,
   claimVoucherMiddleware,
 } = require("../middlewares/users.middlewares");
+const { authenticateToken } = require("../middlewares/authJwt.middlewares");
 const userRoutes = express.Router();
 
 userRoutes.post("/login", loginUserController);
 
 userRoutes.post("/register", registerUserMiddleware, registerUserController);
 
-userRoutes.post("/apply-voucher", applyVoucherMiddleware, applyVoucherController);
+userRoutes.post(
+  "/apply-voucher",
+  authenticateToken,
+  applyVoucherMiddleware,
+  applyVoucherController
+);
 
-userRoutes.get("/show-all-voucher", showAllVoucherController);
+userRoutes.get(
+  "/show-all-voucher",
+  authenticateToken,
+  showAllVoucherController
+);
 
-userRoutes.get("/show-voucher-by-user/:id", showVoucherByUserIdController);
+userRoutes.get(
+  "/show-voucher-by-user/:id",
+  authenticateToken,
+  showVoucherByUserIdController
+);
 
-userRoutes.post("/claim-voucher", claimVoucherMiddleware, claimVoucherController);
-
-
+userRoutes.post(
+  "/claim-voucher",
+  authenticateToken,
+  claimVoucherMiddleware,
+  claimVoucherController
+);
 
 module.exports = userRoutes;

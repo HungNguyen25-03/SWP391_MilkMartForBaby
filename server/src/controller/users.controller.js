@@ -13,7 +13,9 @@ const registerUserController = async (req, res) => {
   try {
     const user = await registerUser(username, password, email);
     if (user.success) {
-      res.status(200).json({ message: user.message, status: 200 });
+      res
+        .status(200)
+        .json({ message: user.message, token: user.token, status: 200 });
     } else {
       res.status(409).json({ message: user.message, status: 409 });
     }
@@ -22,20 +24,25 @@ const registerUserController = async (req, res) => {
   }
 };
 
+
 const loginUserController = async (req, res) => {
   const { email, password } = req.body;
 
   try {
     const user = await loginUser(email, password);
     if (user.success) {
-      res
-        .status(200)
-        .json({ message: user.message, user: user.user, status: 200 });
+      res.status(200).json({
+        message: 'Login successful',
+        user: user.user,
+        token: user.token,
+        status: 200,
+      });
     } else {
       res.status(401).json({ message: user.message, status: 401 });
     }
   } catch (error) {
-    res.status(500).send("Error logging in user");
+    console.error('Error in loginUserController:', error);
+    res.status(500).send('Error logging in user');
   }
 };
 
@@ -65,7 +72,7 @@ const showAllVoucherController = async (req, res) => {
   } catch (error) {
     res.status(500).send("Error showing all vouchers");
   }
-}
+};
 
 const showVoucherByUserIdController = async (req, res) => {
   const user_id = req.params.id;
@@ -80,11 +87,11 @@ const showVoucherByUserIdController = async (req, res) => {
   } catch (error) {
     res.status(500).send("Error showing all vouchers");
   }
-}
+};
 
 const claimVoucherController = async (req, res) => {
-  const {  voucher_id } = req.body;
-  const {user_id} = req.params.id;
+  const { voucher_id } = req.body;
+  const { user_id } = req.params.id;
 
   try {
     const voucher = await claimVoucher(user_id, voucher_id);
@@ -96,7 +103,7 @@ const claimVoucherController = async (req, res) => {
   } catch (error) {
     res.status(500).send("Error claiming voucher");
   }
-}
+};
 
 module.exports = {
   registerUserController,
