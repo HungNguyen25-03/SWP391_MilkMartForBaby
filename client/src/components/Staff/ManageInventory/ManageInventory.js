@@ -1,12 +1,12 @@
 import React from 'react'
-import '../ConfirmOrder/ConfirmOrder.scss'
+import './Inventory.scss'
 
 export default function ManageInventory({ inventory }) {
 
 
     return (
         <>
-            <table>
+            <table className='inventory'>
                 <thead>
                     <tr>
                         <th>Product ID</th>

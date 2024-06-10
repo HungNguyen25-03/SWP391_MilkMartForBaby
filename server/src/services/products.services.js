@@ -16,28 +16,24 @@ async function getAllProduct() {
   }
 }
 
-async function getProductById(product_id){
+async function getProductById(product_id) {
   try {
-   const pool = await  poolPromise;
-         const result = await pool
-         .request()
-         .query(
-          `SELECT * FROM Products WHERE product_id='${product_id}'`
-         );
-       const product = result.recordset;
-       if(product){
-         return { success: true, product };
-       } else {
-         return { success: false, message: "Invalid ID product" };
-       }
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .query(`SELECT * FROM Products WHERE product_id='${product_id}'`);
+    const product = result.recordset;
+    if (product) {
+      return { success: true, product };
+    } else {
+      return { success: false, message: "Invalid ID product" };
+    }
   } catch (error) {
-   throw error;
+    throw error;
   }
- }
-
-
+}
 
 module.exports = {
   getAllProduct,
-  getProductById
+  getProductById,
 };

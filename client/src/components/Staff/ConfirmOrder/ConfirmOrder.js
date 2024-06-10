@@ -20,7 +20,7 @@ export default function ConfirmOrder({ dataConfirm }) {
 
     return (
         <>
-            <table>
+            <table className='table_confirm'>
                 <thead>
                     <tr>
                         <th>Order ID</th>

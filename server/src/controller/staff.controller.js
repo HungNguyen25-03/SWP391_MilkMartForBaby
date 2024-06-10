@@ -42,7 +42,6 @@ const getAllUserController = async (req, res) => {
       console.log("Faill to get Product");
     };
   };
-
  
   const getOrderController = async (req, res) => {
     try {
@@ -57,23 +56,45 @@ const getAllUserController = async (req, res) => {
     };
   };
 
-
-
-
-
 const getVoucherController = async (req,res) => {
-  
+ 
   try {
     const result = await getAllVoucher();
     console.log(result);
     if (result.success) {
       res.json(result.vouchers);
+
+    if (result.success) {
+      return res.status(200).json({ user: result.user });
     } else {
-      res.json({ message: result.message });
+      return res.status(404).json({ message: result.message });
     }
   } catch (error) {
-    console.log("Faill to get Voucher");
-  };
+    console.log("Fail to get all user", error);
+    res.status(500).json({ message: "Error getting all user" });
+  }
+};
+
+
+const editVoucherController = async (req, res) => {
+  const voucher_id = parseInt(req.params.id, 10);
+  const { discount, expiration_date } = req.body;
+  console.log(`Request to update voucher: id=${voucher_id}, discount=${discount}, expiration_date=${expiration_date}`);
+  
+  try {
+    const result = await editVoucher(voucher_id, discount, expiration_date);
+    console.log("Update result:", result);
+
+    if (result.success) {
+      res.status(200).json({ message: result.message, status: 200 });
+    } else {
+      res.status(409).json({ message: result.message, status: 409 });
+    }
+  } catch (error) {
+    console.error("Error in editVoucherController:", error);  // Improved logging
+    res.status(500).json({ message: "Error updating voucher", error: error.message });
+  }
+
 };
 
 
@@ -83,5 +104,8 @@ module.exports = {
     getAllUserController,
     getAllProductController,
     getOrderController,
-    getVoucherController
+    getVoucherController,
+    editVoucherController,
 }
+
+
