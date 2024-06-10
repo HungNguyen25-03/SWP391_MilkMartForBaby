@@ -26,6 +26,7 @@ const{getVoucherController}=require("../controller/staff.controller");
 staffRouters.get("/voucher",getVoucherController);
 
 // Import and export product by staff
-staffRouters.get("/import");
+const{getImportProductController}=require("../controller/staff.controller");
+staffRouters.post("/import",getImportProductController);
 
 module.exports = staffRouters;
