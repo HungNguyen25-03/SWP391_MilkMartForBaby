@@ -1,3 +1,4 @@
+const { pool } = require("mssql");
 const { poolPromise, sql } = require("./database.services");
 const crypto = require("crypto");
 
@@ -162,10 +163,51 @@ const editVoucher = async (voucher_id, discount, expiration_date) => {
 
 
 
+async function getAllVoucher(){
+
+  try {
+    const pool = await poolPromise;
+    const result = await pool.request().query(`
+
+   Select 
+
+   Vouchers.voucher_id,
+   Vouchers.code,
+   Vouchers.discount
+
+   from Vouchers
+
+    
+    `);
+    const vouchers = result.recordset;
+
+    if (vouchers) {
+      return { success: true, vouchers };
+    } else {
+      return { success: false, message: "Fail to connect Order" };
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
+async function importProduct(){
+
+}
+
+
+
+
+
 module.exports = {
   createVoucher,
   getAllUser,
   getAllProduct,
   getAllOrder,
+  getAllVoucher,
+  importProduct,
   editVoucher,
+
 };
