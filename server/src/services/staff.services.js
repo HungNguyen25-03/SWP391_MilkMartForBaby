@@ -1,3 +1,4 @@
+const { pool } = require("mssql");
 const { poolPromise, sql } = require("./database.services");
 const crypto = require("crypto");
 
@@ -161,10 +162,84 @@ const editVoucher = async (voucher_id, discount, expiration_date) => {
   }
 };
 
+
+
+
+async function getAllVoucher(){
+
+  try {
+    const pool = await poolPromise;
+    const result = await pool.request().query(`
+
+   Select 
+
+   Vouchers.voucher_id,
+   Vouchers.code,
+   Vouchers.discount
+
+   from Vouchers
+
+    
+    `);
+    const vouchers = result.recordset;
+
+    if (vouchers) {
+      return { success: true, vouchers };
+    } else {
+      return { success: false, message: "Fail to connect Order" };
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
+async function importProduct(newProduct) {
+  try {
+    const pool = await poolPromise;
+    const productPromises = [];
+
+    if (!Array.isArray(newProduct)) {
+      throw new TypeError('Expected newProduct to be an array');
+    }
+
+    newProduct.forEach(product => {
+      const {  product_name, price,description, stock, category_id } = product;
+      const promise = pool.request()
+      
+        .input('product_name', sql.VarChar, product_name)
+        .input('description',sql.Text,description)
+        .input('price', sql.Decimal, price)
+        .input('stock', sql.Int, stock)
+        .input('category_id', sql.Int, category_id)
+        .query(`
+          INSERT INTO Products ( product_name,description, price, stock, category_id) 
+          VALUES ( @product_name,@description,@price, @stock, @category_id)
+        `);
+      productPromises.push(promise);
+    });
+
+    await Promise.all(productPromises);
+
+    return { success: true, message: 'Products imported successfully' };
+  } catch (error) {
+    console.error('Error importing products', error);
+    throw error;
+  }
+}
+
+
+
+
+
 module.exports = {
   createVoucher,
   getAllUser,
   getAllProduct,
   getAllOrder,
+  getAllVoucher,
+  importProduct,
   editVoucher,
+
 };

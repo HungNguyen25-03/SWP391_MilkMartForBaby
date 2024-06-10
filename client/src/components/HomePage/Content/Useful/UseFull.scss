@@ -1,17 +1,26 @@
-.usefull_detail  img{
-    width: 90%;
-}
-
 .usefull_container {
-    display: flex;
-    width: 1200px;
-    margin-left: 12%;
-}
+  display: flex;
+  justify-content: space-between;
 
-.usefull_detail{
-    margin: 20px 15px;
+  .usefull_detail {
+    width: 24%;
+    padding: 10px;
     cursor: pointer;
     text-decoration: none;
     color: black;
-}
+    background-color: white;
+    border-radius: 10px;
 
+    .usefull-img-container {
+      width: 100%;
+      height: 60%;
+      border-radius: 10px;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+}
