@@ -1,25 +1,54 @@
-import React from 'react'
-import "./UseFull.scss"
-import { listUsefull } from './UsefullList'
+import React from "react";
+import "./UseFull.scss";
+import { listUsefull } from "./UsefullList";
 import { FaRegEye } from "react-icons/fa";
+import { IoIosArrowDropright } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 export default function UseFull() {
   return (
     <div>
-      <div className='usefull_container'>
-        {
-          listUsefull.map((usefull) => {
-            return (
-              <a href={usefull.title} className='usefull_detail' key={usefull.id}>
-                <img src={usefull.img} /><br />
-                <h4>{usefull.info}</h4>
-                <p> <FaRegEye /> {usefull.view}</p>
-              </a>
-            );
-          })
-        }
-
+      <div className="d-flex justify-content-between align-center">
+        <h2>Thông tin bổ ích</h2>
+        <span>
+          <Link
+            to={"/blogs"}
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            Xem tất cả
+          </Link>
+        </span>
+      </div>
+      <div className="usefull_container ">
+        {listUsefull.map((usefull) => {
+          return (
+            <Link
+              to={`/blogs/post/${usefull.id}`}
+              className="usefull_detail"
+              key={usefull.id}
+            >
+              <div className="usefull-img-container">
+                <img src={usefull.img} />
+              </div>
+              <p
+                className="fw-bold mt-2"
+                style={{ lineHeight: "17px", fontSize: "14px" }}
+              >
+                {usefull.info}
+              </p>
+              <p className="mt-auto d-flex justify-content-between">
+                <div>
+                  {" "}
+                  <FaRegEye /> {usefull.view}
+                </div>
+                <div className="fs-5">
+                  <IoIosArrowDropright />
+                </div>
+              </p>
+            </Link>
+          );
+        })}
       </div>
     </div>
-  )
+  );
 }

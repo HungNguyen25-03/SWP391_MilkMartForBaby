@@ -21,8 +21,8 @@ export default function FillterType() {
   return (
     <div className="fillter_container">
       <div className="type">
-        <h3>Loại Sữa</h3>
         <div className="category">
+          <p className="m-0">Loại Sữa</p>
           {categoryList.map((cate) => {
             return (
               <div className="cate" key={cate.id}>
@@ -41,32 +41,37 @@ export default function FillterType() {
         </div>
       </div>
 
-      <div className="product_detail">
-        {productList.map((product) => {
-          return (
-            <a
-              href={`/home/ProductDetail/${product.id}`}
-              className="product"
-              key={product.id}
-            >
-              <div>
-                <img src={product.img} />
+      <div className="product_detail text-center">
+        <div className="row row-cols-5">
+          {productList.map((product) => {
+            return (
+              <div className="product-card col">
+                <a
+                  className="product-detail-link"
+                  href={`/home/ProductDetail/${product.id}`}
+                  key={product.id}
+                >
+                  <div className="home-product-detail-img-container">
+                    <img src={product.img} />
+                  </div>
+                  <div className="mt-2">{product.detail}</div>
+                  <div>
+                    <span className="star">★</span>
+                    <span className="star">★</span>
+                    <span className="star">★</span>
+                    <span className="star">★</span>
+                    <span className="star">★</span>
+                    <></>
+                    <span style={{ fontSize: "10px" }}>{product.sale}</span>
+                  </div>
+                  <div>
+                    {product.price} <FaShoppingCart />
+                  </div>
+                </a>
               </div>
-              <div>
-                <span className="star">★</span>
-                <span className="star">★</span>
-                <span className="star">★</span>
-                <span className="star">★</span>
-                <span className="star">★</span>
-                <></>
-                {product.sale}
-              </div>
-              <div>
-                {product.price} <FaShoppingCart />
-              </div>
-            </a>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );
