@@ -1,4 +1,4 @@
-const {createVoucher,getAllUser, getAllProduct,getAllOrder,getAllVoucher} = require('../services/staff.services');
+const {createVoucher,getAllUser, getAllProduct,getAllOrder,getAllVoucher,importProduct} = require('../services/staff.services');
 
 const createVoucherController = async (req, res) => {
     const {discount, expiration_date} = req.body;
@@ -99,13 +99,36 @@ const editVoucherController = async (req, res) => {
 
 
 
+const getImportProductController = async(req,res) => {
+    const newProduct=req.body;
+    if (!Array.isArray(newProduct)) {
+      return res.status(400).json({ message: 'Invalid input. Expected an array of products.' });
+    }
+  try {
+    const result=await importProduct(newProduct);
+     if(result.success){
+      res.json(result.message);
+     }else{
+      res.json({ message: result.message });
+     }
+
+  } catch (error) {
+    console.log("Fail to import Product");
+    
+  };
+};
+
+
+
+
 module.exports = {
     createVoucherController,
     getAllUserController,
     getAllProductController,
     getOrderController,
     getVoucherController,
-    editVoucherController,
+    getImportProductController,
+   editVoucherController,
 }
 
 
