@@ -1,0 +1,37 @@
+.voucher-container {
+  background-color: white;
+  margin-top: 20px;
+  border-radius: 10px;
+
+  .each-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .first-part {
+      padding: 10px;
+      height: 100px;
+      border-radius: 10px;
+      color: #ff0064;
+      background-color: #fdebf2;
+
+      p {
+        margin: 0;
+      }
+    }
+
+    .second-part {
+      padding: 10px;
+      font-size: 10px;
+      height: 100px;
+      text-align: start;
+      border-radius: 10px;
+      color: #ae0258;
+      background-color: #fdebf2;
+
+      p {
+        margin: 0;
+      }
+    }
+  }
+}

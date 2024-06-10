@@ -29,7 +29,7 @@ export default function HeaderPage() {
             </div>
             <div className="detail">Giỏ hàng</div>
           </Link>
-          <Link to="/acccount" className="acc">
+          <Link to="/customer-account" className="acc">
             <div className="acc_icon">
               <FaUser />
             </div>
