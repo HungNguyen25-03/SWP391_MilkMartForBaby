@@ -1,7 +1,6 @@
 const { poolPromise, sql } = require("./database.services");
 const bcrypt = require("bcrypt");
 const authJwt = require("../middlewares/authJwt.middlewares");
-const dateHelper = require("../helpers/date.helpers");
 
 async function loginUser(email, password) {
   try {
@@ -18,8 +17,9 @@ async function loginUser(email, password) {
       console.log("Password comparison result:", isPasswordValid);
 
       if (isPasswordValid) {
-        const token = authJwt.generateToken(user.id);
-        return { success: true, user, token };
+        console.log("user.id:", user.id);
+        const tokens = await authJwt.generateToken(user.user_id);
+        return { success: true, user, ...tokens };
       } else {
         return { success: false, message: "Invalid Email or password" };
       }
@@ -36,16 +36,23 @@ async function registerUser(username, password, email) {
   try {
     const pool = await poolPromise;
 
-    // Insert new user
-    await pool.request().query(
-      `INSERT INTO Users (username, password, email, role_id) VALUES 
-        ('${username}', '${password}', '${email}', 'customer' )`
-    );
+    // Insert new user and get the inserted user_id
+    const result = await pool
+      .request()
+      .query(
+        `INSERT INTO Users (username, password, email, role_id) OUTPUT INSERTED.user_id VALUES ('${username}', '${password}', '${email}', 'customer')`
+      );
+    const user_id = result.recordset[0].user_id;
+    console.log("registerUser user_id:", user_id); // Log the user_id
 
     // Generate JWT token
-    const token = authJwt.generateToken({ username, email });
+    const tokens = await authJwt.generateToken(user_id);
 
-    return { success: true, message: "User registered successfully", token };
+    return {
+      success: true,
+      message: "User registered successfully",
+      ...tokens,
+    };
   } catch (error) {
     console.error("Error in registerUser:", error);
     throw error;

@@ -12,7 +12,7 @@ const {
   createUserMiddleware,
   updateUserMiddleware,
 } = require("../middlewares/admin.middlewares");
-const {authenticateToken} = require("../middlewares/authJwt.middlewares");
+const authJwt = require("../middlewares/authJwt.middlewares");
 const adminRoutes = express.Router();
 
 // admin CRUD api
