@@ -13,7 +13,7 @@ CREATE TABLE Users (
     password VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
     role_id VARCHAR(10) NOT NULL REFERENCES Roles(role_id),
-    status BIT DEFAULT 1
+	status BIT DEFAULT 1
 );
 
 CREATE TABLE Customer (
@@ -110,11 +110,10 @@ CREATE TABLE Posts(
 	FOREIGN KEY (product_id) REFERENCES Products(product_id)
 )
 
-
 -- Roles
 INSERT INTO Roles (role_id, role_name) VALUES ('admin', 'Administrator');
 INSERT INTO Roles (role_id, role_name) VALUES ('customer', 'Customer');
-
+INSERT INTO Roles (role_id, role_name) VALUES ('staff', 'Staff');
 
 -- Users
 INSERT INTO Users (username, password, email, role_id) VALUES ('admin', 'adminpass', 'admin@example.com', 'admin');
@@ -123,7 +122,7 @@ INSERT INTO Users (username, password, email, role_id) VALUES ('user2', 'user2pa
 INSERT INTO Users (username, password, email, role_id) VALUES ('user3', 'user3pass', 'user3@example.com', 'customer');
 INSERT INTO Users (username, password, email, role_id) VALUES ('user4', 'user4pass', 'user4@example.com', 'customer');
 INSERT INTO Users (username, password, email, role_id) VALUES ('user5', 'user5pass', 'user5@example.com', 'customer');
-
+SELECT * FROM Users
 -- Customers
 INSERT INTO Customer ( loyalty_points) VALUES ( 150);
 INSERT INTO Customer ( loyalty_points) VALUES ( 200);
@@ -200,6 +199,4 @@ INSERT INTO Posts (user_id, content, post_date, product_id) VALUES (4, 'This mat
 INSERT INTO Posts (user_id, content, post_date, product_id) VALUES (5, 'Nursing pillow is a must-have for new moms.', GETDATE(), 4);
 INSERT INTO Posts (user_id, content, post_date, product_id) VALUES (6, 'Love the diaper bag, very practical.', GETDATE(), 5);
 
-select * from Orders
-select * from Order_Items
-select * from Posts
+SELECT * FROM Users
