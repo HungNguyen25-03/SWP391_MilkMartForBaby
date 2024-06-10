@@ -10,7 +10,7 @@ export default function HeaderPage() {
       <div className="container d-flex align-center justify-content-between">
         <div className="d-flex align-center">
           <div className="logo">
-            <img src="assest/images/logo/logo.png" />
+            <img src="https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2FlogoMilk.png?alt=media&token=1bd69b90-459d-45b8-b86a-b0f235f748d9" />
           </div>
           <div className="search ">
             <form className="d-flex">

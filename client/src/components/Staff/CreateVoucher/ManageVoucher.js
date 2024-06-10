@@ -1,9 +1,10 @@
 import React from 'react'
+import './Voucher.scss'
 
 export default function ManageVoucher({ vouchers }) {
     return (
         < >
-            <table>
+            <table className='voucher'>
                 <thead>
                     <tr>
                         <th>User ID</th>

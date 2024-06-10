@@ -1,7 +1,7 @@
 const express = require("express");
 const staffRouters = express.Router();
-const { createVoucherController } = require("../controller/staff.controller");
-const { createVoucherMiddleware } = require("../middlewares/staff.middleware");
+const { createVoucherController, editVoucherController } = require("../controller/staff.controller");
+const { createVoucherMiddleware, editVoucherMiddleware } = require("../middlewares/staff.middleware");
 
 
 // Create Voucher 
@@ -21,6 +21,7 @@ staffRouters.get("/product",getAllProductController);
 const{getOrderController}=require("../controller/staff.controller");
 staffRouters.get("/order",getOrderController);
 
+
 //Get Voucher information by staff
 const{getVoucherController}=require("../controller/staff.controller");
 staffRouters.get("/voucher",getVoucherController);
@@ -28,5 +29,9 @@ staffRouters.get("/voucher",getVoucherController);
 // Import and export product by staff
 const{getImportProductController}=require("../controller/staff.controller");
 staffRouters.post("/import",getImportProductController);
+
+//Edit Voucher
+staffRouters.put("/editVoucher/:id", editVoucherMiddleware, editVoucherController);
+
 
 module.exports = staffRouters;

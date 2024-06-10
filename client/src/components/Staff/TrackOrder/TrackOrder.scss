@@ -1,4 +1,4 @@
-.table_confirm {
+.track_order {
     width: 140%;
     border-collapse: separate;
     border-spacing: 0;
@@ -8,35 +8,35 @@
     margin-top: 20%;
 }
 
-.table_confirm thead {
+.track_order thead {
     background-color: #f8f8f8;
 }
 
-.table_confirm thead th {
+.track_order thead th {
     padding: 12px 15px;
     text-align: left;
     font-weight: bold;
     border-bottom: 1px solid #ddd;
 }
 
-.table_confirm tbody tr {
+.track_order tbody tr {
     border-bottom: 1px solid #ddd;
 }
 
-.table_confirm tbody tr:nth-child(even) {
+.track_order tbody tr:nth-child(even) {
     background-color: #f1eaeac3;
 }
 
-.table_confirm tbody td {
+.track_order tbody td {
     padding: 12px 15px;
     text-align: left;
 }
 
-.table_confirm tbody tr:last-child {
+.track_order tbody tr:last-child {
     border-bottom: none;
 }
 
-.table_confirm .action-btn {
+.track_order .action-btn {
     background: none;
     border: none;
     color: #007bff;
@@ -45,15 +45,15 @@
     font-size: 18px;
 }
 
-.table_confirm .action-btn:hover {
+.track_order .action-btn:hover {
     color: #0056b3;
 }
 
-.table_confirm tbody tr:hover {
+.track_order tbody tr:hover {
     background-color: #cec7c7;
 }
 
-.table_confirm .status-cancel .status-dot {
+.track_order .status-cancel .status-dot {
     background-color: red;
     border-radius: 50%;
     display: inline-block;
@@ -62,7 +62,7 @@
     margin-right: 5px;
 }
 
-.table_confirm .status-confirm .status-dot {
+.track_order .status-confirm .status-dot {
     background-color: green;
     border-radius: 50%;
     display: inline-block;
@@ -71,7 +71,7 @@
     margin-right: 5px;
 }
 
-.table_confirm .status-pending .status-dot {
+.track_order .status-pending .status-dot {
     background-color: yellow;
     border-radius: 50%;
     display: inline-block;

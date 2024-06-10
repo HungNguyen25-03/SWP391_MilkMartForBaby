@@ -40,13 +40,10 @@ function generateVoucherCode() {
   return crypto.randomBytes(8).toString("hex").toUpperCase();
 }
 
-
 async function getAllUser() {
   try {
     const pool = await poolPromise;
-    const result = await pool
-      .request()
-      .query(`
+    const result = await pool.request().query(`
       SELECT 
       Users.user_id,
       Users.username,
@@ -125,6 +122,46 @@ async function getAllOrder() {
   }
 }
 
+const editVoucher = async (voucher_id, discount, expiration_date) => {
+  try {
+    const pool = await poolPromise;
+    const request = pool.request().input("voucher_id", voucher_id);
+
+    let updateFields = [];
+    if (discount) {
+      request.input("discount", discount);
+      updateFields.push("discount = @discount");
+    }
+
+    if (expiration_date) {
+      const formattedDate = new Date(expiration_date);
+      request.input("expiration_date", formattedDate);
+      updateFields.push("expiration_date = @expiration_date");
+    }
+
+    if (updateFields.length === 0) {
+      return { success: false, message: "No fields to update" };
+    }
+
+    const query = `
+      UPDATE Vouchers
+      SET ${updateFields.join(", ")}
+      WHERE voucher_id = @voucher_id`;
+
+    const result = await request.query(query);
+
+    if (result.rowsAffected && result.rowsAffected[0] > 0) {
+      return { success: true, message: "Voucher updated successfully" };
+    } else {
+      return { success: false, message: "Failed to update voucher" };
+    }
+  } catch (error) {
+    console.error("Error updating voucher:", error);  
+    throw error;
+  }
+};
+
+
 
 async function getAllVoucher(){
 
@@ -199,5 +236,7 @@ module.exports = {
   getAllProduct,
   getAllOrder,
   getAllVoucher,
-  importProduct
+  importProduct,
+  editVoucher,
+
 };

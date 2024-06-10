@@ -2,6 +2,9 @@ const {
   registerUser,
   loginUser,
   applyVoucher,
+  showAllVoucher,
+  getVoucherByUserId,
+  claimVoucher,
 } = require("../services/users.services");
 
 const registerUserController = async (req, res) => {
@@ -51,8 +54,55 @@ const applyVoucherController = async (req, res) => {
   }
 };
 
+const showAllVoucherController = async (req, res) => {
+  try {
+    const vouchers = await showAllVoucher();
+    if (vouchers) {
+      res.status(200).json({ vouchers });
+    } else {
+      res.status(404).json({ message: "No vouchers found" });
+    }
+  } catch (error) {
+    res.status(500).send("Error showing all vouchers");
+  }
+}
+
+const showVoucherByUserIdController = async (req, res) => {
+  const user_id = req.params.id;
+
+  try {
+    const vouchers = await getVoucherByUserId(user_id);
+    if (vouchers) {
+      res.status(200).json({ vouchers });
+    } else {
+      res.status(404).json({ message: "No vouchers found" });
+    }
+  } catch (error) {
+    res.status(500).send("Error showing all vouchers");
+  }
+}
+
+const claimVoucherController = async (req, res) => {
+  const {  voucher_id } = req.body;
+  const {user_id} = req.params.id;
+
+  try {
+    const voucher = await claimVoucher(user_id, voucher_id);
+    if (voucher.success) {
+      res.status(200).json({ message: voucher.message, status: 200 });
+    } else {
+      res.status(409).json({ message: voucher.message, status: 409 });
+    }
+  } catch (error) {
+    res.status(500).send("Error claiming voucher");
+  }
+}
+
 module.exports = {
   registerUserController,
   loginUserController,
   applyVoucherController,
+  showAllVoucherController,
+  showVoucherByUserIdController,
+  claimVoucherController,
 };
