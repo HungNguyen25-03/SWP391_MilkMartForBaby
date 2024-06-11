@@ -1,17 +1,27 @@
 const { poolPromise, sql } = require("./database.services");
+const authJwt = require("../middlewares/authJwt.middlewares");
 
 async function createUser(username, password, email, role_id) {
   try {
     const pool = await poolPromise;
-    //insert new user
-    await pool.request().query(
-      `INSERT INTO Users (username, password, email, role_id) VALUES 
-        ('${username}', '${password}', '${email}', '${role_id}' )`
-    );
+    
+    const query = `
+      INSERT INTO Users (username, password, email, role_id)
+      VALUES (@username, @password, @Email, @role_id)
+    `;
+    
+    await pool.request()
+      .input("username", username)
+      .input("password", password)
+      .input("email", email)
+      .input("role_id", role_id)
+      .query(query);
 
-    return { success: true, message: "User registered successfully" };
+    const token = authJwt.generateToken({ username, email });
+    
+    return { success: true, message: "User registered successfully", token };
   } catch (error) {
-    throw error;
+    throw new Error("User creation failed: " + error.message);
   }
 }
 

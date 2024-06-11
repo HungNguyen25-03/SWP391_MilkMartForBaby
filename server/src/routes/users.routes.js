@@ -1,31 +1,45 @@
 const express = require("express");
-const {
-  registerUserController,
-  loginUserController,
-  applyVoucherController,
-  showAllVoucherController,
-  showVoucherByUserIdController,
-  claimVoucherController,
-} = require("../controller/users.controller");
-const {
-  registerUserMiddleware,
-  applyVoucherMiddleware,
-  claimVoucherMiddleware,
-} = require("../middlewares/users.middlewares");
+const userController = require("../controller/users.controller");
+const userMiddleware = require("../middlewares/users.middlewares");
+const authJwt = require("../middlewares/authJwt.middlewares");
 const userRoutes = express.Router();
 
-userRoutes.post("/login", loginUserController);
+userRoutes.post("/login", userController.loginUserController);
 
-userRoutes.post("/register", registerUserMiddleware, registerUserController);
+userRoutes.post(
+  "/register",
+  userMiddleware.registerUserMiddleware,
+  userController.registerUserController
+);
 
-userRoutes.post("/apply-voucher", applyVoucherMiddleware, applyVoucherController);
+userRoutes.post(
+  "/apply-voucher",
+  authJwt.authenticateToken,
+  userMiddleware.applyVoucherMiddleware,
+  userController.applyVoucherController
+);
 
-userRoutes.get("/show-all-voucher", showAllVoucherController);
+userRoutes.get(
+  "/show-all-voucher",
+  authJwt.authenticateToken,
+  userController.showAllVoucherController
+);
 
-userRoutes.get("/show-voucher-by-user/:id", showVoucherByUserIdController);
+userRoutes.get(
+  "/show-voucher-by-user/:id",
+  authJwt.authenticateToken,
+  userController.showVoucherByUserIdController
+);
 
-userRoutes.post("/claim-voucher", claimVoucherMiddleware, claimVoucherController);
+userRoutes.post(
+  "/claim-voucher",
+  authJwt.authenticateToken,
+  userMiddleware.claimVoucherMiddleware,
+  userController.claimVoucherController
+);
 
+userRoutes.post("/refresh-token", userController.refreshTokenController);
 
+userRoutes.post("/logout", userController.logoutController);
 
 module.exports = userRoutes;

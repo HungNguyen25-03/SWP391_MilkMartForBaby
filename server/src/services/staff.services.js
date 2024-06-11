@@ -29,6 +29,7 @@ async function createVoucher(discount, expiration_date) {
       .input("expiration_date", sql.DateTime, new Date(expiration_date))
       .query(`INSERT INTO Vouchers (code, discount, expiration_date) 
                 VALUES (@code, @discount, @expiration_date)`);
+    console.log(result);
     return { success: true, message: "Voucher created successfully" };
   } catch (err) {
     console.error("SQL error", err);
@@ -156,10 +157,11 @@ const editVoucher = async (voucher_id, discount, expiration_date) => {
       return { success: false, message: "Failed to update voucher" };
     }
   } catch (error) {
-    console.error("Error updating voucher:", error);  
+    console.error("Error updating voucher:", error);
     throw error;
   }
 };
+
 
 
 
@@ -226,6 +228,7 @@ async function importProduct(newProduct) {
     throw error;
   }
 }
+
 
 
 
