@@ -1,4 +1,4 @@
-const {createVoucher,getAllUser, getAllProduct,getAllOrder,getAllVoucher,importProduct} = require('../services/staff.services');
+const {createVoucher,getAllUser, getAllProduct,getAllOrder,getAllVoucher,importProduct, exportProduct} = require('../services/staff.services');
 
 const createVoucherController = async (req, res) => {
     const {discount, expiration_date} = req.body;
@@ -61,9 +61,8 @@ const getVoucherController = async (req,res) => {
   try {
     const result = await getAllVoucher();
     console.log(result);
-    if (result.success) {
-      res.json(result.vouchers);
-
+    
+   
     if (result.success) {
       return res.status(200).json({ user: result.user });
     } else {
@@ -73,6 +72,7 @@ const getVoucherController = async (req,res) => {
     console.log("Fail to get all user", error);
     res.status(500).json({ message: "Error getting all user" });
   }
+
 };
 
 
@@ -121,6 +121,25 @@ const getImportProductController = async(req,res) => {
 
 
 
+const exportProductController= async(req,res) => {
+  const product_id = parseInt(req.params.id, 10);
+  try {
+    const result = await exportProduct(product_id);
+    console.log(result);
+    if (result.success) {
+      return res
+        .status(200)
+        .json({ message: "Delete successful", status: 200 });
+    } else {
+      return res.status(401).json({ message: "Delete failed", status: 401 });
+    }
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    throw error;
+  };
+};
+
+
 module.exports = {
     createVoucherController,
     getAllUserController,
@@ -129,6 +148,7 @@ module.exports = {
     getVoucherController,
     getImportProductController,
    editVoucherController,
+   exportProductController
 }
 
 
