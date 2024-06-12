@@ -253,6 +253,37 @@ async function exportProduct(product_id){
 }
 
 
+async function editProduct(product_id,changeQuantity){
+    try {
+       const pool=await poolPromise;
+       const result= await pool.request().input("product_id",sql.Int,product_id).query(`
+       Select stock From Products  WHERE product_id = @product_id;
+     `);
+    
+     if (result.recordset.length === 0) {
+      return { success: false, message: 'Product not found' };
+    }
+
+    const currentStock = result.recordset[0].stock;
+    const newStock = currentStock + changeQuantity;
+    if(newStock<0){
+      return { success: false, message: 'Insufficient stock to reduce' };
+    }
+    await pool.request()
+    .input('product_id', sql.Int, product_id)
+    .input('new_stock', sql.Int, newStock)
+    .query('UPDATE Products SET stock = @new_stock WHERE product_id = @product_id');
+
+  return { success: true, message: 'Product quantity updated successfully' };
+
+
+
+
+    } catch (error) {
+      throw error;
+    }
+};
+
 
 
 module.exports = {
@@ -263,5 +294,6 @@ module.exports = {
   getAllVoucher,
   importProduct,
   editVoucher,
-  exportProduct
+  exportProduct,
+  editProduct
 };

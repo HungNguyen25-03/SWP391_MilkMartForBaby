@@ -36,6 +36,12 @@ staffRouters.put("/editVoucher/:id", editVoucherMiddleware, editVoucherControlle
 
 // Export Product
 const{exportProductController}=require("../controller/staff.controller");
-staffRouters.get("/export/:id",exportProductController),
+staffRouters.get("/export/:id",exportProductController);
+
+
+// Edit quantity Product
+const{editProductController}=require("../controller/staff.controller");
+staffRouters.post("/edit",editProductController);
+
 
 module.exports = staffRouters;
