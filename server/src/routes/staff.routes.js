@@ -34,4 +34,8 @@ staffRouters.post("/import",getImportProductController);
 staffRouters.put("/editVoucher/:id", editVoucherMiddleware, editVoucherController);
 
 
+// Export Product
+const{exportProductController}=require("../controller/staff.controller");
+staffRouters.get("/export/:id",exportProductController),
+
 module.exports = staffRouters;

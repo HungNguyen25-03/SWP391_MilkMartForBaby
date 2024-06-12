@@ -230,6 +230,28 @@ async function importProduct(newProduct) {
 }
 
 
+async function exportProduct(product_id){
+  try {
+    const pool= await  poolPromise;
+    const result = await pool.request().input("product_id",sql.Int,product_id).query(`
+    DELETE From Products  WHERE product_id = @product_id;
+  `);
+
+  const product = result.rowsAffected[0];
+  console.log(product);
+  console.log(result);
+  if (product != 0) {
+    return { success: true, product };
+  } else {
+    return { success: false, message: "Fail to delete Product" };
+  }
+
+  } catch (error) {
+    console.error('Error exporting products', error);
+    throw error;
+  }
+}
+
 
 
 
@@ -241,5 +263,5 @@ module.exports = {
   getAllVoucher,
   importProduct,
   editVoucher,
-
+  exportProduct
 };
