@@ -1,8 +1,7 @@
 .useraccount-container {
   margin-top: 80px;
   margin-bottom: 20px;
-  height: 76vh;
-
+ 
   .account-info {
     margin-top: 20px;
     background-color: white;
@@ -53,3 +52,27 @@
 }
 
 
+.eachthanhtoan {
+  width: 100%;
+  padding: 20px;
+  margin-top: 30px;
+  border-radius: 20px;
+  box-shadow: 1px 1px 20px 5px rgb(204, 199, 199);
+}
+
+.eachchogiao {
+  width: 100%;
+  padding: 20px;
+  margin-top: 30px;
+  border-radius: 20px;
+  box-shadow: 1px 1px 20px 5px rgb(204, 199, 199);
+}
+
+.emptyinfo {
+  text-align: center;
+}
+
+.emptyinfo img {
+  margin-top: 30px;
+  width: 200px;
+}
