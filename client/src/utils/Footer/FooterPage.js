@@ -3,7 +3,7 @@ import "./FooterPage.scss";
 
 export default function FooterPage() {
   return (
-    <div className="footer mt-auto">
+    <div className="footer">
       <div className="footer-content">
         <p>&copy; 2024 Milk Mart For Baby. All rights reserved.</p>
         <div className="social-links">
