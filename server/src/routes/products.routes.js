@@ -11,4 +11,10 @@ const{getProById}=require("../controller/products.controller");
 productRouters.get("/getProById",getProById);
 
 
+// search By name
+
+
+//fliter Product
+
+
 module.exports = productRouters;
