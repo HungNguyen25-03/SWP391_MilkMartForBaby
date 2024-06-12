@@ -26,7 +26,7 @@ function Login() {
   };
 
   const login = async () => {
-    const data = await fetch(`${MainAPI}user/login`, {
+    const data = await fetch(`${MainAPI}/user/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -44,6 +44,7 @@ function Login() {
     console.log(response);
     if (response.status === 200) {
       console.log(response.message);
+      localStorage.setItem("accessToken", JSON.stringify(response.accessToken));
       nav("/home");
     } else {
       console.log(response.message);
