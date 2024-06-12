@@ -115,6 +115,13 @@ CREATE TABLE Posts (
     product_id INT REFERENCES Products(product_id)
 );
 
+CREATE TABLE RefreshTokens (
+  token VARCHAR(255) PRIMARY KEY,
+  user_id INT,
+  expiryDate DATETIME,
+  FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
 -- Insert into Roles
 INSERT INTO Roles (role_id, role_name) VALUES
 ('admin', 'Admin'),
