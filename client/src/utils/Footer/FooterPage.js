@@ -4,7 +4,7 @@ import "./FooterPage.scss";
 export default function FooterPage() {
   return (
     <div className="footer">
-      <div className="footer-content">
+      <div className="footer-content bg-secondary text-white text-center py-3 mt-auto">
         <p>&copy; 2024 Milk Mart For Baby. All rights reserved.</p>
         <div className="social-links">
           <a

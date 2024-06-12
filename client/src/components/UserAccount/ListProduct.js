@@ -24,7 +24,7 @@ export const thanhtoans = [
         tichluy: 100000.
     },
     {
-        img: "https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2FabbottGrow%2Fsua-abbott-grow-3-900g-1-2-tuoi.png?alt=media&token=3de16752-0d09-4fa2-9556-6c31a6adba7b",
+        img: "https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2FabbottGrow%2Fsua-abbott-grow-4-1-7kg-tren-2-tuoi-huong-vani.png?alt=media&token=03473331-552a-4b6f-a7da-818590c497d3",
         name: "Abbott",
         info: "Sữa  Abbott-groww 6 - 12 tháng tuổi",
         quantity: 3,
