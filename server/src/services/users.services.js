@@ -1,5 +1,4 @@
 const { poolPromise, sql } = require("./database.services");
-const bcrypt = require("bcrypt");
 const authJwt = require("../middlewares/authJwt.middlewares");
 
 async function loginUser(email, password) {
