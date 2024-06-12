@@ -12,7 +12,8 @@ productRouters.get("/getProById",getProById);
 
 
 // search By name
-
+const {searchByName}=require("../controller/products.controller");
+productRouters.get("/search",searchByName);
 
 //fliter Product
 
