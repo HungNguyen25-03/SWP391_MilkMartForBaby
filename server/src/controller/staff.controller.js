@@ -1,4 +1,4 @@
-const {createVoucher,getAllUser, getAllProduct,getAllOrder,getAllVoucher,importProduct, exportProduct} = require('../services/staff.services');
+const {createVoucher,getAllUser, getAllProduct,getAllOrder,getAllVoucher,importProduct, exportProduct,editProduct} = require('../services/staff.services');
 
 const createVoucherController = async (req, res) => {
     const {discount, expiration_date} = req.body;
@@ -140,6 +140,23 @@ const exportProductController= async(req,res) => {
 };
 
 
+const editProductController = async (req, res) => {
+  const { product_id, changeQuantity } = req.body;
+
+  try {
+    const result = await editProduct(product_id, changeQuantity);
+    if (result.success) {
+      res.json(result);
+    } else {
+      res.status(400).json({ message: result.message });
+    }
+  } catch (error) {
+    console.log('Fail to update product quantity', error);
+    res.status(500).json({ message: 'Fail to update product quantity' });
+  }
+};
+
+
 module.exports = {
     createVoucherController,
     getAllUserController,
@@ -148,7 +165,8 @@ module.exports = {
     getVoucherController,
     getImportProductController,
    editVoucherController,
-   exportProductController
+   exportProductController,
+   editProductController
 }
 
 
