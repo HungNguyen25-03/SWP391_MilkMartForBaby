@@ -3,7 +3,7 @@ USE MilkShop
 DROP DATABASE MilkShop
 
 CREATE TABLE Roles (
-    role_id CHAR(10) PRIMARY KEY,
+    role_id VARCHAR(20) PRIMARY KEY,
     role_name NVARCHAR(50) NOT NULL
 );
 
@@ -12,7 +12,7 @@ CREATE TABLE Users (
     username NVARCHAR(50) NOT NULL,
     password NVARCHAR(100) NOT NULL,
     email NVARCHAR(100) NOT NULL,
-    role_id CHAR(10) NOT NULL REFERENCES Roles(role_id),
+    role_id VARCHAR(20) NOT NULL REFERENCES Roles(role_id),
     status BIT DEFAULT 1
 );
 
