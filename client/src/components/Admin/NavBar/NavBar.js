@@ -1,9 +1,25 @@
 import React from "react";
 import "./NavBar.scss";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { MainAPI } from "../../API";
 
 export default function NavBar() {
+  const token = JSON.parse(localStorage.getItem("accessToken"));
   const nav = useNavigate();
+
+  const handleLogout = () => {
+    axios
+      .post(`${MainAPI}/user/logout`, token)
+      .then((res) => {
+        console.log(res.data);
+        localStorage.removeItem("accessToken");
+        nav("/login");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <nav className="navbar">
       <div className="navbar-logo">Admin Panel</div>
@@ -30,7 +46,7 @@ export default function NavBar() {
           <a href="#settings">Settings</a>
         </li>
         <li>
-          <a href="#logout">Logout</a>
+          <a onClick={handleLogout}>Logout</a>
         </li>
       </ul>
     </nav>
