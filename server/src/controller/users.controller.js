@@ -7,7 +7,7 @@ const {
   claimVoucher,
 } = require("../services/users.services");
 
-const authJwt = require('../middlewares/authJwt.middlewares')
+const authJwt = require("../middlewares/authJwt.middlewares");
 
 const registerUserController = async (req, res) => {
   const { username, password, email } = req.body;
@@ -109,6 +109,7 @@ const claimVoucherController = async (req, res) => {
 const refreshTokenController = async (req, res) => {
   const { token } = req.body;
   if (!token) return res.sendStatus(401);
+  console.log("token:", token);
 
   try {
     const pool = await poolPromise;

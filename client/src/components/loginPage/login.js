@@ -50,8 +50,9 @@ function Login() {
     if (response.status === 200) {
       const user = response.user;
       const role = response.user.role_id;
+      const accessToken = response.accessToken;
       console.log(response.message);
-      setAuth({ user, role });
+      setAuth({ user, role, accessToken });
       localStorage.setItem("accessToken", JSON.stringify(response.accessToken));
       nav(from, { replace: true });
     } else {

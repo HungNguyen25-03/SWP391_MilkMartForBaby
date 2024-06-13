@@ -39,11 +39,16 @@ function App() {
             <Route path="/customer-account" element={<UserAccount />}></Route>
           </Route>
 
+          {/* admin role */}
           <Route element={<RequireAuth allowedRoles={"admin"} />}>
             <Route path="/admin" element={<NavBar />}></Route>
             <Route path="/admin/user" element={<UserManagement />}></Route>
             <Route path="/admin/edit/:id" element={<Edit />}></Route>
             <Route path="/admin/dashboard" element={<Dashboard />}></Route>
+          </Route>
+
+          {/* staff */}
+          <Route element={<RequireAuth allowedRoles={"staff"} />}>
             <Route path="/staff/*" element={<StaffManagement />}></Route>
           </Route>
 
