@@ -27,10 +27,17 @@ export default function Voucher() {
     <div className="voucher-container">
       <h2 style={{ marginLeft: "20px", paddingTop: "20px" }}>Nhận voucher</h2>
       <Slide
-        slidesToScroll={1}
+        slidesToScroll={3}
         slidesToShow={1}
         autoplay={false}
         responsive={[
+          {
+            breakpoint: 2000,
+            settings: {
+              slidesToShow: 3,
+              slidesToScroll: 1,
+            },
+          },
           {
             breakpoint: 800,
             settings: {
@@ -49,6 +56,7 @@ export default function Voucher() {
       >
         {voucherList.map((voucher) => (
           <div
+            key={voucher.code}
             style={{
               textAlign: "center",
               // background: "red",

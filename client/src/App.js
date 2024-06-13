@@ -13,29 +13,42 @@ import Register from "./components/Register/Register";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import StaffManagement from "./components/Staff/StaffManagement/StaffManagement.js";
 import UserAccount from "./components/UserAccount/UserAccount.js";
+import RequireAuth from "./components/RequireAuth.js";
+import Unauthorized from "./components/Unauthorized/Unauthorized.js";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
+          {/* public routes */}
           <Route path="/home" element={<HomeScreen />}></Route>
-          <Route path="/cart" element={<Cart />}></Route>
           <Route path="/login" element={<Login />}></Route>
-          <Route path="/admin" element={<NavBar />}></Route>
-          <Route path="/blogs" element={<Blog />}></Route>
           <Route path="/register" element={<Register />}></Route>
-          <Route path="/customer-account" element={<UserAccount />}></Route>
-          <Route path="/admin/user" element={<UserManagement />}></Route>
-          <Route path="/blogs/post/:id" element={<Post />}></Route>
-          <Route path="/admin/edit/:id" element={<Edit />}></Route>
-          <Route path="/admin/dashboard" element={<Dashboard />}></Route>
-
+          <Route path="/blogs" element={<Blog />}></Route>
           <Route
             path="/home/productdetail/:id"
             element={<ProductDetail />}
           ></Route>
-          <Route path="/staff/*" element={<StaffManagement />}></Route>
+          <Route path="/blogs/post/:id" element={<Post />}></Route>
+          <Route path="/unauthorized" element={<Unauthorized />}></Route>
+
+          {/* we want to protect these routes */}
+          <Route element={<RequireAuth allowedRoles={"customer"} />}>
+            <Route path="/cart" element={<Cart />}></Route>
+            <Route path="/customer-account" element={<UserAccount />}></Route>
+          </Route>
+
+          <Route element={<RequireAuth allowedRoles={"admin"} />}>
+            <Route path="/admin" element={<NavBar />}></Route>
+            <Route path="/admin/user" element={<UserManagement />}></Route>
+            <Route path="/admin/edit/:id" element={<Edit />}></Route>
+            <Route path="/admin/dashboard" element={<Dashboard />}></Route>
+            <Route path="/staff/*" element={<StaffManagement />}></Route>
+          </Route>
+
+          {/* catch all */}
+          <Route path="*" element={<div>There nothing here</div>}></Route>
         </Routes>
       </BrowserRouter>
     </>

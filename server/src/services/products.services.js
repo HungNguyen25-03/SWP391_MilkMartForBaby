@@ -1,4 +1,4 @@
-const { poolPromise } = require("./database.services");
+const { poolPromise, sql } = require("./database.services");
 
 async function getAllProduct() {
   try {
@@ -14,7 +14,7 @@ async function getAllProduct() {
   } catch (error) {
     throw error;
   }
-}
+};
 
 async function getProductById(product_id) {
   try {
@@ -31,9 +31,48 @@ async function getProductById(product_id) {
   } catch (error) {
     throw error;
   }
-}
+};
+
+
+
+
+async function searchProductByName(searchTerm){
+  try {
+    const pool= await poolPromise;
+    
+    const result= await pool 
+    .request()
+      .input('searchTerm',sql.VarChar, `%${searchTerm}%`)
+      .query(`
+      SELECT 
+        product_id,
+        product_name,
+        price,
+        stock,
+        category_id
+
+      FROM Products
+
+      WHERE product_name LIKE @searchTerm
+    `);
+     
+      const products= result.recordset;
+      
+      if (products.length > 0) {
+        return { success: true, products };
+      } else {
+        return { success: false, message: 'No products found' };
+      }
+    } catch (error) {
+      console.error('Error searching for products', error);
+      throw error;
+    }
+  };
+
+
 
 module.exports = {
   getAllProduct,
   getProductById,
+  searchProductByName
 };
