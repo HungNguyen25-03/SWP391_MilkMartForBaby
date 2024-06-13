@@ -12,11 +12,13 @@ function Login() {
   const { setAuth } = useAuth();
   const nav = useNavigate();
   const location = useLocation();
-  const from = location.state?.from || { pathname: "/" };
+  const from = location.state?.from || { pathname: "/home" };
 
+  const [user, setUser] = useState({});
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  console.log(user);
 
   const handleOnchangeEmail = (event) => {
     setEmail(event.target.value);
@@ -48,13 +50,20 @@ function Login() {
     const response = await login();
     console.log(response);
     if (response.status === 200) {
+      setUser(response.user);
       const user = response.user;
       const role = response.user.role_id;
       const accessToken = response.accessToken;
       console.log(response.message);
       setAuth({ user, role, accessToken });
       localStorage.setItem("accessToken", JSON.stringify(response.accessToken));
-      nav(from, { replace: true });
+      if (role === "admin") {
+        nav("/admin");
+      } else if (role === "staff") {
+        nav("/staff");
+      } else {
+        nav(from, { replace: true });
+      }
     } else {
       console.log(response.message);
     }
