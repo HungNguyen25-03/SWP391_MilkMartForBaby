@@ -5,9 +5,11 @@ const {
   showAllVoucher,
   getVoucherByUserId,
   claimVoucher,
+  generateNewAccessToken,
 } = require("../services/users.services");
 
 const authJwt = require("../middlewares/authJwt.middlewares");
+require("dotenv").config();
 
 const registerUserController = async (req, res) => {
   const { username, password, email } = req.body;
@@ -109,35 +111,14 @@ const claimVoucherController = async (req, res) => {
 const refreshTokenController = async (req, res) => {
   const { token } = req.body;
   if (!token) return res.sendStatus(401);
-  console.log("token:", token);
 
   try {
-    const pool = await poolPromise;
-    const result = await pool
-      .request()
-      .input("token", sql.VarChar, token)
-      .query(`SELECT * FROM RefreshTokens WHERE token = @token`);
-
-    const storedToken = result.recordset[0];
-    if (!storedToken) return res.sendStatus(403);
-
-    jwt.verify(token, refreshSecretKey, (err, user) => {
-      if (err) return res.sendStatus(403);
-
-      const newAccessToken = jwt.sign({ userId: user.userId }, secretKey, {
-        expiresIn: "1h",
-      });
-      res.json({
-        accessToken: newAccessToken,
-      });
-
-      // for testing purposes
-
-      // const newAccessToken = jwt.sign({ userId: user.userId }, secretKey, { expiresIn: "1m" });
-      // res.json({
-      //   accessToken: newAccessToken
-      // });
-    });
+    const newAccessToken = await generateNewAccessToken(token);
+    if (newAccessToken) {
+      res.status(200).json({ accessToken: newAccessToken });
+    } else {
+      res.sendStatus(403);
+    }
   } catch (error) {
     console.error("Error in refreshTokenController:", error);
     res.status(500).send("Internal Server Error");
@@ -146,8 +127,14 @@ const refreshTokenController = async (req, res) => {
 
 const logoutController = async (req, res) => {
   const { token } = req.body;
-  await authJwt.removeRefreshToken(token);
-  res.sendStatus(204).send("Logged out successfully");
+  try {
+    await authJwt.removeRefreshToken(token);
+    res.status(200).send("Logged out successfully");
+    // res.sendStatus(204);
+  } catch (error) {
+    console.error("Error in logoutController:", error);
+    res.status(500).send("Internal Server Error");
+  }
 };
 
 module.exports = {

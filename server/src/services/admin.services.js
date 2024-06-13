@@ -1,25 +1,24 @@
 const { poolPromise, sql } = require("./database.services");
 const authJwt = require("../middlewares/authJwt.middlewares");
+const bcrypt = require("bcrypt");
 
 async function createUser(username, password, email, role_id) {
   try {
     const pool = await poolPromise;
-    
-    const query = `
-      INSERT INTO Users (username, password, email, role_id)
-      VALUES (@username, @password, @Email, @role_id)
-    `;
-    
-    await pool.request()
-      .input("username", username)
-      .input("password", password)
-      .input("email", email)
-      .input("role_id", role_id)
-      .query(query);
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const result = await pool
+      .request()
+      .input("username", sql.VarChar, username)
+      .input("password", sql.VarChar, hashedPassword)
+      .input("email", sql.VarChar, email)
+      .input("role_id", sql.VarChar, role_id)
+      .query(
+        `INSERT INTO Users (username, password, email, role_id) OUTPUT INSERTED.user_id VALUES (@username, @password, @email, @role_id)`
+      );
+    const user_id = result.recordset[0].user_id;
+    const tokens = await authJwt.generateToken(user_id);
 
-    const token = authJwt.generateToken({ username, email });
-    
-    return { success: true, message: "User registered successfully", token };
+    return { success: true, message: "User registered successfully", ...tokens };
   } catch (error) {
     throw new Error("User creation failed: " + error.message);
   }

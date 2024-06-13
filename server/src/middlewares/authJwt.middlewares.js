@@ -17,34 +17,18 @@ async function authenticateToken(req, res, next) {
 }
 
 async function generateToken(user_id) {
-  console.log('generateToken user_id:', user_id);  // Log the user_id
-  if (typeof user_id !== 'number' || isNaN(user_id)) {
-    throw new Error('Invalid user_id');
-  }
-
   const accessToken = jwt.sign({ user_id }, secretKey, { expiresIn: "1h" });
-  const refreshToken = jwt.sign({ user_id }, refreshSecretKey, {expiresIn: "7d"});
-
-  // for testing purposes
-
-  // const accessToken = jwt.sign({ user_id }, secretKey, { expiresIn: "1m" });
-  // const refreshToken = jwt.sign({ user_id }, refreshSecretKey, {expiresIn: "2m"});
+  const refreshToken = jwt.sign({ user_id }, refreshSecretKey, {
+    expiresIn: "7d",
+  });
 
   await storeRefreshToken(refreshToken, user_id);
   return { accessToken, refreshToken };
 }
 
 async function storeRefreshToken(token, user_id) {
-  console.log('storeRefreshToken user_id:', user_id);  // Log the user_id
-  if (typeof user_id !== 'number' || isNaN(user_id)) {
-    throw new Error('Invalid user_id');
-  }
-
   const expiryDate = new Date();
   expiryDate.setDate(expiryDate.getDate() + 7);
-
-  // for testing purposes
-  // expiryDate.setDate(expiryDate.getMinutes() + 2);
 
   const pool = await poolPromise;
   await pool
@@ -52,25 +36,26 @@ async function storeRefreshToken(token, user_id) {
     .input("token", sql.VarChar, token)
     .input("user_id", sql.Int, user_id)
     .input("expiryDate", sql.DateTime, expiryDate)
-    .query(`
-      INSERT INTO RefreshTokens (token, user_id, expiryDate) 
-      VALUES (@token, @user_id, @expiryDate)
-    `);
+    .query(
+      `INSERT INTO RefreshTokens (token, user_id, expiryDate) VALUES (@token, @user_id, @expiryDate)`
+    );
 }
 
 async function findRefreshToken(token) {
   const pool = await poolPromise;
-  const result = await pool.request().input("token", sql.VarChar, token).query(`
-      SELECT * FROM RefreshTokens WHERE token = @token
-    `);
+  const result = await pool
+    .request()
+    .input("token", sql.VarChar, token)
+    .query(`SELECT * FROM RefreshTokens WHERE token = @token`);
   return result.recordset[0];
 }
 
 async function removeRefreshToken(token) {
   const pool = await poolPromise;
-  await pool.request().input("token", sql.VarChar, token).query(`
-      DELETE FROM RefreshTokens WHERE token = @token
-    `);
+  await pool
+    .request()
+    .input("token", sql.VarChar, token)
+    .query(`DELETE FROM RefreshTokens WHERE token = @token`);
 }
 
 async function authenticateRefreshToken(req, res, next) {
