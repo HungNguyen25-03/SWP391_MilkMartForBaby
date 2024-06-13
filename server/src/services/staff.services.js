@@ -1,3 +1,4 @@
+const { pool } = require("mssql");
 const { poolPromise, sql } = require("./database.services");
 const crypto = require("crypto");
 
@@ -28,6 +29,7 @@ async function createVoucher(discount, expiration_date) {
       .input("expiration_date", sql.DateTime, new Date(expiration_date))
       .query(`INSERT INTO Vouchers (code, discount, expiration_date) 
                 VALUES (@code, @discount, @expiration_date)`);
+    console.log(result);
     return { success: true, message: "Voucher created successfully" };
   } catch (err) {
     console.error("SQL error", err);
@@ -155,9 +157,131 @@ const editVoucher = async (voucher_id, discount, expiration_date) => {
       return { success: false, message: "Failed to update voucher" };
     }
   } catch (error) {
-    console.error("Error updating voucher:", error);  
+    console.error("Error updating voucher:", error);
     throw error;
   }
+};
+
+
+
+
+async function getAllVoucher(){
+
+  try {
+    const pool = await poolPromise;
+    const result = await pool.request().query(`
+
+   Select 
+
+   Vouchers.voucher_id,
+   Vouchers.code,
+   Vouchers.discount
+
+   from Vouchers
+
+    
+    `);
+    const vouchers = result.recordset;
+
+    if (vouchers) {
+      return { success: true, vouchers };
+    } else {
+      return { success: false, message: "Fail to connect Order" };
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
+async function importProduct(newProduct) {
+  try {
+    const pool = await poolPromise;
+    const productPromises = [];
+
+    if (!Array.isArray(newProduct)) {
+      throw new TypeError('Expected newProduct to be an array');
+    }
+
+    newProduct.forEach(product => {
+      const {  product_name, price,description, stock, category_id } = product;
+      const promise = pool.request()
+      
+        .input('product_name', sql.VarChar, product_name)
+        .input('description',sql.Text,description)
+        .input('price', sql.Decimal, price)
+        .input('stock', sql.Int, stock)
+        .input('category_id', sql.Int, category_id)
+        .query(`
+          INSERT INTO Products ( product_name,description, price, stock, category_id) 
+          VALUES ( @product_name,@description,@price, @stock, @category_id)
+        `);
+      productPromises.push(promise);
+    });
+
+    await Promise.all(productPromises);
+
+    return { success: true, message: 'Products imported successfully' };
+  } catch (error) {
+    console.error('Error importing products', error);
+    throw error;
+  }
+}
+
+
+async function exportProduct(product_id){
+  try {
+    const pool= await  poolPromise;
+    const result = await pool.request().input("product_id",sql.Int,product_id).query(`
+    DELETE From Products  WHERE product_id = @product_id;
+  `);
+
+  const product = result.rowsAffected[0];
+  console.log(product);
+  console.log(result);
+  if (product != 0) {
+    return { success: true, product };
+  } else {
+    return { success: false, message: "Fail to delete Product" };
+  }
+
+  } catch (error) {
+    console.error('Error exporting products', error);
+    throw error;
+  }
+}
+
+
+async function editProduct(product_id,changeQuantity){
+    try {
+       const pool=await poolPromise;
+       const result= await pool.request().input("product_id",sql.Int,product_id).query(`
+       Select stock From Products  WHERE product_id = @product_id;
+     `);
+    
+     if (result.recordset.length === 0) {
+      return { success: false, message: 'Product not found' };
+    }
+
+    const currentStock = result.recordset[0].stock;
+    const newStock = currentStock + changeQuantity;
+    if(newStock<0){
+      return { success: false, message: 'Insufficient stock to reduce' };
+    }
+    await pool.request()
+    .input('product_id', sql.Int, product_id)
+    .input('new_stock', sql.Int, newStock)
+    .query('UPDATE Products SET stock = @new_stock WHERE product_id = @product_id');
+
+  return { success: true, message: 'Product quantity updated successfully' };
+
+
+
+
+    } catch (error) {
+      throw error;
+    }
 };
 
 
@@ -167,5 +291,9 @@ module.exports = {
   getAllUser,
   getAllProduct,
   getAllOrder,
+  getAllVoucher,
+  importProduct,
   editVoucher,
+  exportProduct,
+  editProduct
 };

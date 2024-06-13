@@ -11,9 +11,14 @@ const productRoutes = require("../server/src/routes/products.routes");
 const orderRoutes = require("../server/src/routes/order.routes");
 const adminRoutes = require("../server/src/routes/admin.routes");
 const staffRoutes = require("../server/src/routes/staff.routes");
-const { errorHandlingMiddleware } = require("../server/src/middlewares/error.middleware");
-//api user
+const {
+  errorHandlingMiddleware,
+} = require("../server/src/middlewares/error.middleware");
 
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
+
+//api user
 app.use("/user", userRoutes);
 
 //api show product

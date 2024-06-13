@@ -8,18 +8,23 @@ const {
 
 const createUserController = async (req, res) => {
   const { username, password, email, role_id } = req.body;
-  console.log(req.body);
+  
   try {
     const result = await createUser(username, password, email, role_id);
-    console.log(result);
+    
     if (result.success) {
       return res.status(200).json({
         message: result.message,
+        token: result.token,
         status: 200,
       });
     }
   } catch (err) {
-    console.log("fail to create a user");
+    return res.status(500).json({
+      message: "Fail to create a user",
+      error: err.message,
+      status: 500,
+    });
   }
 };
 
