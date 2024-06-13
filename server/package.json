@@ -20,5 +20,8 @@
     "mssql": "^10.0.2",
     "nodemon": "^3.1.0",
     "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "bcrypt": "^5.1.1"
   }
 }

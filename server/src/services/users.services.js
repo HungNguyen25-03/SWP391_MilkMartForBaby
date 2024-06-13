@@ -1,23 +1,24 @@
 const { poolPromise, sql } = require("./database.services");
-const bcrypt = require("bcrypt");
 const authJwt = require("../middlewares/authJwt.middlewares");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+
+const secretKey = process.env.SECRET_KEY;
+const refreshSecretKey = process.env.REFRESH_SECRET_KEY;
 
 async function loginUser(email, password) {
   try {
     const pool = await poolPromise;
     const result = await pool
       .request()
-      .query(`SELECT * FROM Users WHERE email = '${email}' AND status = 1`);
+      .input("email", sql.VarChar, email)
+      .query(`SELECT * FROM Users WHERE email = @email AND status = 1`);
     const user = result.recordset[0];
 
-    console.log("User from database:", user);
-
     if (user) {
-      const isPasswordValid = password === user.password;
-      console.log("Password comparison result:", isPasswordValid);
-
+      const isPasswordValid = await bcrypt.compare(password, user.password);
       if (isPasswordValid) {
-        console.log("user.id:", user.id);
         const tokens = await authJwt.generateToken(user.user_id);
         return { success: true, user, ...tokens };
       } else {
@@ -34,18 +35,18 @@ async function loginUser(email, password) {
 
 async function registerUser(username, password, email) {
   try {
+    const hashedPassword = await bcrypt.hash(password, 10);
     const pool = await poolPromise;
-
-    // Insert new user and get the inserted user_id
     const result = await pool
       .request()
+      .input("username", sql.VarChar, username)
+      .input("password", sql.VarChar, hashedPassword)
+      .input("email", sql.VarChar, email)
+      .input("role_id", sql.VarChar, 'customer')
       .query(
-        `INSERT INTO Users (username, password, email, role_id) OUTPUT INSERTED.user_id VALUES ('${username}', '${password}', '${email}', 'customer')`
+        `INSERT INTO Users (username, password, email, role_id) OUTPUT INSERTED.user_id VALUES (@username, @password, @email, @role_id)`
       );
     const user_id = result.recordset[0].user_id;
-    console.log("registerUser user_id:", user_id); // Log the user_id
-
-    // Generate JWT token
     const tokens = await authJwt.generateToken(user_id);
 
     return {
@@ -124,6 +125,31 @@ async function claimVoucher(user_id, voucher_id) {
   }
 }
 
+async function generateNewAccessToken(refreshToken) {
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input("token", sql.VarChar, refreshToken)
+      .query(`SELECT * FROM RefreshTokens WHERE token = @token`);
+
+    const storedToken = result.recordset[0];
+    if (!storedToken) return null;
+
+    return new Promise((resolve, reject) => {
+      jwt.verify(refreshToken, refreshSecretKey, (err, user) => {
+        if (err) return resolve(null);
+
+        const newAccessToken = jwt.sign({ userId: user.userId }, secretKey, { expiresIn: "1h" });
+        resolve(newAccessToken);
+      });
+    });
+  } catch (error) {
+    console.error("Error in generateNewAccessToken:", error);
+    throw new Error("Database query failed");
+  }
+}
+
 module.exports = {
   loginUser,
   registerUser,
@@ -131,4 +157,5 @@ module.exports = {
   showAllVoucher,
   getVoucherByUserId,
   claimVoucher,
+  generateNewAccessToken,
 };
