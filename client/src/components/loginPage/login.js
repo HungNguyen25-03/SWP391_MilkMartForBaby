@@ -5,10 +5,15 @@ import { FaLock } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { IoEyeSharp } from "react-icons/io5";
 import { MainAPI } from "../API";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 function Login() {
+  const { setAuth } = useAuth();
   const nav = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from || { pathname: "/" };
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -43,9 +48,12 @@ function Login() {
     const response = await login();
     console.log(response);
     if (response.status === 200) {
+      const user = response.user;
+      const role = response.user.role_id;
       console.log(response.message);
+      setAuth({ user, role });
       localStorage.setItem("accessToken", JSON.stringify(response.accessToken));
-      nav("/home");
+      nav(from, { replace: true });
     } else {
       console.log(response.message);
     }
