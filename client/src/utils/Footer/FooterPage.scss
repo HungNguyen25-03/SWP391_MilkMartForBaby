@@ -2,7 +2,6 @@ html {
   position: relative;
   min-height: 100%;
 }
-
 body {
   margin: 0;
   padding-bottom: 90px;
@@ -13,6 +12,7 @@ body {
   bottom: 0;
   width: 100%;
   height: 60px; 
+  background-color: #0d96e1;
   color: #fff;
   margin-top: 20px;
 }
@@ -35,5 +35,3 @@ body {
   .social-links a:hover {
     text-decoration: underline;
   }
-
-

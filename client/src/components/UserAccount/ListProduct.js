@@ -30,4 +30,34 @@ export const thanhtoans = [
         quantity: 3,
         tichluy: 100000.
     },
+
+    {
+        img: "https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2FabbottGrow%2Fsua-abbott-grow-4-1-7kg-tren-2-tuoi-huong-vani.png?alt=media&token=03473331-552a-4b6f-a7da-818590c497d3",
+        name: "Abbott",
+        info: "Sữa  Abbott-groww 6 - 12 tháng tuổi",
+        quantity: 3,
+        tichluy: 100000.
+    },
+]
+
+export const chogiaos = [
+    {
+        img: "https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2FabbottGrow%2Fabbott-grow-4-huong-vani-900g.png?alt=media&token=a5a6a917-6e0b-4830-b56e-0478f47f0dc1",
+        name: "Abbott",
+        info: "Sữa  Abbott-groww 6 - 12 tháng tuổi",
+        quantity: 1,
+        tichluy: 100000.
+    },
+]
+
+export const danggiaos = [
+
+]
+
+export const dagiaos = [
+
+]
+
+export const dahuy = [
+
 ]
