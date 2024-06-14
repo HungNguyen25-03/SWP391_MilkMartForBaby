@@ -1,11 +1,12 @@
+
 const { poolPromise, sql } = require("./database.services");
 const authJwt = require("../middlewares/authJwt.middlewares");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-
 const secretKey = process.env.SECRET_KEY;
 const refreshSecretKey = process.env.REFRESH_SECRET_KEY;
+
 
 async function loginUser(email, password) {
   try {
@@ -30,6 +31,7 @@ async function loginUser(email, password) {
   } catch (error) {
     console.error("Error in loginUser:", error);
     throw new Error("Database query failed");
+
   }
 }
 

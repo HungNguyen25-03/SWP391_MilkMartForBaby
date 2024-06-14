@@ -5,15 +5,19 @@ import { FaLock } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { IoEyeSharp } from "react-icons/io5";
 import { MainAPI } from "../API";
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+
 
 function Login() {
   const { setAuth } = useAuth();
   const nav = useNavigate();
   const location = useLocation();
   const from = location.state?.from || { pathname: "/home" };
-
   const [user, setUser] = useState({});
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,6 +35,7 @@ function Login() {
   const handleShowPass = () => {
     setShowPassword(!showPassword);
   };
+
 
   const login = async () => {
     const data = await fetch(`${MainAPI}/user/login`, {
@@ -71,7 +76,8 @@ function Login() {
 
   return (
     <>
-      <div className="login_container">
+      <div className="login_container d-flex justify-content-center align-items-center">
+        <ToastContainer autoClose={2000} />
         <div className="column">
           <h2>Log In</h2>
 
@@ -104,14 +110,14 @@ function Login() {
             </div>
             <div className="other">
               <div>
-                <a href="/register">Register an account</a>
+                <Link to="/register">Register an account</Link>
               </div>
               <div>
                 <a href="#">Forget Password?</a>
               </div>
             </div>
 
-            <button type="submit" value="Log In"></button>
+            <input type="submit" value="Log In"></input>
           </form>
         </div>
       </div>
