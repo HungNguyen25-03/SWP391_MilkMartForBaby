@@ -16,16 +16,20 @@ export default function Edit() {
     email: "",
     role_id: "",
   });
+
+  console.log(user);
   const [role, setRole] = useState("");
+  let passwordFromDb;
 
   useEffect(() => {
     fetch(`${MainAPI}/admin/getUser/${id}`)
       .then((res) => res.json())
       .then((data) => {
         const result = data.user[0];
+        passwordFromDb = result.password;
         setUser({
           username: result.username,
-          role: result.role_id,
+          role_id: result.role_id,
           password: result.password,
           email: result.email,
         });
@@ -34,6 +38,9 @@ export default function Edit() {
   }, []);
 
   const handleSubmit = (e) => {
+    if (user.password === "") {
+      user.password = passwordFromDb;
+    }
     e.preventDefault();
     axios.put(`${MainAPI}/admin/update/${id}`, user).then((res) => {
       toast.success(res.data.message);
@@ -70,7 +77,7 @@ export default function Edit() {
                   name="password"
                   className="form-control"
                   placeholder="Enterpassword"
-                  value={user.password}
+                  value=""
                   onChange={(e) => {
                     setUser({
                       ...user,
