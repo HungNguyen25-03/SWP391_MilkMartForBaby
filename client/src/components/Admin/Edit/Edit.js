@@ -16,6 +16,7 @@ export default function Edit() {
     email: "",
     role_id: "",
   });
+  const [errors, setErrors] = useState([]);
 
   console.log(user);
   const [role, setRole] = useState("");
@@ -42,11 +43,24 @@ export default function Edit() {
       user.password = passwordFromDb;
     }
     e.preventDefault();
-    axios.put(`${MainAPI}/admin/update/${id}`, user).then((res) => {
-      toast.success(res.data.message);
-    });
-    nav("/admin/user");
+    axios
+      .put(`${MainAPI}/admin/update/${id}`, user)
+      .then((res) => {
+        toast.success(res.data.message);
+        nav("/admin/user");
+      })
+      .catch((err) => {
+        console.log(err.response.data.errors);
+        setErrors(err.response.data.errors);
+      });
   };
+
+  const specificError = (name) => {
+    return errors.find((err) => {
+      return err.name === name;
+    });
+  };
+
   return (
     <div className="edit-container">
       <NavBar />
@@ -70,6 +84,12 @@ export default function Edit() {
                   }}
                 />
               </div>
+              {specificError("username") && (
+                <p className="text-danger fw-bold m-0">
+                  {specificError("username").message}
+                </p>
+              )}
+
               <div>
                 <label htmlFor="password">Password: </label>
                 <input
@@ -86,6 +106,12 @@ export default function Edit() {
                   }}
                 />
               </div>
+              {specificError("password") && (
+                <p className="text-danger fw-bold m-0">
+                  {specificError("password").message}
+                </p>
+              )}
+
               <div>
                 <label htmlFor="email">Email: </label>
                 <input
@@ -102,6 +128,12 @@ export default function Edit() {
                   }}
                 />
               </div>
+              {specificError("email") && (
+                <p className="text-danger fw-bold m-0">
+                  {specificError("email").message}
+                </p>
+              )}
+
               <div>
                 <label>Role:</label>
                 <select

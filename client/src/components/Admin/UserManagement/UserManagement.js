@@ -16,6 +16,7 @@ export default function UserManagement() {
   const [data, setData] = useState([]);
   const [records, setRecords] = useState(data);
   const [modalOpen, setModalOpen] = useState(false);
+  const [errors, setErrors] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -59,7 +60,8 @@ export default function UserManagement() {
         }
       })
       .catch((err) => {
-        toast.error(err.response.data.message);
+        console.log(err);
+        setErrors(err.response.data.errors);
       });
   }
 
@@ -125,6 +127,7 @@ export default function UserManagement() {
             </button>
             {modalOpen && (
               <Modal
+                errors={errors}
                 closeModal={() => {
                   setModalOpen(false);
                 }}

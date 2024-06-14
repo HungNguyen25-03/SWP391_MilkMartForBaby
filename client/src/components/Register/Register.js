@@ -42,7 +42,6 @@ export default function Register() {
       return err.name === name;
     });
   };
-  console.log(user);
 
   return (
     <>

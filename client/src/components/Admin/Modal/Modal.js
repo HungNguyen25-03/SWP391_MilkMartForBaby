@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Modal.scss";
 
-export default function Modal({ closeModal, onSubmit }) {
+export default function Modal({ closeModal, onSubmit, errors }) {
   const [form, setForm] = useState({
     username: "",
     password: "",
@@ -19,14 +19,24 @@ export default function Modal({ closeModal, onSubmit }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(form);
-    closeModal();
+    if (errors.length === 0) {
+      closeModal();
+    }
+  };
+
+  const specificError = (name) => {
+    return errors.find((err) => {
+      return err.name === name;
+    });
   };
 
   return (
     <div
       className="modal-container"
       onClick={(e) => {
-        if (e.target.className === "modal-container") closeModal();
+        if (e.target.className === "modal-container") {
+          closeModal();
+        }
       }}
     >
       <div className="modal-content">
@@ -36,14 +46,32 @@ export default function Modal({ closeModal, onSubmit }) {
             <label htmlFor="username">Username</label>
             <input type="text" name="username" onChange={handleChange} />
           </div>
+          {specificError("username") && (
+            <p className="text-danger fw-bold m-0">
+              {specificError("username").message}
+            </p>
+          )}
+
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <input type="password" name="password" onChange={handleChange} />
           </div>
+          {specificError("password") && (
+            <p className="text-danger fw-bold m-0">
+              {specificError("password").message}
+            </p>
+          )}
+
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input type="text" name="email" onChange={handleChange} />
           </div>
+          {specificError("email") && (
+            <p className="text-danger fw-bold m-0">
+              {specificError("email").message}
+            </p>
+          )}
+
           <div className="form-group" onChange={handleChange}>
             <label>Role:</label>
             <select className="form-select" name="role_id">
@@ -52,6 +80,12 @@ export default function Modal({ closeModal, onSubmit }) {
               <option value="customer">Customer</option>
             </select>
           </div>
+          {specificError("role_id") && (
+            <p className="text-danger fw-bold m-0">
+              {specificError("role_id").message}
+            </p>
+          )}
+
           <div className="d-flex justify-content-space-between ">
             <button className=" btn bg-secondary" onClick={closeModal}>
               Close
