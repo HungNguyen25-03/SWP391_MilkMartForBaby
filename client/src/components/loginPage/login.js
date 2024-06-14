@@ -9,12 +9,20 @@ import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
+
 
 function Login() {
+  const { setAuth } = useAuth();
   const nav = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from || { pathname: "/home" };
+  const [user, setUser] = useState({});
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  console.log(user);
 
   const handleOnchangeEmail = (event) => {
     setEmail(event.target.value);
@@ -28,21 +36,42 @@ function Login() {
     setShowPassword(!showPassword);
   };
 
+
+  const login = async () => {
+    const data = await fetch(`${MainAPI}/user/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    }).then((res) => {
+      return res.json();
+    });
+    return data;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    axios
-      .post(`${MainAPI}/user/login`, { email, password })
-      .then((res) => {
-        console.log(res);
-        if (res.status === 200) {
-          nav("/home");
-        } else {
-        }
-      })
-      .catch((err) => {
-        console.log(err.response.data.message);
-        toast.error(err.response.data.message);
-      });
+    const response = await login();
+    console.log(response);
+    if (response.status === 200) {
+      setUser(response.user);
+      const user = response.user;
+      const role = response.user.role_id;
+      const accessToken = response.accessToken;
+      console.log(response.message);
+      setAuth({ user, role, accessToken });
+      localStorage.setItem("accessToken", JSON.stringify(response.accessToken));
+      if (role === "admin") {
+        nav("/admin");
+      } else if (role === "staff") {
+        nav("/staff");
+      } else {
+        nav(from, { replace: true });
+      }
+    } else {
+      console.log(response.message);
+    }
   };
 
   return (

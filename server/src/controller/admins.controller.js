@@ -1,24 +1,31 @@
-const { createUser,
-        updateUser,
-        DeleteUser,
-        getAllUser,
-        getUserById
+const {
+  createUser,
+  updateUser,
+  DeleteUser,
+  getAllUser,
+  getUserById,
 } = require("../services/admin.services");
+
 
 const createUserController = async (req, res) => {
   const { username, password, email, role_id } = req.body;
-  console.log(req.body);
+  
   try {
     const result = await createUser(username, password, email, role_id);
-    console.log(result);
+    
     if (result.success) {
       return res.status(200).json({
         message: result.message,
+        token: result.token,
         status: 200,
       });
     }
   } catch (err) {
-    console.log("fail to create a user");
+    return res.status(500).json({
+      message: "Fail to create a user",
+      error: err.message,
+      status: 500,
+    });
   }
 };
 
@@ -34,7 +41,6 @@ const updateUserController = async (req, res) => {
       email,
       role_id
     );
-    console.log(result);
     if (result.success) {
       return res.status(200).json({
         message: result.message,
@@ -72,7 +78,6 @@ const deleteUserController = async (req, res) => {
   }
 };
 
-
 const getAllUserController = async (req, res) => {
   try {
     const result = await getAllUser();
@@ -88,7 +93,6 @@ const getAllUserController = async (req, res) => {
   }
 };
 
-
 const getUserByIdController = async (req, res) => {
   const user_id = parseInt(req.params.id, 10);
   console.log(user_id);
@@ -103,7 +107,7 @@ const getUserByIdController = async (req, res) => {
     console.log("Fail to get user", err);
     res.status(500).json({ message: "Error getting user" });
   }
-}
+};
 module.exports = {
   createUserController,
   updateUserController,

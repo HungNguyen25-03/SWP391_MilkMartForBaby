@@ -39,6 +39,9 @@ export default function OrderUserInfo() {
             <span>Tổng tiền</span>
             <span>1120000</span>
           </div>
+          <div className="d-flex justify-content-center mt-3">
+            <button className="btn btn-primary">Đặt hàng</button>
+          </div>
         </div>
       </div>
     </div>

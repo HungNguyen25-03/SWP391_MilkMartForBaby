@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ProductInfo from "./Detail/ProductInfo";
 import InfoDetail from "./DetailOfProduct/InfoDetail";
-
-import Rate from "./Rate/Rate";
 import HeaderPage from "../../utils/Header/Header";
+import Rate from "./Rate/Rate";
 import FooterPage from "../../utils/Footer/FooterPage";
 
 export default function ProductDetail() {

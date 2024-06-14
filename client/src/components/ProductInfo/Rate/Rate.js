@@ -8,7 +8,7 @@ export default function Rate({ cus }) {
             <h3>Rating Of Customer</h3>
             <div className='rate'>
                 <div className='rate_image'>
-                    <img src='assest/images/avatar/cusava.png' />
+                    <img src={cus.img} />
                 </div>
                 <div className='cus'>
                     <div>{cus.name}</div>
