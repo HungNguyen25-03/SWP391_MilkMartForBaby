@@ -5,13 +5,11 @@ import { FaLock } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { IoEyeSharp } from "react-icons/io5";
 import { MainAPI } from "../API";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
-
 
 function Login() {
   const { setAuth } = useAuth();
@@ -35,7 +33,6 @@ function Login() {
   const handleShowPass = () => {
     setShowPassword(!showPassword);
   };
-
 
   const login = async () => {
     const data = await fetch(`${MainAPI}/user/login`, {
