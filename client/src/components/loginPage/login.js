@@ -50,7 +50,6 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const response = await login();
-    console.log(response);
     if (response.status === 200) {
       setUser(response.user);
       const user = response.user;
@@ -67,7 +66,7 @@ function Login() {
         nav(from, { replace: true });
       }
     } else {
-      console.log(response.message);
+      toast.error(response.message);
     }
   };
 

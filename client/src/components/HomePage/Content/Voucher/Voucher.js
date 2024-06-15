@@ -32,13 +32,6 @@ export default function Voucher() {
         autoplay={false}
         responsive={[
           {
-            breakpoint: 2000,
-            settings: {
-              slidesToShow: 3,
-              slidesToScroll: 1,
-            },
-          },
-          {
             breakpoint: 800,
             settings: {
               slidesToShow: 3,
