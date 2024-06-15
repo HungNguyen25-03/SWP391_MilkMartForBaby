@@ -60,8 +60,29 @@ const searchByName = async (req, res) => {
 
 
 
+//Filtering Product
+const {filterProduct}=require("../services/products.services");
+const filtering=async (req,res) => {
+  
+   const {ageRange, brand, country}=require.query;
+   console.log(ageRange, brand, country);
+
+   try {
+    const result=await filterProduct(ageRange, brand, country);
+    if (result.success) {
+      res.json(result.product);
+    } else {
+      res.status(404).json({ message: result.message });
+    }
+   } catch (error) {
+    res.status(500).json({ message: 'Fail to Filter products' });
+   }
+}
+
+
 module.exports = {
   getProduct,
   getProById,
-  searchByName
+  searchByName,
+  filtering
 };
