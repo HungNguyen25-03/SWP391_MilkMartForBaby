@@ -73,13 +73,13 @@ async function searchProductByName(searchTerm){
 
 
 
-async function filterProduct(ageRange, brand, country) {
+async function filterProduct(ageRange,brand,country) {
   try {
     const pool = await poolPromise;
     const request = pool.request();
 
     if (ageRange) {
-      request.input('ageRange', sql.NVarChar, ageRange);
+      request.input('ageRange', sql.NVarChar, ageRange.join(','));
     }
     if (brand) {
       request.input('brand', sql.NVarChar, brand);
