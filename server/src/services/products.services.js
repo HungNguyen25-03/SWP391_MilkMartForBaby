@@ -78,58 +78,21 @@ async function filterProduct(ageRange,brand,country) {
     const pool = await poolPromise;
     const request = pool.request();
 
-    if (ageRange) {
-      request.input('ageRange', sql.NVarChar, ageRange.join(','));
-    }
-    if (brand) {
-      request.input('brand', sql.NVarChar, brand);
-    }
-    if (country) {
-      request.input('country', sql.NVarChar, country);
-    }
-
-    let query = `
-      SELECT 
-        product_id,
-        product_name,
-        description,
-        price,
-        stock,
-        brand_id,
-        country_id,
-        age_range,
-        category_id
-      FROM Products
-      WHERE 1=1
-    `;
-
-    if (ageRange) {
-      query += ` AND age_range = @ageRange`;
-    }
-    if (brand) {
-      query += ` AND brand_id = (
-        SELECT brand_id FROM Brands WHERE brand_name = @brand
-      )`;
-    }
-    if (country) {
-      query += ` AND country_id = (
-        SELECT country_id FROM Originated_Country WHERE country_name = @country
-      )`;
-    }
+   let ageFields=[];
+   let brandFields=[];
+   let countryFeilds=[];
+   if(ageFields.length === 0 && brandFields === 0 && countryFeilds.length === 0){
+     getAllProduct;
+   } else if (ageFields.length === 0 && brandFields === 0 ){
+   
+   }
 
 
-
-    const result = await request.query(query);
-    const product = result.recordset;
-
-    return product.length > 0 
-      ? { success: true, product}
-      : { success: false, message: "No products found" };
-  } catch (error) {
-    console.error('Error filtering products', error);
-    throw error;
+    
+  }catch(error){
+  throw error;
   }
-}
+};
 
 
 
