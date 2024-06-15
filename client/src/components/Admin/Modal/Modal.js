@@ -77,6 +77,7 @@ export default function Modal({ closeModal, onSubmit, errors }) {
             <select className="form-select" name="role_id">
               <option selected>Select the role</option>
               <option value="admin">Admin</option>
+              <option value="staff">Staff</option>
               <option value="customer">Customer</option>
             </select>
           </div>
