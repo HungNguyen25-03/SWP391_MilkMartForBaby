@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Modal.scss";
 
-export default function Modal({ closeModal, onSubmit, errors }) {
+export default function Modal({ closeModal, onSubmit, errors, success }) {
   const [form, setForm] = useState({
     username: "",
     password: "",
@@ -19,7 +19,7 @@ export default function Modal({ closeModal, onSubmit, errors }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(form);
-    if (errors.length === 0) {
+    if (errors.length === 0 && success) {
       closeModal();
     }
   };
