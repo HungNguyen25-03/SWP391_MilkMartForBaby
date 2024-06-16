@@ -21,7 +21,6 @@ userRoutes.post(
 
 userRoutes.get(
   "/show-all-voucher",
-  authJwt.authenticateToken,
   userController.showAllVoucherController
 );
 

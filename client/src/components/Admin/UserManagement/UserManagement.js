@@ -17,6 +17,7 @@ export default function UserManagement() {
   const [records, setRecords] = useState(data);
   const [modalOpen, setModalOpen] = useState(false);
   const [errors, setErrors] = useState([]);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -55,13 +56,14 @@ export default function UserManagement() {
       .post("http://localhost:4000/admin/create", newUser)
       .then((res) => {
         if (res.status === 200) {
+          setSuccess(true);
           toast.success(res.data.message);
-        } else {
         }
       })
       .catch((err) => {
         console.log(err);
         setErrors(err.response.data.errors);
+        setSuccess(false);
       });
   }
 
@@ -127,6 +129,7 @@ export default function UserManagement() {
             </button>
             {modalOpen && (
               <Modal
+                success={success}
                 errors={errors}
                 closeModal={() => {
                   setModalOpen(false);

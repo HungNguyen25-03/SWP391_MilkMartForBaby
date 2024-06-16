@@ -28,12 +28,18 @@ export default function HeaderPage() {
 
   return (
     <div className=" search-bar">
-      <div className="container d-flex align-center justify-content-between">
-        <div className="d-flex align-center">
-          <div className="logo">
+      <div className="container">
+        <div className="row justify-content-between align-items-center">
+          <div
+            className="logo col-3"
+            onClick={() => {
+              nav("/home");
+            }}
+          >
             <img src="https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2Flogo.png?alt=media&token=608fc814-b3d6-463b-845b-3c64b92cc563" />
           </div>
-          <div className="search ">
+
+          <div className="search col-6">
             <form className="d-flex">
               <input type="text" placeholder="Hôm nay bạn muốn mua gì?" />
               <button type="submit" className="btn" name="submit-search">
@@ -41,29 +47,29 @@ export default function HeaderPage() {
               </button>
             </form>
           </div>
-        </div>
 
-        <div className="other_header d-flex align-center justify-content-space">
-          <Link to="/cart" className="acc">
-            <div className="acc_icon">
-              <FaShoppingCart />
-            </div>
-            <div className="detail">Giỏ hàng</div>
-          </Link>
-          <Link to="/customer-account" className="acc">
-            <div className="acc_icon">
-              <FaUser />
-            </div>
-            <div className="detail">Tài khoản</div>
-          </Link>
-          {token ? (
-            <div className="acc" onClick={handleLogout}>
+          <div className="other_header d-flex align-center justify-content-space col-3">
+            <Link to="/cart" className="acc">
+              <div className="acc_icon">
+                <FaShoppingCart />
+              </div>
+              <div className="detail">Giỏ hàng</div>
+            </Link>
+            <Link to="/customer-account" className="acc">
               <div className="acc_icon">
                 <FaUser />
               </div>
-              <div className="detail">Đăng xuất</div>
-            </div>
-          ) : null}
+              <div className="detail">Tài khoản</div>
+            </Link>
+            {token ? (
+              <div className="acc" onClick={handleLogout}>
+                <div className="acc_icon">
+                  <FaUser />
+                </div>
+                <div className="detail">Đăng xuất</div>
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
     </div>

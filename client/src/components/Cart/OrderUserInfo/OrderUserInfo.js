@@ -1,7 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./OrderUserInfo.scss";
+import Modal from "../../Admin/Modal/Modal";
+import axios from "axios";
+import { MainAPI } from "../../API";
+import useAuth from "../../../hooks/useAuth";
 
 export default function OrderUserInfo() {
+  const [show, setShow] = useState(false);
+  const [listOfVoucherById, setListOfVoucherById] = useState([]);
+  const [isUsedVoucher, setIsUsedVoucher] = useState(false);
+  const { auth } = useAuth();
+
+  useEffect(() => {
+    axios
+      .get(`${MainAPI}/user/show-voucher-by-user/${auth.user.user_id}`, {
+        headers: {
+          "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+        },
+      })
+      .then((res) => {
+        console.log(res.data.vouchers.vouchers);
+        setListOfVoucherById(res.data.vouchers.vouchers);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <div className="fixed-cart">
       <div className="box-block">
@@ -23,8 +48,29 @@ export default function OrderUserInfo() {
         <span className="box-block-title">Ưu đãi và giảm giá</span>
         <div className="user-address">
           <div className="show-phone-address">
-            <span>Võ Minh Trí</span>
-            <span>092843746</span>
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                setShow(true);
+              }}
+            >
+              {isUsedVoucher ? "Đã áp dụng 1 voucher" : "Sử dụng mã giảm giá"}
+            </button>
+
+            {/* MODAL */}
+            {show && (
+              <Modal
+                listOfVoucher={listOfVoucherById}
+                isUsedVoucher={() => {
+                  setIsUsedVoucher(true);
+                }}
+                closeModal={() => {
+                  setShow(false);
+                }}
+                onSubmit={() => {}}
+                errors={[]}
+              />
+            )}
           </div>
         </div>
       </div>

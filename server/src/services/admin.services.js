@@ -134,6 +134,29 @@ async function updateUser(user_id, username, password, email, role_id) {
   }
 }
 
+async function dashboard() {
+  try {
+    const pool = await poolPromise;
+    const result = await pool.request().query(`
+    SELECT COUNT(*) as totalUsers FROM Users WHERE status = 1;
+    SELECT COUNT(*) as totalProducts FROM Products WHERE status = 1;
+    SELECT COUNT(*) as totalOrders FROM Orders WHERE status = 1;
+  `);
+    const totalUsers = result.recordsets[0][0].totalUsers;
+    const totalProducts = result.recordsets[1][0].totalProducts;
+    const totalOrders = result.recordsets[2][0].totalOrders;
+
+    return { totalUsers, totalProducts, totalOrders };
+  } catch (error) {
+    console.error("Error getting dashboard data:", error);
+    return {
+      totalUsers: 0,
+      totalProducts: 0,
+      totalOrders: 0,
+    };
+  }
+}
+
 module.exports = {
   createUser,
   getUserById,

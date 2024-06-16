@@ -40,17 +40,17 @@ export const thanhtoans = [
 ];
 
 export const chogiaos = [
-  {
-    img: "https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2FabbottGrow%2Fabbott-grow-4-huong-vani-900g.png?alt=media&token=a5a6a917-6e0b-4830-b56e-0478f47f0dc1",
-    name: "Abbott",
-    info: "Sữa  Abbott-groww 6 - 12 tháng tuổi",
-    quantity: 1,
-    tichluy: 100000,
-  },
+  // {
+  //   img: "https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2FabbottGrow%2Fabbott-grow-4-huong-vani-900g.png?alt=media&token=a5a6a917-6e0b-4830-b56e-0478f47f0dc1",
+  //   name: "Abbott",
+  //   info: "Sữa  Abbott-groww 6 - 12 tháng tuổi",
+  //   quantity: 1,
+  //   tichluy: 100000,
+  // },
 ];
 
 export const danggiaos = [];
 
 export const dagiaos = [];
 
-export const dahuy = [];
+export const dahuys = [];
