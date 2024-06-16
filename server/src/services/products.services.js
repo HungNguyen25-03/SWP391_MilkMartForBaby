@@ -73,28 +73,67 @@ async function searchProductByName(searchTerm){
 
 
 
-async function filterProduct(ageRange,brand,country) {
-  try {
-    const pool = await poolPromise;
-    const request = pool.request();
-
-   let ageFields=[];
-   let brandFields=[];
-   let countryFeilds=[];
-   if(ageFields.length === 0 && brandFields === 0 && countryFeilds.length === 0){
-     getAllProduct;
-   } else if (ageFields.length === 0 && brandFields === 0 ){
-   
-   }
 
 
-    
-  }catch(error){
-  throw error;
+  async function filterProduct(ageRange, brand, country) {
+    try {
+      const pool = await poolPromise;
+      const request = pool.request();
+  
+      let filters = [];
+  
+      if (ageRange) {
+        if (!Array.isArray(ageRange)) {
+          ageRange = [ageRange];
+        }
+        request.input('ageRange', sql.NVarChar, ageRange.join(','));
+        filters.push("age_range IN (SELECT value FROM STRING_SPLIT(@ageRange, ','))");
+      }
+  
+      if (brand) {
+        request.input('brand', sql.NVarChar, brand);
+        filters.push(`brand_id = (SELECT brand_id FROM Brands WHERE brand_name = @brand)`);
+      }
+  
+      if (country) {
+        request.input('country', sql.NVarChar, country);
+        filters.push(`country_id = (SELECT country_id FROM Originated_Country WHERE country_name = @country)`);
+      }
+  
+      let query = `
+        SELECT 
+          product_id,
+          product_name,
+          description,
+          price,
+          stock,
+          brand_id,
+          country_id,
+          age_range,
+          category_id
+        FROM Products
+      `;
+  
+      if (filters.length > 0) {
+        query += ' WHERE ' + filters.join(' AND ');
+      }
+  
+      console.log('Executing query:', query);  // Debug: Print the query
+  
+      const result = await request.query(query);
+      const products = result.recordset;
+  
+      return products.length > 0 
+        ? { success: true, products }
+        : { success: false, message: "No products found" };
+    } catch (error) {
+      console.error('Error filtering products', error);
+      throw error;
+    }
   }
-};
-
-
+  
+  
+ 
 
 
 module.exports = {
