@@ -103,11 +103,29 @@ const {getCompleteStatus}=require("../services/order.services");
 
 
 
+ const {getCancelledStatus}=require("../services/order.services");
+ const getOrderByCancelledStatus= async (req,res) =>{
+  try {
+    const result= await getCancelledStatus();
+    if(result.success){
+      res.json(result.order);
+
+    }else {
+      res.json({message:result.message});
+    }
+    
+  } catch (error) {
+    console.log("Fail to get Orders by Cancelled Status");
+  }
+ }
+
+
 module.exports = {
   getOrder,
   getOrderById,
   getOrderByCompleteStatus,
   getOrderByPendingStatus,
   getOrderByConfirmStatus,
-  getOrderByDeliveredStatus
+  getOrderByDeliveredStatus,
+  getOrderByCancelledStatus
 };

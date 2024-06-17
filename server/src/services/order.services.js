@@ -149,6 +149,30 @@ async function getOrderById(order_id){
   }
  };
 
+ async function getCancelledStatus(){
+  try {
+   const pool = await  poolPromise;
+         const request = await pool.request();
+
+         request.input('status', sql.NVarChar, 'Cancelled');
+       
+       
+         const query =
+          `SELECT * FROM Orders WHERE status=@status`
+         ;
+          const result=await request.query(query);
+         const order = result.recordset;
+       if(order){
+         return { success: true, order };
+       } else {
+         return { success: false, message: "Fail to connect Order Cancelled Status" };
+       }
+  } catch (error) {
+   throw error;
+  }
+ };
+
+
 
 
  module.exports = {
@@ -157,7 +181,8 @@ async function getOrderById(order_id){
     getCompleteStatus,
     getPendingStatus,
     getConfirmStatus,
-    getDeliverStatus
+    getDeliverStatus,
+    getCancelledStatus
     
   };
   

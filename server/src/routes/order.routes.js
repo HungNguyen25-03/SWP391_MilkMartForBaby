@@ -29,6 +29,7 @@ const {getOrderByDeliveredStatus}=require("../controller/orders.controller");
 orderRouters.get("/DeliveredOrder",getOrderByDeliveredStatus);
 
 // Cancelled
-
+const {getOrderByCancelledStatus}=require("../controller/orders.controller");
+orderRouters.get("/CancelledOrder",getOrderByCancelledStatus);
 
 module.exports = orderRouters;
