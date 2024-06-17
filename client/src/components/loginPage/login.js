@@ -55,7 +55,7 @@ function Login() {
       const user = response.user;
       const role = response.user.role_id;
       const accessToken = response.accessToken;
-      console.log(response.message);
+
       setAuth({ user, role, accessToken });
       localStorage.setItem("accessToken", JSON.stringify(response.accessToken));
       if (role === "admin") {

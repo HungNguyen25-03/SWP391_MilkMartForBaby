@@ -31,7 +31,64 @@ const getOrderId= async (req,res)=>{
  
 }
 
+const {getCompleteStatus}=require("../services/order.services");
+ const getOrderByCompleteStatus= async (req,res) =>{
+  try {
+    const result= await getCompleteStatus();
+    if(result.success){
+      res.json(result.order);
+
+    }else {
+      res.json({message:result.message});
+    }
+    
+  } catch (error) {
+    console.log("Fail to get Orders by Complete Status");
+  }
+ }
+
+
+
+ const {getPendingStatus}=require("../services/order.services");
+ const getOrderByPendingStatus= async (req,res) =>{
+  try {
+    const result= await getPendingStatus();
+    if(result.success){
+      res.json(result.order);
+
+    }else {
+      res.json({message:result.message});
+    }
+    
+  } catch (error) {
+    console.log("Fail to get Orders by Pending Status");
+  }
+ }
+
+
+
+ const {getConfirmStatus}=require("../services/order.services");
+ const getOrderByConfirmStatus= async (req,res) =>{
+  try {
+    const result= await getConfirmStatus();
+    if(result.success){
+      res.json(result.order);
+
+    }else {
+      res.json({message:result.message});
+    }
+    
+  } catch (error) {
+    console.log("Fail to get Orders by Pending Status");
+  }
+ }
+
+
+
 module.exports = {
   getOrder,
-  getOrderById
+  getOrderById,
+  getOrderByCompleteStatus,
+  getOrderByPendingStatus,
+  getOrderByConfirmStatus
 };

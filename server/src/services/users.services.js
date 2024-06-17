@@ -1,4 +1,3 @@
-
 const { poolPromise, sql } = require("./database.services");
 const authJwt = require("../middlewares/authJwt.middlewares");
 const bcrypt = require("bcrypt");
@@ -6,7 +5,6 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const secretKey = process.env.SECRET_KEY;
 const refreshSecretKey = process.env.REFRESH_SECRET_KEY;
-
 
 async function loginUser(email, password) {
   try {
@@ -31,7 +29,6 @@ async function loginUser(email, password) {
   } catch (error) {
     console.error("Error in loginUser:", error);
     throw new Error("Database query failed");
-
   }
 }
 
@@ -44,7 +41,7 @@ async function registerUser(username, password, email) {
       .input("username", sql.VarChar, username)
       .input("password", sql.VarChar, hashedPassword)
       .input("email", sql.VarChar, email)
-      .input("role_id", sql.VarChar, 'customer')
+      .input("role_id", sql.VarChar, "customer")
       .query(
         `INSERT INTO Users (username, password, email, role_id) OUTPUT INSERTED.user_id VALUES (@username, @password, @email, @role_id)`
       );
@@ -83,7 +80,7 @@ async function showAllVoucher() {
   try {
     const pool = await poolPromise;
     const result = await pool.request()
-      .query(`SELECT code, discount, FORMAT(expiration_date, 'dd-MM-yyyy') as expiration_date
+      .query(`SELECT voucher_id, code, discount, FORMAT(expiration_date, 'dd-MM-yyyy') as expiration_date
     FROM Vouchers;`);
     const vouchers = result.recordset;
     if (vouchers) {
@@ -100,7 +97,7 @@ async function getVoucherByUserId(user_id) {
   try {
     const pool = await poolPromise;
     const result = await pool.request().query(`
-    SELECT v.discount, FORMAT(v.expiration_date, 'dd-MM-yyyy') AS expiration_date , uv.used FROM Vouchers v JOIN 
+    SELECT v.voucher_id, v.discount, FORMAT(v.expiration_date, 'dd-MM-yyyy') AS expiration_date , uv.used FROM Vouchers v JOIN 
     User_Vouchers uv ON v.voucher_id = uv.voucher_id WHERE uv.user_id = ${user_id} AND uv.used = 0`);
     const vouchers = result.recordset;
     if (vouchers) {
@@ -142,7 +139,9 @@ async function generateNewAccessToken(refreshToken) {
       jwt.verify(refreshToken, refreshSecretKey, (err, user) => {
         if (err) return resolve(null);
 
-        const newAccessToken = jwt.sign({ userId: user.userId }, secretKey, { expiresIn: "1h" });
+        const newAccessToken = jwt.sign({ userId: user.userId }, secretKey, {
+          expiresIn: "1h",
+        });
         resolve(newAccessToken);
       });
     });

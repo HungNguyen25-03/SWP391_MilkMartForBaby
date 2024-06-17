@@ -1,4 +1,4 @@
-const { poolPromise } = require("./database.services");
+const { poolPromise ,sql} = require("./database.services");
 
 async function getAllOrder() {
   try {
@@ -53,9 +53,86 @@ async function getOrderById(order_id){
   }
  };
 
+ async function getCompleteStatus(){
+  try {
+   const pool = await  poolPromise;
+         const request = await pool.request();
+
+         request.input('status', sql.NVarChar, 'Complete');
+       
+       
+         const query =
+          `SELECT * FROM Orders WHERE status=@status`
+         ;
+          const result=await request.query(query);
+         const order = result.recordset;
+       if(order){
+         return { success: true, order };
+       } else {
+         return { success: false, message: "Fail to connect Order Complete Status" };
+       }
+  } catch (error) {
+   throw error;
+  }
+ };
+
+ 
+
+ async function getPendingStatus(){
+  try {
+   const pool = await  poolPromise;
+         const request = await pool.request();
+
+         request.input('status', sql.NVarChar, 'Pending');
+       
+       
+         const query =
+          `SELECT * FROM Orders WHERE status=@status`
+         ;
+          const result=await request.query(query);
+         const order = result.recordset;
+       if(order){
+         return { success: true, order };
+       } else {
+         return { success: false, message: "Fail to connect Order Pending Status" };
+       }
+  } catch (error) {
+   throw error;
+  }
+ };
+
+ async function getConfirmStatus(){
+  try {
+   const pool = await  poolPromise;
+         const request = await pool.request();
+
+         request.input('status', sql.NVarChar, 'Confirmed');
+       
+       
+         const query =
+          `SELECT * FROM Orders WHERE status=@status`
+         ;
+          const result=await request.query(query);
+         const order = result.recordset;
+       if(order){
+         return { success: true, order };
+       } else {
+         return { success: false, message: "Fail to connect Order Confirmed Status" };
+       }
+  } catch (error) {
+   throw error;
+  }
+ };
+
+
+
+
  module.exports = {
     getAllOrder,
-    getOrderById
+    getOrderById,
+    getCompleteStatus,
+    getPendingStatus,
+    getConfirmStatus
     
   };
   

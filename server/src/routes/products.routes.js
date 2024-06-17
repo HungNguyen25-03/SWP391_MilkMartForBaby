@@ -16,6 +16,7 @@ const {searchByName}=require("../controller/products.controller");
 productRouters.get("/search",searchByName);
 
 //fliter Product
-
+const{filtering}=require("../controller/products.controller");
+productRouters.get("/filter",filtering)
 
 module.exports = productRouters;

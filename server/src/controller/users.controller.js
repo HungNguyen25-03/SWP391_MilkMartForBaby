@@ -89,7 +89,7 @@ const showVoucherByUserIdController = async (req, res) => {
       res.status(404).json({ message: "No vouchers found" });
     }
   } catch (error) {
-    res.status(500).send("Error showing all vouchers");
+    res.status(500).send("Error showing all vouchers", error);
   }
 };
 
