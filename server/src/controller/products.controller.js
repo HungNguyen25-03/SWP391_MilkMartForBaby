@@ -60,8 +60,25 @@ const searchByName = async (req, res) => {
 
 
 
+//Filtering Product
+const {filterProduct}=require("../services/products.services");
+const filtering=async (req,res) => {
+
+
+   try {
+    const { ageRange, brand ,country} = req.query;
+    const result = await filterProduct(ageRange,brand,country);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+   
+};
+
+
 module.exports = {
   getProduct,
   getProById,
-  searchByName
+  searchByName,
+  filtering
 };
