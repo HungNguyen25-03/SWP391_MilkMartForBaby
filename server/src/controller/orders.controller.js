@@ -49,8 +49,26 @@ const {getCompleteStatus}=require("../services/order.services");
 
 
 
+ const {getPendingStatus}=require("../services/order.services");
+ const getOrderByPendingStatus= async (req,res) =>{
+  try {
+    const result= await getPendingStatus();
+    if(result.success){
+      res.json(result.order);
+
+    }else {
+      res.json({message:result.message});
+    }
+    
+  } catch (error) {
+    console.log("Fail to get Orders by Pending Status");
+  }
+ }
+
+
 module.exports = {
   getOrder,
   getOrderById,
-  getOrderByCompleteStatus
+  getOrderByCompleteStatus,
+  getOrderByPendingStatus
 };

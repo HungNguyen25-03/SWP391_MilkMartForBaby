@@ -76,9 +76,30 @@ async function getOrderById(order_id){
   }
  };
 
+ 
 
+ async function getPendingStatus(){
+  try {
+   const pool = await  poolPromise;
+         const request = await pool.request();
 
-
+         request.input('status', sql.NVarChar, 'Pending');
+       
+       
+         const query =
+          `SELECT * FROM Orders WHERE status=@status`
+         ;
+          const result=await request.query(query);
+         const order = result.recordset;
+       if(order){
+         return { success: true, order };
+       } else {
+         return { success: false, message: "Fail to connect Order Pending Status" };
+       }
+  } catch (error) {
+   throw error;
+  }
+ };
 
 
 
@@ -87,6 +108,7 @@ async function getOrderById(order_id){
     getAllOrder,
     getOrderById,
     getCompleteStatus,
+    getPendingStatus
     
   };
   
