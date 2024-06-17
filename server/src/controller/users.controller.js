@@ -6,6 +6,7 @@ const {
   getVoucherByUserId,
   claimVoucher,
   generateNewAccessToken,
+  readyToCheckout,
 } = require("../services/users.services");
 
 const authJwt = require("../middlewares/authJwt.middlewares");
@@ -137,6 +138,21 @@ const logoutController = async (req, res) => {
   }
 };
 
+const readyToCheckoutController = async (req, res) => {
+  const { user_id, total_amount } = req.body;
+
+  try {
+    const order = await readyToCheckout(user_id, total_amount);
+    if (order.success) {
+      res.status(200).json({ message: order.message, status: 200 });
+    } else {
+      res.status(409).json({ message: order.message, status: 409 });
+    }
+  } catch (error) {
+    res.status(500).send("Error to pay");
+  }
+}
+
 module.exports = {
   registerUserController,
   loginUserController,
@@ -146,4 +162,5 @@ module.exports = {
   claimVoucherController,
   refreshTokenController,
   logoutController,
+  readyToCheckoutController,
 };

@@ -151,6 +151,25 @@ async function generateNewAccessToken(refreshToken) {
   }
 }
 
+async function readyToCheckout(user_id, total_amount) {
+  try {
+    const pool = await poolPromise;
+    await pool
+      .request()
+      .input("user_id", sql.Int, user_id)
+      .input("order_date", sql.DateTime, new Date())
+      .input("status", sql.VarChar, "pending")
+      .input("total_amount", sql.Decimal, total_amount)
+      .query(
+        `INSERT INTO Orders (user_id, order_date, status, total_amount) 
+        VALUES (@user_id, @order_date, @status, @total_amount)`
+      );
+    return { success: true, message: "Ready to checkout" };
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   loginUser,
   registerUser,
@@ -159,4 +178,5 @@ module.exports = {
   getVoucherByUserId,
   claimVoucher,
   generateNewAccessToken,
+  readyToCheckout,
 };

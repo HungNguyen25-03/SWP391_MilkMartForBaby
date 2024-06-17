@@ -10,4 +10,8 @@ paymentRoutes.post("/zaloPay", payment.paymentController);
 
 paymentRoutes.post("/callback", payment.callbackURLController);
 
+paymentRoutes.post("/order-status/:id", payment.orderStatusController);
+
+paymentRoutes.get("/payment-methods", payment.getAllPaymentMethodsController);
+
 module.exports = paymentRoutes;
