@@ -16,6 +16,8 @@ orderRouters.get("/CompleteOrder",getOrderByCompleteStatus);
 
 
 //Pending
+const{getOrderByPendingStatus}=require("../controller/orders.controller");
+orderRouters.get("/PendingOrder",getOrderByPendingStatus);
 
 
 //Confirmed
