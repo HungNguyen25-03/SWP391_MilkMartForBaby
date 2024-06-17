@@ -118,7 +118,7 @@ async function searchProductByName(searchTerm){
         query += ' WHERE ' + filters.join(' AND ');
       }
   
-      console.log('Executing query:', query);  // Debug: Print the query
+     
   
       const result = await request.query(query);
       const products = result.recordset;
