@@ -21,7 +21,8 @@ orderRouters.get("/PendingOrder",getOrderByPendingStatus);
 
 
 //Confirmed
-
+const {getOrderByConfirmStatus}=require("../controller/orders.controller");
+orderRouters.get("/ConfirmOrder",getOrderByConfirmStatus);
 
 //Delivered
 
