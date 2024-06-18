@@ -19,10 +19,7 @@ userRoutes.post(
   userController.applyVoucherController
 );
 
-userRoutes.get(
-  "/show-all-voucher",
-  userController.showAllVoucherController
-);
+userRoutes.get("/show-all-voucher", userController.showAllVoucherController);
 
 userRoutes.get(
   "/show-voucher-by-user/:id",
@@ -37,8 +34,22 @@ userRoutes.post(
   userController.claimVoucherController
 );
 
-userRoutes.post("/refresh-token", userController.refreshTokenController);
+userRoutes.post(
+  "/ready-to-checkout",
+  authJwt.authenticateToken,
+  userController.readyToCheckoutController
+);
 
-userRoutes.post("/logout", userController.logoutController);
+userRoutes.post(
+  "/refresh-token",
+  authJwt.authenticateToken,
+  userController.refreshTokenController
+);
+
+userRoutes.post(
+  "/logout",
+  authJwt.authenticateToken,
+  userController.logoutController
+);
 
 module.exports = userRoutes;
