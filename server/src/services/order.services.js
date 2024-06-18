@@ -126,13 +126,38 @@ async function getOrderById(order_id){
 
 
 
+ async function getDeliverStatus(){
+  try {
+   const pool = await  poolPromise;
+         const request = await pool.request();
+
+         request.input('status', sql.NVarChar, 'Delivered');
+       
+       
+         const query =
+          `SELECT * FROM Orders WHERE status=@status`
+         ;
+          const result=await request.query(query);
+         const order = result.recordset;
+       if(order){
+         return { success: true, order };
+       } else {
+         return { success: false, message: "Fail to connect Order Delivered Status" };
+       }
+  } catch (error) {
+   throw error;
+  }
+ };
+
+
 
  module.exports = {
     getAllOrder,
     getOrderById,
     getCompleteStatus,
     getPendingStatus,
-    getConfirmStatus
+    getConfirmStatus,
+    getDeliverStatus
     
   };
   

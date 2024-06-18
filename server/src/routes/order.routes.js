@@ -25,7 +25,8 @@ const {getOrderByConfirmStatus}=require("../controller/orders.controller");
 orderRouters.get("/ConfirmOrder",getOrderByConfirmStatus);
 
 //Delivered
-
+const {getOrderByDeliveredStatus}=require("../controller/orders.controller");
+orderRouters.get("/DeliveredOrder",getOrderByDeliveredStatus);
 
 // Cancelled
 

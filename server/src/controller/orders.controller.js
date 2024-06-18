@@ -85,10 +85,29 @@ const {getCompleteStatus}=require("../services/order.services");
 
 
 
+ const {getDeliverStatus}=require("../services/order.services");
+ const getOrderByDeliveredStatus= async (req,res) =>{
+  try {
+    const result= await getDeliverStatus();
+    if(result.success){
+      res.json(result.order);
+
+    }else {
+      res.json({message:result.message});
+    }
+    
+  } catch (error) {
+    console.log("Fail to get Orders by Delivered Status");
+  }
+ }
+
+
+
 module.exports = {
   getOrder,
   getOrderById,
   getOrderByCompleteStatus,
   getOrderByPendingStatus,
-  getOrderByConfirmStatus
+  getOrderByConfirmStatus,
+  getOrderByDeliveredStatus
 };
