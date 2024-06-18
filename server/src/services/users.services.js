@@ -164,7 +164,8 @@ async function readyToCheckout(user_id, total_amount) {
         `INSERT INTO Orders (user_id, order_date, status, total_amount) 
         VALUES (@user_id, @order_date, @status, @total_amount)`
       );
-    return { success: true, message: "Ready to checkout" };
+        // insert order_items
+    return { success: true, message: "Ready to checkout successfully" };
   } catch (error) {
     throw error;
   }

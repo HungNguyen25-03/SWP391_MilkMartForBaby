@@ -6,12 +6,27 @@ const authJwt = require("../middlewares/authJwt.middlewares");
 const paymentRoutes = express.Router();
 
 // payment api
-paymentRoutes.post("/zaloPay", payment.paymentController);
+paymentRoutes.post(
+  "/zaloPay",
+  authJwt.authenticateToken,
+  payment.paymentController
+);
 
-paymentRoutes.post("/callback", payment.callbackURLController);
+paymentRoutes.post(
+  "/callback",
+  payment.callbackURLController
+);
 
-paymentRoutes.post("/order-status/:id", payment.orderStatusController);
+paymentRoutes.post(
+  "/order-status/:id",
+  authJwt.authenticateToken,
+  payment.orderStatusController
+);
 
-paymentRoutes.get("/payment-methods", payment.getAllPaymentMethodsController);
+paymentRoutes.get(
+  "/payment-methods",
+  authJwt.authenticateToken,
+  payment.getAllPaymentMethodsController
+);
 
 module.exports = paymentRoutes;
