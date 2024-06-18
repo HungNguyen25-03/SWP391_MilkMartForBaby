@@ -7,8 +7,8 @@ export default function CustomerThanhToan({ title }) {
         <div className={title === 'Thanh toán' ? 'thanhtoan' : 'fade'}>
             <h5 className="fw-bold">{title}</h5>
             {thanhtoans.length === 0 ?
-                <div>
-                    <imgl src={"https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2Faccount%2Fthanhtoan.png?alt=media&token=511e5785-0844-4fea-8530-3124f9296eab"} />
+                <div className="emptyinfo">
+                    <img src='https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2Faccount%2Fthanhtoan.png?alt=media&token=511e5785-0844-4fea-8530-3124f9296eab' />
                     <p>Hiện chưa có đơn hàng <br />nào chờ thanh toán</p>
                 </div>
                 :
