@@ -6,7 +6,7 @@ export default function CustomerDaGiao({ title }) {
         <div className={title === 'Đã giao' ? 'chờ giao' : 'fade'}>
             <h5 className="fw-bold">{title}</h5>
             {dagiaos.length === 0 ?
-                <div>
+                <div className="emptyinfo">
                     <img src='https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2Faccount%2Fdanggiao.png?alt=media&token=c31a1c88-3ed9-4d03-b8d5-daabd9cf7992' />
                     <p>Hiện chưa có sản phẩm <br />nào đã giao</p>
                 </div>

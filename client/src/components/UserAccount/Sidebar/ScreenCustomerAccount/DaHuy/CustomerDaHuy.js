@@ -6,7 +6,7 @@ export default function CustomerDaHuy({ title }) {
         <div className={title === 'Đã hủy' ? 'chờ giao' : 'fade'}>
             <h5 className="fw-bold">{title}</h5>
             {dahuys.length === 0 ?
-                <div>
+                <div className="emptyinfo">
                     <img src='https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2Faccount%2Fthanhtoan.png?alt=media&token=511e5785-0844-4fea-8530-3124f9296eab' />
                     <p>Hiện chưa có sản phẩm hủy</p>
                 </div>
