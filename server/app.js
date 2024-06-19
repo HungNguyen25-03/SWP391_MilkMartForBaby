@@ -11,6 +11,7 @@ const productRoutes = require("../server/src/routes/products.routes");
 const orderRoutes = require("../server/src/routes/order.routes");
 const adminRoutes = require("../server/src/routes/admin.routes");
 const staffRoutes = require("../server/src/routes/staff.routes");
+const paymentRoutes = require("../server/src/routes/payment.routes");
 const {
   errorHandlingMiddleware,
 } = require("../server/src/middlewares/error.middleware");
@@ -32,6 +33,9 @@ app.use("/admin", adminRoutes);
 
 //api to use staff
 app.use("/staff", staffRoutes);
+
+//api to use payment
+app.use("/payment", paymentRoutes);
 
 app.use(errorHandlingMiddleware);
 
