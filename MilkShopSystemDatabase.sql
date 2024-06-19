@@ -67,7 +67,7 @@ CREATE TABLE Orders (
     order_id INT IDENTITY(1,1) PRIMARY KEY,
     user_id INT NOT NULL REFERENCES Users(user_id),
     order_date DATETIME DEFAULT GETDATE(),
-    status NVARCHAR(10),
+    status NVARCHAR(10) CHECK (status IN ('pending', 'paid', 'confirmed', 'completed', 'cancelled')),
     total_amount DECIMAL(10, 2) NOT NULL CHECK (total_amount >= 0)
 );
 
@@ -145,7 +145,7 @@ INSERT INTO Customer (customer_id, loyalty_points) VALUES
 -- Insert into Product_Categories
 INSERT INTO Product_Categories (category_name) VALUES
 ('Brands'),
-('Originated countries');
+('Originated countries'),
 ('Age ranges');
 
 -- Insert into Brands
@@ -170,17 +170,17 @@ INSERT INTO Age_Range (age_range, category_id) VALUES
 ('Adult', 3);
 
 -- Insert into Products
-INSERT INTO Products (product_name, description, price, stock, brand_id, country_id, age_range, category_id) VALUES
-('Infant Milk Powder', 'High-quality milk powder for infants 0-6 months.', 25.99, 100, 1, 'USA', '0-6 months', 1),
-('Maternal Milk Supplement', 'Nutritional supplement for mothers.', 19.99, 50, 2, 'CAN', '1-2 years', 2),
-('Baby Formula', 'Baby formula for infants 6-12 months.', 29.99, 75, 1, 'USA', '6-12 months', 1),
-('Toddler Milk Drink', 'Nutritious milk drink for toddlers.', 22.99, 60, 1, 'GER', '1-2 years', 1),
-('Organic Baby Formula', 'Organic formula for infants 0-6 months.', 35.99, 40, 2, 'CAN', '0-6 months', 1),
-('Maternal Health Drink', 'Healthy drink for pregnant women.', 27.99, 30, 2, 'JPN', 'Maternal', 2),
-('Junior Growth Milk', 'Growth milk for kids over 2 years.', 32.99, 80, 1, 'USA', 'More than 2 years old', 1),
-('Adult Milk Powder', 'Milk powder for adults.', 20.99, 45, 1, 'USA', 'Adult', 2),
-('Soy-Based Infant Formula', 'Soy-based formula for infants 0-6 months.', 29.99, 50, 2, 'GER', '0-6 months', 1),
-('Lactose-Free Baby Formula', 'Lactose-free formula for infants.', 33.99, 70, 1, 'USA', '0-6 months', 1);
+INSERT INTO Products (product_name, description, price, stock, brand_id, country_id, age_range) VALUES
+('Infant Milk Powder', 'High-quality milk powder for infants 0-6 months.', 25.99, 100, 1, 'USA', '0-6 months'),
+('Maternal Milk Supplement', 'Nutritional supplement for mothers.', 19.99, 50, 2, 'CAN', '1-2 years'),
+('Baby Formula', 'Baby formula for infants 6-12 months.', 29.99, 75, 1, 'USA', '6-12 months'),
+('Toddler Milk Drink', 'Nutritious milk drink for toddlers.', 22.99, 60, 1, 'GER', '1-2 years'),
+('Organic Baby Formula', 'Organic formula for infants 0-6 months.', 35.99, 40, 2, 'CAN', '0-6 months'),
+('Maternal Health Drink', 'Healthy drink for pregnant women.', 27.99, 30, 2, 'JPN', 'Maternal'),
+('Junior Growth Milk', 'Growth milk for kids over 2 years.', 32.99, 80, 1, 'USA', 'More than 2 years old'),
+('Adult Milk Powder', 'Milk powder for adults.', 20.99, 45, 1, 'USA', 'Adult'),
+('Soy-Based Infant Formula', 'Soy-based formula for infants 0-6 months.', 29.99, 50, 2, 'GER', '0-6 months'),
+('Lactose-Free Baby Formula', 'Lactose-free formula for infants.', 33.99, 70, 1, 'USA', '0-6 months');
 
 -- Insert into Orders
 INSERT INTO Orders (user_id, order_date, status, total_amount) VALUES
@@ -228,4 +228,3 @@ INSERT INTO Payments (order_id, payment_method_id, transaction_date, amount, tra
 (2, 3, '2024-06-05', 29.99, 'Failed', 'Bank transfer failed, insufficient funds'),
 (1, 4, '2024-06-01', 55.98, 'Completed', 'Payment will be collected upon delivery'),
 (2, 5, '2024-06-05', 29.99, 'Pending', 'Gift card code: SUMMERGIFT');
-
