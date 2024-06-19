@@ -69,8 +69,20 @@ async function applyVoucher(user_id, voucher_id) {
       .query(
         `UPDATE User_Vouchers SET used = 1 WHERE user_id = @user_id AND voucher_id = @voucher_id`
       );
+    const result = await pool
+      .request()
+      .input("user_id", sql.Int, user_id)
+      .input("voucher_id", sql.Int, voucher_id)
+      .query(
+        `SELECT * FROM User_Vouchers WHERE user_id = @user_id AND voucher_id = @voucher_id`
+      );
 
-    return { success: true, message: "Voucher applied successfully" };
+    const voucher = result.recordset[0];
+    return {
+      success: true,
+      voucher: voucher,
+      message: "Voucher applied successfully",
+    };
   } catch (error) {
     throw error;
   }
@@ -98,7 +110,7 @@ async function getVoucherByUserId(user_id) {
     const pool = await poolPromise;
     const result = await pool.request().query(`
     SELECT v.voucher_id, v.discount, FORMAT(v.expiration_date, 'dd-MM-yyyy') AS expiration_date , uv.used FROM Vouchers v JOIN 
-    User_Vouchers uv ON v.voucher_id = uv.voucher_id WHERE uv.user_id = ${user_id} AND uv.used = 0`);
+    User_Vouchers uv ON v.voucher_id = uv.voucher_id WHERE uv.user_id = ${user_id}`);
     const vouchers = result.recordset;
     if (vouchers) {
       return { success: true, vouchers: vouchers };
@@ -154,17 +166,19 @@ async function generateNewAccessToken(refreshToken) {
 async function readyToCheckout(user_id, total_amount) {
   try {
     const pool = await poolPromise;
-    await pool
+    const result = await pool
       .request()
       .input("user_id", sql.Int, user_id)
       .input("order_date", sql.DateTime, new Date())
       .input("status", sql.VarChar, "pending")
       .input("total_amount", sql.Decimal, total_amount)
       .query(
-        `INSERT INTO Orders (user_id, order_date, status, total_amount) 
+        `INSERT INTO Orders (user_id, order_date, status, total_amount) OUTPUT INSERTED.order_id 
         VALUES (@user_id, @order_date, @status, @total_amount)`
       );
-        // insert order_items
+    const order_id = result.recordset[0].order_id;
+    console.log("order_id:", order_id);
+    // insert order_items
     return { success: true, message: "Ready to checkout successfully" };
   } catch (error) {
     throw error;
