@@ -4,12 +4,14 @@ import Modal from "../../Admin/Modal/Modal";
 import axios from "axios";
 import { MainAPI } from "../../API";
 import useAuth from "../../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 export default function OrderUserInfo() {
   const [show, setShow] = useState(false);
   const [listOfVoucherById, setListOfVoucherById] = useState([]);
   const [isUsedVoucher, setIsUsedVoucher] = useState(false);
   const { auth } = useAuth();
+  const nav = useNavigate();
 
   useEffect(() => {
     axios
@@ -26,6 +28,10 @@ export default function OrderUserInfo() {
         console.log(err);
       });
   }, []);
+
+  const handleClick = () => {
+    nav("/order-payment");
+  };
 
   return (
     <div className="fixed-cart">
@@ -86,7 +92,9 @@ export default function OrderUserInfo() {
             <span>1120000</span>
           </div>
           <div className="d-flex justify-content-center mt-3">
-            <button className="btn btn-primary">Đặt hàng</button>
+            <button className="btn btn-primary" onClick={handleClick}>
+              Đặt hàng
+            </button>
           </div>
         </div>
       </div>

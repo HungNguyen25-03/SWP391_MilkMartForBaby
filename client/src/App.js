@@ -15,6 +15,7 @@ import StaffManagement from "./components/Staff/StaffManagement/StaffManagement.
 import UserAccount from "./components/UserAccount/UserAccount.js";
 import RequireAuth from "./components/RequireAuth.js";
 import Unauthorized from "./components/Unauthorized/Unauthorized.js";
+import OrderPayment from "./components/OrderPayment/OrderPayment.js";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Route element={<RequireAuth allowedRoles={"customer"} />}>
             <Route path="/cart" element={<Cart />}></Route>
             <Route path="/customer-account" element={<UserAccount />}></Route>
+            <Route path="/order-payment" element={<OrderPayment />}></Route>
           </Route>
 
           {/* admin role */}
