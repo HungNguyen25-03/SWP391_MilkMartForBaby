@@ -29,7 +29,7 @@ export default function OrderPayment() {
           </div>
         </div>
       </div>
-      <FooterPage />
+      {/* <FooterPage /> */}
     </div>
   );
 }

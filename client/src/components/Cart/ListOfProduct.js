@@ -19,7 +19,7 @@ export const ListOfProduct = [
     price: 995000,
     quantity: 1,
     image:
-      "https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2Faptakid-thuc-pham-bo-sung-3-growing-up-milk-formula-2-tuoi-tro-len-900g.png?alt=media&token=8c2fcc68-8f31-4158-b825-cf5de392d79e",
+      "https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2Ffrisogoldpro%2Ffriso-gold-pro-so-4-800g-3-6-tuoi.png?alt=media&token=78e5bd0e-62a0-4759-abe8-5a2ff2dcc217",
   },
   {
     id: 4,
