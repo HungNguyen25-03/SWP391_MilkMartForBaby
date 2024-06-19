@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import { ListOfProduct } from "../ListOfProduct";
 import { MdDelete } from "react-icons/md";
 import "./OrderDetail.scss";
+import { CartContext } from "../CartContext";
 
 export default function OrderDetail() {
+
+  const { cartList } = useContext(CartContext)
+
+  console.log(cartList)
+
   return (
     <>
       {

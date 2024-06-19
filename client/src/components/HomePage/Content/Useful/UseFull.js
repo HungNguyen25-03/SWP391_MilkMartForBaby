@@ -37,13 +37,13 @@ export default function UseFull() {
                 {usefull.info}
               </p>
               <p className="mt-auto d-flex justify-content-between">
-                <div>
+                <span>
                   {" "}
                   <FaRegEye /> {usefull.view}
-                </div>
-                <div className="fs-5">
+                </span>
+                <span className="fs-5">
                   <IoIosArrowDropright />
-                </div>
+                </span>
               </p>
             </Link>
           );

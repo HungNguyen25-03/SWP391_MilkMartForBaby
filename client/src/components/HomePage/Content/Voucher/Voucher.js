@@ -22,7 +22,6 @@ export default function Voucher() {
     axios
       .get(`${MainAPI}/user/show-all-voucher`)
       .then((res) => {
-        console.log(res.data.vouchers.vouchers);
         setVoucherList(res.data.vouchers.vouchers);
       })
       .catch((err) => {
