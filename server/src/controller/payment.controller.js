@@ -126,7 +126,7 @@ const callbackURLController = async (req, res) => {
         .request()
         .input("order_id", sql.Int, order_id)
         .query(`UPDATE Orders SET status = 'paid' WHERE order_id = @order_id`);
-        const orderItems = JSON.parse(dataJson.item);
+      const orderItems = JSON.parse(dataJson.item);
       // console.log("items", orderItems);
       for (const i of orderItems) {
         // console.log("Item:", i.item_id, i.item_quantity, i.item_stock);
@@ -135,13 +135,12 @@ const callbackURLController = async (req, res) => {
           .input("product_id", sql.Int, i.item_id)
           .input("quantity", sql.Int, i.item_quantity)
           .input("stock", sql.Int, i.item_stock)
-          .query(`UPDATE Products SET stock = @stock - @quantity WHERE product_id = @product_id`);
+          .query(
+            `UPDATE Products SET stock = @stock - @quantity WHERE product_id = @product_id`
+          );
       }
       result.return_code = 1;
       result.return_message = "success";
-      // await pool
-      // .request()
-      // .input("order_id", sql.Int, dataJson.app_user)
     }
   } catch (ex) {
     console.log("Exception in callback:", ex);
