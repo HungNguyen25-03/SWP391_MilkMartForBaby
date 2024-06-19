@@ -1,139 +1,145 @@
-.login_container {
-  display: flex;
-  text-align: center;
+body, html {
   margin: 0;
   padding: 0;
-  background: url(baby.png) no-repeat;
-  background-size: cover;
-
-  .column {
-    // width: 26%;
-    // height: 10%;
-    border: 1px solid rgba(255, 3, 3, 0.2);
-    border-radius: 10px;
-    margin: 6.02rem auto;
-    backdrop-filter: blur(20px);
-    background: transparent;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  }
+  height: 100%;
+  font-family: Arial, sans-serif;
 }
 
-.login_info {
+.login-container {
   display: flex;
-  flex-direction: column;
-  margin: 20px 0px;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-.login_detail {
-  margin: 20px 10px;
-  position: relative;
-}
-
-.login_info .login_detail input {
-  padding: 8px 160px 5px 4px;
-  margin-left: 10px;
-  border: none;
-  border: 2px solid rgba(184, 32, 32, 0.2);
+.login-form {
+  background: #fff;
+  padding: 40px 30px;
   border-radius: 10px;
-  outline: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
 }
 
-.column [type="submit"] {
-  border-radius: 20px;
-  background-color: palevioletred;
-  padding: 15px 50px;
-  color: antiquewhite;
-  margin: 50px 0;
-  font-size: 15px;
+.login-form h2 {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 24px;
+}
+
+.login-info {
+  margin-bottom: 20px;
+}
+
+.login-detail {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  background: #f9f9f9;
+  transition: all 0.3s ease;
+}
+
+.login-detail input {
+  border: none;
+  outline: none;
+  flex: 1;
+  padding: 10px;
+  font-size: 14px;
+  background: none;
+}
+
+.login-detail svg {
+  margin-right: 10px;
+  color: #888;
+}
+
+.eyes {
   cursor: pointer;
+  color: #888;
+}
+
+.login-detail:hover {
+  border-color: #6a11cb;
 }
 
 .other {
   display: flex;
-  justify-content: space-around;
-  margin-top: 40px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  font-size: 14px;
 }
 
 .other a {
+  color: #2575fc;
   text-decoration: none;
-  color: rgb(34, 87, 168);
+  transition: color 0.3s;
 }
 
-.eyes {
-  position: absolute;
-  top: 52%;
-  right: 30px;
-  transform: translateY(-50%);
+.other a:hover {
+  text-decoration: underline;
+}
+
+.login-btn {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
   cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
 }
 
-@media only screen and (min-width: 1535px) {
-  .login_container {
-    display: flex;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    background: url(baby.png) no-repeat;
-    background-size: cover;
+.login-btn:hover {
+  background: linear-gradient(135deg, #2575fc, #6a11cb);
+}
+
+@media (max-width: 768px) {
+  .login-form {
+    padding: 30px 20px;
   }
 
-  .column {
-    width: 26%;
-    height: 10%;
-    border: 1px solid rgba(255, 3, 3, 0.2);
-    border-radius: 10px;
-    margin: 9.75% auto;
-    backdrop-filter: blur(20px);
-    background: transparent;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  .login-form h2 {
+    font-size: 20px;
   }
 
-  .login_info {
-    display: flex;
-    flex-direction: column;
-    margin: 20px 0px;
-  }
-
-  .login_detail {
-    margin: 20px 0;
-    position: relative;
-  }
-
-  .login_info .login_detail input {
-    padding: 8px 160px 5px 4px;
-    margin-left: 10px;
-    border: none;
-    border: 2px solid rgba(184, 32, 32, 0.2);
-    border-radius: 10px;
-    outline: none;
-  }
-
-  .column [type="submit"] {
-    border-radius: 20px;
-    background-color: palevioletred;
-    padding: 15px 50px;
-    color: antiquewhite;
-    margin: 50px 0;
-    font-size: 15px;
-    cursor: pointer;
+  .login-btn {
+    font-size: 14px;
+    padding: 8px 16px;
   }
 
   .other {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 40px;
+    flex-direction: column;
+    align-items: center;
   }
 
   .other a {
-    text-decoration: none;
-    color: rgb(34, 87, 168);
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 10px;
   }
 
-  .eyes {
-    position: absolute;
-    top: 52%;
-    right: 30px;
-    transform: translateY(-50%);
-    cursor: pointer;
+  .login-form {
+    padding: 20px 10px;
+  }
+
+  .login-form h2 {
+    font-size: 18px;
+  }
+
+  .login-btn {
+    font-size: 12px;
+    padding: 6px 12px;
   }
 }

@@ -12,6 +12,7 @@ export default function Cart() {
   const handleClick = () => {
     nav("/home");
   };
+
   return (
     <div className="cart-container">
       <div className="cart-header">

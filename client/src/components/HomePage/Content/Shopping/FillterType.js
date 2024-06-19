@@ -22,22 +22,24 @@ export default function FillterType() {
     <div className="fillter_container">
       <div className="type">
         <div className="category">
-          <p className="m-0">Loại Sữa</p>
-          {categoryList.map((cate) => {
-            return (
-              <div className="cate" key={cate.id}>
-                <span onClick={showcheckbox}>
-                  {" "}
-                  {checkbox === true ? (
-                    <MdOutlineCheckBox />
-                  ) : (
-                    <MdOutlineCheckBoxOutlineBlank />
-                  )}
-                </span>
-                &nbsp;{cate.title}
-              </div>
-            );
-          })}
+          <p className="m-0">Loại Sữa:</p>
+          <div style={{ marginLeft: '25px' }}>
+            {categoryList.map((cate) => {
+              return (
+                <div className="cate" key={cate.id}>
+                  <span onClick={showcheckbox}>
+                    {" "}
+                    {checkbox === true ? (
+                      <MdOutlineCheckBox />
+                    ) : (
+                      <MdOutlineCheckBoxOutlineBlank />
+                    )}
+                  </span>
+                  &nbsp;{cate.title}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
 
@@ -64,8 +66,13 @@ export default function FillterType() {
                     <></>
                     <span style={{ fontSize: "10px" }}>{product.sale}</span>
                   </div>
-                  <div>
-                    {product.price} <FaShoppingCart />
+                  <div style={{ display: 'flex', marginTop: "10px", justifyContent: 'space-around' }}>
+                    <div>
+                      {product.price}
+                    </div>
+                    <div>
+                      <FaShoppingCart />
+                    </div>
                   </div>
                 </a>
               </div>
