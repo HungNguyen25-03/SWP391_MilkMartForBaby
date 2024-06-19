@@ -17,8 +17,13 @@ function CartProvider({ children }) {
         }
     };
 
+    const handleDeleteCart = (product) => {
+        const updatedCart = cartList.filter((item) => item.id !== product.id);
+        setCartList(updatedCart);
+    };
+
     return (
-        <CartContext.Provider value={{ cartList, handleAddToCart }}>
+        <CartContext.Provider value={{ cartList, handleAddToCart, handleDeleteCart }}>
             {children}
         </CartContext.Provider>
     )

@@ -22,8 +22,6 @@ export default function FillterType() {
     console.log(getProduct);
   };
 
-  // console.log(carts.cartList)
-
   return (
     <div className="fillter_container">
       <div className="type">
