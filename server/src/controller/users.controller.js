@@ -57,7 +57,7 @@ const applyVoucherController = async (req, res) => {
   try {
     const voucher = await applyVoucher(user_id, voucher_id);
     if (voucher.success) {
-      res.status(200).json({ message: voucher.message, status: 200 });
+      res.status(200).json({ message: voucher.message, voucher: voucher.voucher ,status: 200 });
     } else {
       res.status(409).json({ message: voucher.message, status: 409 });
     }
