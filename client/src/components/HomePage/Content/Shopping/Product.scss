@@ -10,14 +10,13 @@
 }
 
 .category {
+  position: static;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 20px;
   margin-top: 10px;
-  position: sticky;
   top: 50px;
-  z-index: 2;
 }
 
 .product_detail {
@@ -69,4 +68,13 @@
   max-height: 100%;
   object-fit: cover;
   border-radius: 10px;
+}
+
+
+.icon_cart:hover {
+  color: rgb(234, 20, 70);
+}
+
+.icon_cart {
+  cursor: pointer;
 }
