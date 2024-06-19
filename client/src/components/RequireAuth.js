@@ -9,7 +9,8 @@ const RequireAuth = ({ allowedRoles }) => {
   return auth?.role === allowedRoles ? (
     <Outlet />
   ) : auth?.user ? (
-    <Navigate to="/unauthorized" state={{ from: location }} replace />
+    (localStorage.removeItem("accessToken"),
+    (<Navigate to="/unauthorized" state={{ from: location }} replace />))
   ) : (
     <Navigate to="/login" state={{ from: location }} replace />
   );
