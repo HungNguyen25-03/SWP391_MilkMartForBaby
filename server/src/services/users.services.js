@@ -178,7 +178,11 @@ async function readyToCheckout(user_id, total_amount, orderItems) {
 
     // insert order_items
     await insertOrderItems(order_id, orderItems);
-    return { success: true, message: "Ready to checkout successfully" };
+    return {
+      success: true,
+      order_id: order_id,
+      message: "Ready to checkout successfully",
+    };
   } catch (error) {
     throw error;
   }

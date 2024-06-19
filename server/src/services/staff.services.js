@@ -162,11 +162,7 @@ const editVoucher = async (voucher_id, discount, expiration_date) => {
   }
 };
 
-
-
-
-async function getAllVoucher(){
-
+async function getAllVoucher() {
   try {
     const pool = await poolPromise;
     const result = await pool.request().query(`
@@ -191,9 +187,7 @@ async function getAllVoucher(){
   } catch (error) {
     throw error;
   }
-};
-
-
+}
 
 async function importProduct(newProduct) {
   try {
@@ -201,19 +195,19 @@ async function importProduct(newProduct) {
     const productPromises = [];
 
     if (!Array.isArray(newProduct)) {
-      throw new TypeError('Expected newProduct to be an array');
+      throw new TypeError("Expected newProduct to be an array");
     }
 
-    newProduct.forEach(product => {
-      const {  product_name, price,description, stock, category_id } = product;
-      const promise = pool.request()
-      
-        .input('product_name', sql.VarChar, product_name)
-        .input('description',sql.Text,description)
-        .input('price', sql.Decimal, price)
-        .input('stock', sql.Int, stock)
-        .input('category_id', sql.Int, category_id)
-        .query(`
+    newProduct.forEach((product) => {
+      const { product_name, price, description, stock, category_id } = product;
+      const promise = pool
+        .request()
+
+        .input("product_name", sql.VarChar, product_name)
+        .input("description", sql.Text, description)
+        .input("price", sql.Decimal, price)
+        .input("stock", sql.Int, stock)
+        .input("category_id", sql.Int, category_id).query(`
           INSERT INTO Products ( product_name,description, price, stock, category_id) 
           VALUES ( @product_name,@description,@price, @stock, @category_id)
         `);
@@ -222,69 +216,83 @@ async function importProduct(newProduct) {
 
     await Promise.all(productPromises);
 
-    return { success: true, message: 'Products imported successfully' };
+    return { success: true, message: "Products imported successfully" };
   } catch (error) {
-    console.error('Error importing products', error);
+    console.error("Error importing products", error);
     throw error;
   }
 }
 
-
-async function exportProduct(product_id){
+async function exportProduct(product_id) {
   try {
-    const pool= await  poolPromise;
-    const result = await pool.request().input("product_id",sql.Int,product_id).query(`
+    const pool = await poolPromise;
+    const result = await pool.request().input("product_id", sql.Int, product_id)
+      .query(`
     DELETE From Products  WHERE product_id = @product_id;
   `);
 
-  const product = result.rowsAffected[0];
-  console.log(product);
-  console.log(result);
-  if (product != 0) {
-    return { success: true, product };
-  } else {
-    return { success: false, message: "Fail to delete Product" };
-  }
-
+    const product = result.rowsAffected[0];
+    console.log(product);
+    console.log(result);
+    if (product != 0) {
+      return { success: true, product };
+    } else {
+      return { success: false, message: "Fail to delete Product" };
+    }
   } catch (error) {
-    console.error('Error exporting products', error);
+    console.error("Error exporting products", error);
     throw error;
   }
 }
 
-
-async function editProduct(product_id,changeQuantity){
-    try {
-       const pool=await poolPromise;
-       const result= await pool.request().input("product_id",sql.Int,product_id).query(`
+async function editProduct(product_id, changeQuantity) {
+  try {
+    const pool = await poolPromise;
+    const result = await pool.request().input("product_id", sql.Int, product_id)
+      .query(`
        Select stock From Products  WHERE product_id = @product_id;
      `);
-    
-     if (result.recordset.length === 0) {
-      return { success: false, message: 'Product not found' };
+
+    if (result.recordset.length === 0) {
+      return { success: false, message: "Product not found" };
     }
 
     const currentStock = result.recordset[0].stock;
     const newStock = currentStock + changeQuantity;
-    if(newStock<0){
-      return { success: false, message: 'Insufficient stock to reduce' };
+    if (newStock < 0) {
+      return { success: false, message: "Insufficient stock to reduce" };
     }
-    await pool.request()
-    .input('product_id', sql.Int, product_id)
-    .input('new_stock', sql.Int, newStock)
-    .query('UPDATE Products SET stock = @new_stock WHERE product_id = @product_id');
+    await pool
+      .request()
+      .input("product_id", sql.Int, product_id)
+      .input("new_stock", sql.Int, newStock)
+      .query(
+        "UPDATE Products SET stock = @new_stock WHERE product_id = @product_id"
+      );
 
-  return { success: true, message: 'Product quantity updated successfully' };
+    return { success: true, message: "Product quantity updated successfully" };
+  } catch (error) {
+    throw error;
+  }
+}
 
+async function confirmOrder(order_id) {
+  try {
+    const pool = await poolPromise;
+    const result = await pool.request().input("order_id", sql.Int, order_id)
+      .query(`
+    UPDATE Orders SET status = 'confirmed' WHERE order_id = @order_id;
+  `);
 
-
-
-    } catch (error) {
-      throw error;
+    if (result.rowsAffected[0] > 0) {
+      return { success: true, message: "Order confirmed successfully" };
+    } else {
+      return { success: false, message: "Failed to confirm order" };
     }
-};
-
-
+  } catch (error) {
+    throw error;
+  }
+}
 
 module.exports = {
   createVoucher,
@@ -295,5 +303,6 @@ module.exports = {
   importProduct,
   editVoucher,
   exportProduct,
-  editProduct
+  editProduct,
+  confirmOrder,
 };
