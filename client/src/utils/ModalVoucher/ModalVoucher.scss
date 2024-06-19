@@ -1,4 +1,4 @@
-.modal-container {
+.modal-container-voucher {
   position: fixed;
   z-index: 1;
   left: 0;
@@ -11,6 +11,9 @@
   background-color: rgba(0, 0, 0, 0.4);
 
   .modal-content {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+    scrollbar-width: none;
     border-radius: 15px;
     padding: 2rem;
     background-color: white;

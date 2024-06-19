@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { MainAPI } from "../../components/API";
 import useAuth from "../../hooks/useAuth";
+import useCart from "../../hooks/useCart";
 
 export default function ModalVoucher({
   closeModal,
@@ -11,6 +12,7 @@ export default function ModalVoucher({
   isUsedVoucher,
 }) {
   const { auth } = useAuth();
+  const { setOrderInfomation } = useCart();
   const handleApplyVoucher = (e) => {
     axios
       .post(
@@ -27,6 +29,8 @@ export default function ModalVoucher({
       )
       .then((res) => {
         console.log(res.data);
+        const discount = res.data.voucher.discount;
+        setOrderInfomation({ discount });
         isUsedVoucher();
         closeModal();
         toast.success(res.data.message);
@@ -39,9 +43,9 @@ export default function ModalVoucher({
 
   return (
     <div
-      className="modal-container"
+      className="modal-container-voucher"
       onClick={(e) => {
-        if (e.target.className === "modal-container") {
+        if (e.target.className === "modal-container-voucher") {
           closeModal();
         }
       }}
@@ -73,18 +77,37 @@ export default function ModalVoucher({
                 <span style={{ fontSize: "13px" }}>
                   HSD:{voucher.expiration_date}
                 </span>
-                <button
-                  className="btn btn-danger fw-bold px-4 "
-                  style={{
-                    borderRadius: "20px",
-                    color: "white",
-                    backgroundColor: "#ff0064",
-                  }}
-                  value={voucher.voucher_id}
-                  onClick={handleApplyVoucher}
-                >
-                  Áp dụng
-                </button>
+                {voucher.used ? (
+                  <>
+                    {" "}
+                    <button
+                      className="btn btn-danger fw-bold px-4 "
+                      style={{
+                        borderRadius: "20px",
+                        color: "Black",
+                        backgroundColor: "#F5F7FD",
+                      }}
+                      value={voucher.voucher_id}
+                    >
+                      Đã sử dụng
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      className="btn btn-danger fw-bold px-4 "
+                      style={{
+                        borderRadius: "20px",
+                        color: "white",
+                        backgroundColor: "#ff0064",
+                      }}
+                      value={voucher.voucher_id}
+                      onClick={handleApplyVoucher}
+                    >
+                      Áp dụng
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>

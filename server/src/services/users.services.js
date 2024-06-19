@@ -73,9 +73,7 @@ async function applyVoucher(user_id, voucher_id) {
       .request()
       .input("user_id", sql.Int, user_id)
       .input("voucher_id", sql.Int, voucher_id)
-      .query(
-        `SELECT * FROM User_Vouchers WHERE user_id = @user_id AND voucher_id = @voucher_id`
-      );
+      .query(`SELECT * FROM Vouchers WHERE voucher_id = @voucher_id`);
 
     const voucher = result.recordset[0];
     return {

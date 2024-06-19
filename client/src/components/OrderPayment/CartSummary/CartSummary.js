@@ -1,29 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { ListOfProduct } from "../../Cart/ListOfProduct";
+import useCart from "../../../hooks/useCart";
 
 const CartSummary = () => {
   const [temporary, setTemporary] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [total, setTotal] = useState(0);
+  const { orderInfomation } = useCart();
+
   useEffect(() => {
-    ListOfProduct.map((product) => {
-      setTemporary(temporary + product.price * product.quantity);
-    });
+    setTemporary(
+      ListOfProduct.reduce((total, item) => {
+        return total + item.price * item.quantity;
+      }, 0)
+    );
+    setDiscount(temporary * parseFloat(orderInfomation.discount / 100));
+    setTotal(temporary - discount);
   }, []);
 
+  console.log(temporary);
+  console.log(~~discount);
+  console.log(total);
   return (
     <div className="cart-summary">
       <div className="summary-item">
-        Tạm tính: <span>2.123.000₫</span>
+        Tạm tính: <span>{temporary}₫</span>
       </div>
       <div className="summary-item">
-        Giảm giá sản phẩm: <span>-461.400₫</span>
+        Giảm giá sản phẩm: <span>-{discount}₫</span>
       </div>
       <div className="summary-item">
-        Phí vận chuyển: <span>+23.600₫</span>
+        Phí vận chuyển: <span>+0₫</span>
       </div>
       <div className="summary-item">
-        Tổng tiền: <span>1.684.600₫ (Đã bao gồm VAT)</span>
+        Tổng tiền: <span>{total}₫ (Đã bao gồm VAT)</span>
       </div>
       <button
         className="btn"

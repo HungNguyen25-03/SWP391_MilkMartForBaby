@@ -20,7 +20,7 @@ const DiscountSection = () => {
         },
       })
       .then((res) => {
-        console.log(res.data.vouchers.vouchers);
+        console.log(res.data.vouchers);
         setListOfVoucherById(res.data.vouchers.vouchers);
       })
       .catch((err) => {
