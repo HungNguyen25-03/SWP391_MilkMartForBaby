@@ -2,55 +2,71 @@
   display: flex;
   width: 100%;
   margin-top: 50px;
+}
 
-  .product_detail {
-    display: flex;
-    justify-content: space-between;
+.type {
+  width: 25%;
+  margin-right: 20px;
+}
 
-    .product-card {
-      padding: 10px 5px 0 5px;
-      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-      margin: 10px 3px;
-      width: 19%;
-      background-color: white;
-      border-radius: 10px;
+.category {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-top: 10px;
+  position: sticky;
+  top: 50px;
+  z-index: 2;
+}
 
-      .product-detail-link {
-        text-decoration: none;
-        color: black;
+.product_detail {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 75%;
+}
 
-        .star {
-          color: orange;
-        }
-      }
+.product-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  padding: 15px;
+  width: calc(25% - 20px);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
 
-      .home-product-detail-img-container {
-        height: 60%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
 
-        img {
-          width: 70%;
-          height: 100%;
-        }
-      }
-    }
-  }
+.product-detail-link {
+  color: black;
+  text-decoration: none;
+  transition: color 0.3s;
+}
 
-  .type {
-    width: 30%;
-    margin-right: 20px;
+.product-detail-link:hover {
+  color: #03afffbe;
+}
 
-    .category {
-      height: 65%;
-      margin-top: 10px;
-      background-color: white;
-      padding: 10px;
-      border-radius: 10px;
-      line-height: 30px;
-      position: sticky;
-      z-index: 2;
-    }
-  }
+.star {
+  color: orange;
+}
+
+.home-product-detail-img-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px; 
+  margin-bottom: 15px;
+}
+
+.home-product-detail-img-container img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
 }
