@@ -29,9 +29,7 @@ export default function Cart() {
         <OrderDetail />
         <OrderUserInfo />
       </div>
-      <div className="footer">
-        <FooterPage />
-      </div>
+      <FooterPage />
     </div>
   );
 }
