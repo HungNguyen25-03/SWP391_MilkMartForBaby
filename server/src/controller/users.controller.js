@@ -139,10 +139,10 @@ const logoutController = async (req, res) => {
 };
 
 const readyToCheckoutController = async (req, res) => {
-  const { user_id, total_amount } = req.body;
+  const { user_id, total_amount, orderItems } = req.body;
 
   try {
-    const order = await readyToCheckout(user_id, total_amount);
+    const order = await readyToCheckout(user_id, total_amount, orderItems);
     if (order.success) {
       res.status(200).json({ message: order.message, status: 200 });
     } else {

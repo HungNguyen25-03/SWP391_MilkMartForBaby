@@ -39,7 +39,7 @@ const paymentController = async (req, res) => {
       .request()
       .input("order_id", sql.Int, order_id)
       .query(
-        `SELECT p.product_name, oi.quantity, oi.price 
+        `SELECT p.product_id ,p.product_name, p.stock, oi.quantity, oi.price 
       FROM Orders o JOIN Order_Items oi ON o.order_id = oi.order_id JOIN Products p 
       ON  oi.product_id = p.product_id WHERE o.order_id = @order_id
       `
@@ -50,12 +50,12 @@ const paymentController = async (req, res) => {
     }
 
     const items = itemsResult.recordset.map((item) => ({
-      itemname: item.product_name,
-      itemprice: item.price,
-      itemquantity: item.quantity,
+      item_id: item.product_id,
+      item_name: item.product_name,
+      item_price: item.price,
+      item_stock: item.stock,
+      item_quantity: item.quantity,
     }));
-
-    console.log("Items:", items);
 
     // const transIDRand = Math.floor(Math.random() * 1000000);
     // console.log("transIDRand", transIDRand);
@@ -72,7 +72,7 @@ const paymentController = async (req, res) => {
       description: `MilkMartSystem - Payment for the order #${transID}`,
       bank_code: "",
       callback_url:
-        "https://8bf4-113-172-57-171.ngrok-free.app/payment/callback",
+        "https://7a87-113-172-57-171.ngrok-free.app/payment/callback",
     };
 
     const data = `${config.app_id}|${order.app_trans_id}|${order.app_user}|${order.amount}|${order.app_time}|${order.embed_data}|${order.item}`;
@@ -126,7 +126,17 @@ const callbackURLController = async (req, res) => {
         .request()
         .input("order_id", sql.Int, order_id)
         .query(`UPDATE Orders SET status = 'paid' WHERE order_id = @order_id`);
-
+        const orderItems = JSON.parse(dataJson.item);
+      // console.log("items", orderItems);
+      for (const i of orderItems) {
+        // console.log("Item:", i.item_id, i.item_quantity, i.item_stock);
+        await pool
+          .request()
+          .input("product_id", sql.Int, i.item_id)
+          .input("quantity", sql.Int, i.item_quantity)
+          .input("stock", sql.Int, i.item_stock)
+          .query(`UPDATE Products SET stock = @stock - @quantity WHERE product_id = @product_id`);
+      }
       result.return_code = 1;
       result.return_message = "success";
       // await pool

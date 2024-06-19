@@ -163,7 +163,7 @@ async function generateNewAccessToken(refreshToken) {
   }
 }
 
-async function readyToCheckout(user_id, total_amount) {
+async function readyToCheckout(user_id, total_amount, orderItems) {
   try {
     const pool = await poolPromise;
     const result = await pool
@@ -177,11 +177,29 @@ async function readyToCheckout(user_id, total_amount) {
         VALUES (@user_id, @order_date, @status, @total_amount)`
       );
     const order_id = result.recordset[0].order_id;
-    console.log("order_id:", order_id);
+
     // insert order_items
+    await insertOrderItems(order_id, orderItems);
     return { success: true, message: "Ready to checkout successfully" };
   } catch (error) {
     throw error;
+  }
+}
+
+async function insertOrderItems(order_id, orderItems) {
+  const pool = await poolPromise;
+
+  for (const item of orderItems) {
+    await pool
+      .request()
+      .input("order_id", sql.Int, order_id)
+      .input("product_id", sql.Int, item.product_id)
+      .input("quantity", sql.Int, item.quantity)
+      .input("price", sql.Decimal, item.price)
+      .query(
+        `INSERT INTO Order_Items (order_id, product_id, quantity, price) 
+        VALUES (@order_id, @product_id, @quantity, @price)`
+      );
   }
 }
 
