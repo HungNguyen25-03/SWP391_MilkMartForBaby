@@ -22,8 +22,26 @@ function CartProvider({ children }) {
         setCartList(updatedCart);
     };
 
+    const incrementQuantity = (product) => {
+        setCartList(
+            cartList.map(item =>
+                item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+            )
+        );
+    };
+
+    const decrementQuantity = (product) => {
+        setCartList(
+            cartList.map(item =>
+                item.id === product.id
+                    ? { ...item, quantity: item.quantity > 1 ? item.quantity - 1 : 1 }
+                    : item
+            )
+        );
+    };
+
     return (
-        <CartContext.Provider value={{ cartList, handleAddToCart, handleDeleteCart }}>
+        <CartContext.Provider value={{ cartList, handleAddToCart, handleDeleteCart, decrementQuantity, incrementQuantity }}>
             {children}
         </CartContext.Provider>
     )
