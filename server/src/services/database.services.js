@@ -1,10 +1,11 @@
 const sql = require("mssql");
+require("dotenv").config();
 
 const sqlConfig = {
-  user: "sa",
-  password: "12345",
-  server: "localhost",
-  database: "MilkShop",
+  user: process.env.SQL_USER,
+  password: process.env.SQL_PASSWORD,
+  server: process.env.SQL_SERVER,
+  database: process.env.SQL_DATABASE,
   options: {
     trustServerCertificate: true,
     trustedConnection: false,
