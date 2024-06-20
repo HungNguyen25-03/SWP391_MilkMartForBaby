@@ -6,6 +6,7 @@ import CartSummary from "./CartSummary/CartSummary";
 import "./OrderPayment.scss";
 import HeaderPage from "../../utils/Header/Header";
 import FooterPage from "../../utils/Footer/FooterPage";
+import UserInformation from "./UserInformation/UserInformation";
 
 export default function OrderPayment() {
   return (
@@ -23,7 +24,8 @@ export default function OrderPayment() {
             className="col-md-4 pr-md-4 d-flex flex-column"
             style={{ padding: "0px 15px", gap: "10px" }}
           >
-            <DiscountSection />
+            {/* <DiscountSection /> */}
+            <UserInformation />
             <PaymentOptions />
             <CartSummary />
           </div>

@@ -6,19 +6,28 @@ import "./Header.scss";
 import axios from "axios";
 import { MainAPI } from "../../components/API";
 import AuthContext from "../../context/AuthProvider";
+import { ToastContainer, toast } from "react-toastify";
+import useOrder from "../../hooks/useOrder";
 
 export default function HeaderPage() {
   const { setAuth } = useContext(AuthContext);
+  const { setOrderInfomation } = useOrder();
   const token = JSON.parse(localStorage.getItem("accessToken"));
   const nav = useNavigate();
 
   const handleLogout = () => {
     axios
-      .post(`${MainAPI}/user/logout`, token)
+      .post(`${MainAPI}/user/logout`, token, {
+        headers: {
+          "x-access-token": token,
+        },
+      })
       .then((res) => {
         console.log(res.data);
         localStorage.removeItem("accessToken");
         setAuth({});
+        setOrderInfomation({});
+        toast.success("Đăng xuất thành công");
         nav("/home");
       })
       .catch((err) => {
@@ -28,6 +37,7 @@ export default function HeaderPage() {
 
   return (
     <div className=" search-bar">
+      <ToastContainer autoClose={2000} />
       <div className="container">
         <div className="row justify-content-between align-items-center">
           <div

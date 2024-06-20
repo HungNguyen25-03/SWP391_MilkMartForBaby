@@ -1,18 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./OrderUserInfo.scss";
-import Modal from "../../Admin/Modal/Modal";
 import axios from "axios";
 import { MainAPI } from "../../API";
 import useAuth from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import ModalVoucher from "../../../utils/ModalVoucher/ModalVoucher";
+import useOrder from "../../../hooks/useOrder";
+import { CartContext } from "../CartContext";
+import { formatVND } from "../../../utils/Format";
 
 export default function OrderUserInfo() {
+  /* USESTATE */
   const [show, setShow] = useState(false);
   const [listOfVoucherById, setListOfVoucherById] = useState([]);
   const [isUsedVoucher, setIsUsedVoucher] = useState(false);
+  const [orderItem, setOrderItem] = useState({
+    user_id: "",
+    total_amount: 0,
+    orderItems: [],
+  });
+  const [temporary, setTemporary] = useState(0);
+  const [discount, setDiscount] = useState(0);
+  const [total, setTotal] = useState(0);
+
+  /* USECONTEXT */
+  const { orderInfomation, setOrderInfomation } = useOrder();
+  const { cartList } = useContext(CartContext);
   const { auth } = useAuth();
+  console.log(cartList);
+
   const nav = useNavigate();
 
+  /* USEEFFECT GET VOUCHER BY USER ID */
   useEffect(() => {
     axios
       .get(`${MainAPI}/user/show-voucher-by-user/${auth.user.user_id}`, {
@@ -29,8 +48,66 @@ export default function OrderUserInfo() {
       });
   }, []);
 
+  const handleCalculate = () => {
+    const temporaryTemp = cartList.reduce((total, item) => {
+      return total + item.price * item.quantity;
+    }, 0);
+
+    let discountTemp = orderInfomation.discount * temporaryTemp;
+    if (isNaN(discountTemp)) {
+      discountTemp = 0;
+    }
+
+    const totalTemp = temporaryTemp - discountTemp;
+
+    return { temporaryTemp, discountTemp, totalTemp };
+  };
+
+  useEffect(() => {
+    const { temporaryTemp, discountTemp, totalTemp } = handleCalculate();
+
+    setTemporary(temporaryTemp);
+    setDiscount(discountTemp);
+    setTotal(totalTemp);
+
+    setOrderInfomation({
+      ...orderInfomation,
+      temporary: temporary,
+      total: total,
+    });
+
+    setOrderItem({
+      ...orderItem,
+      total_amount: total,
+      user_id: auth.user.user_id,
+      orderItems: cartList,
+    });
+
+    console.log(temporaryTemp);
+    console.log(orderInfomation.discount);
+    console.log(discountTemp);
+    console.log(totalTemp);
+  }, [cartList, orderInfomation.discount]);
+
   const handleClick = () => {
-    nav("/order-payment");
+    console.log(orderItem);
+    axios
+      .post(`${MainAPI}/user/ready-to-checkout`, orderItem, {
+        headers: {
+          "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setOrderInfomation({
+          ...orderInfomation,
+          order_id: res.data.order_id,
+        });
+        nav("/order-payment");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -65,7 +142,7 @@ export default function OrderUserInfo() {
 
             {/* MODAL */}
             {show && (
-              <Modal
+              <ModalVoucher
                 listOfVoucher={listOfVoucherById}
                 isUsedVoucher={() => {
                   setIsUsedVoucher(true);
@@ -73,7 +150,7 @@ export default function OrderUserInfo() {
                 closeModal={() => {
                   setShow(false);
                 }}
-                onSubmit={() => { }}
+                onSubmit={() => {}}
                 errors={[]}
               />
             )}
@@ -82,21 +159,25 @@ export default function OrderUserInfo() {
       </div>
       <div className="box-block">
         <span className="box-block-title">Tổng tiền</span>
-        <div className="user-address">
-          <div className="temporary">
-            <span>Tạm tính</span>
-            <span>1120000</span>
-          </div>
-          <div className="show-phone-address">
-            <span>Tổng tiền</span>
-            <span>1120000</span>
-          </div>
-          <div className="d-flex justify-content-center mt-3">
-            <button className="btn btn-primary" onClick={handleClick}>
-              Đặt hàng
-            </button>
-          </div>
+        <div className="summary-item">
+          Tạm tính: <span>{formatVND(temporary)}</span>
         </div>
+        <div className="summary-item">
+          Giảm giá sản phẩm: <span>-{formatVND(discount)}</span>
+        </div>
+        <div className="summary-item">
+          Phí vận chuyển: <span>+0 ₫</span>
+        </div>
+        <div className="summary-item">
+          Tổng tiền: <span>{formatVND(total)} (Đã bao gồm VAT)</span>
+        </div>
+        <button
+          className="btn btn-order"
+          onClick={handleClick}
+          style={{ background: "#FF199B", margin: 0, color: "white" }}
+        >
+          Tiếp tục
+        </button>
       </div>
     </div>
   );

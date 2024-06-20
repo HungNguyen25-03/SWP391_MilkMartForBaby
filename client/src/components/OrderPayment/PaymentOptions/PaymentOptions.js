@@ -16,13 +16,6 @@ const PaymentOptions = () => {
           description="Ví ZaloPay"
           onClick={() => setSelectedMethod("ZaloPay")}
         />
-        <PaymentOptionsButton
-          selected={selectedMethod === "VietQR"}
-          icon="https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2FLogo-ZaloPay-Square.png?alt=media&token=82235a2a-503a-48f7-af08-1e038bf76ad3"
-          title="Thanh toán VietQR"
-          description="Xem hướng dẫn"
-          onClick={() => setSelectedMethod("VietQR")}
-        />
       </div>
     </div>
   );

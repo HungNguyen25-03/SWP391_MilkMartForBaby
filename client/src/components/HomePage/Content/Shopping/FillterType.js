@@ -1,17 +1,18 @@
 import { useContext, useState } from "react";
 import { categoryList } from "./category";
-import { MdOutlineCheckBoxOutlineBlank, MdOutlineCheckBox } from "react-icons/md";
+import {
+  MdOutlineCheckBoxOutlineBlank,
+  MdOutlineCheckBox,
+} from "react-icons/md";
 import { productList } from "./Product";
 import "./Product.scss";
 import { FaShoppingCart } from "react-icons/fa";
 import { CartContext } from "../../../Cart/CartContext";
 
 export default function FillterType() {
-
-  const { handleAddToCart } = useContext(CartContext)
+  const { handleAddToCart } = useContext(CartContext);
 
   const [checkbox, setCheckbox] = useState(false);
-
 
   const showCheckbox = (item) => {
     setCheckbox(!checkbox);
@@ -27,11 +28,15 @@ export default function FillterType() {
       <div className="type">
         <div className="category">
           <p className="m-0">Loại Sữa:</p>
-          <div style={{ marginLeft: '25px' }}>
+          <div style={{ marginLeft: "25px" }}>
             {categoryList.map((cate) => (
               <div className="cate" key={cate.id}>
                 <span onClick={() => showCheckbox(cate)}>
-                  {checkbox === true ? <MdOutlineCheckBox /> : <MdOutlineCheckBoxOutlineBlank />}
+                  {checkbox === true ? (
+                    <MdOutlineCheckBox />
+                  ) : (
+                    <MdOutlineCheckBoxOutlineBlank />
+                  )}
                 </span>
                 &nbsp;{cate.title}
               </div>
@@ -43,10 +48,10 @@ export default function FillterType() {
       <div className="product_detail text-center">
         <div className="row row-cols-5">
           {productList.map((product) => (
-            <div key={product.id} className="product-card col">
+            <div key={product.product_id} className="product-card col">
               <a
                 className="product-detail-link"
-                href={`/home/ProductDetail/${product.id}`}
+                href={`/home/ProductDetail/${product.product_id}`}
               >
                 <div className="home-product-detail-img-container">
                   <img src={product.img} alt={product.title} />
@@ -61,11 +66,18 @@ export default function FillterType() {
                   <span style={{ fontSize: "10px" }}>{product.sale}</span>
                 </div>
               </a>
-              <div style={{ display: 'flex', marginTop: "10px", justifyContent: 'space-around' }}>
-                <div>
-                  {product.price}
-                </div>
-                <div className="icon_cart" onClick={() => handleAddToCart(product)}>
+              <div
+                style={{
+                  display: "flex",
+                  marginTop: "10px",
+                  justifyContent: "space-around",
+                }}
+              >
+                <div>{product.price}</div>
+                <div
+                  className="icon_cart"
+                  onClick={() => handleAddToCart(product)}
+                >
                   <FaShoppingCart />
                 </div>
               </div>

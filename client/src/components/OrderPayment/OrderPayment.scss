@@ -125,3 +125,20 @@
     white-space: nowrap;
   }
 }
+
+.user-information {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+
+  .summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+
+    span {
+      font-weight: bold;
+    }
+  }
+}
