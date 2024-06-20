@@ -1,37 +1,27 @@
-html {
-  position: relative;
-  min-height: 100%;
-}
-body {
-  margin: 0;
-  padding-bottom: 90px;
-}
-
 .footer {
-  position: absolute;
-  bottom: 0;
   width: 100%;
-  height: 60px; 
-  background-color: #0d96e1;
+  background-color: #71dbf3;
   color: #fff;
-  margin-top: 20px;
+  padding: 20px 0; 
+  text-align: center; 
 }
 
 .footer-content {
   background-color: #71dbf3;
+  padding: 0px 0px 10px 0px; 
 }
 
 .social-links {
-    margin-top: 10px;
-  }
-  
-  .social-links a {
-    color: white;
-    margin: 0 10px;
-    text-decoration: none;
-    font-size: 18px;
-  }
-  
-  .social-links a:hover {
-    text-decoration: underline;
-  }
+  margin-top: 10px;
+}
+
+.social-links a {
+  color: white;
+  margin: 0 10px;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.social-links a:hover {
+  text-decoration: underline;
+}
