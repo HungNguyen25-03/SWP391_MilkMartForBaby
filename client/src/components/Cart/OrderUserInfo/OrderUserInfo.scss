@@ -26,12 +26,18 @@
       }
     }
 
-    .temporary {
-      border-bottom: 1px solid #e0e0e0;
-      margin-bottom: 10px;
-      padding-bottom: 10px;
+    .summary-item {
       display: flex;
       justify-content: space-between;
+      margin-bottom: 10px;
+
+      span {
+        font-weight: bold;
+      }
+    }
+
+    .btn-order {
+      width: 100%;
     }
   }
 }

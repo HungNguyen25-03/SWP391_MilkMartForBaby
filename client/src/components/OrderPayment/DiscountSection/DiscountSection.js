@@ -3,14 +3,12 @@ import ModalVoucher from "../../../utils/ModalVoucher/ModalVoucher";
 import axios from "axios";
 import { MainAPI } from "../../API";
 import useAuth from "../../../hooks/useAuth";
-import useCart from "../../../hooks/useCart";
 
 const DiscountSection = () => {
   const [show, setShow] = useState(false);
   const [isUsedVoucher, setIsUsedVoucher] = useState(false);
   const [listOfVoucherById, setListOfVoucherById] = useState([]);
   const { auth } = useAuth();
-  const { setOrderInfomation } = useCart();
 
   useEffect(() => {
     axios

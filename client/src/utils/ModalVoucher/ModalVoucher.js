@@ -4,7 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { MainAPI } from "../../components/API";
 import useAuth from "../../hooks/useAuth";
-import useCart from "../../hooks/useCart";
+import useOrder from "../../hooks/useOrder";
 
 export default function ModalVoucher({
   closeModal,
@@ -12,7 +12,7 @@ export default function ModalVoucher({
   isUsedVoucher,
 }) {
   const { auth } = useAuth();
-  const { setOrderInfomation } = useCart();
+  const { setOrderInfomation } = useOrder();
   const handleApplyVoucher = (e) => {
     axios
       .post(
@@ -29,7 +29,7 @@ export default function ModalVoucher({
       )
       .then((res) => {
         console.log(res.data);
-        const discount = res.data.voucher.discount;
+        const discount = res.data.voucher.discount / 100;
         setOrderInfomation({ discount });
         isUsedVoucher();
         closeModal();
