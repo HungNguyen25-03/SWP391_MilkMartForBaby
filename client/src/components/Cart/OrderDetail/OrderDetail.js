@@ -1,24 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { MdDelete } from "react-icons/md";
 import "./OrderDetail.scss";
 import { CartContext } from "../CartContext";
 
 export default function OrderDetail() {
 
-  const { cartList, handleDeleteCart } = useContext(CartContext)
-
-  // const [quantity, setQuantity] = useState()
-
-  // const handleIncrease = (product) => {
-  //   cartList.find((item) => item.id === product.id)
-  //   setQuantity(product.quantity + 1)
-  // }
-
-  // console.log(quantity)
-
-  // const handleDescrease = () => {
-
-  // }
+  const { cartList, handleDeleteCart, decrementQuantity, incrementQuantity } = useContext(CartContext)
 
   return (
     <>
@@ -55,11 +42,11 @@ export default function OrderDetail() {
                       <div className="item-cart-price-pro mr-0 ">{product.price} </div>
                       <div className="item-cart-quantity-pro">
                         <div className="btn-1">
-                          <button >-</button>
+                          <button onClick={() => decrementQuantity(product)}>-</button>
                         </div>
                         {product.quantity}
                         <div className="btn-1">
-                          <button >+</button>
+                          <button onClick={() => incrementQuantity(product)}>+</button>
                         </div>
                       </div>
                       <div className="item-cart-total">
