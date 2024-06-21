@@ -14,7 +14,7 @@ async function getAllProduct() {
   } catch (error) {
     throw error;
   }
-};
+}
 
 async function getProductById(product_id) {
   try {
@@ -31,19 +31,15 @@ async function getProductById(product_id) {
   } catch (error) {
     throw error;
   }
-};
+}
 
-
-
-
-async function searchProductByName(searchTerm){
+async function searchProductByName(searchTerm) {
   try {
-    const pool= await poolPromise;
-    
-    const result= await pool 
-    .request()
-      .input('searchTerm',sql.VarChar, `%${searchTerm}%`)
-      .query(`
+    const pool = await poolPromise;
+
+    const result = await pool
+      .request()
+      .input("searchTerm", sql.VarChar, `%${searchTerm}%`).query(`
       SELECT 
         product_id,
         product_name,
@@ -55,52 +51,52 @@ async function searchProductByName(searchTerm){
 
       WHERE product_name LIKE @searchTerm
     `);
-     
-      const products= result.recordset;
-      
-      if (products.length > 0) {
-        return { success: true, products };
-      } else {
-        return { success: false, message: 'No products found' };
-      }
-    } catch (error) {
-      console.error('Error searching for products', error);
-      throw error;
+
+    const products = result.recordset;
+
+    if (products.length > 0) {
+      return { success: true, products };
+    } else {
+      return { success: false, message: "No products found" };
     }
-  };
+  } catch (error) {
+    console.error("Error searching for products", error);
+    throw error;
+  }
+}
 
+async function filterProduct(ageRange, brand, country) {
+  try {
+    const pool = await poolPromise;
+    const request = pool.request();
 
+    let filters = [];
 
-
-
-
-
-  async function filterProduct(ageRange, brand, country) {
-    try {
-      const pool = await poolPromise;
-      const request = pool.request();
-  
-      let filters = [];
-  
-      if (ageRange) {
-        if (!Array.isArray(ageRange)) {
-          ageRange = [ageRange];
-        }
-        request.input('ageRange', sql.NVarChar, ageRange.join(','));
-        filters.push("age_range IN (SELECT value FROM STRING_SPLIT(@ageRange, ','))");
+    if (ageRange) {
+      if (!Array.isArray(ageRange)) {
+        ageRange = [ageRange];
       }
-  
-      if (brand) {
-        request.input('brand', sql.NVarChar, brand);
-        filters.push(`brand_id = (SELECT brand_id FROM Brands WHERE brand_name = @brand)`);
-      }
-  
-      if (country) {
-        request.input('country', sql.NVarChar, country);
-        filters.push(`country_id = (SELECT country_id FROM Originated_Country WHERE country_name = @country)`);
-      }
-  
-      let query = `
+      request.input("ageRange", sql.NVarChar, ageRange.join(","));
+      filters.push(
+        "age_range IN (SELECT value FROM STRING_SPLIT(@ageRange, ','))"
+      );
+    }
+
+    if (brand) {
+      request.input("brand", sql.NVarChar, brand);
+      filters.push(
+        `brand_id = (SELECT brand_id FROM Brands WHERE brand_name = @brand)`
+      );
+    }
+
+    if (country) {
+      request.input("country", sql.NVarChar, country);
+      filters.push(
+        `country_id = (SELECT country_id FROM Originated_Country WHERE country_name = @country)`
+      );
+    }
+
+    let query = `
         SELECT 
           product_id,
           product_name,
@@ -113,32 +109,26 @@ async function searchProductByName(searchTerm){
           category_id
         FROM Products
       `;
-  
-      if (filters.length > 0) {
-        query += ' WHERE ' + filters.join(' AND ');
-      }
-  
-     
-  
-      const result = await request.query(query);
-      const products = result.recordset;
-  
-      return products.length > 0 
-        ? { success: true, products }
-        : { success: false, message: "No products found" };
-    } catch (error) {
-      console.error('Error filtering products', error);
-      throw error;
-    }
-  }
-  
-  
- 
 
+    if (filters.length > 0) {
+      query += " WHERE " + filters.join(" AND ");
+    }
+
+    const result = await request.query(query);
+    const products = result.recordset;
+
+    return products.length > 0
+      ? { success: true, products }
+      : { success: false, message: "No products found" };
+  } catch (error) {
+    console.error("Error filtering products", error);
+    throw error;
+  }
+}
 
 module.exports = {
   getAllProduct,
   getProductById,
   searchProductByName,
-  filterProduct
+  filterProduct,
 };
