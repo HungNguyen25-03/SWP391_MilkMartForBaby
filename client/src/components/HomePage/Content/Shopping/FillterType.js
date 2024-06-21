@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { categoryList } from "./category";
 import {
   MdOutlineCheckBoxOutlineBlank,
@@ -8,20 +8,35 @@ import { productList } from "./Product";
 import "./Product.scss";
 import { FaShoppingCart } from "react-icons/fa";
 import { CartContext } from "../../../Cart/CartContext";
+import axios from "axios";
+import { MainAPI } from "../../../API";
 
 export default function FillterType() {
   const { handleAddToCart } = useContext(CartContext);
+  const [selectedFilters, setSelectedFilters] = useState([]);
+  const [filteredItems, setFilteredItems] = useState(productList);
 
-  const [checkbox, setCheckbox] = useState(false);
-
-  const showCheckbox = (item) => {
-    setCheckbox(!checkbox);
-    let currList = [...categoryList];
-    let getProduct = currList.filter((product) => {
-      return product.id === item.id;
-    });
-    console.log(getProduct);
+  const handleFilterButtonClick = (seletedCategory) => {
+    if (selectedFilters.includes(seletedCategory)) {
+      setSelectedFilters(
+        selectedFilters.filter((category) => category !== seletedCategory)
+      );
+    } else {
+      setSelectedFilters([...selectedFilters, seletedCategory]);
+    }
   };
+
+  useEffect(() => {
+    axios
+      .get(`${MainAPI}/product/getProduct`)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+  console.log(selectedFilters);
 
   return (
     <div className="fillter_container">
@@ -29,16 +44,19 @@ export default function FillterType() {
         <div className="category">
           <p className="m-0">Loại Sữa:</p>
           <div style={{ marginLeft: "25px" }}>
-            {categoryList.map((cate) => (
+            {categoryList.map((cate, index) => (
               <div className="cate" key={cate.id}>
-                <span onClick={() => showCheckbox(cate)}>
-                  {checkbox === true ? (
-                    <MdOutlineCheckBox />
-                  ) : (
-                    <MdOutlineCheckBoxOutlineBlank />
-                  )}
-                </span>
-                &nbsp;{cate.title}
+                <button
+                  onClick={() => {
+                    handleFilterButtonClick(cate.title);
+                  }}
+                  className={`btn ${
+                    selectedFilters?.includes(cate.title) ? "active" : ""
+                  }`}
+                  key={`filters-${index}`}
+                >
+                  {cate.title}
+                </button>
               </div>
             ))}
           </div>

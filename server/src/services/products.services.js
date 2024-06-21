@@ -15,7 +15,7 @@ async function getAllProduct() {
   } catch (error) {
     throw error;
   }
-};
+}
 
 async function getProductById(product_id) {
   try {
@@ -32,7 +32,7 @@ async function getProductById(product_id) {
   } catch (error) {
     throw error;
   }
-};
+}
 
 
 
@@ -137,5 +137,5 @@ module.exports = {
   getAllProduct,
   getProductById,
   searchProductByName,
-  filterProduct
+  filterProduct,
 };
