@@ -35,11 +35,6 @@ const CartSummary = () => {
     setTemporary(temporaryTemp);
     setDiscount(discountTemp);
     setTotal(totalTemp);
-
-    console.log(temporaryTemp);
-    console.log(orderInfomation.discount);
-    console.log(discountTemp);
-    console.log(totalTemp);
   }, [cartList, orderInfomation.discount]);
 
   const handleOrder = () => {

@@ -16,6 +16,7 @@ import UserAccount from "./components/UserAccount/UserAccount.js";
 import RequireAuth from "./components/RequireAuth.js";
 import Unauthorized from "./components/Unauthorized/Unauthorized.js";
 import OrderPayment from "./components/OrderPayment/OrderPayment.js";
+import SearchPage from "./components/HomePage/Search/SearchPage.js";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<Register />}></Route>
           <Route path="/blogs" element={<Blog />}></Route>
+          <Route path="/search" element={<SearchPage />}></Route>
           <Route
             path="/home/productdetail/:id"
             element={<ProductDetail />}

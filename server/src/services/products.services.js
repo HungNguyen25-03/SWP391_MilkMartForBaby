@@ -1,6 +1,5 @@
 const { poolPromise, sql } = require("./database.services");
 
-
 async function getAllProduct() {
   try {
     const pool = await poolPromise;
@@ -51,7 +50,6 @@ async function searchProductByName(searchTerm) {
       WHERE product_name LIKE @searchTerm
     `);
 
-
     const products = result.recordset;
 
     if (products.length > 0) {
@@ -72,33 +70,28 @@ async function filterProduct(ageRange, brand, country) {
 
     let filters = [];
 
-   
-
-
-async function filterProduct(ageRange, brand, country) {
-  try {
-    const pool = await poolPromise;
-    const request = pool.request();
-
-    let filters = [];
-
     if (ageRange) {
       if (!Array.isArray(ageRange)) {
         ageRange = [ageRange];
       }
-      request.input('ageRange', sql.NVarChar, ageRange.join(','));
-      filters.push("age_range IN (SELECT value FROM STRING_SPLIT(@ageRange, ','))");
+      request.input("ageRange", sql.NVarChar, ageRange.join(","));
+      filters.push(
+        "age_range IN (SELECT value FROM STRING_SPLIT(@ageRange, ','))"
+      );
     }
 
     if (brand) {
-      request.input('brand', sql.NVarChar, brand);
-      filters.push(`brand_id = (SELECT brand_id FROM Brands WHERE brand_name = @brand)`);
+      request.input("brand", sql.NVarChar, brand);
+      filters.push(
+        `brand_id = (SELECT brand_id FROM Brands WHERE brand_name = @brand)`
+      );
     }
 
     if (country) {
-      request.input('country', sql.NVarChar, country);
-      filters.push(`country_id = (SELECT country_id FROM Originated_Country WHERE country_name = @country)`);
-
+      request.input("country", sql.NVarChar, country);
+      filters.push(
+        `country_id = (SELECT country_id FROM Originated_Country WHERE country_name = @country)`
+      );
     }
 
     let query = `
@@ -116,11 +109,8 @@ async function filterProduct(ageRange, brand, country) {
       `;
 
     if (filters.length > 0) {
-
-      query += ' WHERE ' + filters.join(' AND ');
+      query += " WHERE " + filters.join(" AND ");
     }
-
-
 
     const result = await request.query(query);
     const products = result.recordset;
@@ -129,19 +119,10 @@ async function filterProduct(ageRange, brand, country) {
       ? { success: true, products }
       : { success: false, message: "No products found" };
   } catch (error) {
-    console.error('Error filtering products', error);
+    console.error("Error filtering products", error);
     throw error;
   }
 }
-
-
-
-=======
-      query += " WHERE " + filters.join(" AND ");
-    }
-
-
-   
 
 module.exports = {
   getAllProduct,
