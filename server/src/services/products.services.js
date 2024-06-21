@@ -61,7 +61,8 @@ async function searchProductByName(searchTerm) {
     console.error("Error searching for products", error);
     throw error;
   }
-}
+
+};
 
 async function filterProduct(ageRange, brand, country) {
   try {
