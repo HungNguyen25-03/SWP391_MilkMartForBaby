@@ -31,7 +31,7 @@ function CartProvider({ children }) {
     const incrementQuantity = (product) => {
         setCartList(
             cartList.map(item =>
-                item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+                item.product_id === product.product_id ? { ...item, quantity: item.quantity + 1 } : item
             )
         );
     };
@@ -39,7 +39,7 @@ function CartProvider({ children }) {
     const decrementQuantity = (product) => {
         setCartList(
             cartList.map(item =>
-                item.id === product.id
+                item.product_id === product.product_id
                     ? { ...item, quantity: item.quantity > 1 ? item.quantity - 1 : 1 }
                     : item
             )
