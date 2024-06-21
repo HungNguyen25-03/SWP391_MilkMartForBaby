@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
@@ -10,6 +10,7 @@ import { ToastContainer, toast } from "react-toastify";
 import useOrder from "../../hooks/useOrder";
 
 export default function HeaderPage() {
+  const [searchValue, setSearchValue] = useState("");
   const { setAuth } = useContext(AuthContext);
   const { setOrderInfomation } = useOrder();
   const token = JSON.parse(localStorage.getItem("accessToken"));
@@ -35,6 +36,19 @@ export default function HeaderPage() {
       });
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    axios
+      .get(`${MainAPI}/product/search`, { searchTerm: searchValue })
+      .then((res) => {
+        console.log(res.data);
+        // nav("/search", { searchResult: res.data });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className=" search-bar">
       <ToastContainer autoClose={2000} />
@@ -50,8 +64,13 @@ export default function HeaderPage() {
           </div>
 
           <div className="search col-6">
-            <form className="d-flex">
-              <input type="text" placeholder="Hôm nay bạn muốn mua gì?" />
+            <form className="d-flex" onSubmit={handleSearch}>
+              <input
+                type="text"
+                placeholder="Hôm nay bạn muốn mua gì?"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+              />
               <button type="submit" className="btn" name="submit-search">
                 Tìm kiếm
               </button>

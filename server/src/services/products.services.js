@@ -15,7 +15,7 @@ async function getAllProduct() {
   } catch (error) {
     throw error;
   }
-};
+}
 
 async function getProductById(product_id) {
   try {
@@ -32,10 +32,7 @@ async function getProductById(product_id) {
   } catch (error) {
     throw error;
   }
-};
-
-
-
+}
 
 async function searchProductByName(searchTerm) {
   try {
@@ -43,8 +40,9 @@ async function searchProductByName(searchTerm) {
 
     const result = await pool
       .request()
-      .input('searchTerm', sql.VarChar, `%${searchTerm}%`)
-      .query(`
+
+      .input("searchTerm", sql.VarChar, `%${searchTerm}%`).query(`
+
       SELECT 
        *
 
@@ -53,23 +51,28 @@ async function searchProductByName(searchTerm) {
       WHERE product_name LIKE @searchTerm
     `);
 
+
     const products = result.recordset;
 
     if (products.length > 0) {
       return { success: true, products };
     } else {
-      return { success: false, message: 'No products found' };
+      return { success: false, message: "No products found" };
     }
   } catch (error) {
-    console.error('Error searching for products', error);
+    console.error("Error searching for products", error);
     throw error;
   }
-};
+}
 
+async function filterProduct(ageRange, brand, country) {
+  try {
+    const pool = await poolPromise;
+    const request = pool.request();
 
+    let filters = [];
 
-
-
+   
 
 
 async function filterProduct(ageRange, brand, country) {
@@ -95,6 +98,7 @@ async function filterProduct(ageRange, brand, country) {
     if (country) {
       request.input('country', sql.NVarChar, country);
       filters.push(`country_id = (SELECT country_id FROM Originated_Country WHERE country_name = @country)`);
+
     }
 
     let query = `
@@ -112,6 +116,7 @@ async function filterProduct(ageRange, brand, country) {
       `;
 
     if (filters.length > 0) {
+
       query += ' WHERE ' + filters.join(' AND ');
     }
 
@@ -131,11 +136,16 @@ async function filterProduct(ageRange, brand, country) {
 
 
 
+=======
+      query += " WHERE " + filters.join(" AND ");
+    }
 
+
+   
 
 module.exports = {
   getAllProduct,
   getProductById,
   searchProductByName,
-  filterProduct
+  filterProduct,
 };
