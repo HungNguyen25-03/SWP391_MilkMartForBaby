@@ -35,16 +35,15 @@ async function getProductById(product_id) {
 }
 
 
-
-
 async function searchProductByName(searchTerm) {
   try {
     const pool = await poolPromise;
 
     const result = await pool
       .request()
-      .input('searchTerm', sql.VarChar, `%${searchTerm}%`)
-      .query(`
+
+      .input("searchTerm", sql.VarChar, `%${searchTerm}%`).query(`
+
       SELECT 
        *
 
@@ -52,6 +51,7 @@ async function searchProductByName(searchTerm) {
 
       WHERE product_name LIKE @searchTerm
     `);
+
 
     const products = result.recordset;
 
@@ -67,8 +67,7 @@ async function searchProductByName(searchTerm) {
 };
 
 
-
-
+   
 
 
 
@@ -95,6 +94,7 @@ async function filterProduct(ageRange, brand, country) {
     if (country) {
       request.input('country', sql.NVarChar, country);
       filters.push(`country_id = (SELECT country_id FROM Originated_Country WHERE country_name = @country)`);
+
     }
 
     let query = `
@@ -112,6 +112,7 @@ async function filterProduct(ageRange, brand, country) {
       `;
 
     if (filters.length > 0) {
+
       query += ' WHERE ' + filters.join(' AND ');
     }
 
