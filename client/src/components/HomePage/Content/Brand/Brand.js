@@ -5,6 +5,7 @@ import "./slick-theme.css";
 import "./Brand.scss";
 import { useState, useEffect, useRef } from "react";
 import { listBrand } from "./BrandList";
+import { Link } from 'react-router-dom'
 
 function Arrow(props) {
   const { className, style, onClick } = props;
@@ -55,16 +56,16 @@ export default function Brand({ initialSlide = 0 }) {
             <div key={index} className="slide">
               <div className="brand_row">
                 {group.slice(0, 4).map((brand) => (
-                  <a href={brand.title} className="brand_detail" key={brand.id}>
+                  <Link to={brand.title} className="brand_detail" key={brand.id}>
                     <img src={brand.img} alt={brand.alt} />
-                  </a>
+                  </Link>
                 ))}
               </div>
               <div className="brand_row">
                 {group.slice(4, 8).map((brand) => (
-                  <a href={brand.title} className="brand_detail" key={brand.id}>
+                  <Link to={brand.title} className="brand_detail" key={brand.id}>
                     <img src={brand.img} alt={brand.alt} />
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>

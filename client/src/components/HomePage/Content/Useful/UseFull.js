@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 export default function UseFull() {
   return (
-    <div>
+    <div style={{ marginTop: '15px' }}>
       <div className="d-flex justify-content-between align-center">
         <h2>Thông tin bổ ích</h2>
         <span>
