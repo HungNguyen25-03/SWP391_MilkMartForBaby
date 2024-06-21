@@ -6,15 +6,22 @@ async function getPaged(page, pageSize) {
     try {
         const pool = await poolPromise;
         const request = pool.request();
+
         const offset = (page - 1) * pageSize;
+
+
+        request.input('offset', sql.Int, offset);
+        request.input('pageSize', sql.Int, pageSize);
+
         const query = `
-      SELECT 
-       *
-      FROM Products
-      ORDER BY product_id
-      OFFSET @offset ROWS
-      FETCH NEXT @pageSize ROWS ONLY
-    `;
+          SELECT 
+            *
+          FROM Products
+          ORDER BY product_id
+          OFFSET @offset ROWS
+          FETCH NEXT @pageSize ROWS ONLY
+        `;
+
 
         const result = await request.query(query);
         const products = result.recordset;
@@ -33,10 +40,12 @@ async function getPaged(page, pageSize) {
             currentPage: page,
         };
     } catch (error) {
+
+   
+
         throw error;
     }
 };
-
 
 module.exports = {
     getPaged
