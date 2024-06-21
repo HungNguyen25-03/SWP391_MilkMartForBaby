@@ -78,6 +78,16 @@ async function filterProduct(ageRange, brand, country) {
 
     let filters = [];
 
+   
+
+
+async function filterProduct(ageRange, brand, country) {
+  try {
+    const pool = await poolPromise;
+    const request = pool.request();
+
+    let filters = [];
+
     if (ageRange) {
       if (!Array.isArray(ageRange)) {
         ageRange = [ageRange];
@@ -129,7 +139,6 @@ async function filterProduct(ageRange, brand, country) {
     throw error;
   }
 }
-
 
 
 
