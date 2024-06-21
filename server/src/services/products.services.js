@@ -33,7 +33,6 @@ async function getProductById(product_id) {
   }
 }
 
-
 async function searchProductByName(searchTerm) {
   try {
     const pool = await poolPromise;
@@ -56,18 +55,14 @@ async function searchProductByName(searchTerm) {
     if (products.length > 0) {
       return { success: true, products };
     } else {
-      return { success: false, message: 'No products found' };
+      return { success: false, message: "No products found" };
     }
   } catch (error) {
-    console.error('Error searching for products', error);
+    console.error("Error searching for products", error);
     throw error;
   }
+
 };
-
-
-   
-
-
 
 async function filterProduct(ageRange, brand, country) {
   try {
