@@ -22,10 +22,8 @@ export default function Brand({ initialSlide = 0 }) {
     className: "center",
     infinite: true,
     centerPadding: "60px",
-    slidesToShow: 3,
+    slidesToShow: 1,
     speed: 500,
-    rows: 2,
-    slidesPerRow: 2,
     nextArrow: <Arrow />,
     prevArrow: <Arrow />,
   };
@@ -40,6 +38,11 @@ export default function Brand({ initialSlide = 0 }) {
     }
   }, [initialSlide, hasSetPosition, slider]);
 
+  const groupedBrands = [];
+  for (let i = 0; i < listBrand.length; i += 8) {
+    groupedBrands.push(listBrand.slice(i, i + 8));
+  }
+
   return (
     <>
       <div className="titleBrand mt-5">
@@ -47,14 +50,25 @@ export default function Brand({ initialSlide = 0 }) {
       </div>
 
       <div className="brand_container">
-        <Slider {...settings}>
-          {listBrand.map((list) => {
-            return (
-              <a href={list.title} className="brand_detail" key={list.id}>
-                <img src={list.img} alt={list.atl} />
-              </a>
-            );
-          })}
+        <Slider ref={slider} {...settings}>
+          {groupedBrands.map((group, index) => (
+            <div key={index} className="slide">
+              <div className="brand_row">
+                {group.slice(0, 4).map((brand) => (
+                  <a href={brand.title} className="brand_detail" key={brand.id}>
+                    <img src={brand.img} alt={brand.alt} />
+                  </a>
+                ))}
+              </div>
+              <div className="brand_row">
+                {group.slice(4, 8).map((brand) => (
+                  <a href={brand.title} className="brand_detail" key={brand.id}>
+                    <img src={brand.img} alt={brand.alt} />
+                  </a>
+                ))}
+              </div>
+            </div>
+          ))}
         </Slider>
       </div>
     </>
