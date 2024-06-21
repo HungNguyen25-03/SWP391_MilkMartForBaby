@@ -12,6 +12,7 @@ const orderRoutes = require("../server/src/routes/order.routes");
 const adminRoutes = require("../server/src/routes/admin.routes");
 const staffRoutes = require("../server/src/routes/staff.routes");
 const paymentRoutes = require("../server/src/routes/payment.routes");
+const pageRoutes = require("../server/src/routes/page.routes");
 const {
   errorHandlingMiddleware,
 } = require("../server/src/middlewares/error.middleware");
@@ -36,6 +37,10 @@ app.use("/staff", staffRoutes);
 
 //api to use payment
 app.use("/payment", paymentRoutes);
+
+
+//api to Pagination
+app.use("/page", pageRoutes);
 
 app.use(errorHandlingMiddleware);
 

@@ -1,4 +1,4 @@
-const { getAllProduct } = require("../services/products.services");
+const { getAllProduct, getProductById, searchProductByName, filterProduct } = require("../services/products.services");
 
 
 
@@ -17,21 +17,20 @@ const getProduct = async (req, res) => {
 };
 
 // Get Product By ID Controller
-const {getProductById}=require("../services/products.services");
 
-const getProById=async (req,res)=>{
-  const {product_id}=req.body;
+const getProById = async (req, res) => {
+  const { product_id } = req.body;
   console.log(product_id);
-  try{
-    const result =await getProductById(product_id);
-    if(result.success){
+  try {
+    const result = await getProductById(product_id);
+    if (result.success) {
       res.json(result.product);
 
-    }else{
-      res.json({message:result.message});
+    } else {
+      res.json({ message: result.message });
     }
 
-  }catch(error){
+  } catch (error) {
     console.log("Fail to get Product by ID");
   }
 };
@@ -39,10 +38,10 @@ const getProById=async (req,res)=>{
 
 // Search Product By Name
 
-const {searchProductByName}=require("../services/products.services");
+
 
 const searchByName = async (req, res) => {
-  const searchTerm  = req.query.searchTerm; 
+  const searchTerm = req.query.searchTerm;
   console.log(searchTerm);
 
   try {
@@ -61,18 +60,18 @@ const searchByName = async (req, res) => {
 
 
 //Filtering Product
-const {filterProduct}=require("../services/products.services");
-const filtering=async (req,res) => {
+
+const filtering = async (req, res) => {
 
 
-   try {
-    const { ageRange, brand ,country} = req.query;
-    const result = await filterProduct(ageRange,brand,country);
+  try {
+    const { ageRange, brand, country } = req.query;
+    const result = await filterProduct(ageRange, brand, country);
     res.json(result);
   } catch (error) {
     res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
-   
+
 };
 
 
