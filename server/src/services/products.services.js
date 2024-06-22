@@ -84,32 +84,40 @@ async function filterProduct(ageRange, brand, country) {
         ageRange = [ageRange];
       }
       request.input('ageRange', sql.NVarChar, ageRange.join(','));
-      filters.push("age_range IN (SELECT value FROM STRING_SPLIT(@ageRange, ','))");
+      filters.push("age_range IN (SELECT value FROM STRING_SPLIT(@ageRange,','))");
     }
 
     if (brand) {
-      request.input('brand', sql.NVarChar, brand);
-      filters.push(`brand_id = (SELECT brand_id FROM Brands WHERE brand_name = @brand)`);
+      if (!Array.isArray(brand)) {
+        brand = [brand];
+      }
+      request.input('brand', sql.NVarChar, brand.join(','));
+      filters.push("brand_name IN (SELECT value FROM STRING_SPLIT (@brand,','))");
     }
 
     if (country) {
-      request.input('country', sql.NVarChar, country);
-      filters.push(`country_id = (SELECT country_id FROM Originated_Country WHERE country_name = @country)`);
+      if (!Array.isArray(country)) {
+        country = [country];
+      }
+      request.input('country', sql.NVarChar, country.join(','));
+      filters.push("country_name IN (SELECT value FROM STRING_SPLIT (@country, ','))");
     }
 
     let query = `
-        SELECT 
-          product_id,
-          product_name,
-          description,
-          price,
-          stock,
-          brand_id,
-          country_id,
-          age_range,
-          category_id
-        FROM Products
-      `;
+    SELECT 
+      p.product_id,
+      p.product_name,
+      p.description,
+      p.price,
+      p.stock,
+      b.brand_name,
+      oc.country_name,
+      p.age_range
+    FROM Products p
+    LEFT JOIN Brands b ON p.brand_id = b.brand_id
+    LEFT JOIN Originated_Country oc ON p.country_id = oc.country_id
+    
+  `;
 
     if (filters.length > 0) {
       query += ' WHERE ' + filters.join(' AND ');

@@ -42,7 +42,11 @@ const getProById = async (req, res) => {
 
 const searchByName = async (req, res) => {
   const searchTerm = req.query.searchTerm;
+  if (!searchTerm) {
+    return res.status(400).json({ message: 'Search term is required' });
+  }
   console.log(searchTerm);
+
 
   try {
     const result = await searchProductByName(searchTerm);
@@ -65,8 +69,9 @@ const filtering = async (req, res) => {
 
 
   try {
-    const { ageRange, brand, country } = req.query;
+    const { ageRange, brand, country } = req.body;
     const result = await filterProduct(ageRange, brand, country);
+    console.log(result);
     res.json(result);
   } catch (error) {
     res.status(500).json({ success: false, message: 'Internal Server Error' });
