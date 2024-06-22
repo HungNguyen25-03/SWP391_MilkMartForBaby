@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import ManageInventory from './ManageInventory'
+import { MainAPI } from '../../API'
 
-export default function GetInentory() {
+export default function GetInventory() {
 
     const [inventory, setInventory] = useState()
 
     useEffect(() => {
-        fetch("http://127.0.0.1:1880/inventory")
-            .then((res) => res.json())
-            .then((data) => setInventory(data))
+        const fetchData = async () => {
+            const res = await fetch(`${MainAPI}/staff/order`)
+        }
     }, [])
 
     return (

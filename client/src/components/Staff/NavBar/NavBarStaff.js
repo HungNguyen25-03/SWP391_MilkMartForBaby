@@ -1,12 +1,19 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import './NavBarStaff.scss'
 
 export default function NavBarStaff() {
+
+    // const navigate = useNavigate();
+
+    // useEffect(() => {
+    //     navigate('/staff/comfirm_order'); // Redirect to the desired path
+    // }, [navigate]);
+
     return (
         <div className='staff'>
             <div className='logo_staff'>
-                <img src='https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2FlogoMilk.png?alt=media&token=1bd69b90-459d-45b8-b86a-b0f235f748d9' />
+                <img src='https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2Flogo.png?alt=media&token=608fc814-b3d6-463b-845b-3c64b92cc563' />
             </div>
 
             <div className='user_name'>
