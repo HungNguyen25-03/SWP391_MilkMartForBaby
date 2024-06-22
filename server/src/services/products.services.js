@@ -76,6 +76,7 @@ async function filterProduct(ageRange, brand, country) {
         ageRange = [ageRange];
       }
 
+
       request.input('ageRange', sql.NVarChar, ageRange.join(','));
       filters.push("age_range IN (SELECT value FROM STRING_SPLIT(@ageRange,','))");
     }
@@ -94,6 +95,7 @@ async function filterProduct(ageRange, brand, country) {
       }
       request.input('country', sql.NVarChar, country.join(','));
       filters.push("country_name IN (SELECT value FROM STRING_SPLIT (@country, ','))");
+
     }
 
     let query = `

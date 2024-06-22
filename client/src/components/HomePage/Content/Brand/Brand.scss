@@ -1,22 +1,4 @@
-// .brand_detail img {
-//   width: 190px;
-// }
-
-// .brand_detail {
-//   width: 300px;
-//   outline: none;
-// }
-
-// .brand_container {
-//   width: 100%;
-//   margin: 50px auto;
-// }
-
-
-/* Brand.scss */
-
 .titleBrand {
-  text-align: center;
   margin-top: 20px;
   h2 {
     font-size: 2rem;
@@ -25,11 +7,12 @@
 }
 
 .brand_container {
-  width: 80%;
+  width: 100%; 
   margin: 0 auto;
+  position: relative;
 }
 
-.slide {
+.slide-brand {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -45,10 +28,10 @@
 
 .brand_detail {
   display: block;
-  width: 150px; 
-  height: 150px;
+  width: 350px; 
+  height: 150px; 
   overflow: hidden;
-  margin: 0 10px; 
+  margin: 0 5px; 
   img {
     width: 100%;
     height: 100%;
@@ -59,15 +42,19 @@
 .slick-prev, .slick-next {
   width: 30px;
   height: 30px;
-  z-index: 1;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
 }
 .slick-prev::before, .slick-next::before {
   font-size: 30px;
   color: black;
 }
 .slick-prev {
-  left: -40px;
+  left: -50px;
+  margin-top: -30px;
 }
 .slick-next {
-  right: -40px;
+  right: -50px;
+  margin-top: -30px;
 }
