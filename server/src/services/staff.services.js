@@ -79,6 +79,9 @@ async function getAllProduct() {
     `);
     const product = result.recordset;
 
+
+
+
     if (product) {
       return { success: true, product };
     } else {
