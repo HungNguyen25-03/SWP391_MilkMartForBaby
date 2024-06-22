@@ -4,24 +4,20 @@ import './ManageUser.scss'
 export default function ManageUser({ users }) {
     return (
         < >
-            <table className='manageuser'>
+            <table className='table_manageuser'>
                 <thead>
                     <tr>
                         <th>User ID</th>
                         <th>User Name</th>
                         <th>Role</th>
-                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {users.map((user, index) => (
                         <tr key={index}>
-                            <td>{user.useid}</td>
-                            <td>{user.usename}</td>
-                            <td>{user.role}</td>
-                            <td>
-                                <button className="action-btn">▪▪▪</button>
-                            </td>
+                            <td>{user.user_id}</td>
+                            <td>{user.username}</td>
+                            <td>{user.role_id}</td>
                         </tr>
                     ))}
                 </tbody>

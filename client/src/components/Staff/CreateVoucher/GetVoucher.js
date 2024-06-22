@@ -1,16 +1,29 @@
 import React, { useEffect, useState } from 'react'
 import ManageVoucher from './ManageVoucher'
+import { MainAPI } from '../../API'
 
 export default function GetVoucher() {
     const [vouchers, setVoucher] = useState()
 
-    useEffect(() => {
-        fetch('http://127.0.0.1:1880/voucher')
-            .then((res) => res.json())
-            .then((date) => setVoucher(date))
-    }, [])
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const res = await fetch(`${MainAPI}/staff/user`, {
+    //                 method: "GET",
+    //             });
 
-    console.log(vouchers)
+    //             if (!res.ok) throw new Error("Failed to fetch data get user");
+
+    //             const data = await res.json();
+    //             setVoucher(data);
+
+    //         } catch (error) {
+    //             console.error("Error fetching data user:", error);
+    //         }
+    //     }
+
+    //     fetchData();
+    // }, [])
 
     return (
         <div>

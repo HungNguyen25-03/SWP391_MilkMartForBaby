@@ -1,81 +1,41 @@
-.manageuser {
-    width: 140%;
-    border-collapse: separate;
-    border-spacing: 0;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    margin-left: 30%;
-    margin-top: 20%;
-}
+.table_manageuser {
+    width: 80%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    margin-left: 10%;
+    margin-top: 150px;
+    margin-bottom: 100px;
+    box-shadow: 1px 1px 10px 5px rgba(199, 194, 194, 0.989); 
 
-.manageuser thead {
-    background-color: #f8f8f8;
-}
 
-.manageuser thead th {
-    padding: 12px 15px;
-    text-align: left;
-    font-weight: bold;
-    border-bottom: 1px solid #ddd;
-}
+    thead {
+        background-color: #f8f9fa;
+        th {
+            padding: 6px; 
+            text-align: center;
+            font-weight: bold;
+            border-bottom: 1px solid #dee2e6;
+            font-size: 17px; 
+        }
+    }
 
-.manageuser tbody tr {
-    border-bottom: 1px solid #ddd;
-}
+    tbody {
+        text-align: center;
+        
+        tr:nth-of-type(even) {
+                background-color: #f2f2f2;
+        }
 
-.manageuser tbody tr:nth-child(even) {
-    background-color: #f1eaeac3;
-}
+        tr:hover {
+                background-color: #e9ecef;
+        }
 
-.manageuser tbody td {
-    padding: 12px 15px;
-    text-align: left;
-}
-
-.manageuser tbody tr:last-child {
-    border-bottom: none;
-}
-
-.manageuser .action-btn {
-    background: none;
-    border: none;
-    color: #007bff;
-    cursor: pointer;
-    padding: 5px 10px;
-    font-size: 18px;
-}
-
-.manageuser .action-btn:hover {
-    color: #0056b3;
-}
-
-.manageuser tbody tr:hover {
-    background-color: #cec7c7;
-}
-
-.manageuser .status-cancel .status-dot {
-    background-color: red;
-    border-radius: 50%;
-    display: inline-block;
-    height: 10px;
-    width: 10px;
-    margin-right: 5px;
-}
-
-.manageuser .status-confirm .status-dot {
-    background-color: green;
-    border-radius: 50%;
-    display: inline-block;
-    height: 10px;
-    width: 10px;
-    margin-right: 5px;
-}
-
-.manageuser .status-pending .status-dot {
-    background-color: yellow;
-    border-radius: 50%;
-    display: inline-block;
-    height: 10px;
-    width: 10px;
-    margin-right: 5px;
+        tr {
+            td {
+                padding: 7px; 
+                border-bottom: 1px solid #dee2e6;
+                font-size: 17px; 
+            }
+        }
+    }
 }

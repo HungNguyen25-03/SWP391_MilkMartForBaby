@@ -1,19 +1,33 @@
-import React, { useEffect, useState } from 'react'
-import ConfirmOrder from './ConfirmOrder'
+import React, { useEffect, useState } from 'react';
+import ConfirmOrder from './ConfirmOrder';
+import { MainAPI } from '../../API';
 
 export default function GetDetailConfirm() {
 
-    const [dataConfirm, setDataConfirm] = useState()
+    const [dataConfirm, setDataConfirm] = useState();
 
     useEffect(() => {
-        fetch('http://127.0.0.1:1880/confirm_order')
-            .then((res) => res.json())
-            .then((data) => setDataConfirm(data))
-    }, [])
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${MainAPI}/staff/order`, {
+                    method: "GET",
+                });
+
+                if (!response.ok) throw new Error("Failed to fetch data get order");
+
+                const data = await response.json();
+                setDataConfirm(data);
+            } catch (error) {
+                console.error("Error fetching data order:", error);
+            }
+        };
+        fetchData();
+    }, []);
+
 
     return (
         <div>
             {dataConfirm && <ConfirmOrder dataConfirm={dataConfirm} />}
         </div>
-    )
+    );
 }

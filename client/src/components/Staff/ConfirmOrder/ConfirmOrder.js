@@ -1,22 +1,32 @@
 import React, { useState } from 'react';
+import { FaWindowClose } from "react-icons/fa";
+import { IoMdCheckbox } from "react-icons/io";
 import './ConfirmOrder.scss';
 
 export default function ConfirmOrder({ dataConfirm }) {
-    const [action, setAction] = useState(false);
 
     const getStatusClass = (status) => {
-        console.log(status); // Kiểm tra giá trị của status
         switch (status.toLowerCase()) {
             case 'cancel':
                 return 'status-cancel';
-            case 'confirm':
-                return 'status-confirm';
+            case 'completed':
+                return 'status-complete';
             case 'pending':
                 return 'status-pending';
+            case 'complete':
+                return 'status-delevery';
+            case 'confirm':
+                return 'status-confirm';
             default:
                 return '';
         }
     };
+
+    const checkStatusIsPending = (status) => {
+        if (status.toLowerCase() === 'pending') {
+            return true
+        }
+    }
 
     return (
         <>
@@ -34,17 +44,22 @@ export default function ConfirmOrder({ dataConfirm }) {
                 <tbody>
                     {dataConfirm.map((confirm, index) => (
                         <tr key={index}>
-                            <td>{confirm.orderID}</td>
-                            <td>{confirm.date}</td>
-                            <td>{confirm.cusName}</td>
+                            <td>{confirm.order_id}</td>
+                            <td>{confirm.order_date}</td>
+                            <td>{confirm.username}</td>
                             <td className={getStatusClass(confirm.status)}>
                                 <span className="status-dot"></span>
                                 {confirm.status}
                             </td>
-                            <td>{confirm.amount}</td>
-                            <td>
-                                <button className="action-btn">▪▪▪</button>
-                            </td>
+                            <td>{confirm.total_amount} đ</td>
+                            {checkStatusIsPending(confirm.status) === true ?
+                                <td>
+                                    <button className="action-btn"><IoMdCheckbox color='green' size='25px' /></button>
+                                    <button className="action-btn"><FaWindowClose color='red' size='22px' /></button>
+                                </td>
+                                :
+                                <td></td>
+                            }
                         </tr>
                     ))}
                 </tbody>
