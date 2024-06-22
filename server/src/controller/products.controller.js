@@ -42,11 +42,13 @@ const getProById = async (req, res) => {
 // Search Product By Name
 
 const searchByName = async (req, res) => {
-  const searchTerm = req.query.searchTerm;
+  const searchTerm = req.query.searchTerm?.trim();
+
   if (!searchTerm) {
-    return res.status(400).json({ message: "Search term is required" });
+    return res.status(200).json([]); // Return an empty array if no search term is provided
   }
-  console.log(searchTerm);
+
+  console.log(`Search term: ${searchTerm}`);
 
   try {
     const result = await searchProductByName(searchTerm);
@@ -56,11 +58,10 @@ const searchByName = async (req, res) => {
       res.status(404).json({ message: result.message });
     }
   } catch (error) {
-    console.log("Fail to search products", error);
+    console.error("Fail to search products", error);
     res.status(500).json({ message: "Fail to search products" });
   }
 };
-
 //Filtering Product
 
 const filtering = async (req, res) => {

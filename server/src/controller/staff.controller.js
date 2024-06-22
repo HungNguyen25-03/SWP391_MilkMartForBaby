@@ -8,6 +8,7 @@ const {
   exportProduct,
   editProduct,
   confirmOrder,
+  cancelOrder,
 } = require("../services/staff.services");
 
 const createVoucherController = async (req, res) => {
@@ -163,18 +164,42 @@ const editProductController = async (req, res) => {
 const confirmOrderController = async (req, res) => {
   const { order_id } = req.body;
 
-
   if (!Number.isInteger(order_id)) {
-    return res.status(400).json({ success: false, message: 'Invalid order_id. It must be an integer.' });
+    return res.status(400).json({
+      success: false,
+      message: "Invalid order_id. It must be an integer.",
+    });
   }
   try {
     const result = await confirmOrder(order_id);
     res.json(result);
   } catch (error) {
-    res.status(500).json({ success: false, message: 'An error occurred', error: error.message });
+    res.status(500).json({
+      success: false,
+      message: "An error occurred",
+      error: error.message,
+    });
   }
 };
 
+const cancelOrderController = async (req, res) => {
+  const { order_id } = req.body;
+  if (!order_id) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Order ID is required" });
+  }
+  try {
+    const result = await cancelOrder(order_id);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "An error occurred",
+      error: error.message,
+    });
+  }
+};
 
 module.exports = {
   createVoucherController,
@@ -187,4 +212,5 @@ module.exports = {
   exportProductController,
   editProductController,
   confirmOrderController,
+  cancelOrderController,
 };

@@ -40,19 +40,16 @@ async function getProductById(product_id) {
 async function searchProductByName(searchTerm) {
   try {
     const pool = await poolPromise;
+    const query = `
+      SELECT *
+      FROM Products
+      WHERE product_name LIKE @searchTerm
+    `;
 
     const result = await pool
       .request()
-
-      .input("searchTerm", sql.VarChar, `%${searchTerm}%`).query(`
-
-      SELECT 
-       *
-
-      FROM Products
-
-      WHERE product_name LIKE @searchTerm
-    `);
+      .input("searchTerm", sql.VarChar, `%${searchTerm}%`)
+      .query(query);
 
     const products = result.recordset;
 
