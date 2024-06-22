@@ -70,12 +70,11 @@ async function getAllProduct() {
     Products.product_id,
     Products.product_name,
     Products.price,
-    Products.stock,
-    Category.category_name
+    Products.stock
+    
 
     FROM Products
-    JOIN Category
-    ON Products.category_id=Category.category_id ;
+    
     `);
     const product = result.recordset;
 
@@ -297,6 +296,9 @@ async function confirmOrder(order_id) {
     throw error;
   }
 };
+
+
+
 
 module.exports = {
   createVoucher,

@@ -43,6 +43,7 @@ const getAllUserController = async (req, res) => {
 const getAllProductController = async (req, res) => {
   try {
     const result = await getAllProduct();
+    console.log(result);
     if (result.success) {
       res.json(result.product);
     } else {
