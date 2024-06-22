@@ -180,7 +180,7 @@ async function getAllVoucher() {
     const vouchers = result.recordset;
 
     if (vouchers) {
-      return { success: true, vouchers };
+      return { success: true, vouchers: vouchers };
     } else {
       return { success: false, message: "Fail to connect Order" };
     }
