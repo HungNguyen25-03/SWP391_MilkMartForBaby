@@ -78,9 +78,6 @@ async function getAllProduct() {
     `);
     const product = result.recordset;
 
-
-
-
     if (product) {
       return { success: true, product };
     } else {
@@ -252,7 +249,7 @@ async function editProduct(product_id, changeQuantity) {
     const pool = await poolPromise;
     const result = await pool.request().input("product_id", sql.Int, product_id)
       .query(`
-       Select stock From Products  WHERE product_id = @product_id;
+       Select stock From Products WHERE product_id = @product_id;
      `);
 
     if (result.recordset.length === 0) {
@@ -278,14 +275,33 @@ async function editProduct(product_id, changeQuantity) {
   }
 }
 
+async function cancelOrder(order_id) {
+  try {
+    const pool = await poolPromise;
+
+    const result = await pool
+      .request()
+      .input("order_id", sql.Int, order_id)
+      .query(
+        `UPDATE Orders SET status = 'cancelled' WHERE order_id = @order_id;`
+      );
+    if (result.rowsAffected[0] > 0) {
+      return { success: true, message: "Order cancelled successfully" };
+    } else {
+      return { success: false, message: "Failed to cancel order" };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function confirmOrder(order_id) {
   try {
     const pool = await poolPromise;
 
     const result = await pool.request().input("order_id", sql.Int, order_id)
-
       .query(`
-    UPDATE Orders SET status = 'Confirmed' WHERE order_id = @order_id;
+    UPDATE Orders SET status = 'confirmed' WHERE order_id = @order_id;
   `);
     console.log(result);
     if (result.rowsAffected[0] > 0) {
@@ -296,10 +312,7 @@ async function confirmOrder(order_id) {
   } catch (error) {
     throw error;
   }
-};
-
-
-
+}
 
 module.exports = {
   createVoucher,
@@ -312,4 +325,5 @@ module.exports = {
   exportProduct,
   editProduct,
   confirmOrder,
+  cancelOrder,
 };

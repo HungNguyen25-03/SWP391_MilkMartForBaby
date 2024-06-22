@@ -1,9 +1,8 @@
 const express = require("express");
 const pageRouters = express.Router();
 
-
-// API Pages 
+// API Pages
 const { pagesController } = require("../controller/pages.controller");
-pageRouters.get("/Pagination", pagesController);
+pageRouters.get("/pagination", pagesController);
 
 module.exports = pageRouters;
