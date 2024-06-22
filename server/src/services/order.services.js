@@ -6,7 +6,7 @@ async function getAllOrder() {
     const result = await pool.request().query(`
     SELECT 
      Orders.order_id,
-     FORMAT(Orders.order_date, 'yyyy-MM-dd HH:mm:ss') AS order_date,
+     FORMAT(Orders.order_date, 'dd-MM-yyyy') AS order_date,
      Users.username,
      Orders.status,
      Orders.total_amount
