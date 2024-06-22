@@ -281,6 +281,7 @@ async function editProduct(product_id, changeQuantity) {
 async function confirmOrder(order_id) {
   try {
     const pool = await poolPromise;
+
     const result = await pool.request().input("order_id", sql.Int, order_id)
 
       .query(`

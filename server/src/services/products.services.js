@@ -7,7 +7,11 @@ async function getAllProduct() {
     const product = result.recordset;
 
     if (product) {
-      return { success: true, product };
+      const inStockProducts = product.filter((product) => product.stock > 0);
+      const outOfStockProducts = product.filter(
+        (product) => product.stock <= 0
+      );
+      return { success: true, inStockProducts, outOfStockProducts };
     } else {
       return { success: false, message: "Fail to show all Products" };
     }
@@ -61,8 +65,7 @@ async function searchProductByName(searchTerm) {
     console.error("Error searching for products", error);
     throw error;
   }
-
-};
+}
 
 async function filterProduct(ageRange, brand, country) {
   try {
@@ -76,26 +79,30 @@ async function filterProduct(ageRange, brand, country) {
         ageRange = [ageRange];
       }
 
-
-      request.input('ageRange', sql.NVarChar, ageRange.join(','));
-      filters.push("age_range IN (SELECT value FROM STRING_SPLIT(@ageRange,','))");
+      request.input("ageRange", sql.NVarChar, ageRange.join(","));
+      filters.push(
+        "age_range IN (SELECT value FROM STRING_SPLIT(@ageRange,','))"
+      );
     }
 
     if (brand) {
       if (!Array.isArray(brand)) {
         brand = [brand];
       }
-      request.input('brand', sql.NVarChar, brand.join(','));
-      filters.push("brand_name IN (SELECT value FROM STRING_SPLIT (@brand,','))");
+      request.input("brand", sql.NVarChar, brand.join(","));
+      filters.push(
+        "brand_name IN (SELECT value FROM STRING_SPLIT (@brand,','))"
+      );
     }
 
     if (country) {
       if (!Array.isArray(country)) {
         country = [country];
       }
-      request.input('country', sql.NVarChar, country.join(','));
-      filters.push("country_name IN (SELECT value FROM STRING_SPLIT (@country, ','))");
-
+      request.input("country", sql.NVarChar, country.join(","));
+      filters.push(
+        "country_name IN (SELECT value FROM STRING_SPLIT (@country, ','))"
+      );
     }
 
     let query = `

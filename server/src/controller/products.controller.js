@@ -1,13 +1,19 @@
-const { getAllProduct, getProductById, searchProductByName, filterProduct } = require("../services/products.services");
-
-
+const {
+  getAllProduct,
+  getProductById,
+  searchProductByName,
+  filterProduct,
+} = require("../services/products.services");
 
 //Get All Product Controller
 const getProduct = async (req, res) => {
   try {
     const result = await getAllProduct();
     if (result.success) {
-      res.json(result.product);
+      res.json({
+        inStockProducts: result.inStockProducts,
+        outOfStockProducts: result.outOfStockProducts,
+      });
     } else {
       res.json({ message: result.message });
     }
@@ -25,28 +31,22 @@ const getProById = async (req, res) => {
     const result = await getProductById(product_id);
     if (result.success) {
       res.json(result.product);
-
     } else {
       res.json({ message: result.message });
     }
-
   } catch (error) {
     console.log("Fail to get Product by ID");
   }
 };
 
-
 // Search Product By Name
-
-
 
 const searchByName = async (req, res) => {
   const searchTerm = req.query.searchTerm;
   if (!searchTerm) {
-    return res.status(400).json({ message: 'Search term is required' });
+    return res.status(400).json({ message: "Search term is required" });
   }
   console.log(searchTerm);
-
 
   try {
     const result = await searchProductByName(searchTerm);
@@ -56,33 +56,27 @@ const searchByName = async (req, res) => {
       res.status(404).json({ message: result.message });
     }
   } catch (error) {
-    console.log('Fail to search products', error);
-    res.status(500).json({ message: 'Fail to search products' });
+    console.log("Fail to search products", error);
+    res.status(500).json({ message: "Fail to search products" });
   }
 };
-
-
 
 //Filtering Product
 
 const filtering = async (req, res) => {
-
-
   try {
     const { ageRange, brand, country } = req.body;
     const result = await filterProduct(ageRange, brand, country);
     console.log(result);
     res.json(result);
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Internal Server Error' });
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
-
 };
-
 
 module.exports = {
   getProduct,
   getProById,
   searchByName,
-  filtering
+  filtering,
 };
