@@ -22,6 +22,7 @@ export default function Voucher() {
     axios
       .get(`${MainAPI}/user/show-all-voucher`)
       .then((res) => {
+        console.log(res.data.vouchers.vouchers);
         setVoucherList(res.data.vouchers.vouchers);
       })
       .catch((err) => {
@@ -63,6 +64,7 @@ export default function Voucher() {
     <div className="voucher-container">
       <ToastContainer autoClose={2000} />
       <h2 style={{ marginLeft: "20px", paddingTop: "20px" }}>Nhận voucher</h2>
+
       <Slide
         slidesToScroll={1}
         slidesToShow={3}

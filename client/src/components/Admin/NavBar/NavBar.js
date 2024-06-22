@@ -10,7 +10,11 @@ export default function NavBar() {
 
   const handleLogout = () => {
     axios
-      .post(`${MainAPI}/user/logout`, token)
+      .post(`${MainAPI}/user/logout`, token, {
+        headers: {
+          "x-access-token": token,
+        },
+      })
       .then((res) => {
         console.log(res.data);
         localStorage.removeItem("accessToken");

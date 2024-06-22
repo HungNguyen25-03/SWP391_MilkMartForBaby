@@ -8,6 +8,8 @@ import { MainAPI } from "../../components/API";
 import AuthContext from "../../context/AuthProvider";
 import { ToastContainer, toast } from "react-toastify";
 import useOrder from "../../hooks/useOrder";
+import { MdLogin } from "react-icons/md";
+import { RiLogoutBoxLine } from "react-icons/ri";
 
 export default function HeaderPage() {
   const [searchValue, setSearchValue] = useState("");
@@ -92,11 +94,23 @@ export default function HeaderPage() {
             {token ? (
               <div className="acc" onClick={handleLogout}>
                 <div className="acc_icon">
-                  <FaUser />
+                  <RiLogoutBoxLine />
                 </div>
                 <div className="detail">Đăng xuất</div>
               </div>
-            ) : null}
+            ) : (
+              <div
+                className="acc"
+                onClick={() => {
+                  nav("/login");
+                }}
+              >
+                <div className="acc_icon">
+                  <MdLogin />
+                </div>
+                <div className="detail">Đăng Nhập</div>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -25,6 +25,8 @@ export default function SearchPage() {
       });
   }, [searchTerm]);
 
+  console.log(searchResult);
+
   return (
     <div>
       <HeaderPage />

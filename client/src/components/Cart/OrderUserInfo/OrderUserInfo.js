@@ -27,7 +27,6 @@ export default function OrderUserInfo() {
   const { orderInfomation, setOrderInfomation } = useOrder();
   const { cartList } = useContext(CartContext);
   const { auth } = useAuth();
-  console.log(cartList);
 
   const nav = useNavigate();
 
@@ -60,6 +59,13 @@ export default function OrderUserInfo() {
 
     const totalTemp = temporaryTemp - discountTemp;
 
+    setOrderItem({
+      ...orderItem,
+      total_amount: totalTemp,
+      user_id: auth.user.user_id,
+      orderItems: cartList,
+    });
+
     return { temporaryTemp, discountTemp, totalTemp };
   };
 
@@ -75,22 +81,10 @@ export default function OrderUserInfo() {
       temporary: temporary,
       total: total,
     });
-
-    setOrderItem({
-      ...orderItem,
-      total_amount: total,
-      user_id: auth.user.user_id,
-      orderItems: cartList,
-    });
-
-    console.log(temporaryTemp);
-    console.log(orderInfomation.discount);
-    console.log(discountTemp);
-    console.log(totalTemp);
   }, [cartList, orderInfomation.discount]);
 
+  console.log(orderItem);
   const handleClick = () => {
-    console.log(orderItem);
     axios
       .post(`${MainAPI}/user/ready-to-checkout`, orderItem, {
         headers: {
