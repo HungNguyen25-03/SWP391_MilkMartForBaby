@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
 import "./Header.scss";
@@ -13,8 +13,11 @@ export default function HeaderPage() {
   const [searchValue, setSearchValue] = useState("");
   const { setAuth } = useContext(AuthContext);
   const { setOrderInfomation } = useOrder();
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const token = JSON.parse(localStorage.getItem("accessToken"));
   const nav = useNavigate();
+  const myParam = searchParams.get("search_query");
 
   const handleLogout = () => {
     axios
@@ -38,15 +41,11 @@ export default function HeaderPage() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    axios
-      .get(`${MainAPI}/product/search`, { searchTerm: searchValue })
-      .then((res) => {
-        console.log(res.data);
-        // nav("/search", { searchResult: res.data });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    setSearchParams({ search_query: searchValue });
+    nav({
+      pathname: "/search",
+      search: `?search_query=${searchValue}`,
+    });
   };
 
   return (

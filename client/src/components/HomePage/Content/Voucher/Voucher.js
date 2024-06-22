@@ -55,7 +55,7 @@ export default function Voucher() {
       })
       .catch((err) => {
         console.log(err);
-        toast.error(err.response.data);
+        toast.error(err.response.data.errors[0].message);
       });
   };
 

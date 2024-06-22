@@ -1,6 +1,5 @@
 const { poolPromise, sql } = require("./database.services");
 
-
 async function getAllProduct() {
   try {
     const pool = await poolPromise;
@@ -34,17 +33,15 @@ async function getProductById(product_id) {
   }
 }
 
-
-
-
 async function searchProductByName(searchTerm) {
   try {
     const pool = await poolPromise;
 
     const result = await pool
       .request()
-      .input('searchTerm', sql.VarChar, `%${searchTerm}%`)
-      .query(`
+
+      .input("searchTerm", sql.VarChar, `%${searchTerm}%`).query(`
+
       SELECT 
        *
 
@@ -58,19 +55,14 @@ async function searchProductByName(searchTerm) {
     if (products.length > 0) {
       return { success: true, products };
     } else {
-      return { success: false, message: 'No products found' };
+      return { success: false, message: "No products found" };
     }
   } catch (error) {
-    console.error('Error searching for products', error);
+    console.error("Error searching for products", error);
     throw error;
   }
+
 };
-
-
-
-
-
-
 
 async function filterProduct(ageRange, brand, country) {
   try {
@@ -120,10 +112,8 @@ async function filterProduct(ageRange, brand, country) {
   `;
 
     if (filters.length > 0) {
-      query += ' WHERE ' + filters.join(' AND ');
+      query += " WHERE " + filters.join(" AND ");
     }
-
-
 
     const result = await request.query(query);
     const products = result.recordset;
@@ -132,14 +122,10 @@ async function filterProduct(ageRange, brand, country) {
       ? { success: true, products }
       : { success: false, message: "No products found" };
   } catch (error) {
-    console.error('Error filtering products', error);
+    console.error("Error filtering products", error);
     throw error;
   }
 }
-
-
-
-
 
 module.exports = {
   getAllProduct,

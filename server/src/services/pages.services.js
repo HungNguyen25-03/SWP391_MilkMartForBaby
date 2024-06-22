@@ -40,7 +40,9 @@ async function getPaged(page, pageSize) {
             currentPage: page,
         };
     } catch (error) {
-        console.error('Error fetching paginated products:', error);
+
+   
+
         throw error;
     }
 };
