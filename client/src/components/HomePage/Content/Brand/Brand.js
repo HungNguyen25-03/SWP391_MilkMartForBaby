@@ -53,7 +53,7 @@ export default function Brand({ initialSlide = 0 }) {
       <div className="brand_container">
         <Slider ref={slider} {...settings}>
           {groupedBrands.map((group, index) => (
-            <div key={index} className="slide">
+            <div key={index} className="slide-brand">
               <div className="brand_row">
                 {group.slice(0, 4).map((brand) => (
                   <Link to={brand.title} className="brand_detail" key={brand.id}>
