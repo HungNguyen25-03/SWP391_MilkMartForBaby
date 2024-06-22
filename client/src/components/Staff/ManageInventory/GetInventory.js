@@ -22,6 +22,7 @@ export default function GetInventory() {
                 console.error("Error fetching data product:", error);
             }
         }
+        fetchData();
     }, [])
 
     return (
