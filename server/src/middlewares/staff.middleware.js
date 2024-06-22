@@ -1,3 +1,5 @@
+const { poolPromise, sql } = require("../services/database.services");
+
 const createVoucherMiddleware = async (req, res, next) => {
   try {
     const errors = [];
@@ -102,14 +104,74 @@ const editVoucherMiddleware = async (req, res, next) => {
 
     next();
   } catch (error) {
-    console.error("Error in editVoucherMiddleware:", error);  
+    console.error("Error in editVoucherMiddleware:", error);
     next(error);
   }
 };
 
+const confirmOrderMiddleware = async (req, res, next) => {
+  try {
+    const errors = [];
+    const { order_id } = req.body;
 
+    if (!order_id) {
+      errors.push({
+        name: "order_id",
+        success: false,
+        message: "Order ID is required",
+        status: 400,
+      });
+    }
+    const pool = await poolPromise;
+    const statusCheckResult = await pool
+      .request()
+      .input("order_id", sql.Int, order_id).query(`
+        SELECT status FROM Orders WHERE order_id = @order_id;
+      `);
+
+    if (
+      statusCheckResult.recordset.length > 0 &&
+      statusCheckResult.recordset[0].status === "confirmed"
+    ) {
+      errors.push({
+        name: "order_id",
+        success: false,
+        message: "Order is already confirmed",
+        status: 400,
+      });
+    }
+
+    const stockCheckResult = await pool
+      .request()
+      .input("order_id", sql.Int, order_id)
+      .query(
+        `SELECT COUNT(*) as count FROM Products p JOIN Order_Items oi 
+        ON p.product_id = oi.product_id JOIN Orders o ON oi.order_id = o.order_id
+        WHERE p.stock <= 0 AND o.order_id = @order_id;`
+      );
+
+    if (stockCheckResult.recordset[0].count > 0) {
+      errors.push({
+        name: "order_id",
+        success: false,
+        message:
+          "Order cannot be confirmed, one or more products are out of stock",
+        status: 400,
+      });
+    }
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
+    }
+
+    next();
+  } catch (error) {
+    console.error("Error in confirmOrderMiddleware:", error);
+    next(error);
+  }
+};
 
 module.exports = {
   createVoucherMiddleware,
   editVoucherMiddleware,
+  confirmOrderMiddleware,
 };

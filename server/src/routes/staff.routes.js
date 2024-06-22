@@ -7,6 +7,7 @@ const {
 const {
   createVoucherMiddleware,
   editVoucherMiddleware,
+  confirmOrderMiddleware,
 } = require("../middlewares/staff.middleware");
 const { authenticateToken } = require("../middlewares/authJwt.middlewares");
 
@@ -56,6 +57,6 @@ staffRouters.post("/edit", editProductController);
 
 // Confirm Order
 const { confirmOrderController } = require("../controller/staff.controller");
-staffRouters.post("/confirm", confirmOrderController);
+staffRouters.post("/confirm", confirmOrderMiddleware, confirmOrderController);
 
 module.exports = staffRouters;
