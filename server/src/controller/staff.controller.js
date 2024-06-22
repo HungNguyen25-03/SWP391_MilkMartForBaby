@@ -160,19 +160,20 @@ const editProductController = async (req, res) => {
 };
 
 const confirmOrderController = async (req, res) => {
-  const order_id = req.body.order_id;
+  const { order_id } = req.body;
+
+
+  if (!Number.isInteger(order_id)) {
+    return res.status(400).json({ success: false, message: 'Invalid order_id. It must be an integer.' });
+  }
   try {
     const result = await confirmOrder(order_id);
-    if (result.success) {
-      res.json(result);
-    } else {
-      res.status(400).json({ message: result.message });
-    }
+    res.json(result);
   } catch (error) {
-    console.log("Fail to confirm order", error);
-    res.status(500).json({ message: "Fail to confirm order" });
+    res.status(500).json({ success: false, message: 'An error occurred', error: error.message });
   }
 };
+
 
 module.exports = {
   createVoucherController,
