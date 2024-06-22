@@ -79,6 +79,9 @@ async function getAllProduct() {
     `);
     const product = result.recordset;
 
+
+
+
     if (product) {
       return { success: true, product };
     } else {
@@ -280,10 +283,11 @@ async function confirmOrder(order_id) {
   try {
     const pool = await poolPromise;
     const result = await pool.request().input("order_id", sql.Int, order_id)
-      .query(`
-    UPDATE Orders SET status = 'confirmed' WHERE order_id = @order_id;
-  `);
 
+      .query(`
+    UPDATE Orders SET status = 'Confirmed' WHERE order_id = @order_id;
+  `);
+    console.log(result);
     if (result.rowsAffected[0] > 0) {
       return { success: true, message: "Order confirmed successfully" };
     } else {
@@ -292,7 +296,7 @@ async function confirmOrder(order_id) {
   } catch (error) {
     throw error;
   }
-}
+};
 
 module.exports = {
   createVoucher,
