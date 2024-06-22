@@ -8,7 +8,19 @@ export default function GetInventory() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const res = await fetch(`${MainAPI}/staff/order`)
+            try {
+                const res = await fetch(`${MainAPI}/staff/product`, {
+                    method: "GET"
+                })
+
+                if (!res.ok) throw new Error("Failed to fetch data get product");
+
+                const data = await res.json();
+                setInventory(data);
+
+            } catch (error) {
+                console.error("Error fetching data product:", error);
+            }
         }
     }, [])
 
