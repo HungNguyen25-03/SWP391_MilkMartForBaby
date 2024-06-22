@@ -72,7 +72,7 @@ const getVoucherController = async (req, res) => {
     console.log(result);
 
     if (result.success) {
-      return res.status(200).json({ user: result.vouchers });
+      return res.status(200).json(result.vouchers);
     } else {
       return res.status(404).json({ message: result.message });
     }

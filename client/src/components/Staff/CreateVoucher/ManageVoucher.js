@@ -4,24 +4,20 @@ import './Voucher.scss'
 export default function ManageVoucher({ vouchers }) {
     return (
         < >
-            <table className='voucher'>
+            <table className='table-voucher'>
                 <thead>
                     <tr>
-                        <th>User ID</th>
-                        <th>User Name</th>
-                        <th>Role</th>
-                        <th>Action</th>
+                        <th>Voucher ID</th>
+                        <th>Code</th>
+                        <th>Discount</th>
                     </tr>
                 </thead>
                 <tbody>
                     {vouchers.map((voucher, index) => (
                         <tr key={index}>
-                            <td>{voucher.voucherID}</td>
-                            <td>{voucher.name}</td>
-                            <td>{voucher.discount}</td>
-                            <td>
-                                <button className="action-btn">▪▪▪</button>
-                            </td>
+                            <td>{voucher.voucher_id}</td>
+                            <td>{voucher.code}</td>
+                            <td>{voucher.discount}%</td>
                         </tr>
                     ))}
                 </tbody>

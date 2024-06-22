@@ -32,6 +32,7 @@ import GetInventory from '../ManageInventory/GetInventory'; // Corrected the imp
 import GetVoucher from '../CreateVoucher/GetVoucher';
 import GetTrackOrder from '../TrackOrder/GetTrackOrder';
 import GetManageUser from '../ManageUser/GetManageUser';
+import GetManagePosts from '../ManagePosts/GetManagePosts';
 
 export default function StaffManagement() {
     return (
@@ -46,7 +47,8 @@ export default function StaffManagement() {
                         <Route path='/manage_inventory' element={<GetInventory />} />
                         <Route path='/manage_users' element={<GetManageUser />} />
                         <Route path='/create_voucher_codes' element={<GetVoucher />} />
-                        <Route path='/track_orders' element={<GetTrackOrder />} />
+                        {/* <Route path='/track_orders' element={<GetTrackOrder />} />
+                        <Route path='/manage_posts' element={<GetManagePosts />} /> */}
                     </Routes>
                 </div>
             </div>
