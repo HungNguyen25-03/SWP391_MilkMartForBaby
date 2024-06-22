@@ -1,112 +1,6 @@
-// .register_container {
-//   height: 100%;
-//   width: 100%;
-//   text-align: center;
-//   display: flex;
-//   text-align: center;
-//   margin: 0;
-//   padding: 0;
-//   // background: url(baby.png) no-repeat;
-//   background-size: cover;
-
-//   .column_register {
-//     // width: 26%;
-//     // height: 70%;
-//     border: 1px solid rgba(255, 3, 3, 0.2);
-//     border-radius: 10px;
-//     margin: 3.9rem auto;
-//     backdrop-filter: blur(20px);
-//     background: transparent;
-//     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-
-//     [type="submit"] {
-//       border-radius: 20px;
-//       background-color: palevioletred;
-//       padding: 15px 50px;
-//       color: antiquewhite;
-//       margin: 20px 0;
-//       font-size: 15px;
-//       cursor: pointer;
-//     }
-//   }
-
-//   .register_info {
-//     display: flex;
-//     flex-direction: column;
-//     margin: 20px 0px;
-
-//     .register_detail {
-//       margin: 15px 10px;
-
-//       input {
-//         padding: 8px 160px 5px 4px;
-//         margin-left: 10px;
-//         border: none;
-//         border: 2px solid rgba(184, 32, 32, 0.2);
-//         border-radius: 10px;
-//         outline: none;
-//       }
-//     }
-//   }
-// }
-
-// @media only screen and (min-width: 1535px) {
-//   .register_container {
-//     text-align: center;
-//     display: flex;
-//     text-align: center;
-//     margin: 0;
-//     padding: 0;
-//     background: url(baby.png) no-repeat;
-//     background-size: cover;
-//   }
-
-//   .column_register {
-//     width: 26%;
-//     height: 10%;
-//     border: 1px solid rgba(255, 3, 3, 0.2);
-//     border-radius: 10px;
-//     margin: 8.3% auto;
-//     backdrop-filter: blur(20px);
-//     background: transparent;
-//     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-
-//     [type="submit"] {
-//       border-radius: 20px;
-//       background-color: palevioletred;
-//       padding: 15px 50px;
-//       color: antiquewhite;
-//       margin: 20px 0;
-//       font-size: 15px;
-//       cursor: pointer;
-//     }
-//   }
-
-//   .register_info {
-//     display: flex;
-//     flex-direction: column;
-//     margin: 20px 0px;
-
-//     .register_detail {
-//       margin: 15px 0;
-
-//       input {
-//         padding: 8px 160px 5px 4px;
-//         margin-left: 10px;
-//         border: none;
-//         border: 2px solid rgba(184, 32, 32, 0.2);
-//         border-radius: 10px;
-//         outline: none;
-//       }
-//     }
-//   }
-// }
-
-
 body, html {
   margin: 0;
   padding: 0;
-  // height: 100%;
   font-family: Arial, sans-serif;
 }
 
@@ -120,7 +14,7 @@ body, html {
   box-sizing: border-box;
 }
 
-.login-form {
+.register-form {
   background: #fff;
   padding: 40px 30px;
   border-radius: 10px;
@@ -130,17 +24,11 @@ body, html {
   text-align: center;
 }
 
-.login-form h2 {
-  margin-bottom: 20px;
-  color: #333;
-  font-size: 24px;
-}
-
-.login-info {
+.register_info {
   margin-bottom: 20px;
 }
 
-.login-detail {
+.register_detail {
   display: flex;
   align-items: center;
   margin-bottom: 15px;
@@ -151,7 +39,7 @@ body, html {
   transition: all 0.3s ease;
 }
 
-.login-detail input {
+.register_detail input {
   border: none;
   outline: none;
   flex: 1;
@@ -160,7 +48,7 @@ body, html {
   background: none;
 }
 
-.login-detail svg {
+.register_detail svg {
   margin-right: 10px;
   color: #888;
 }
@@ -170,7 +58,7 @@ body, html {
   color: #888;
 }
 
-.login-detail:hover {
+.register_detail:hover {
   border-color: #6a11cb;
 }
 
@@ -191,7 +79,7 @@ body, html {
   text-decoration: underline;
 }
 
-.login-btn {
+.register-btn {
   background: linear-gradient(135deg, #6a11cb, #2575fc);
   border: none;
   color: #fff;
@@ -202,20 +90,16 @@ body, html {
   transition: background 0.3s;
 }
 
-.login-btn:hover {
+.register-btn:hover {
   background: linear-gradient(135deg, #2575fc, #6a11cb);
 }
 
 @media (max-width: 768px) {
-  .login-form {
+  .register-form {
     padding: 30px 20px;
   }
 
-  .login-form h2 {
-    font-size: 20px;
-  }
-
-  .login-btn {
+  .register-btn {
     font-size: 14px;
     padding: 8px 16px;
   }
@@ -235,15 +119,11 @@ body, html {
     padding: 10px;
   }
 
-  .login-form {
+  .register-form {
     padding: 20px 10px;
   }
 
-  .login-form h2 {
-    font-size: 18px;
-  }
-
-  .login-btn {
+  .register-btn {
     font-size: 12px;
     padding: 6px 12px;
   }
