@@ -75,6 +75,7 @@ async function filterProduct(ageRange, brand, country) {
       if (!Array.isArray(ageRange)) {
         ageRange = [ageRange];
       }
+
       request.input('ageRange', sql.NVarChar, ageRange.join(','));
       filters.push("age_range IN (SELECT value FROM STRING_SPLIT(@ageRange,','))");
     }
