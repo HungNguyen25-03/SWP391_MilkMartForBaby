@@ -48,12 +48,13 @@ CREATE TABLE Products (
     product_name NVARCHAR(100) NOT NULL,
     description TEXT,
     price DECIMAL(10, 2) NOT NULL CHECK (price >= 0),
-    stock INT NOT NULL CHECK (stock >= 0),
+    stock INT NOT NULL,
     brand_id INT REFERENCES Brands(brand_id),
     country_id CHAR(3) REFERENCES Originated_Country(country_id),
     age_range NVARCHAR(255) REFERENCES Age_Range(age_range),
 );
-
+ALTER TABLE Products
+DROP CONSTRAINT CK__Products__stock__5EBF139D;
 CREATE TABLE Reviews (
     review_id INT IDENTITY(1,1) PRIMARY KEY,
     user_id INT NOT NULL REFERENCES Users(user_id),
@@ -67,7 +68,7 @@ CREATE TABLE Orders (
     order_id INT IDENTITY(1,1) PRIMARY KEY,
     user_id INT NOT NULL REFERENCES Users(user_id),
     order_date DATETIME DEFAULT GETDATE(),
-    status NVARCHAR(10) CHECK (status IN ('pending', 'paid', 'confirmed', 'completed', 'cancelled')),
+    status NVARCHAR(10),
     total_amount DECIMAL(10, 2) NOT NULL CHECK (total_amount >= 0)
 );
 
@@ -136,7 +137,6 @@ INSERT INTO Users (username, password, email, role_id) VALUES
 ('customer1', 'password123', 'customer1@example.com', 'customer'),
 ('customer2', 'password123', 'customer2@example.com', 'customer'),
 ('staff1', '123456789', 'staff1@example.com', 'staff');
-
 -- Insert into Customer
 INSERT INTO Customer (customer_id, loyalty_points) VALUES
 (2, 100),
@@ -184,15 +184,21 @@ INSERT INTO Products (product_name, description, price, stock, brand_id, country
 
 -- Insert into Orders
 INSERT INTO Orders (user_id, order_date, status, total_amount) VALUES
+(5, '2024-06-18', 'Pending', 1200000),
 (2, '2024-06-01', 'Completed', 55.98),
 (3, '2024-06-05', 'Pending', 29.99);
-
+SELECT * FROM Orders
+SELECT p.product_name, oi.quantity, oi.price 
+      FROM Orders o JOIN Order_Items oi ON o.order_id = oi.order_id JOIN Products p 
+      ON  oi.product_id = p.product_id WHERE o.order_id = 1
 -- Insert into Order_Items
 INSERT INTO Order_Items (order_id, product_id, quantity, price) VALUES
+(3, 2, 2, 400000),
+(3, 2, 2, 800000),
 (1, 1, 1, 25.99),
 (1, 2, 1, 19.99),
 (2, 3, 1, 29.99);
-
+SELECT * FROM Order_Items
 -- Insert into Vouchers
 INSERT INTO Vouchers (code, discount, expiration_date) VALUES
 ('DISCOUNT10', 10.00, '2024-12-31'),
@@ -228,3 +234,4 @@ INSERT INTO Payments (order_id, payment_method_id, transaction_date, amount, tra
 (2, 3, '2024-06-05', 29.99, 'Failed', 'Bank transfer failed, insufficient funds'),
 (1, 4, '2024-06-01', 55.98, 'Completed', 'Payment will be collected upon delivery'),
 (2, 5, '2024-06-05', 29.99, 'Pending', 'Gift card code: SUMMERGIFT');
+
