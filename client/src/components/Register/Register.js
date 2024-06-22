@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import "./Register.scss";
-import { FaUser, FaLock } from "react-icons/fa";
+import { FaUser, FaLock, FaEyeSlash } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { MainAPI } from "../API";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { IoEyeSharp } from "react-icons/io5";
 
 export default function Register() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [ShowPasswordConfirm, setShowPasswordConfirm] = useState(false);
   const nav = useNavigate();
   const [user, setUser] = useState({
     username: "",
@@ -43,11 +46,19 @@ export default function Register() {
     });
   };
 
+  const handleShowPass = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleShowPassConfirm = () => {
+    setShowPasswordConfirm(!ShowPasswordConfirm);
+  };
+
   return (
     <>
       <div className="register_container d-flex justify-content-center align-items-center">
         <ToastContainer autoClose={2000} />
-        <div className="column_register">
+        <div className="register-form">
           <h2 className="mt-2">Sign up</h2>
           <form onSubmit={handleSubmit}>
             <div className="register_info">
@@ -86,12 +97,15 @@ export default function Register() {
               <div className="register_detail">
                 <FaLock />
                 <input
-                  type="password"
+                  type={showPassword === false ? "password" : "text"}
                   value={user.password}
                   placeholder="Password"
                   name="password"
                   onChange={handleChange}
                 />
+                <span className="eyes" onClick={handleShowPass}>
+                  {showPassword === true ? <FaEyeSlash /> : <IoEyeSharp />}
+                </span>
               </div>
               {specificError("password") && (
                 <p className="text-danger fw-bold m-0">
@@ -102,12 +116,15 @@ export default function Register() {
               <div className="register_detail">
                 <FaLock />
                 <input
-                  type="password"
+                  type={ShowPasswordConfirm === false ? "password" : "text"}
                   value={user.confirmPassword}
                   placeholder="Confirm password"
                   name="confirmPassword"
                   onChange={handleChange}
                 />
+                <span className="eyes" onClick={handleShowPassConfirm}>
+                  {ShowPasswordConfirm === true ? <FaEyeSlash /> : <IoEyeSharp />}
+                </span>
               </div>
               {specificError("confirm password") && (
                 <p className="text-danger fw-bold m-0">
@@ -121,7 +138,7 @@ export default function Register() {
               </div>
             </div>
 
-            <input type="submit" value="Sign up" />
+            <input type="submit" value="Sign up" className="register-btn" />
           </form>
         </div>
       </div>
