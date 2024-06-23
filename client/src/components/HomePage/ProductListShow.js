@@ -63,10 +63,6 @@ export default function ProductListShow({ productList = [] }) {
     filterItems();
   }, [countryFilters, ageFilters]);
 
-  console.log(filteredItems);
-  console.log(ageFilters);
-  console.log(countryFilters);
-
   return (
     <div className="fillter_container">
       <ToastContainer />
