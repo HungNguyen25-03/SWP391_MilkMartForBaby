@@ -5,9 +5,9 @@ export default function ManageInventory({ inventory }) {
 
 
     return (
-        <>
-            <table className='table-inventory'>
-                <thead>
+        <div className='inventory'>
+            <div className='inventory-th'>
+                <table className='table-inventory-th'>
                     <tr>
                         <th>Product ID</th>
                         <th>Product Name</th>
@@ -15,11 +15,14 @@ export default function ManageInventory({ inventory }) {
                         <th>Stock</th>
                         <th>Action</th>
                     </tr>
-                </thead>
-                <tbody>
+                </table>
+            </div>
+
+            <div className='inventory-tb'>
+                <table className='table-inventory-tb'>
                     {inventory.map((invent, index) => (
                         <tr key={index}>
-                            <td>{invent.product_id}</td>
+                            <td style={{ padding: "10px" }}>{invent.product_id}</td>
                             <td>{invent.product_name}</td>
                             <td>{invent.price} đ</td>
                             <td>{invent.stock}</td>
@@ -28,8 +31,8 @@ export default function ManageInventory({ inventory }) {
                             </td>
                         </tr>
                     ))}
-                </tbody>
-            </table>
-        </>
+                </table>
+            </div>
+        </div>
     )
 }

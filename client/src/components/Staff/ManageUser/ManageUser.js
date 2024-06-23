@@ -3,16 +3,21 @@ import './ManageUser.scss'
 
 export default function ManageUser({ users }) {
     return (
-        < >
-            <table className='table_manageuser'>
-                <thead>
-                    <tr>
-                        <th>User ID</th>
-                        <th>User Name</th>
-                        <th>Role</th>
-                    </tr>
-                </thead>
-                <tbody>
+        <div className='user'>
+            <div className='user-th'>
+                <table className='table-user-th'>
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>User Name</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
+            <div className='user-tb'>
+                <table className='table-user-tb'>
                     {users.map((user, index) => (
                         <tr key={index}>
                             <td>{user.user_id}</td>
@@ -20,8 +25,8 @@ export default function ManageUser({ users }) {
                             <td>{user.role_id}</td>
                         </tr>
                     ))}
-                </tbody>
-            </table>
-        </>
+                </table>
+            </div>
+        </div>
     )
 }

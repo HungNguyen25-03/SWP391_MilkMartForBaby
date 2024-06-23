@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FaWindowClose } from "react-icons/fa";
 import { IoMdCheckbox } from "react-icons/io";
 import './ConfirmOrder.scss';
@@ -29,9 +29,9 @@ export default function ConfirmOrder({ dataConfirm }) {
     }
 
     return (
-        <>
-            <table className='table_confirm'>
-                <thead>
+        <div className='confirm'>
+            <div className='confirm-th'>
+                <table className='table-confirm-th'>
                     <tr>
                         <th>Order ID</th>
                         <th>Date</th>
@@ -40,8 +40,11 @@ export default function ConfirmOrder({ dataConfirm }) {
                         <th>Amount</th>
                         <th>Action</th>
                     </tr>
-                </thead>
-                <tbody>
+                </table>
+            </div>
+
+            <div className='confirm-tb'>
+                <table className='table-confirm-tb'>
                     {dataConfirm.map((confirm, index) => (
                         <tr key={index}>
                             <td>{confirm.order_id}</td>
@@ -62,8 +65,8 @@ export default function ConfirmOrder({ dataConfirm }) {
                             }
                         </tr>
                     ))}
-                </tbody>
-            </table>
-        </>
+                </table>
+            </div>
+        </div >
     );
 }

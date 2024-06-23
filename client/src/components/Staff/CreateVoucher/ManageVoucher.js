@@ -3,16 +3,19 @@ import './Voucher.scss'
 
 export default function ManageVoucher({ vouchers }) {
     return (
-        < >
-            <table className='table-voucher'>
-                <thead>
+        <div className='voucher'>
+            <div className='voucher-th'>
+                <table className='table-voucher-th'>
                     <tr>
                         <th>Voucher ID</th>
                         <th>Code</th>
                         <th>Discount</th>
                     </tr>
-                </thead>
-                <tbody>
+                </table>
+            </div>
+
+            <div className='voucher-tb'>
+                <table className='table-voucher-tb'>
                     {vouchers.map((voucher, index) => (
                         <tr key={index}>
                             <td>{voucher.voucher_id}</td>
@@ -20,8 +23,8 @@ export default function ManageVoucher({ vouchers }) {
                             <td>{voucher.discount}%</td>
                         </tr>
                     ))}
-                </tbody>
-            </table>
-        </>
+                </table>
+            </div>
+        </div >
     )
 }

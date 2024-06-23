@@ -1,95 +1,97 @@
-.table_confirm {
+.confirm {
     width: 80%;
-    border-collapse: collapse;
-    font-family: Arial, sans-serif;
-    margin-left: 10%;
-    margin-top: 150px;
-    margin-bottom: 100px;
-    box-shadow: 1px 1px 10px 5px rgba(199, 194, 194, 0.989); 
+    margin: 100px auto 0; 
+    box-shadow: 1px 1px 10px 5px rgba(180, 177, 177, 0.989); 
+    background-color: #fff; 
 
-
-    thead {
+    .confirm-th {
+        height: 40px;
         background-color: #f8f9fa;
-        th {
-            padding: 6px; 
-            text-align: center;
-            font-weight: bold;
-            border-bottom: 1px solid #dee2e6;
-            font-size: 17px; 
+        text-align: center;
+        font-weight: bold;
+        font-size: 17px;
+        line-height: 40px; 
+        border-bottom: 1px solid #ddd; 
+
+        .table-confirm-th {
+            width: 100%;
+            padding: 6px;
+            table-layout: fixed;
         }
     }
 
-    tbody {
-        text-align: center;
-        
-        tr:nth-of-type(even) {
-                background-color: #f2f2f2;
-        }
+    .confirm-tb {
+        height: 475px;
+        overflow: auto;
 
-        tr:hover {
-                background-color: #e9ecef;
-        }
+        .table-confirm-tb {
+            width: 100%;
+            padding: 10px;
+            font-size: 15px;
+            table-layout: fixed; 
+            tr:nth-child(even) {
+                background-color: #dcdee3;
+            }
 
-        tr {
-        td {
-            padding: 7px; 
-            border-bottom: 1px solid #dee2e6;
-            font-size: 17px; 
-        }
-            
-        .status-cancel {
-            color: #dc3545;
-        }
+            td {
+                padding: 10px 10px 10px 30px;
+                text-align: center;
+            }
 
-        .status-complete {
-            color: #28a745;
+            .status-cancel {
+                color: #dc3545;
+            }
+    
+            .status-complete {
+                color: #28a745;
+            }
+    
+            .status-pending {
+                color: #ffc107;
+            }
+    
+            .status-delevery {
+                color: #a304ff;
+            }
+    
+            .status-confirm {
+                color: #04f0fc;
+            }
+    
+            .status-dot {
+                display: inline-block;
+                width: 10px;
+                height: 10px; 
+                border-radius: 50%;
+                margin-right: 5px;
+            }
+                
+            .status-cancel .status-dot {
+                background-color: #dc3545;
+            }
+    
+            .status-complete .status-dot {
+                background-color: #28a745;
+            }
+    
+            .status-pending .status-dot {
+                background-color: #ffc107;
+            }
+    
+            .status-delevery .status-dot {
+                background-color: #a304ff;
+            }
+    
+            .status-confirm .status-dot {
+                background-color: #04f0fc;
+            }
         }
-
-        .status-pending {
-            color: #ffc107;
-        }
-
-        .status-delevery {
-            color: #a304ff;
-        }
-
-        .status-confirm {
-            color: #04f0fc;
-        }
-
-        .status-dot {
-            display: inline-block;
-            width: 10px;
-            height: 10px; 
-            border-radius: 50%;
-            margin-right: 5px;
-        }
-            
-        .status-cancel .status-dot {
-            background-color: #dc3545;
-        }
-
-        .status-complete .status-dot {
-            background-color: #28a745;
-        }
-
-        .status-pending .status-dot {
-            background-color: #ffc107;
-        }
-
-        .status-delevery .status-dot {
-            background-color: #a304ff;
-        }
-
-        .status-confirm .status-dot {
-            background-color: #04f0fc;
-        }
+    
 
         .action-btn {
             background: none;
             border: none;
-        }
-        
+            font-size: 16px;
         }
     }
 }
