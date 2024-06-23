@@ -1,4 +1,4 @@
-CREATE DATABASE MilkShop
+﻿CREATE DATABASE MilkShop
 USE MilkShop
 DROP DATABASE MilkShop
 
@@ -45,7 +45,7 @@ CREATE TABLE Age_Range (
 
 CREATE TABLE Products (
     product_id INT IDENTITY(1,1) PRIMARY KEY,
-    product_name NVARCHAR(100) NOT NULL,
+    product_name NVARCHAR(255) NOT NULL,
     description TEXT,
     price DECIMAL(10, 2) NOT NULL CHECK (price >= 0),
     stock INT NOT NULL,
@@ -53,8 +53,7 @@ CREATE TABLE Products (
     country_id CHAR(3) REFERENCES Originated_Country(country_id),
     age_range NVARCHAR(255) REFERENCES Age_Range(age_range),
 );
-ALTER TABLE Products
-DROP CONSTRAINT CK__Products__stock__5EBF139D;
+
 CREATE TABLE Reviews (
     review_id INT IDENTITY(1,1) PRIMARY KEY,
     user_id INT NOT NULL REFERENCES Users(user_id),
@@ -150,11 +149,29 @@ INSERT INTO Product_Categories (category_name) VALUES
 
 -- Insert into Brands
 INSERT INTO Brands (brand_name, category_id) VALUES
-('BabyMilk Co.',1),
-('Maternal Care Inc.',1);
+('Yoko Gold', 1),
+('Wakodo', 1),
+('Vinamilk', 1),
+('Vanma (Nutifood)', 1),
+('Similac', 1),
+('Hikid', 1),
+('Friso Gold Pro', 1),
+('Fanma (Nutifood)', 1),
+('Enfamil', 1),
+('Bellamy', 1),
+('Aptamil', 1),
+('Abbot Grow', 1)
 
 -- Insert into Originated_Country
 INSERT INTO Originated_Country (country_id, country_name, category_id) VALUES
+('FRA', 'France ', 2),
+('AUS', 'Australia ', 2),
+('THL', 'Thailand', 2),
+('NED', 'Netherlands', 2),
+('KOR', 'Korea', 2),
+('IRE', 'Ireland', 2),
+('SWE', 'Sweden', 2),
+('VNA', 'Viet Nam', 2),
 ('USA', 'United States', 2),
 ('CAN', 'Canada', 2),
 ('JPN', 'Japan', 2),
@@ -162,35 +179,73 @@ INSERT INTO Originated_Country (country_id, country_name, category_id) VALUES
 
 -- Insert into Age_Range
 INSERT INTO Age_Range (age_range, category_id) VALUES
-('0-6 months', 3),
-('6-12 months', 3),
+('0-1 year', 3),
 ('1-2 years', 3),
-('More than 2 years old', 3),
+('> 2 years old', 3),
 ('Maternal', 3),
 ('Adult', 3);
 
 -- Insert into Products
 INSERT INTO Products (product_name, description, price, stock, brand_id, country_id, age_range) VALUES
-('Infant Milk Powder', 'High-quality milk powder for infants 0-6 months.', 25.99, 100, 1, 'USA', '0-6 months'),
-('Maternal Milk Supplement', 'Nutritional supplement for mothers.', 19.99, 50, 2, 'CAN', '1-2 years'),
-('Baby Formula', 'Baby formula for infants 6-12 months.', 29.99, 75, 1, 'USA', '6-12 months'),
-('Toddler Milk Drink', 'Nutritious milk drink for toddlers.', 22.99, 60, 1, 'GER', '1-2 years'),
-('Organic Baby Formula', 'Organic formula for infants 0-6 months.', 35.99, 40, 2, 'CAN', '0-6 months'),
-('Maternal Health Drink', 'Healthy drink for pregnant women.', 27.99, 30, 2, 'JPN', 'Maternal'),
-('Junior Growth Milk', 'Growth milk for kids over 2 years.', 32.99, 80, 1, 'USA', 'More than 2 years old'),
-('Adult Milk Powder', 'Milk powder for adults.', 20.99, 45, 1, 'USA', 'Adult'),
-('Soy-Based Infant Formula', 'Soy-based formula for infants 0-6 months.', 29.99, 50, 2, 'GER', '0-6 months'),
-('Lactose-Free Baby Formula', 'Lactose-free formula for infants.', 33.99, 70, 1, 'USA', '0-6 months');
+(N'Vinamilk Yoko Gold 1 350g', N'High-quality milk from Yoko Gold for infants 0-1 year.', 229000, 120, 1, 'VNA', '0-1 year'),
+(N'Vinamilk Yoko Gold 2 850g', N'High-quality milk from Yoko Gold for babies 1-2 years.', 435000, 90, 1, 'VNA', '1-2 years'),
+(N'Vinamilk Yoko Gold 1 850g', N'High-quality milk from Yoko Gold for infants 0-1 year.', 449000, 120, 1, 'VNA', '0-1 year'),
+(N'Vinamilk Yoko Gold 3 850g', N'High-quality milk from Yoko Gold for kids 2-6 years.', 337100, 120, 1, 'VNA', '> 2 years old'),
+(N'Sữa Wakodo MOM 300g', N'Dành cho mẹ mang thai và cho con bú.', 219000, 360, 2, 'JPN', 'Maternal'),
+(N'Sữa Wakodo MOM 830g', N'Dành cho mẹ mang thai và cho con bú.', 455000, 210, 2, 'JPN', 'Maternal'),
+(N'Sữa Vinamilk ColosGold số 2 350g (1-2 tuổi)', N'Dành cho trẻ từ 1 đến 2 tuổi.', 219000, 600, 3, 'VNA', '1-2 years'),
+(N'Sữa bột Vinamilk Kenko Haru hộp 850g', N'Dành cho trẻ từ 1 đến 2 tuổi.', 605000, 600, 3, 'VNA', '1-2 years'),
+(N'Sữa Vinamilk ColosGold 1 350g (0-1 tuổi)', N'Dành cho trẻ từ 0-1 tuổi.', 235000, 340, 3, 'VNA', '0-1 year'),
+(N'Sữa Dielac Grow Plus 1+, 1-2 tuổi, 850g', N'Dành cho trẻ từ 0-1 tuổi tới từ VN.', 365000, 2450, 3, 'VNA', '1-2 years'),
+(N'Sữa Vinamilk ColosGold số 2 800g (1-2 tuổi)', N'Dành cho trẻ từ 1-2 tuổi tới từ VN.', 419000, 120, 3, 'VNA', '1-2 years'),
+(N'Sữa Vinamilk ColosGold số 1 800g (0-1 tuổi)', N'Dành cho trẻ từ 0-1 tuổi tới từ VN.', 449000, 650, 3, 'VNA', '0-1 year'),
+(N'Sữa Dielac Alpha Gold IQ 3, 850g (1-2 tuổi)', N'Dành cho trẻ từ 1-2 tuổi tới từ Dielac.', 285000, 340, 3, 'VNA', '1-2 years'),
+(N'Vinamilk Optimum Gold 3, 850g, 1-2 tuổi', N'Dành cho trẻ từ 1-2 tuổi tới từ Optimum.', 369000, 1200, 3, 'VNA', '1-2 years'),
+(N'Sữa Vinamilk ColosGold số 3 800g (2-6 tuổi)', N'Dành cho trẻ từ 2-6 tuổi tới từ ColosGold.', 359100, 920, 3, 'VNA', '> 2 years old'),
+(N'Sữa Dielac Grow Plus 2+, 2-10 tuổi, 850g', N'Dành cho trẻ từ 2-10 tuổi tới từ Dielac.', 323100, 490, 3, 'VNA', '> 2 years old'),
+(N'Vinamilk Optimum Gold 4, 850g, 2-6 tuổi', N'Dành cho trẻ từ 2-6 tuổi tới từ Optimum.', 314100, 250, 3, 'VNA', '> 2 years old'),
+(N'Sữa Nutifood Varna Complete 850g', N'Thụy Điển, dưới sự giám sát chặt chẽ theo tiêu chuẩn chất lượng nghiêm ngặt của Viện Nghiên Cứu Dinh Dưỡng Nutifood Thụy Điển', 531000, 750, 4, 'SWE', 'Adult'),
+(N'Sữa Nutifood Varna Complete 400g', N'Thụy Điển, dưới sự giám sát chặt chẽ theo tiêu chuẩn chất lượng nghiêm ngặt của Viện Nghiên Cứu Dinh Dưỡng Nutifood Thụy Điển', 269000, 660, 4, 'SWE', 'Adult'),
+(N'Sữa Similac Total Protection 4 900g (2 - 6 tuổi)', N'Abbott Ireland, Cootehill, Co. Cavan, Ireland', 559000, 260, 5, 'IRE', '> 2 years old'),
+(N'Sữa bầu Similac Mom 900g hương Vani', N'Abbott Ireland, Cootehill, Co. Cavan, Ireland', 455000, 900, 5, 'IRE', 'Maternal'),
+(N'Sữa Similac 5G số 4 900g (2-6 tuổi)', N'Abbott Ireland, Cootehill, Co. Cavan, Ireland', 519000, 500, 5, 'IRE', '> 2 years old'),
+(N'Sữa Similac Neosure 370g (0-12 tháng)', N'Abbott Ireland, Cootehill, Co. Cavan, Ireland', 252000, 500, 5, 'IRE', '0-1 year'),
+(N'Sữa Similac 5G số 3 1,7kg (1-2 tuổi)', N'Abbott Ireland, Cootehill, Co. Cavan, Ireland', 895000, 420, 5, 'IRE', '1-2 years'),
+(N'Sữa Similac Total Protection 3 900g (1 - 2 tuổi)', N'Abbott Ireland, Cootehill, Co. Cavan, Ireland', 595000, 210, 5, 'IRE', '1-2 years'),
+(N'Sữa Similac 5G số 3 900g (1-2 tuổi)', N'Abbott Ireland, Cootehill, Co. Cavan, Ireland', 535000, 610, 5, 'IRE', '1-2 years'),
+(N'Sữa Similac Total Comfort 1 (HMO) 360g (0-12 tháng)', N'Abbott Ireland, Cootehill, Co. Cavan, Ireland', 305000, 980, 5, 'IRE', '0-1 year'),
+(N'Sữa Similac 5G số 4 1,7kg (2-6 tuổi)', N'Abbott Ireland, Cootehill, Co. Cavan, Ireland', 869000, 2200, 5, 'IRE', '> 2 years old'),
+(N'Sữa dê Hikid 650g (2-9 tuổi)', N'Sản phẩm dinh dưỡng công thức với mục đích ăn bổ sung cho trẻ từ 2 - 9 tuổi: Hikid Goat Gold', 624000, 1200, 6, 'KOR', '> 2 years old'),
+(N'Sữa Hikid vị Vani 600g (2-9 tuổi)', N'Sản phẩm dinh dưỡng công thức với mục đích ăn bổ sung cho trẻ từ 2 - 9 tuổi: Hikid Goat Gold', 533000, 870, 6, 'KOR', '> 2 years old'),
+(N'Sữa Friso Gold Pro số 4 800g (3 - 6 tuổi)', N'Sản phẩm dinh dưỡng Friso Gold Pro 4 dành cho trẻ từ 3 - 6 tuổi', 595000, 990, 7, 'NED', '> 2 years old'),
+(N'Sữa bầu Friso Mum Gold 400g hương cam', N'Thực phẩm bổ sung cho mẹ mang thai và cho con bú, hương cam nhãn hiệu Frisomum Gold DualCare+TM', 269000, 1760, 7, 'NED', 'Maternal'),
+(N'Sữa Frisolac Gold số 3 850g (1 - 2 tuổi)', N'Sữa Frisolac Gold số 3 850g (1 - 2 tuổi)', 519000, 220, 7, 'NED', '1-2 years'),
+(N'Sữa Friso Gold số 4 850g (2 - 6 tuổi)', N'Sữa Friso Gold số 4 850g (2 - 6 tuổi)', 495000, 1220, 7, 'NED', '> 2 years old'),
+(N'Sữa Frisolac Gold số 3 1400g (1-2 tuổi)', N'Sữa Frisolac Gold số 3 1400g (1-2 tuổi)', 755000, 920, 7, 'NED', '1-2 years'),
+(N'Sữa Famna Số 2 850g (0-12 tháng tuổi)', N'Sữa Famna Số 2 850g (0-12 tháng tuổi)', 459000, 230, 8, 'SWE', '0-1 year'),
+(N'Sữa Famna Số 3 850g (1-2 tuổi)', N'Sữa Famna Số 3 850g (1-2 tuổi)', 419000, 560, 8, 'SWE', '1-2 years'),
+(N'Sữa Enfagrow Enspire 3 850g (2-6 tuổi)', N'Sản phẩm dinh dưỡng Enfagrow Enspire 3 cho trẻ 2-6 tuổi 850g', 890000, 660, 9, 'THL', '> 2 years old'),
+(N'Sữa Enfagrow Enspire 2 850g (1-2 tuổi)', N'Sản phẩm dinh dưỡng công thức Enfagrow Enspire 2 cho trẻ 1-3 tuổi 850g', 965000, 210, 9, 'THL', '1-2 years'),
+(N'Sữa Enfagrow A+ số 4 830g (2-6 tuổi) 2Flex', N'Thực phẩm bổ sung Enfagrow A+ Neuropro 4 với 2’-FL HMO cho trẻ từ 2-6 tuổi', 515000, 890, 9, 'THL', '> 2 years old'),
+(N'Sữa Enfamil Enspire Infant Formula 581g (0-12 tháng)', N'Sản phẩm dinh dưỡng công thức Enfamil Enspire Infant Formula (dành cho trẻ 0 - 12 tháng tuổi)', 515000, 890, 9, 'THL', '0-1 year'),
+(N'Sữa Enfagrow A+ số 3 830g (1-3 tuổi) 2Flex', N'Sản phẩm dinh dưỡng công thức Enfagrow A+ Neuropro 3 với 2’-FL HMO follow up formula dành cho trẻ từ 12-36 tháng tuổi', 549000, 440, 9, 'THL', '1-2 years'),
+(N'Sữa Nutramigen A+ LGG 400g (0-12 tháng)', N'Sản phẩm dinh dưỡng công thức Nutramigen A+ LGG với mục đích y tế đặc biệt cho trẻ từ 0 - 12 tháng tuổi', 559000, 660, 9, 'THL', '0-1 year'),
+(N'Sữa Enfagrow A2 NeuroPro số 3 800g (1 - 6 tuổi)', N'Sữa Enfagrow A2 NeuroPro số 3 800g (1 - 6 tuổi)', 689000, 660, 9, 'THL', '> 2 years old'),
+(N'Sữa Enfamil Enspire Infant Formula 850g (0-12 tháng)', N'Sản phẩm dinh dưỡng công thức Enfamil Enspire Infant Formula (dành cho trẻ 0 - 12 tháng tuổi)', 1219000, 760, 9, 'THL', '0-1 year'),
+(N'Sữa Bellamys Organic Infant Formula số 1 900g (0-6 tháng)', N'Sữa Bellamys Organic Infant Formula số 1 900g (0-6 tháng)', 1069000, 430, 10, 'FRA', '0-1 year'),
+(N'Sữa Aptamil Profutura Úc số 4 900g (từ 3 tuổi)', N'Sản phẩm dinh dưỡng công thức với mục đích ăn bổ sung Aptamil Profutura 4 Premium Nutritional Supplement dành cho trẻ từ 3 tuổi', 850000, 340, 11, 'FRA', '> 2 years old'),
+(N'Sữa Aptamil Profutura Duobiotik 1 800g (0-6 tháng)', N'Sản phẩm dinh dưỡng công thức Aptamil Profutura Duobiotik 1', 795000, 1100, 11, 'FRA', '0-1 year'),
+(N'Aptamil Profutura Cesarbiotik 1 380g (0-12 tháng)', N'Sản phẩm dinh dưỡng công thức Aptamil Profutura CESARBIOTIK 1, dành cho trẻ từ 0-12 tháng tuổi', 355000, 230, 11, 'FRA', '0-1 year'),
+(N'Sữa Abbott Grow 2 900g (6-12 tháng)', N'Sản phẩm dinh dưỡng công thức cho trẻ 6-12 tháng tuổi: Abbott Grow 2', 329000, 900, 12, 'IRE', '0-1 year'),
+(N'Sữa Abbott Grow 3 900g (1-2 tuổi)', N'Sản phẩm dinh dưỡng công thức cho trẻ 1-2 tuổi: Abbott Grow 3', 299000, 320, 12, 'IRE', '1-2 years')
+
 
 -- Insert into Orders
 INSERT INTO Orders (user_id, order_date, status, total_amount) VALUES
-(5, '2024-06-18', 'Pending', 1200000),
+(4, '2024-06-18', 'Pending', 1200000),
 (2, '2024-06-01', 'Completed', 55.98),
 (3, '2024-06-05', 'Pending', 29.99);
-SELECT * FROM Orders
-SELECT p.product_name, oi.quantity, oi.price 
-      FROM Orders o JOIN Order_Items oi ON o.order_id = oi.order_id JOIN Products p 
-      ON  oi.product_id = p.product_id WHERE o.order_id = 1
+
 -- Insert into Order_Items
 INSERT INTO Order_Items (order_id, product_id, quantity, price) VALUES
 (3, 2, 2, 400000),
@@ -198,7 +253,7 @@ INSERT INTO Order_Items (order_id, product_id, quantity, price) VALUES
 (1, 1, 1, 25.99),
 (1, 2, 1, 19.99),
 (2, 3, 1, 29.99);
-SELECT * FROM Order_Items
+
 -- Insert into Vouchers
 INSERT INTO Vouchers (code, discount, expiration_date) VALUES
 ('DISCOUNT10', 10.00, '2024-12-31'),
@@ -234,4 +289,3 @@ INSERT INTO Payments (order_id, payment_method_id, transaction_date, amount, tra
 (2, 3, '2024-06-05', 29.99, 'Failed', 'Bank transfer failed, insufficient funds'),
 (1, 4, '2024-06-01', 55.98, 'Completed', 'Payment will be collected upon delivery'),
 (2, 5, '2024-06-05', 29.99, 'Pending', 'Gift card code: SUMMERGIFT');
-
