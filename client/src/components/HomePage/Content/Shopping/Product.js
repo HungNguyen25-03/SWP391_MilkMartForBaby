@@ -5,6 +5,9 @@ export const productList = [
     detail: "Sữa pediaSure 1.6kg",
     sale: "Đã bán 50k+",
     price: 650000,
+    country: "USA",
+    age_range: "0-6 months",
+    brand: "Friso Gold Pro",
   },
   {
     product_id: "2",
@@ -12,6 +15,9 @@ export const productList = [
     detail: "Sữa bầu Friso Gold 900g",
     sale: "Đã bán 10k+",
     price: 489000,
+    country: "CAN",
+    age_range: "1-2 years",
+    brand: "Friso Gold Pro",
   },
   {
     product_id: "3",
@@ -19,6 +25,9 @@ export const productList = [
     detail: "Sữa Abbott Grow 1.7",
     sale: "Đã bán 5k+",
     price: 869000,
+    country: "GER",
+    age_range: "6-12 months",
+    brand: "Friso Gold Pro",
   },
   {
     product_id: "4",
@@ -26,6 +35,9 @@ export const productList = [
     detail: "Sữa dê Kabrita 800g",
     sale: "Đã bán 1k+",
     price: 905000,
+    country: "JPN",
+    age_range: "6-12 months",
+    brand: "Friso Gold Pro",
   },
   {
     product_id: "5",
@@ -33,6 +45,9 @@ export const productList = [
     detail: "Sữa Similac 1.7kg",
     sale: "Đã bán 12k+",
     price: 489000,
+    country: "CAN",
+    age_range: "More than 2 years old",
+    brand: "Friso Gold Pro",
   },
   {
     product_id: "6",
@@ -40,6 +55,9 @@ export const productList = [
     detail: "Sữa pediaSure 1.6kg",
     sale: "Đã bán 50k+",
     price: 650000,
+    country: "GER",
+    age_range: "0-6 months",
+    brand: "Friso Gold Pro",
   },
   {
     product_id: "7",
@@ -47,6 +65,9 @@ export const productList = [
     detail: "Sữa bầu Friso Gold 900g",
     sale: "Đã bán 10k+",
     price: 489000,
+    country: "USA",
+    age_range: "1-2 years",
+    brand: "Friso Gold Pro",
   },
   {
     product_id: "8",
@@ -54,6 +75,9 @@ export const productList = [
     detail: "Sữa Abbott Grow 1.7",
     sale: "Đã bán 5k+",
     price: 869000,
+    country: "CAN",
+    age_range: "1-2 years",
+    brand: "Friso Gold Pro",
   },
   {
     product_id: "9",
@@ -61,6 +85,9 @@ export const productList = [
     detail: "Sữa dê Kabrita 800g",
     sale: "Đã bán 1k+",
     price: 908000,
+    country: "USA",
+    age_range: "6-12 months",
+    brand: "Friso Gold Pro",
   },
   {
     product_id: "10",
@@ -68,6 +95,9 @@ export const productList = [
     detail: "Sữa Similac 1.7kg",
     sale: "Đã bán 12k+",
     price: 489000,
+    country: "CAN",
+    age_range: "0-6 months",
+    brand: "Friso Gold Pro",
   },
   {
     product_id: "11",
@@ -75,6 +105,9 @@ export const productList = [
     detail: "Sữa dê Kabrita 800g",
     sale: "Đã bán 1k+",
     price: 905000,
+    country: "GER",
+    age_range: "0-6 months",
+    brand: "Friso Gold Pro",
   },
   {
     product_id: "12",
@@ -82,5 +115,8 @@ export const productList = [
     detail: "Sữa Similac 1.7kg",
     sale: "Đã bán 12k+",
     price: 489000,
+    country: "GER",
+    age_range: "Adult",
+    brand: "Friso Gold Pro",
   },
 ];
