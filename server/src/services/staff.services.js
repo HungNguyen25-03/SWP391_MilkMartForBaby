@@ -283,10 +283,10 @@ async function cancelOrder(order_id) {
       .request()
       .input("order_id", sql.Int, order_id)
       .query(
-        `UPDATE Orders SET status = 'cancelled' WHERE order_id = @order_id;`
+        `UPDATE Orders SET status = 'cancel' WHERE order_id = @order_id;`
       );
     if (result.rowsAffected[0] > 0) {
-      return { success: true, message: "Order cancelled successfully" };
+      return { success: true, message: "Order cancel successfully" };
     } else {
       return { success: false, message: "Failed to cancel order" };
     }
@@ -301,11 +301,11 @@ async function confirmOrder(order_id) {
 
     const result = await pool.request().input("order_id", sql.Int, order_id)
       .query(`
-    UPDATE Orders SET status = 'confirmed' WHERE order_id = @order_id;
+    UPDATE Orders SET status = 'confirm' WHERE order_id = @order_id;
   `);
     console.log(result);
     if (result.rowsAffected[0] > 0) {
-      return { success: true, message: "Order confirmed successfully" };
+      return { success: true, message: "Order confirm successfully" };
     } else {
       return { success: false, message: "Failed to confirm order" };
     }
