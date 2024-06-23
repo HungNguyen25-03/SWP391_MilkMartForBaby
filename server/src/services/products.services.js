@@ -85,35 +85,21 @@ async function filterProduct(ageRange, brand, country) {
 
     let filters = [];
 
-    if (ageRange) {
-      if (!Array.isArray(ageRange)) {
-        ageRange = [ageRange];
-      }
-
-      request.input("ageRange", sql.NVarChar, ageRange.join(","));
-      filters.push(
-        "age_range IN (SELECT value FROM STRING_SPLIT(@ageRange,','))"
-      );
+    if (ageRange && ageRange.length > 0) {
+      request.input('ageRange', sql.NVarChar, ageRange.join(','));
+      filters.push("p.age_range IN (SELECT value FROM STRING_SPLIT(@ageRange, ','))");
     }
 
-    if (brand) {
-      if (!Array.isArray(brand)) {
-        brand = [brand];
-      }
-      request.input("brand", sql.NVarChar, brand.join(","));
-      filters.push(
-        "brand_name IN (SELECT value FROM STRING_SPLIT (@brand,','))"
-      );
+
+    if (brand && brand.length > 0) {
+      request.input('brand', sql.NVarChar, brand.join(','));
+      filters.push("b.brand_name IN (SELECT value FROM STRING_SPLIT(@brand, ','))");
     }
 
-    if (country) {
-      if (!Array.isArray(country)) {
-        country = [country];
-      }
-      request.input("country", sql.NVarChar, country.join(","));
-      filters.push(
-        "country_name IN (SELECT value FROM STRING_SPLIT (@country, ','))"
-      );
+
+    if (country && country.length > 0) {
+      request.input('country', sql.NVarChar, country.join(','));
+      filters.push("oc.country_name IN (SELECT value FROM STRING_SPLIT(@country, ','))");
     }
 
     let query = `
