@@ -1,8 +1,8 @@
 export const categoryList = [
-  { id: 1, title: "Sữa Mỹ", country: "USA" },
-  { id: 2, title: "Sữa Châu Âu", country: "GER" },
-  { id: 3, title: "Sữa Nhật", country: "JPN" },
-  { id: 4, title: "Sữa Khác", country: "CAN" },
+  { id: 1, title: "Sữa Mỹ", country: "United States" },
+  { id: 2, title: "Sữa Châu Âu", country: "Germany" },
+  { id: 3, title: "Sữa Nhật", country: "Japan" },
+  { id: 4, title: "Sữa Khác", country: "Canada" },
 ];
 
 export const ageList = [
