@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import { dagiaos } from "../ListProduct";
 import axios from "axios";
 import { MainAPI } from "../../../../API";
+import { formatVND } from "../../../../../utils/Format";
+import ModalReview from "../ModalReview/ModalReview";
 
 export default function CustomerDaGiao({ title }) {
   const [completeOrderList, setCompleteOrderList] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     axios
@@ -17,6 +20,11 @@ export default function CustomerDaGiao({ title }) {
         console.log(err);
       });
   }, []);
+
+  const handleSubmit = (feedback) => {
+    console.log(feedback);
+  };
+
   return (
     <div className={title === "Đã giao" ? "chờ giao" : "fade"}>
       <h5 className="fw-bold">{title}</h5>
@@ -38,7 +46,9 @@ export default function CustomerDaGiao({ title }) {
                     <img src="assest/images/product/44604-trans.png" alt="1" />
                   </div>
                   <div className="product-info w-100">
-                    <div className="item-cart-product-name">đã giao</div>
+                    <div className="item-cart-product-name">
+                      {dagiao.product_name}
+                    </div>
                     <div className="d-flex w-100 align-center product-info-bottom">
                       <span style={{ width: 600 }}></span>
                       <div className="item-cart-quantity-pro">x1</div>
@@ -80,10 +90,29 @@ export default function CustomerDaGiao({ title }) {
                       Thành tiền
                     </span>
                     <span className="font-bold font-15 line-height-15 color-20">
-                      790000đ
+                      {formatVND(dagiao.total_amount)}
                     </span>
                   </span>
                 </span>
+              </div>
+              <div className="d-flex justify-content-end mt-3">
+                <button
+                  className="btn btn-warning m-0"
+                  onClick={() => {
+                    setModalOpen(true);
+                  }}
+                >
+                  Đánh giá
+                </button>
+                {modalOpen && (
+                  <ModalReview
+                    product_id={dagiao.product_id}
+                    closeModal={() => {
+                      setModalOpen(false);
+                    }}
+                    onSubmit={handleSubmit}
+                  />
+                )}
               </div>
             </>
           );

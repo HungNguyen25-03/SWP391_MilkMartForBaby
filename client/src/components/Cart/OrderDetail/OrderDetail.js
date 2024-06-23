@@ -36,7 +36,7 @@ export default function OrderDetail() {
               <div className="item-cart-quantity">Số lượng</div>
               <div className="item-cart-total">Thành tiền</div>
             </div>
-            {localCartList.map((product) => (
+            {cartList.map((product) => (
               <div key={product.id} className="cart-product-line">
                 <div className="block-cart-first">
                   <div className="product-img">
