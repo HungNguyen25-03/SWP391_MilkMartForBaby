@@ -7,8 +7,10 @@ import { formatVND } from "../../utils/Format";
 import { ageList } from "./category";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import { MainAPI } from "../API";
 
-export default function ProductListShow({ productList }) {
+export default function ProductListShow({ productList = [] }) {
   const { handleAddToCart } = useContext(CartContext);
   const [ageFilters, setAgeFilters] = useState([]);
   const [countryFilters, setCountryFilters] = useState([]);
@@ -28,6 +30,21 @@ export default function ProductListShow({ productList }) {
     }
   };
 
+  const filterItems = () => {
+    axios
+      .post(`${MainAPI}/product/filter`, {
+        country: countryFilters,
+        ageRange: ageFilters,
+      })
+      .then((res) => {
+        // console.log(res.data);
+        setFilteredItems(res.data.products);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   // const filterItems = () => {
   //   if (selectedFilters.length > 0) {
   //     let tempItems = selectedFilters.map((seletedCategory) => {
@@ -42,11 +59,13 @@ export default function ProductListShow({ productList }) {
   //   }
   // };
 
-  // useEffect(() => {
-  //   filterItems();
-  // }, [selectedFilters]);
+  useEffect(() => {
+    filterItems();
+  }, [countryFilters, ageFilters]);
 
-  console.log(countryFilters, ageFilters);
+  console.log(filteredItems);
+  console.log(ageFilters);
+  console.log(countryFilters);
 
   return (
     <div className="fillter_container">
@@ -104,42 +123,43 @@ export default function ProductListShow({ productList }) {
 
       <div className="product_detail text-center">
         <div className="row row-cols-5">
-          {productList.map((product) => (
-            <div key={product.product_id} className="product-card col">
-              <a
-                className="product-detail-link"
-                href={`/home/ProductDetail/${product.product_id}`}
-              >
-                <div className="home-product-detail-img-container">
-                  <img src={product.img} alt={product.title} />
-                </div>
-                <div className="mt-2">{product.detail}</div>
-                <div>
-                  <span className="star">★</span>
-                  <span className="star">★</span>
-                  <span className="star">★</span>
-                  <span className="star">★</span>
-                  <span className="star">★</span>
-                  <span style={{ fontSize: "10px" }}>{product.sale}</span>
-                </div>
-              </a>
-              <div
-                style={{
-                  display: "flex",
-                  marginTop: "10px",
-                  justifyContent: "space-around",
-                }}
-              >
-                <div>{formatVND(product.price)}</div>
-                <div
-                  className="icon_cart"
-                  onClick={() => handleAddToCart(product)}
+          {filteredItems &&
+            filteredItems.map((product) => (
+              <div key={product.product_id} className="product-card col">
+                <a
+                  className="product-detail-link"
+                  href={`/home/ProductDetail/${product.product_id}`}
                 >
-                  <FaShoppingCart />
+                  <div className="home-product-detail-img-container">
+                    <img src={product.img} alt={product.title} />
+                  </div>
+                  <div className="mt-2">{product.detail}</div>
+                  <div>
+                    <span className="star">★</span>
+                    <span className="star">★</span>
+                    <span className="star">★</span>
+                    <span className="star">★</span>
+                    <span className="star">★</span>
+                    <span style={{ fontSize: "10px" }}>{product.sale}</span>
+                  </div>
+                </a>
+                <div
+                  style={{
+                    display: "flex",
+                    marginTop: "10px",
+                    justifyContent: "space-around",
+                  }}
+                >
+                  <div>{formatVND(product.price)}</div>
+                  <div
+                    className="icon_cart"
+                    onClick={() => handleAddToCart(product)}
+                  >
+                    <FaShoppingCart />
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </div>
