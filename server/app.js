@@ -38,7 +38,6 @@ app.use("/staff", staffRoutes);
 //api to use payment
 app.use("/payment", paymentRoutes);
 
-
 //api to Pagination
 app.use("/page", pageRoutes);
 

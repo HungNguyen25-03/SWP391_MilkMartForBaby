@@ -16,7 +16,7 @@ export default function OrderDetail() {
 
   return (
     <>
-      {localCartList.length === 0 ? (
+      {cartList.length === 0 ? (
         <div className="cart_empty">
           <div>
             <img
