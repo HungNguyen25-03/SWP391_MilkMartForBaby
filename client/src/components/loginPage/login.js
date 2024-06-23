@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import useAuth from "../../hooks/useAuth";
 
 function Login() {
-  const { setAuth } = useAuth();
+  const { auth, setAuth } = useAuth();
   const nav = useNavigate();
   const location = useLocation();
   const from = location.state?.from || { pathname: "/home" };
@@ -54,10 +54,13 @@ function Login() {
 
       setAuth({ user, role, accessToken });
       localStorage.setItem("accessToken", JSON.stringify(response.accessToken));
+      localStorage.setItem("auth", JSON.stringify({ user, role, accessToken }));
       if (role === "admin") {
         nav("/admin");
       } else if (role === "staff") {
         nav("/staff");
+      } else if (role === "customer") {
+        nav("/home");
       } else {
         nav(from, { replace: true });
       }
