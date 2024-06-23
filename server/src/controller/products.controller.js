@@ -8,17 +8,22 @@ const {
 //Get All Product Controller
 const getProduct = async (req, res) => {
   try {
-    const result = await getAllProduct();
-    if (result.success) {
-      res.json({
-        inStockProducts: result.inStockProducts,
-        outOfStockProducts: result.outOfStockProducts,
-      });
-    } else {
-      res.json({ message: result.message });
-    }
+    const page = parseInt(req.body.page) || 1;
+    const pageSize = parseInt(req.body.pageSize) || 4;
+
+    const { inStockProducts, outOfStockProducts, totalProducts } =
+      await getAllProduct(page, pageSize);
+
+    res.json({
+      inStockProducts,
+      outOfStockProducts,
+      page,
+      pageSize,
+      totalProducts,
+    });
   } catch (error) {
-    console.log("Faill");
+    console.log("Failed to get products:", error);
+    res.status(500).json({ message: "Failed to retrieve products." });
   }
 };
 
