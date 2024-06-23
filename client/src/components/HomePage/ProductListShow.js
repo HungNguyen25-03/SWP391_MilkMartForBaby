@@ -10,10 +10,15 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function ProductListShow({ productList }) {
   const { handleAddToCart } = useContext(CartContext);
-  const [selectedFilters, setSelectedFilters] = useState([]);
+  const [ageFilters, setAgeFilters] = useState([]);
+  const [countryFilters, setCountryFilters] = useState([]);
   const [filteredItems, setFilteredItems] = useState(productList);
 
-  const handleFilterButtonClick = (seletedCategory) => {
+  const handleFilterButtonClick = (
+    seletedCategory,
+    selectedFilters,
+    setSelectedFilters
+  ) => {
     if (selectedFilters.includes(seletedCategory)) {
       setSelectedFilters(
         selectedFilters.filter((category) => category !== seletedCategory)
@@ -23,25 +28,25 @@ export default function ProductListShow({ productList }) {
     }
   };
 
-  const filterItems = () => {
-    if (selectedFilters.length > 0) {
-      let tempItems = selectedFilters.map((seletedCategory) => {
-        let temp = productList.filter(
-          (product) => product.category === seletedCategory
-        );
-        return temp;
-      });
-      setFilteredItems(tempItems.flat());
-    } else {
-      setFilteredItems([...productList]);
-    }
-  };
+  // const filterItems = () => {
+  //   if (selectedFilters.length > 0) {
+  //     let tempItems = selectedFilters.map((seletedCategory) => {
+  //       let temp = productList.filter(
+  //         (product) => product.category === seletedCategory
+  //       );
+  //       return temp;
+  //     });
+  //     setFilteredItems(tempItems.flat());
+  //   } else {
+  //     setFilteredItems([...productList]);
+  //   }
+  // };
 
-  useEffect(() => {
-    filterItems();
-  }, [selectedFilters]);
+  // useEffect(() => {
+  //   filterItems();
+  // }, [selectedFilters]);
 
-  //   console.log(selectedFilters);
+  console.log(countryFilters, ageFilters);
 
   return (
     <div className="fillter_container">
@@ -54,10 +59,14 @@ export default function ProductListShow({ productList }) {
               <div className="cate" key={cate.id}>
                 <button
                   onClick={() => {
-                    handleFilterButtonClick(cate.title);
+                    handleFilterButtonClick(
+                      cate.country,
+                      countryFilters,
+                      setCountryFilters
+                    );
                   }}
                   className={`btn ${
-                    selectedFilters?.includes(cate.title) ? "active" : ""
+                    countryFilters?.includes(cate.country) ? "active" : ""
                   }`}
                   key={`filters-${index}`}
                 >
@@ -74,10 +83,14 @@ export default function ProductListShow({ productList }) {
               <div className="cate" key={age.id}>
                 <button
                   onClick={() => {
-                    handleFilterButtonClick(age.title);
+                    handleFilterButtonClick(
+                      age.title,
+                      ageFilters,
+                      setAgeFilters
+                    );
                   }}
                   className={`btn ${
-                    selectedFilters?.includes(age.title) ? "active" : ""
+                    ageFilters?.includes(age.title) ? "active" : ""
                   }`}
                   key={`filters-${index}`}
                 >

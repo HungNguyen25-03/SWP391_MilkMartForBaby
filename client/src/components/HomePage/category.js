@@ -1,15 +1,14 @@
 export const categoryList = [
-  { id: 1, title: "Sữa Mỹ" },
-  { id: 2, title: "Sữa úc" },
-  { id: 3, title: "Sữa Châu Âu" },
-  { id: 4, title: "Sữa Nhật" },
-  { id: 5, title: "Sữa Khác" },
+  { id: 1, title: "Sữa Mỹ", country: "USA" },
+  { id: 2, title: "Sữa Châu Âu", country: "GER" },
+  { id: 3, title: "Sữa Nhật", country: "JPN" },
+  { id: 4, title: "Sữa Khác", country: "CAN" },
 ];
 
 export const ageList = [
-  { id: 1, title: "0-1 tuổi" },
-  { id: 2, title: "1-2 tuổi" },
-  { id: 3, title: "> 2 tuổi" },
-  { id: 4, title: "Sữa Bầu" },
-  { id: 5, title: "Sữa Người Lớn" },
+  { id: 1, title: "0-6 months" },
+  { id: 2, title: "6-12 months" },
+  { id: 3, title: "1-2 years" },
+  { id: 4, title: "More than 2 years old" },
+  { id: 5, title: "Adult" },
 ];
