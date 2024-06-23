@@ -1,19 +1,33 @@
 const { poolPromise, sql } = require("./database.services");
 
-async function getAllProduct() {
+async function getAllProduct(page, pageSize) {
   try {
     const pool = await poolPromise;
-    const result = await pool.request().query(`SELECT * FROM Products`);
-    const product = result.recordset;
+    const offset = (page - 1) * pageSize;
 
-    if (product) {
-      const inStockProducts = product.filter((product) => product.stock > 0);
-      const outOfStockProducts = product.filter(
+    // Query to get the total count of products
+    const countResult = await pool
+      .request()
+      .query(`SELECT COUNT(*) as total FROM Products`);
+    const totalProducts = countResult.recordset[0].total;
+
+    // Query to get the paginated products
+    const result = await pool.request().query(`
+      SELECT * FROM Products
+      ORDER BY product_id
+      OFFSET ${offset} ROWS
+      FETCH NEXT ${pageSize} ROWS ONLY
+    `);
+    const products = result.recordset;
+
+    if (products) {
+      const inStockProducts = products.filter((product) => product.stock > 0);
+      const outOfStockProducts = products.filter(
         (product) => product.stock <= 0
       );
-      return { success: true, inStockProducts, outOfStockProducts };
+      return { inStockProducts, outOfStockProducts, totalProducts };
     } else {
-      return { success: false, message: "Fail to show all Products" };
+      throw new Error("Failed to retrieve products.");
     }
   } catch (error) {
     throw error;
