@@ -5,6 +5,8 @@ import { FaShoppingCart } from "react-icons/fa";
 import { CartContext } from "../Cart/CartContext";
 import { formatVND } from "../../utils/Format";
 import { ageList } from "./category";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ProductListShow({ productList }) {
   const { handleAddToCart } = useContext(CartContext);
@@ -43,6 +45,7 @@ export default function ProductListShow({ productList }) {
 
   return (
     <div className="fillter_container">
+      <ToastContainer />
       <div className="type">
         <div className="category">
           <p className="m-0">Loại Sữa:</p>

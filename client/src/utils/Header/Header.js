@@ -7,6 +7,7 @@ import axios from "axios";
 import { MainAPI } from "../../components/API";
 import AuthContext from "../../context/AuthProvider";
 import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import useOrder from "../../hooks/useOrder";
 import { MdLogin } from "react-icons/md";
 import { RiLogoutBoxLine } from "react-icons/ri";
@@ -31,6 +32,7 @@ export default function HeaderPage() {
       .then((res) => {
         console.log(res.data);
         localStorage.removeItem("accessToken");
+        localStorage.removeItem("auth");
         setAuth({});
         setOrderInfomation({});
         toast.success("Đăng xuất thành công");
@@ -52,8 +54,8 @@ export default function HeaderPage() {
 
   return (
     <div className=" search-bar">
-      <ToastContainer autoClose={2000} />
       <div className="container">
+        <ToastContainer />
         <div className="row justify-content-between align-items-center">
           <div
             className="logo col-3"
