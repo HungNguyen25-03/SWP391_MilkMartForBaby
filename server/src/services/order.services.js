@@ -175,7 +175,6 @@ async function getOrderByUserId(user_id) {
     `;
     const orderResult = await request.query(orderQuery);
     const orders = orderResult.recordset;
-
     if (orders.length === 0) {
       return {
         success: false,
