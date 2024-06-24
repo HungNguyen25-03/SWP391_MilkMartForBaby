@@ -12,7 +12,7 @@ export default function NavBarStaff() {
         nav('/staff/comfirm_order');
     }, []);
 
-    const getuserName = localStorage.getItem('name')
+    const getName = localStorage.getItem('name')
     const token = JSON.parse(localStorage.getItem("accessToken"));
     const { setAuth } = useContext(AuthContext);
     const nav = useNavigate();
@@ -44,7 +44,7 @@ export default function NavBarStaff() {
             </div>
 
             <div className='user_name'>
-                <p><span>User Name:</span>&nbsp; {getuserName}</p>
+                <p><span>User Name:</span>&nbsp; {getName}</p>
             </div>
 
             <div>
