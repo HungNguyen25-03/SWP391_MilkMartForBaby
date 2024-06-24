@@ -55,12 +55,34 @@ async function getCompleteStatus() {
   try {
     const pool = await poolPromise;
     const request = await pool.request();
+    request.input('status', sql.NVarChar, 'Completed');
 
-    request.input("status", sql.NVarChar, "Complete");
 
-    const query = `SELECT * FROM Orders WHERE status=@status`;
+    const query =
+      `SELECT 
+      o.order_id,
+      oi.order_item_id,
+      p.product_id,
+      p.product_name,
+      p.description,
+      oi.quantity,
+      oi.price,
+      o.total_amount,
+      o.status
+  FROM 
+      Orders o
+  JOIN 
+      Order_Items oi ON o.order_id = oi.order_id
+  JOIN 
+      Products p ON oi.product_id = p.product_id
+  WHERE 
+      o.status = @status;
+        `
+      ;
     const result = await request.query(query);
+
     const order = result.recordset;
+    console.log(order);
     if (order) {
       return { success: true, order };
     } else {
@@ -81,7 +103,9 @@ async function getPendingStatus() {
 
     request.input("status", sql.NVarChar, "Pending");
 
-    const query = `SELECT * FROM Orders WHERE status=@status`;
+    const query =
+      `SELECT * FROM Orders WHERE status = @status`
+      ;
     const result = await request.query(query);
     const order = result.recordset;
     if (order) {
@@ -104,7 +128,9 @@ async function getConfirmStatus() {
 
     request.input("status", sql.NVarChar, "Confirmed");
 
-    const query = `SELECT * FROM Orders WHERE status=@status`;
+    const query =
+      `SELECT * FROM Orders WHERE status = @status`
+      ;
     const result = await request.query(query);
     const order = result.recordset;
     if (order) {
@@ -127,7 +153,10 @@ async function getDeliverStatus() {
 
     request.input("status", sql.NVarChar, "Delivered");
 
-    const query = `SELECT * FROM Orders WHERE status=@status`;
+    const query =
+      `SELECT * FROM Orders WHERE status = @status`
+      ;
+
     const result = await request.query(query);
     const order = result.recordset;
     if (order) {
