@@ -9,7 +9,7 @@ const {
 const getProduct = async (req, res) => {
   try {
     const page = parseInt(req.body.page) || 1;
-    const pageSize = parseInt(req.body.pageSize) || 4;
+    const pageSize = parseInt(req.body.pageSize) || 12;
 
     const { inStockProducts, outOfStockProducts, totalProducts } =
       await getAllProduct(page, pageSize);
@@ -56,26 +56,42 @@ const searchByName = async (req, res) => {
   console.log(`Search term: ${searchTerm}`);
 
   try {
-    const result = await searchProductByName(searchTerm);
-    if (result.success) {
-      res.json(result.products);
-    } else {
-      res.status(404).json({ message: result.message });
-    }
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 12;
+
+    const { inStockProducts, outOfStockProducts, totalProducts } =
+      await searchProductByName(searchTerm, page, pageSize);
+    res.json({
+      inStockProducts,
+      outOfStockProducts,
+      page,
+      pageSize,
+      totalProducts,
+    });
   } catch (error) {
-    console.error("Fail to search products", error);
-    res.status(500).json({ message: "Fail to search products" });
+    console.error("Failed to search products", error);
+    res.status(500).json({ message: "Failed to search products" });
   }
 };
 //Filtering Product
 
 const filtering = async (req, res) => {
   try {
-    const { ageRange, brand, country } = req.body;
-    const result = await filterProduct(ageRange, brand, country);
-    console.log(result);
-    res.json(result);
+    const { ageRange, brand, country, page, pageSize } = req.body;
+    const pageNumber = parseInt(page) || 1;
+    const size = parseInt(pageSize) || 12;
+
+    const { inStockProducts, outOfStockProducts, totalProducts } =
+      await filterProduct(ageRange, brand, country, pageNumber, size);
+    res.json({
+      inStockProducts,
+      outOfStockProducts,
+      page,
+      pageSize,
+      totalProducts,
+    });
   } catch (error) {
+    console.error("Error filtering products", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
