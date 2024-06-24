@@ -28,6 +28,7 @@ export default function NavBarStaff() {
                 console.log(res.data);
                 localStorage.removeItem("accessToken");
                 localStorage.removeItem("auth");
+                localStorage.removeItem("name")
                 setAuth({});
                 toast.success("Đăng xuất thành công");
                 nav("/login");
