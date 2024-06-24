@@ -205,6 +205,24 @@ async function insertOrderItems(order_id, orderItems) {
   }
 }
 
+async function reviewsByProductId(user_id, product_id, rating, comment) {
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input("user_id", sql.Int, user_id)
+      .input("product_id", sql.Int, product_id)
+      .input("rating", sql.Int, rating)
+      .input("comment", sql.NVarChar, comment)
+      .query(
+        `INSERT INTO Reviews (user_id, product_id, rating, comment) VALUES (@user_id, @product_id, @rating, @comment)`
+      );
+    return { success: true, message: "Review added successfully" };
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   loginUser,
   registerUser,
@@ -214,4 +232,5 @@ module.exports = {
   claimVoucher,
   generateNewAccessToken,
   readyToCheckout,
+  reviewsByProductId,
 };

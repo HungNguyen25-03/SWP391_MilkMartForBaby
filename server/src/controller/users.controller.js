@@ -7,6 +7,7 @@ const {
   claimVoucher,
   generateNewAccessToken,
   readyToCheckout,
+  reviewsByProductId,
 } = require("../services/users.services");
 
 const authJwt = require("../middlewares/authJwt.middlewares");
@@ -161,6 +162,26 @@ const readyToCheckoutController = async (req, res) => {
   }
 };
 
+const reviewsByProductIdController = async (req, res) => {
+  const { user_id, product_id, rating, comment } = req.body;
+
+  try {
+    const reviews = await reviewsByProductId(
+      user_id,
+      product_id,
+      rating,
+      comment
+    );
+    if (reviews) {
+      res.status(200).json({ reviews });
+    } else {
+      res.status(404).json({ message: "No reviews found" });
+    }
+  } catch (error) {
+    res.status(500).send("Error showing all reviews");
+  }
+};
+
 module.exports = {
   registerUserController,
   loginUserController,
@@ -171,4 +192,5 @@ module.exports = {
   refreshTokenController,
   logoutController,
   readyToCheckoutController,
+  reviewsByProductIdController,
 };

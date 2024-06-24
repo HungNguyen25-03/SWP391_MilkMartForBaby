@@ -262,8 +262,39 @@ const claimVoucherMiddleware = async (req, res, next) => {
   }
 };
 
+const reviewsByProductIdMiddlewares = async (req, res, next) => {
+  try {
+    const errors = [];
+    const pool = await poolPromise;
+    const { user_id, product_id } = req.body;
+    const existingReview = await pool
+      .request()
+      .input("user_id", sql.Int, user_id)
+      .input("product_id", sql.Int, product_id)
+      .query(
+        `SELECT * FROM Reviews WHERE user_id = @user_id AND product_id = @product_id`
+      );
+
+    if (existingReview.recordset.length > 0) {
+      errors.push({
+        name: "review",
+        success: false,
+        message: "User has already reviewed this product.",
+        status: 400,
+      });
+    }
+    if (errors.length > 0) {
+      return next(errors);
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   registerUserMiddleware,
   applyVoucherMiddleware,
   claimVoucherMiddleware,
+  reviewsByProductIdMiddlewares,
 };

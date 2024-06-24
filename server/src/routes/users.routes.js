@@ -35,6 +35,13 @@ userRoutes.post(
 );
 
 userRoutes.post(
+  "/review-product",
+  authJwt.authenticateToken,
+  userMiddleware.reviewsByProductIdMiddlewares,
+  userController.reviewsByProductIdController
+);
+
+userRoutes.post(
   "/ready-to-checkout",
   authJwt.authenticateToken,
   userController.readyToCheckoutController
