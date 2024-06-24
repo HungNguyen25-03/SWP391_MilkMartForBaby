@@ -10,7 +10,7 @@ export default function CustomerThanhToan({ title }) {
     axios
       .get(`${MainAPI}/order/ConfirmOrder`)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setConfirmOrderList(res.data);
       })
       .catch((err) => {

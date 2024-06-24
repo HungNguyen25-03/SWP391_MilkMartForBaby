@@ -171,7 +171,7 @@ async function getOrderByUserId(user_id) {
     const orderQuery = `
       SELECT * FROM Orders 
       WHERE user_id = @user_id 
-      AND status = 'completed'
+      AND status = 'Completed'
     `;
     const orderResult = await request.query(orderQuery);
     const orders = orderResult.recordset;

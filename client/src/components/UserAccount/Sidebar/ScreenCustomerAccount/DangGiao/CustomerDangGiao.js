@@ -10,7 +10,7 @@ export default function CustomerDangGiao({ title }) {
     axios
       .get(`${MainAPI}/order/DeliveredOrder`)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setDeliveryOrderList(res.data);
       })
       .catch((err) => {

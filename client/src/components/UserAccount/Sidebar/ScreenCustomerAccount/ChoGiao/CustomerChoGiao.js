@@ -37,7 +37,7 @@ export default function CustomerChoGiao({ title }) {
       ) : (
         pendingOrderList.map((product) => {
           return (
-            <div className="eachchogiao">
+            <div className="eachchogiao" key={product.product_id}>
               <div className="tab-content">
                 <div key="1" className="cart-product-line d-flex ">
                   <div className="product-img">

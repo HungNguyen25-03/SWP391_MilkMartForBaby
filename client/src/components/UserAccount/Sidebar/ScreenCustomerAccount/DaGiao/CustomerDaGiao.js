@@ -4,14 +4,20 @@ import axios from "axios";
 import { MainAPI } from "../../../../API";
 import { formatVND } from "../../../../../utils/Format";
 import ModalReview from "../ModalReview/ModalReview";
+import useAuth from "../../../../../hooks/useAuth";
+import { ToastContainer } from "react-toastify";
 
 export default function CustomerDaGiao({ title }) {
   const [completeOrderList, setCompleteOrderList] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
+  const { auth } = useAuth();
 
+  console.log(auth.user.user_id);
   useEffect(() => {
     axios
-      .get(`${MainAPI}/order/CompleteOrder`)
+      .post(`${MainAPI}/order/get-order-by-user-id`, {
+        user_id: auth.user.user_id,
+      })
       .then((res) => {
         console.log(res.data);
         setCompleteOrderList(res.data);
@@ -27,6 +33,7 @@ export default function CustomerDaGiao({ title }) {
 
   return (
     <div className={title === "Đã giao" ? "chờ giao" : "fade"}>
+      <ToastContainer />
       <h5 className="fw-bold">{title}</h5>
       {completeOrderList.length === 0 ? (
         <div className="emptyinfo">
