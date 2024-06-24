@@ -1,6 +1,6 @@
 .inventory {
     width: 80%;
-    margin: 100px auto 0; 
+    margin: 80px auto 0; 
     box-shadow: 1px 1px 10px 5px rgba(180, 177, 177, 0.989); 
     background-color: #fff; 
 
@@ -21,7 +21,7 @@
     }
 
     .inventory-tb {
-        height: 475px;
+        height: 400px;
         overflow: auto;
 
         .table-inventory-tb {
@@ -44,5 +44,20 @@
         background: none;
         border: none;
         font-size: 16px;
+    }
+
+    .create-inventory-btn {
+        text-align: right;
+    }
+
+    .add-cancel {
+        border: none;
+        background-color: #00CCFF;
+        border-radius: 20px;
+        margin-left: 10px;
+    }
+
+    .code-dis {
+        margin-left: 10px;
     }
 }
