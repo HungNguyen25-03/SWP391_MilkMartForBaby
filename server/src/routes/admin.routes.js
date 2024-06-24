@@ -18,19 +18,33 @@ const adminRoutes = express.Router();
 // admin CRUD api
 
 //api create User
-adminRoutes.post("/create", createUserMiddleware, createUserController);
+adminRoutes.post(
+  "/create",
+  authJwt.authenticateToken,
+  createUserMiddleware,
+  createUserController
+);
 
 //api get User
-adminRoutes.get("/getUser/:id", getUserByIdController);
+adminRoutes.get(
+  "/getUser/:id",
+  authJwt.authenticateToken,
+  getUserByIdController
+);
 
 // get All User
-adminRoutes.get("/allUsers", getAllUserController);
+adminRoutes.get("/allUsers", authJwt.authenticateToken, getAllUserController);
 
 // Delete user
 
-adminRoutes.get("/delete/:id", deleteUserController);
+adminRoutes.get("/delete/:id", authJwt.authenticateToken, deleteUserController);
 
 //api update User
-adminRoutes.put("/update/:id", updateUserMiddleware, updateUserController);
+adminRoutes.put(
+  "/update/:id",
+  authJwt.authenticateToken,
+  updateUserMiddleware,
+  updateUserController
+);
 
 module.exports = adminRoutes;
