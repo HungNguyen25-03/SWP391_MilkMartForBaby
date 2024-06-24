@@ -1,32 +1,33 @@
 import { useContext, useEffect, useState } from "react";
-import { categoryList } from "./category";
+import { categoryList, ageList } from "./category";
 import "./Product.scss";
 import { FaShoppingCart } from "react-icons/fa";
 import { CartContext } from "../Cart/CartContext";
 import { formatVND } from "../../utils/Format";
-import { ageList } from "./category";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { MainAPI } from "../API";
 
-export default function ProductListShow({ productList = [] }) {
+export default function ProductListShow({ productList, changePage }) {
   const { handleAddToCart } = useContext(CartContext);
   const [ageFilters, setAgeFilters] = useState([]);
   const [countryFilters, setCountryFilters] = useState([]);
   const [filteredItems, setFilteredItems] = useState(productList);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
 
   const handleFilterButtonClick = (
-    seletedCategory,
+    selectedCategory,
     selectedFilters,
     setSelectedFilters
   ) => {
-    if (selectedFilters.includes(seletedCategory)) {
+    if (selectedFilters.includes(selectedCategory)) {
       setSelectedFilters(
-        selectedFilters.filter((category) => category !== seletedCategory)
+        selectedFilters.filter((category) => category !== selectedCategory)
       );
     } else {
-      setSelectedFilters([...selectedFilters, seletedCategory]);
+      setSelectedFilters([...selectedFilters, selectedCategory]);
     }
   };
 
@@ -37,31 +38,39 @@ export default function ProductListShow({ productList = [] }) {
         ageRange: ageFilters,
       })
       .then((res) => {
-        // console.log(res.data);
         setFilteredItems(res.data.products);
+        setCurrentPage(1); // Reset to the first page when filters are applied
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  // const filterItems = () => {
-  //   if (selectedFilters.length > 0) {
-  //     let tempItems = selectedFilters.map((seletedCategory) => {
-  //       let temp = productList.filter(
-  //         (product) => product.category === seletedCategory
-  //       );
-  //       return temp;
-  //     });
-  //     setFilteredItems(tempItems.flat());
-  //   } else {
-  //     setFilteredItems([...productList]);
-  //   }
-  // };
+  useEffect(() => {
+    if (countryFilters.length > 0 || ageFilters.length > 0) {
+      filterItems();
+    } else {
+      setFilteredItems(productList);
+    }
+  }, [countryFilters, ageFilters, productList]);
 
   useEffect(() => {
-    filterItems();
-  }, [countryFilters, ageFilters]);
+    setFilteredItems(productList);
+  }, [productList]);
+
+  console.log(productList);
+
+  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentItems = filteredItems.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    changePage(pageNumber);
+  };
 
   return (
     <div className="fillter_container">
@@ -117,19 +126,19 @@ export default function ProductListShow({ productList = [] }) {
         </div>
       </div>
 
-      <div className="product_detail text-center">
+      <div className="product_detail text-center d-flex flex-column">
         <div className="row row-cols-5">
-          {filteredItems &&
-            filteredItems.map((product) => (
+          {currentItems &&
+            productList.map((product) => (
               <div key={product.product_id} className="product-card col">
                 <a
                   className="product-detail-link"
                   href={`/home/ProductDetail/${product.product_id}`}
                 >
                   <div className="home-product-detail-img-container">
-                    <img src={product.img} alt={product.title} />
+                    <img src={product.image_url} alt={product.title} />
                   </div>
-                  <div className="mt-2">{product.detail}</div>
+                  <div className="mt-2">{product.product_name}</div>
                   <div>
                     <span className="star">★</span>
                     <span className="star">★</span>
@@ -156,6 +165,19 @@ export default function ProductListShow({ productList = [] }) {
                 </div>
               </div>
             ))}
+        </div>
+        <div className="pagination">
+          {Array.from({ length: 3 }, (_, index) => (
+            <button
+              key={index}
+              onClick={() => handlePageChange(index + 1)}
+              className={`pagination-button ${
+                index + 1 === currentPage ? "active" : ""
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
         </div>
       </div>
     </div>

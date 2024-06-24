@@ -32,6 +32,6 @@ orderRouters.get("/DeliveredOrder", getOrderByDeliveredStatus);
 const {
   getOrderByUserIdController,
 } = require("../controller/orders.controller");
-orderRouters.get("/get-order-by-user-id", getOrderByUserIdController);
+orderRouters.post("/get-order-by-user-id", getOrderByUserIdController);
 
 module.exports = orderRouters;

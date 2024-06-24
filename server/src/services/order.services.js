@@ -55,11 +55,9 @@ async function getCompleteStatus() {
   try {
     const pool = await poolPromise;
     const request = await pool.request();
-    request.input('status', sql.NVarChar, 'Completed');
+    request.input("status", sql.NVarChar, "Completed");
 
-
-    const query =
-      `SELECT 
+    const query = `SELECT 
       o.order_id,
       oi.order_item_id,
       p.product_id,
@@ -77,8 +75,7 @@ async function getCompleteStatus() {
       Products p ON oi.product_id = p.product_id
   WHERE 
       o.status = @status;
-        `
-      ;
+        `;
     const result = await request.query(query);
 
     const order = result.recordset;
@@ -103,9 +100,7 @@ async function getPendingStatus() {
 
     request.input("status", sql.NVarChar, "Pending");
 
-    const query =
-      `SELECT * FROM Orders WHERE status = @status`
-      ;
+    const query = `SELECT * FROM Orders WHERE status = @status`;
     const result = await request.query(query);
     const order = result.recordset;
     if (order) {
@@ -128,9 +123,7 @@ async function getConfirmStatus() {
 
     request.input("status", sql.NVarChar, "Confirmed");
 
-    const query =
-      `SELECT * FROM Orders WHERE status = @status`
-      ;
+    const query = `SELECT * FROM Orders WHERE status = @status`;
     const result = await request.query(query);
     const order = result.recordset;
     if (order) {
@@ -153,10 +146,7 @@ async function getDeliverStatus() {
 
     request.input("status", sql.NVarChar, "Delivered");
 
-    const query =
-      `SELECT * FROM Orders WHERE status = @status`
-      ;
-
+    const query = `SELECT * FROM Orders WHERE status = @status`;
     const result = await request.query(query);
     const order = result.recordset;
     if (order) {
@@ -178,13 +168,19 @@ async function getOrderByUserId(user_id) {
     const request = pool.request();
 
     request.input("user_id", sql.Int, user_id);
-
-    const orderQuery = `SELECT * FROM Orders WHERE user_id = @user_id`;
+    const orderQuery = `
+      SELECT * FROM Orders 
+      WHERE user_id = @user_id 
+      AND status = 'Completed'
+    `;
     const orderResult = await request.query(orderQuery);
     const orders = orderResult.recordset;
 
     if (orders.length === 0) {
-      return { success: false, message: "No orders found for the user" };
+      return {
+        success: false,
+        message: "No completed orders found for the user",
+      };
     }
 
     const orderWithProducts = [];
@@ -192,10 +188,11 @@ async function getOrderByUserId(user_id) {
     for (const order of orders) {
       const productRequest = pool.request();
       productRequest.input("user_id", sql.Int, order.user_id);
-
+      productRequest.input("order_id", sql.Int, order.order_id);
       const productQuery = `SELECT p.*, o.total_amount, oi. quantity 
       FROM Orders o JOIN Order_Items oi ON o.order_id = oi.order_id 
-      JOIN Products p ON oi.product_id = p.product_id WHERE o.user_id = 4 
+      JOIN Products p ON oi.product_id = p.product_id 
+      WHERE o.user_id = @user_id AND o.order_id = @order_id
       AND status = 'completed'
       `;
       const productResult = await productRequest.query(productQuery);

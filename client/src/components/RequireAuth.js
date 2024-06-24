@@ -4,9 +4,10 @@ import useAuth from "../hooks/useAuth";
 const RequireAuth = ({ allowedRoles }) => {
   const { auth } = useAuth();
   const location = useLocation();
-
+  // console.log(auth);
   console.log(auth);
   localStorage.setItem('name', auth.user.username)
+
 
   return auth?.role === allowedRoles ? (
     <Outlet />
