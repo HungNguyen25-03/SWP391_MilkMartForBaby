@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useAuth from "../../../../../hooks/useAuth";
 import { productList } from "../../../../HomePage/Content/Shopping/Product";
 import "./ModaReview.scss";
 import { FaStar } from "react-icons/fa";
+import axios from "axios";
+import { MainAPI } from "../../../../API";
+import { toast } from "react-toastify";
 
 const colors = {
   orange: "#FFBA5A",
@@ -19,6 +22,25 @@ export default function ModalReview({
   const stars = Array(5).fill(0);
   const [currentValue, setCurrentValue] = useState(0);
   const [hoverValue, setHoverValue] = useState(undefined);
+  const [feedback, setFeedback] = useState("");
+  const product = productList[0];
+
+  useEffect(() => {
+    axios
+      .post(`${MainAPI}/user/review-product`, {
+        user_id: auth.user.user_id,
+        product_id: product_id,
+        rating: currentValue,
+        comment: feedback,
+      })
+      .then((res) => {
+        closeModal();
+        toast.success("Đánh giá thành công");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
 
   const handleClick = (value) => {
     setCurrentValue(value);
@@ -31,9 +53,6 @@ export default function ModalReview({
   const handleMouseLeave = () => {
     setHoverValue(undefined);
   };
-
-  const [feedback, setFeedback] = useState("");
-  const product = productList[0];
 
   const handleChange = (e) => {
     setFeedback(e.target.value);

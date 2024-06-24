@@ -3,7 +3,7 @@ const productRouters = express.Router();
 
 // get All Product
 const { getProduct } = require("../controller/products.controller");
-productRouters.get("/getProduct", getProduct);
+productRouters.post("/getProduct", getProduct);
 
 //get Product By ID
 const { getProById } = require("../controller/products.controller");
@@ -16,10 +16,8 @@ productRouters.get("/search", searchByName);
 //fliter Product
 const { filtering } = require("../controller/products.controller");
 
-
-
 productRouters.use(express.json());
 
-productRouters.post('/filter', filtering);
+productRouters.post("/filter", filtering);
 
 module.exports = productRouters;

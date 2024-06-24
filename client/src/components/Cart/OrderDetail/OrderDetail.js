@@ -40,9 +40,11 @@ export default function OrderDetail() {
               <div key={product.id} className="cart-product-line">
                 <div className="block-cart-first">
                   <div className="product-img">
-                    <img src={product.img} alt={product.name} />
+                    <img src={product.image_url} alt={product.name} />
                   </div>
-                  <div className="item-cart-product-name">{product.name}</div>
+                  <div className="item-cart-product-name">
+                    {product.description}
+                  </div>
                 </div>
                 <div className="block-cart-end">
                   <div className="item-cart-price-pro mr-0 ">

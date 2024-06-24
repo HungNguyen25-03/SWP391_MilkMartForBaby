@@ -3,7 +3,7 @@ import "./FooterPage.scss";
 
 export default function FooterPage() {
   return (
-    <div className="footer">
+    <div className="footer mt-4">
       {/* <div className="footer-content text-white"> */}
       <p>&copy; 2024 Milk Mart For Baby. All rights reserved.</p>
       <div className="social-links">
@@ -14,11 +14,7 @@ export default function FooterPage() {
         >
           Facebook
         </a>
-        <a
-          href="https://twitter.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
           Twitter
         </a>
         <a

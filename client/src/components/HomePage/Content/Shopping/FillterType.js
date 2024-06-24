@@ -6,17 +6,31 @@ import ProductListShow from "../../ProductListShow";
 
 export default function FillterType() {
   const [allProductList, setAllProductList] = useState([]);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     axios
-      .get(`${MainAPI}/product/getProduct`)
+      .post(`${MainAPI}/product/getProduct`, {
+        page: page,
+        pageSize: 12,
+      })
       .then((res) => {
-        setAllProductList(res.data);
+        // console.log(res.data.inStockProducts);
+        setAllProductList(res.data.inStockProducts);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [page, setPage]);
 
-  return <ProductListShow productList={productList} />;
+  console.log(page);
+
+  return (
+    <ProductListShow
+      productList={allProductList}
+      changePage={(page) => {
+        setPage(page);
+      }}
+    />
+  );
 }

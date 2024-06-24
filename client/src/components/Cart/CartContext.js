@@ -1,14 +1,17 @@
 import { createContext, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import useAuth from "../../hooks/useAuth";
 
 const CartContext = createContext();
 
 function CartProvider({ children }) {
   const [cartList, setCartList] = useState([]);
+  const { auth } = useAuth();
   const token = JSON.parse(localStorage.getItem("accessToken"));
   const localCartList = JSON.parse(localStorage.getItem("cartList"));
-  console.log(localCartList);
+  // console.log(token);
+  // console.log(localCartList);
 
   const handleAddToCart = (product) => {
     if (token) {
