@@ -1,14 +1,41 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import './NavBarStaff.scss'
+import { MainAPI } from '../../API';
+import AuthContext from '../../../context/AuthProvider';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 export default function NavBarStaff() {
 
-    // const navigate = useNavigate();
+    useEffect(() => {
+        nav('/staff/comfirm_order');
+    }, []);
 
-    // useEffect(() => {
-    //     navigate('/staff/comfirm_order'); // Redirect to the desired path
-    // }, [navigate]);
+    const getName = localStorage.getItem('name')
+    const token = JSON.parse(localStorage.getItem("accessToken"));
+    const { setAuth } = useContext(AuthContext);
+    const nav = useNavigate();
+
+    const handleLogout = () => {
+        axios
+            .post(`${MainAPI}/user/logout`, token, {
+                headers: {
+                    "x-access-token": token,
+                },
+            })
+            .then((res) => {
+                console.log(res.data);
+                localStorage.removeItem("accessToken");
+                localStorage.removeItem("auth");
+                setAuth({});
+                toast.success("Đăng xuất thành công");
+                nav("/login");
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
 
     return (
         <div className='staff'>
@@ -17,7 +44,16 @@ export default function NavBarStaff() {
             </div>
 
             <div className='user_name'>
-                <p><span>User Name:</span>&nbsp; Minh Trí</p>
+                <p><span>User Name:</span>&nbsp; {getName}</p>
+            </div>
+
+            <div>
+                <button
+                    style={{ textAlign: 'center', backgroundColor: '#00ccff', borderRadius: '50px', border: 'none' }}
+                    onClick={handleLogout}
+                >
+                    Đăng xuất
+                </button>
             </div>
 
             <div className='line'></div>

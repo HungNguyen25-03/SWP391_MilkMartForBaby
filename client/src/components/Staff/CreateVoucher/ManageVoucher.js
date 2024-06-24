@@ -6,23 +6,27 @@ export default function ManageVoucher({ vouchers }) {
         <div className='voucher'>
             <div className='voucher-th'>
                 <table className='table-voucher-th'>
-                    <tr>
-                        <th>Voucher ID</th>
-                        <th>Code</th>
-                        <th>Discount</th>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>Voucher ID</th>
+                            <th>Code</th>
+                            <th>Discount</th>
+                        </tr>
+                    </thead>
                 </table>
             </div>
 
             <div className='voucher-tb'>
                 <table className='table-voucher-tb'>
-                    {vouchers.map((voucher, index) => (
-                        <tr key={index}>
-                            <td>{voucher.voucher_id}</td>
-                            <td>{voucher.code}</td>
-                            <td>{voucher.discount}%</td>
-                        </tr>
-                    ))}
+                    <tbody>
+                        {vouchers.map((voucher, index) => (
+                            <tr key={index}>
+                                <td>{voucher.voucher_id}</td>
+                                <td>{voucher.code}</td>
+                                <td>{voucher.discount}%</td>
+                            </tr>
+                        ))}
+                    </tbody>
                 </table>
             </div>
         </div >

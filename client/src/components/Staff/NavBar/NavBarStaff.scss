@@ -28,6 +28,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+
         width: 100%;
 
         .staff_playout {
@@ -36,7 +37,7 @@
             text-align: center;
             border-radius: 8px;
             padding: 10px;
-            background-color: #1481e1;
+            background-color: #00a2ff;
             color: white;
             transition: background-color 0.3s, box-shadow 0.3s;
             font-size: 1em;

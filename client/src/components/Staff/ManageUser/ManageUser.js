@@ -18,13 +18,15 @@ export default function ManageUser({ users }) {
 
             <div className='user-tb'>
                 <table className='table-user-tb'>
-                    {users.map((user, index) => (
-                        <tr key={index}>
-                            <td>{user.user_id}</td>
-                            <td>{user.username}</td>
-                            <td>{user.role_id}</td>
-                        </tr>
-                    ))}
+                    <tbody>
+                        {users.map((user, index) => (
+                            <tr key={index}>
+                                <td>{user.user_id}</td>
+                                <td>{user.username}</td>
+                                <td>{user.role_id}</td>
+                            </tr>
+                        ))}
+                    </tbody>
                 </table>
             </div>
         </div>
