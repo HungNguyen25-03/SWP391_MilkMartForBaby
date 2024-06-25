@@ -12,35 +12,15 @@ const colors = {
   grey: "#a9a9a9",
 };
 
-export default function ModalReview({
-  closeModal,
-  onSubmit,
-  errors,
-  product_id,
-}) {
+export default function ModalReview({ closeModal, onSubmit, product }) {
   const { auth } = useAuth();
   const stars = Array(5).fill(0);
   const [currentValue, setCurrentValue] = useState(0);
   const [hoverValue, setHoverValue] = useState(undefined);
   const [feedback, setFeedback] = useState("");
-  const product = productList[0];
+  console.log(product);
 
-  useEffect(() => {
-    axios
-      .post(`${MainAPI}/user/review-product`, {
-        user_id: auth.user.user_id,
-        product_id: product_id,
-        rating: currentValue,
-        comment: feedback,
-      })
-      .then((res) => {
-        closeModal();
-        toast.success("Đánh giá thành công");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
+  useEffect(() => {}, []);
 
   const handleClick = (value) => {
     setCurrentValue(value);
@@ -60,27 +40,49 @@ export default function ModalReview({
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    axios
+      .post(
+        `${MainAPI}/user/review-product`,
+        {
+          user_id: auth.user.user_id,
+          product_id: product.product_id,
+          rating: currentValue,
+          comment: feedback,
+        },
+        {
+          headers: {
+            "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+          },
+        }
+      )
+      .then((res) => {
+        closeModal();
+        toast.success("Đánh giá thành công");
+        closeModal();
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Đánh giá thất bại");
+      });
     onSubmit({ feedback, currentValue });
-    closeModal();
   };
 
   return (
     <div
       className="modal-container-review"
       onClick={(e) => {
-        if (e.target.className === "modal-container") {
+        if (e.target.className === "modal-container-review") {
           closeModal();
         }
       }}
     >
-      {/* ADMINPAGE */}
       <div className="modal-content">
         <h3 className="text-center">Đánh giá sản phẩm</h3>
         <div className="d-flex">
           <div className="img-container">
-            <img src={product.img} alt="product" />
+            <img src={product.image_url} alt="product" />
           </div>
-          <p>{product.detail}</p>
+          <p>{product.product_name}</p>
         </div>
 
         <div className="rating d-flex justify-content-center">
