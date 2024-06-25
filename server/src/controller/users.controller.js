@@ -164,12 +164,13 @@ const readyToCheckoutController = async (req, res) => {
 };
 
 const reviewsByProductIdController = async (req, res) => {
-  const { user_id, product_id, rating, comment } = req.body;
+  const { user_id, product_id, order_id, rating, comment } = req.body;
 
   try {
     const reviews = await reviewsByProductId(
       user_id,
       product_id,
+      order_id,
       rating,
       comment
     );

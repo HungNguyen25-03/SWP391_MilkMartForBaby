@@ -205,17 +205,25 @@ async function insertOrderItems(order_id, orderItems) {
   }
 }
 
-async function reviewsByProductId(user_id, product_id, rating, comment) {
+async function reviewsByProductId(
+  user_id,
+  product_id,
+  order_id,
+  rating,
+  comment
+) {
   try {
     const pool = await poolPromise;
     const result = await pool
       .request()
       .input("user_id", sql.Int, user_id)
       .input("product_id", sql.Int, product_id)
+      .input("order_id", sql.Int, order_id)
+
       .input("rating", sql.Int, rating)
       .input("comment", sql.NVarChar, comment)
       .query(
-        `INSERT INTO Reviews (user_id, product_id, rating, comment) VALUES (@user_id, @product_id, @rating, @comment)`
+        `INSERT INTO Reviews (user_id, product_id, order_id ,rating, comment) VALUES (@user_id, @product_id, @order_id, @rating, @comment)`
       );
     return { success: true, message: "Review added successfully" };
   } catch (error) {
@@ -230,7 +238,7 @@ async function showReviewsByProductId(product_id) {
       .request()
       .input("product_id", sql.Int, product_id)
       .query(
-        `SELECT r.review_id, r.rating, r.comment, r.review_date, u.username, u.user_id FROM Reviews r JOIN Users u ON r.user_id = u.user_id WHERE r.product_id = @product_id`
+        `SELECT r.review_id, r.rating, r.comment, r.review_date, r.order_id, u.username, u.user_id FROM Reviews r JOIN Users u ON r.user_id = u.user_id WHERE r.product_id = @product_id`
       );
     const reviews = result.recordset;
     return { success: true, reviews: reviews };
