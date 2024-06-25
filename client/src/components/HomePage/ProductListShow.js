@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { MainAPI } from "../API";
+import { Link } from "react-router-dom";
 
 export default function ProductListShow({ productList, changePage }) {
   const { handleAddToCart } = useContext(CartContext);
@@ -131,9 +132,9 @@ export default function ProductListShow({ productList, changePage }) {
           {currentItems &&
             productList.map((product) => (
               <div key={product.product_id} className="product-card col">
-                <a
+                <Link
                   className="product-detail-link"
-                  href={`/home/ProductDetail/${product.product_id}`}
+                  to={`/home/ProductDetail/${product.product_id}`}
                 >
                   <div className="home-product-detail-img-container">
                     <img src={product.image_url} alt={product.title} />
@@ -147,7 +148,7 @@ export default function ProductListShow({ productList, changePage }) {
                     <span className="star">★</span>
                     <span style={{ fontSize: "10px" }}>{product.sale}</span>
                   </div>
-                </a>
+                </Link>
                 <div
                   style={{
                     display: "flex",
