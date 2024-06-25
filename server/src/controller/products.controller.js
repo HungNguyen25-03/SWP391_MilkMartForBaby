@@ -44,7 +44,7 @@ const getAllProductWithoutPaginationController = async (req, res) => {
 // Get Product By ID Controller
 
 const getProById = async (req, res) => {
-  const { product_id } = req.body;
+  const product_id = parseInt(req.params.id, 10);
   console.log(product_id);
   try {
     const result = await getProductById(product_id);
