@@ -8,10 +8,11 @@ const {
   searchByName,
   filtering,
   getAllProductWithoutPaginationController,
+  getAllCategoryController,
 } = require("../controller/products.controller");
 
 // Define the routes with their corresponding controller functions
-productRouters.post("/getProduct", getProduct);
+productRouters.get("/getProduct", getProduct);
 productRouters.get("/getProById", getProById);
 productRouters.get("/search", searchByName);
 productRouters.post("/filter", filtering);
@@ -19,5 +20,6 @@ productRouters.get(
   "/getAllProductWithoutPagination",
   getAllProductWithoutPaginationController
 );
+productRouters.get("/get-all-category", getAllCategoryController);
 
 module.exports = productRouters;
