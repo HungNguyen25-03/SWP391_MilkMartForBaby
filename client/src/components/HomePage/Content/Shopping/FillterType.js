@@ -7,6 +7,7 @@ import ProductListShow from "../../ProductListShow";
 export default function FillterType() {
   const [allProductList, setAllProductList] = useState([]);
   const [page, setPage] = useState(1);
+  const [totalProduct, setTotalProduct] = useState(0);
 
   useEffect(() => {
     axios
@@ -17,13 +18,14 @@ export default function FillterType() {
       .then((res) => {
         // console.log(res.data.inStockProducts);
         setAllProductList(res.data.inStockProducts);
+        setTotalProduct(res.data.totalProducts);
       })
       .catch((err) => {
         console.log(err);
       });
   }, [page, setPage]);
 
-  console.log(page);
+  // console.log(page);
 
   return (
     <ProductListShow
@@ -31,6 +33,7 @@ export default function FillterType() {
       changePage={(page) => {
         setPage(page);
       }}
+      totalProduct={totalProduct}
     />
   );
 }

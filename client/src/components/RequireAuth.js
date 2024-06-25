@@ -6,7 +6,6 @@ const RequireAuth = ({ allowedRoles }) => {
   const location = useLocation();
   // console.log(auth);
   console.log(auth);
-  localStorage.setItem("name", auth.user.username);
 
   return auth?.role === allowedRoles ? (
     <Outlet />
