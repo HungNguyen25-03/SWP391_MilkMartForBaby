@@ -266,20 +266,21 @@ const reviewsByProductIdMiddlewares = async (req, res, next) => {
   try {
     const errors = [];
     const pool = await poolPromise;
-    const { user_id, product_id } = req.body;
+    const { user_id, product_id, order_id } = req.body;
     const existingReview = await pool
       .request()
       .input("user_id", sql.Int, user_id)
       .input("product_id", sql.Int, product_id)
+      .input("order_id", sql.Int, order_id)
       .query(
-        `SELECT * FROM Reviews WHERE user_id = @user_id AND product_id = @product_id`
+        `SELECT * FROM Reviews WHERE user_id = @user_id AND product_id = @product_id AND order_id = @order_id`
       );
 
     if (existingReview.recordset.length > 0) {
       errors.push({
         name: "review",
         success: false,
-        message: "User has already reviewed this product.",
+        message: "User has already reviewed this product in this order.",
         status: 400,
       });
     }
