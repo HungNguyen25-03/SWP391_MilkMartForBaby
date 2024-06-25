@@ -1,68 +1,3 @@
-// import React, { useEffect, useState } from 'react'
-// import './Inventory.scss'
-// import { MainAPI } from '../../API'
-
-// export default function ManageInventory() {
-
-
-//     const [inventory, setInventory] = useState([])
-
-//     const fetchData = async () => {
-//         try {
-//             const res = await fetch(`${MainAPI}/staff/product`, {
-//                 method: "GET"
-//             })
-
-//             if (!res.ok) throw new Error("Failed to fetch data get product");
-
-//             const data = await res.json();
-//             setInventory(data);
-
-//         } catch (error) {
-//             console.error("Error fetching data product:", error);
-//         }
-//     }
-//     useEffect(() => {
-//         fetchData();
-//     }, [])
-
-//     return (
-//         <div className='inventory'>
-//             <div className='inventory-th'>
-//                 <table className='table-inventory-th'>
-//                     <thead>
-//                         <tr>
-//                             <th>Product ID</th>
-//                             <th>Product Name</th>
-//                             <th>Price</th>
-//                             <th>Stock</th>
-//                             <th>Action</th>
-//                         </tr>
-//                     </thead>
-//                 </table>
-//             </div>
-
-//             <div className='inventory-tb'>
-//                 <table className='table-inventory-tb'>
-//                     <tbody>
-//                         {inventory.map((invent, index) => (
-//                             <tr key={index}>
-//                                 <td style={{ padding: "10px" }}>{invent.product_id}</td>
-//                                 <td>{invent.product_name}</td>
-//                                 <td>{invent.price} đ</td>
-//                                 <td>{invent.stock}</td>
-//                                 <td>
-//                                     <button className="action-btn">▪▪▪</button>
-//                                 </td>
-//                             </tr>
-//                         ))}
-//                     </tbody>
-//                 </table>
-//             </div>
-//         </div>
-//     )
-// }
-
 import React, { useEffect, useState } from 'react';
 import './Inventory.scss';
 import { BsJournalCheck } from "react-icons/bs";
@@ -71,27 +6,23 @@ import { MainAPI } from '../../API';
 
 export default function ManageInventory() {
     const [inventory, setInventory] = useState([]);
-    const [actionVisible, setActionVisible] = useState(true);
+    const [actionVisible, setActionVisible] = useState(null);
     const [proName, setProName] = useState('');
     const [price, setPrice] = useState('');
     const [stock, setStock] = useState('');
     const [showAdd, setShowAdd] = useState(false);
 
-
-    const fetchData = async () => {
-        try {
-            const res = await fetch(`${MainAPI}/staff/product`, {
-                method: "GET"
-            });
-
-            if (!res.ok) throw new Error("Failed to fetch data get product");
-
-            const data = await res.json();
-            setInventory(data);
-
-        } catch (error) {
-            console.error("Error fetching data product:", error);
-        }
+    const fetchData = () => {
+        fetch(`${MainAPI}/staff/product`, {
+            method: "GET",
+            headers: { "x-access-token": JSON.parse(localStorage.getItem("accessToken")) }
+        })
+            .then(res => {
+                if (!res.ok) throw new Error("Failed to fetch data get product");
+                return res.json();
+            })
+            .then(data => setInventory(data))
+            .catch(error => console.error("Error fetching data product:", error));
     };
 
     useEffect(() => {
@@ -110,9 +41,37 @@ export default function ManageInventory() {
         console.log(`Delete product with ID: ${productId}`);
     };
 
+    const handleAddProduct = () => {
+        const newProduct = {
+            product_name: proName,
+            price: parseFloat(price),
+            stock: parseInt(stock),
+        };
+
+        fetch(`${MainAPI}/staff/product`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-access-token": JSON.parse(localStorage.getItem("accessToken"))
+            },
+            body: JSON.stringify(newProduct),
+        })
+            .then(res => {
+                if (!res.ok) throw new Error("Failed to add product");
+                return res.json();
+            })
+            .then(data => {
+                setInventory([...inventory, data]);
+                setShowAdd(false);
+                setProName('');
+                setPrice('');
+                setStock('');
+            })
+            .catch(error => console.error("Error adding product:", error));
+    };
+
     return (
         <div className='inventory'>
-
             <div className="create-inventory-btn">
                 <button
                     style={{ border: 'none', borderRadius: '20px', marginRight: '20px', marginTop: '20px', backgroundColor: '#00CCFF' }}
@@ -130,7 +89,7 @@ export default function ManageInventory() {
                         <input type="number" value={price} onChange={(event) => setPrice(event.target.value)} />
                         <label style={{ marginLeft: '10px' }}>Stock:</label>
                         <input type="number" value={stock} onChange={(event) => setStock(event.target.value)} />
-                        <button className='add-cancel'>Create</button>
+                        <button className='add-cancel' onClick={handleAddProduct}>Create</button>
                         <button className='add-cancel' onClick={() => setShowAdd(false)}>Cancel</button>
                     </div>
                 </div>
