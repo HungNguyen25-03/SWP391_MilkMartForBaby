@@ -13,7 +13,7 @@ const {
 
 // Define the routes with their corresponding controller functions
 productRouters.get("/getProduct", getProduct);
-productRouters.get("/getProById", getProById);
+productRouters.get("/getProById/:id", getProById);
 productRouters.get("/search", searchByName);
 productRouters.post("/filter", filtering);
 productRouters.get(
