@@ -1,23 +1,23 @@
 const express = require("express");
 const productRouters = express.Router();
 
-// get All Product
-const { getProduct } = require("../controller/products.controller");
+// get all the controllers at once
+const {
+  getProduct,
+  getProById,
+  searchByName,
+  filtering,
+  getAllProductWithoutPaginationController,
+} = require("../controller/products.controller");
+
+// Define the routes with their corresponding controller functions
 productRouters.post("/getProduct", getProduct);
-
-//get Product By ID
-const { getProById } = require("../controller/products.controller");
 productRouters.get("/getProById", getProById);
-
-// search By name
-const { searchByName } = require("../controller/products.controller");
 productRouters.get("/search", searchByName);
-
-//fliter Product
-const { filtering } = require("../controller/products.controller");
-
-productRouters.use(express.json());
-
 productRouters.post("/filter", filtering);
+productRouters.get(
+  "/getAllProductWithoutPagination",
+  getAllProductWithoutPaginationController
+);
 
 module.exports = productRouters;

@@ -3,12 +3,25 @@ const staffRouters = express.Router();
 const {
   createVoucherController,
   editVoucherController,
+  getAllUserController,
+  getAllProductController,
+  getOrderController,
+  getVoucherController,
+  getImportProductController,
+  exportProductController,
+  editProductController,
+  confirmOrderController,
+  cancelOrderController,
+  addProductController,
+  updateProductController,
 } = require("../controller/staff.controller");
 const {
   createVoucherMiddleware,
   editVoucherMiddleware,
   confirmOrderMiddleware,
   cancelOrderMiddleware,
+  addProductMiddlewares,
+  updateProductMiddlewares,
 } = require("../middlewares/staff.middleware");
 const { authenticateToken } = require("../middlewares/authJwt.middlewares");
 
@@ -21,25 +34,18 @@ staffRouters.post(
 );
 
 //Get User Information by staff
-const { getAllUserController } = require("../controller/staff.controller");
 staffRouters.get("/user", authenticateToken, getAllUserController);
 
 // Get Product Information by Staff
-const { getAllProductController } = require("../controller/staff.controller");
 staffRouters.get("/product", authenticateToken, getAllProductController);
 
 //Get Order information by staff
-const { getOrderController } = require("../controller/staff.controller");
 staffRouters.get("/order", authenticateToken, getOrderController);
 
 //Get Voucher information by staff
-const { getVoucherController } = require("../controller/staff.controller");
 staffRouters.get("/voucher", authenticateToken, getVoucherController);
 
 // Import and export product by staff
-const {
-  getImportProductController,
-} = require("../controller/staff.controller");
 staffRouters.post("/import", authenticateToken, getImportProductController);
 
 //Edit Voucher
@@ -51,15 +57,12 @@ staffRouters.put(
 );
 
 // Export Product
-const { exportProductController } = require("../controller/staff.controller");
 staffRouters.get("/export/:id", authenticateToken, exportProductController);
 
 // Edit quantity Product
-const { editProductController } = require("../controller/staff.controller");
 staffRouters.post("/edit", authenticateToken, editProductController);
 
 // Confirm Order
-const { confirmOrderController } = require("../controller/staff.controller");
 staffRouters.put(
   "/confirm",
   authenticateToken,
@@ -68,12 +71,25 @@ staffRouters.put(
 );
 
 // Cancel Order
-const { cancelOrderController } = require("../controller/staff.controller");
 staffRouters.put(
   "/cancel",
   authenticateToken,
   cancelOrderMiddleware,
   cancelOrderController
+);
+
+staffRouters.post(
+  "/add-product",
+  authenticateToken,
+  addProductMiddlewares,
+  addProductController
+);
+
+staffRouters.put(
+  "/update-product/:id",
+  authenticateToken,
+  updateProductMiddlewares,
+  updateProductController
 );
 
 module.exports = staffRouters;

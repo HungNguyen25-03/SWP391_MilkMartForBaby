@@ -214,9 +214,184 @@ const cancelOrderMiddleware = async (req, res, next) => {
   }
 };
 
+const addProductMiddlewares = async (req, res, next) => {
+  try {
+    const errors = [];
+    const pool = await poolPromise;
+    const {
+      product_name,
+      description,
+      price,
+      stock,
+      brand_id,
+      country_id,
+      age_range,
+      image_url,
+    } = req.body;
+
+    if (!product_name) {
+      errors.push({
+        name: "product_name",
+        success: false,
+        message: "Product name is required",
+        status: 400,
+      });
+    }
+
+    const productNameCheck = await pool
+      .request()
+      .input("product_name", sql.NVarChar, product_name).query(`
+      SELECT product_name FROM Products WHERE product_name = @product_name;`);
+
+    if (productNameCheck.recordset.length > 0) {
+      errors.push({
+        name: "product_name",
+        success: false,
+        message: "Product name already exists",
+        status: 400,
+      });
+    }
+
+    if (!price) {
+      errors.push({
+        name: "price",
+        success: false,
+        message: "Price is required",
+        status: 400,
+      });
+    }
+
+    if (price < 100) {
+      errors.push({
+        name: "price",
+        success: false,
+        message: "Price must be more than 100",
+        status: 400,
+      });
+    }
+
+    if (!stock) {
+      errors.push({
+        name: "stock",
+        success: false,
+        message: "Stock is required",
+        status: 400,
+      });
+    }
+
+    if (stock < 0) {
+      errors.push({
+        name: "stock",
+        success: false,
+        message: "Stock must be more than 1",
+        status: 400,
+      });
+    }
+
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
+    }
+
+    next();
+  } catch (error) {
+    console.error("Error in addProductMiddlewares:", error);
+    next(error);
+  }
+};
+
+const updateProductMiddlewares = async (req, res, next) => {
+  try {
+    const errors = [];
+    const pool = await poolPromise;
+    const product_id = req.params.id;
+    const {
+      product_name,
+      description,
+      price,
+      stock,
+      brand_id,
+      country_id,
+      age_range,
+      image_url,
+    } = req.body;
+
+    if (!product_name) {
+      errors.push({
+        name: "product_name",
+        message: "Product name is required",
+        status: 400,
+      });
+    }
+
+    if (!price) {
+      errors.push({
+        name: "price",
+        message: "Price is required",
+        status: 400,
+      });
+    }
+
+    if (price < 100) {
+      errors.push({
+        name: "price",
+        success: false,
+        message: "Price must be more than 100",
+        status: 400,
+      });
+    }
+
+    if (!stock) {
+      errors.push({
+        name: "stock",
+        message: "Stock is required",
+        status: 400,
+      });
+    }
+
+    if (stock < 0) {
+      errors.push({
+        name: "stock",
+        success: false,
+        message: "Stock must be more than 1",
+        status: 400,
+      });
+    }
+
+    let productCheckquery;
+    if (product_name) {
+      productCheckquery = await pool
+        .request()
+        .input("product_name", sql.NVarChar, product_name)
+        .input("product_id", sql.Int, product_id).query(`
+      SELECT * FROM Products WHERE product_name = @product_name AND product_id != @product_id`);
+    }
+    console.log(productCheckquery.recordset);
+    if (productCheckquery.recordset.length > 0) {
+      const existingProductName = productCheckquery.recordset[0].product_name;
+      if (existingProductName === product_name) {
+        errors.push({
+          name: "product_name",
+          success: false,
+          message: "Product name already exists",
+          status: 400,
+        });
+      }
+    }
+
+    if (errors.length > 0) {
+      return next(errors);
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createVoucherMiddleware,
   editVoucherMiddleware,
   confirmOrderMiddleware,
   cancelOrderMiddleware,
+  addProductMiddlewares,
+  updateProductMiddlewares,
 };

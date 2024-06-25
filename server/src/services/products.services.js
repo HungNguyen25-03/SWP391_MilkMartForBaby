@@ -34,6 +34,26 @@ async function getAllProduct(page, pageSize) {
   }
 }
 
+async function getAllProductWihoutPagination() {
+  try {
+    const pool = await poolPromise;
+    const result = await pool.request().query(`SELECT * FROM Products`);
+    const products = result.recordset;
+
+    if (products) {
+      const inStockProducts = products.filter((product) => product.stock > 0);
+      const outOfStockProducts = products.filter(
+        (product) => product.stock <= 0
+      );
+      return { inStockProducts, outOfStockProducts };
+    } else {
+      throw new Error("Failed to retrieve products.");
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function getProductById(product_id) {
   try {
     const pool = await poolPromise;
@@ -185,4 +205,5 @@ module.exports = {
   getProductById,
   searchProductByName,
   filterProduct,
+  getAllProductWihoutPagination,
 };

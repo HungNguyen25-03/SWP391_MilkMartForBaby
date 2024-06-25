@@ -282,9 +282,7 @@ async function cancelOrder(order_id) {
     const result = await pool
       .request()
       .input("order_id", sql.Int, order_id)
-      .query(
-        `UPDATE Orders SET status = 'cancel' WHERE order_id = @order_id;`
-      );
+      .query(`UPDATE Orders SET status = 'cancel' WHERE order_id = @order_id;`);
     if (result.rowsAffected[0] > 0) {
       return { success: true, message: "Order cancel successfully" };
     } else {
@@ -314,6 +312,122 @@ async function confirmOrder(order_id) {
   }
 }
 
+async function addProduct(
+  product_name,
+  description,
+  price,
+  stock,
+  brand_id,
+  country_id,
+  age_range,
+  image_url
+) {
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input("product_name", sql.NVarChar, product_name)
+      .input("description", sql.NVarChar, description)
+      .input("price", sql.Decimal, price)
+      .input("stock", sql.Int, stock)
+      .input("brand_id", sql.Int, brand_id)
+      .input("country_id", sql.Char, country_id)
+      .input("age_range", sql.VarChar, age_range)
+      .input("image_url", sql.VarChar, image_url).query(`
+      INSERT INTO Products (product_name, description, price, stock, brand_id, country_id, age_range, image_url)
+      VALUES (@product_name, @description, @price, @stock, @brand_id, @country_id, @age_range, @image_url)
+    `);
+
+    return { success: true, message: "Product successfully added" };
+  } catch (error) {
+    console.error("Error adding or updating product:", error);
+    throw error;
+  }
+}
+
+async function updateProduct(
+  product_id,
+  product_name,
+  description,
+  price,
+  stock,
+  brand_id,
+  country_id,
+  age_range,
+  image_url
+) {
+  try {
+    const pool = await poolPromise;
+    const request = pool.request().input("product_id", product_id);
+
+    let updateFields = [];
+
+    if (product_name) {
+      request.input("product_name", product_name);
+      updateFields.push("product_name = @product_name");
+    }
+
+    if (description) {
+      request.input("description", description);
+      updateFields.push("description = @description");
+    }
+
+    if (price) {
+      request.input("price", price);
+      updateFields.push("price = @price");
+    }
+
+    if (stock) {
+      request.input("stock", stock);
+      updateFields.push("stock = @stock");
+    }
+
+    if (brand_id) {
+      request.input("brand_id", brand_id);
+      updateFields.push("brand_id = @brand_id");
+    }
+
+    if (country_id) {
+      request.input("country_id", country_id);
+      updateFields.push("country_id = @country_id");
+    }
+
+    if (age_range) {
+      request.input("age_range", age_range);
+      updateFields.push("age_range = @age_range");
+    }
+
+    if (image_url) {
+      request.input("image_url", image_url);
+      updateFields.push("image_url = @image_url");
+    }
+
+    if (updateFields.length === 0) {
+      return { success: false, message: "No fields to update" };
+    }
+
+    const query = `
+    UPDATE Products
+    SET ${updateFields.join(", ")}
+    WHERE product_id = @product_id`;
+
+    const result = await request.query(query);
+
+    if (result.rowsAffected && result.rowsAffected[0] > 0) {
+      return { success: true, message: "Product updated successfully" };
+    } else {
+      return { success: false, message: "Failed to update product" };
+    }
+  } catch (error) {
+    console.error("Error updating product:", error);
+    return {
+      success: false,
+      message: "Failed to update product",
+      error: error.message,
+    };
+  }
+}
+
 module.exports = {
   createVoucher,
   getAllUser,
@@ -326,4 +440,6 @@ module.exports = {
   editProduct,
   confirmOrder,
   cancelOrder,
+  addProduct,
+  updateProduct,
 };

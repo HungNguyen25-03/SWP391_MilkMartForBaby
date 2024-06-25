@@ -59,4 +59,9 @@ userRoutes.post(
   userController.logoutController
 );
 
+userRoutes.get(
+  "/show-reviews-by-product/:product_id",
+  userController.showReviewsByProductIdController
+);
+
 module.exports = userRoutes;

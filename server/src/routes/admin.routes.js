@@ -18,12 +18,7 @@ const adminRoutes = express.Router();
 // admin CRUD api
 
 //api create User
-adminRoutes.post(
-  "/create",
-  authJwt.authenticateToken,
-  createUserMiddleware,
-  createUserController
-);
+adminRoutes.post("/create", createUserMiddleware, createUserController);
 
 //api get User
 adminRoutes.get(
