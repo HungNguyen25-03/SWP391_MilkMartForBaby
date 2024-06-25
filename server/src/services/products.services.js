@@ -1,6 +1,6 @@
 const { poolPromise, sql } = require("./database.services");
 
-async function getAllProduct(page = 1, pageSize = 10) {
+async function getAllProduct(page = 1, pageSize = 12) {
   try {
     const pool = await poolPromise;
     const offset = (page - 1) * pageSize;
@@ -80,7 +80,7 @@ async function getProductById(product_id) {
   }
 }
 
-async function searchProductByName(searchTerm, page = 1, pageSize = 10) {
+async function searchProductByName(searchTerm, page = 1, pageSize = 12) {
   try {
     const pool = await poolPromise;
     const offset = (page - 1) * pageSize;
@@ -134,7 +134,7 @@ async function filterProduct(
   brand = [],
   country = [],
   page = 1,
-  pageSize = 10
+  pageSize = 12
 ) {
   try {
     const pool = await poolPromise;
