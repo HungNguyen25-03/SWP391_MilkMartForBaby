@@ -1,6 +1,6 @@
 const { poolPromise, sql } = require("./database.services");
 
-async function getAllProduct(page, pageSize) {
+async function getAllProduct(page = 1, pageSize = 10) {
   try {
     const pool = await poolPromise;
     const offset = (page - 1) * pageSize;
@@ -10,6 +10,7 @@ async function getAllProduct(page, pageSize) {
       .request()
       .query("SELECT COUNT(*) as total FROM Products");
     const totalProducts = countResult.recordset[0].total;
+    const totalPages = Math.ceil(totalProducts / pageSize);
 
     // Query to get the paginated products
     const result = await pool.request().query(`
@@ -25,11 +26,19 @@ async function getAllProduct(page, pageSize) {
       const outOfStockProducts = products.filter(
         (product) => product.stock <= 0
       );
-      return { inStockProducts, outOfStockProducts, totalProducts };
+      return {
+        inStockProducts,
+        outOfStockProducts,
+        totalProducts,
+        currentPage: page,
+        totalPages,
+        pageSize,
+      };
     } else {
       throw new Error("Failed to retrieve products.");
     }
   } catch (error) {
+    console.error("Error in getAllProduct:", error.message);
     throw error;
   }
 }
@@ -71,7 +80,7 @@ async function getProductById(product_id) {
   }
 }
 
-async function searchProductByName(searchTerm, page, pageSize) {
+async function searchProductByName(searchTerm, page = 1, pageSize = 10) {
   try {
     const pool = await poolPromise;
     const offset = (page - 1) * pageSize;
@@ -79,21 +88,23 @@ async function searchProductByName(searchTerm, page, pageSize) {
     // Query to get the total count of products matching the search term
     const countResult = await pool
       .request()
-      .input("searchTerm", sql.VarChar, `%${searchTerm}%`).query(`
-      SELECT COUNT(*) as total FROM Products WHERE product_name LIKE @searchTerm
-    `);
+      .input("searchTerm", sql.VarChar, `%${searchTerm}%`)
+      .query(
+        "SELECT COUNT(*) as total FROM Products WHERE product_name LIKE @searchTerm"
+      );
     const totalProducts = countResult.recordset[0].total;
+    const totalPages = Math.ceil(totalProducts / pageSize);
 
     // Query to get the paginated products matching the search term
     const result = await pool
       .request()
       .input("searchTerm", sql.VarChar, `%${searchTerm}%`).query(`
-      SELECT * FROM Products
-      WHERE product_name LIKE @searchTerm
-      ORDER BY product_id
-      OFFSET ${offset} ROWS
-      FETCH NEXT ${pageSize} ROWS ONLY
-    `);
+        SELECT * FROM Products
+        WHERE product_name LIKE @searchTerm
+        ORDER BY product_id
+        OFFSET ${offset} ROWS
+        FETCH NEXT ${pageSize} ROWS ONLY
+      `);
     const products = result.recordset;
 
     if (products) {
@@ -101,7 +112,14 @@ async function searchProductByName(searchTerm, page, pageSize) {
       const outOfStockProducts = products.filter(
         (product) => product.stock <= 0
       );
-      return { inStockProducts, outOfStockProducts, totalProducts };
+      return {
+        inStockProducts,
+        outOfStockProducts,
+        totalProducts,
+        currentPage: page,
+        totalPages,
+        pageSize,
+      };
     } else {
       throw new Error("Failed to retrieve products.");
     }
@@ -111,7 +129,13 @@ async function searchProductByName(searchTerm, page, pageSize) {
   }
 }
 
-async function filterProduct(ageRange, brand, country, page, pageSize) {
+async function filterProduct(
+  ageRange = [],
+  brand = [],
+  country = [],
+  page = 1,
+  pageSize = 10
+) {
   try {
     const pool = await poolPromise;
     const request = pool.request();
@@ -119,21 +143,21 @@ async function filterProduct(ageRange, brand, country, page, pageSize) {
 
     let filters = [];
 
-    if (ageRange && ageRange.length > 0) {
+    if (ageRange.length > 0) {
       request.input("ageRange", sql.NVarChar, ageRange.join(","));
       filters.push(
         "p.age_range IN (SELECT value FROM STRING_SPLIT(@ageRange, ','))"
       );
     }
 
-    if (brand && brand.length > 0) {
+    if (brand.length > 0) {
       request.input("brand", sql.NVarChar, brand.join(","));
       filters.push(
         "b.brand_name IN (SELECT value FROM STRING_SPLIT(@brand, ','))"
       );
     }
 
-    if (country && country.length > 0) {
+    if (country.length > 0) {
       request.input("country", sql.NVarChar, country.join(","));
       filters.push(
         "oc.country_name IN (SELECT value FROM STRING_SPLIT(@country, ','))"
@@ -152,6 +176,7 @@ async function filterProduct(ageRange, brand, country, page, pageSize) {
     }
     const countResult = await request.query(countQuery);
     const totalProducts = countResult.recordset[0].total;
+    const totalPages = Math.ceil(totalProducts / pageSize);
 
     // Query to get the paginated products matching the filters
     let query = `
@@ -190,6 +215,9 @@ async function filterProduct(ageRange, brand, country, page, pageSize) {
         inStockProducts,
         outOfStockProducts,
         totalProducts,
+        currentPage: page,
+        totalPages,
+        pageSize,
       };
     } else {
       return { success: false, message: "No products found" };
@@ -200,10 +228,36 @@ async function filterProduct(ageRange, brand, country, page, pageSize) {
   }
 }
 
+async function getAllCategory() {
+  try {
+    const pool = await poolPromise;
+    const brandResult = await pool.request().query(`SELECT * FROM Brands`);
+    const countryResult = await pool
+      .request()
+      .query(`SELECT * FROM Originated_Country`);
+    const ageRangeResult = await pool
+      .request()
+      .query(`SELECT * FROM Age_Range`);
+
+    const brands = brandResult.recordset;
+    const countries = countryResult.recordset;
+    const ageRanges = ageRangeResult.recordset;
+
+    if (brands && countries && ageRanges) {
+      return { brands, countries, ageRanges };
+    } else {
+      throw new Error("Failed to retrieve one or more categories.");
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   getAllProduct,
   getProductById,
   searchProductByName,
   filterProduct,
   getAllProductWihoutPagination,
+  getAllCategory,
 };
