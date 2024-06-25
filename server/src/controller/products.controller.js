@@ -3,6 +3,7 @@ const {
   getProductById,
   searchProductByName,
   filterProduct,
+  getAllProductWihoutPagination,
 } = require("../services/products.services");
 
 //Get All Product Controller
@@ -23,6 +24,17 @@ const getProduct = async (req, res) => {
     });
   } catch (error) {
     console.log("Failed to get products:", error);
+    res.status(500).json({ message: "Failed to retrieve products." });
+  }
+};
+
+const getAllProductWithoutPaginationController = async (req, res) => {
+  try {
+    const { inStockProducts, outOfStockProducts } =
+      await getAllProductWihoutPagination();
+    res.json({ inStockProducts, outOfStockProducts });
+  } catch (error) {
+    console.error("Failed to get products without pagination", error);
     res.status(500).json({ message: "Failed to retrieve products." });
   }
 };
@@ -101,4 +113,5 @@ module.exports = {
   getProById,
   searchByName,
   filtering,
+  getAllProductWithoutPaginationController,
 };

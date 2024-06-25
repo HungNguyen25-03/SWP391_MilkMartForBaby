@@ -9,6 +9,8 @@ const {
   editProduct,
   confirmOrder,
   cancelOrder,
+  addProduct,
+  updateProduct,
 } = require("../services/staff.services");
 
 const createVoucherController = async (req, res) => {
@@ -201,6 +203,82 @@ const cancelOrderController = async (req, res) => {
   }
 };
 
+const addProductController = async (req, res) => {
+  const {
+    product_name,
+    description,
+    price,
+    stock,
+    brand_id,
+    country_id,
+    age_range,
+    image_url,
+  } = req.body;
+  try {
+    const result = await addProduct(
+      product_name,
+      description,
+      price,
+      stock,
+      brand_id,
+      country_id,
+      age_range,
+      image_url
+    );
+    if (result.success) {
+      return res.status(200).json({
+        message: result.message,
+        status: 200,
+      });
+    }
+  } catch (error) {
+    console.log("fail to add a product");
+    throw error;
+  }
+};
+
+const updateProductController = async (req, res) => {
+  const product_id = parseInt(req.params.id, 10);
+  const {
+    product_name,
+    description,
+    price,
+    stock,
+    brand_id,
+    country_id,
+    age_range,
+    image_url,
+  } = req.body;
+  console.log(req.body);
+  try {
+    const result = await updateProduct(
+      product_id,
+      product_name,
+      description,
+      price,
+      stock,
+      brand_id,
+      country_id,
+      age_range,
+      image_url
+    );
+    if (result.success) {
+      return res.status(200).json({
+        message: result.message,
+        status: 200,
+      });
+    } else {
+      return res.status(401).json({
+        message: result.message,
+        status: 401,
+      });
+    }
+  } catch (error) {
+    console.log("fail to update a product");
+    throw error;
+  }
+};
+
 module.exports = {
   createVoucherController,
   getAllUserController,
@@ -213,4 +291,6 @@ module.exports = {
   editProductController,
   confirmOrderController,
   cancelOrderController,
+  addProductController,
+  updateProductController,
 };

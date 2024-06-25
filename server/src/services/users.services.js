@@ -223,6 +223,22 @@ async function reviewsByProductId(user_id, product_id, rating, comment) {
   }
 }
 
+async function showReviewsByProductId(product_id) {
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input("product_id", sql.Int, product_id)
+      .query(
+        `SELECT r.review_id, r.rating, r.comment, r.review_date, u.username, u.user_id FROM Reviews r JOIN Users u ON r.user_id = u.user_id WHERE r.product_id = @product_id`
+      );
+    const reviews = result.recordset;
+    return { success: true, reviews: reviews };
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   loginUser,
   registerUser,
@@ -233,4 +249,5 @@ module.exports = {
   generateNewAccessToken,
   readyToCheckout,
   reviewsByProductId,
+  showReviewsByProductId,
 };
