@@ -11,7 +11,7 @@ const {
 const getProduct = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
-    const pageSize = parseInt(req.query.pageSize) || 10;
+    const pageSize = parseInt(req.query.pageSize) || 12;
 
     const { inStockProducts, outOfStockProducts, totalProducts, totalPages } =
       await getAllProduct(page, pageSize);
@@ -71,7 +71,7 @@ const searchByName = async (req, res) => {
 
   try {
     const page = parseInt(req.query.page) || 1;
-    const pageSize = parseInt(req.query.pageSize) || 10;
+    const pageSize = parseInt(req.query.pageSize) || 12;
 
     const { inStockProducts, outOfStockProducts, totalProducts, totalPages } =
       await searchProductByName(searchTerm, page, pageSize);
@@ -95,7 +95,7 @@ const filtering = async (req, res) => {
   try {
     const { ageRange, brand, country } = req.body;
     const page = parseInt(req.query.page) || 1;
-    const pageSize = parseInt(req.query.pageSize) || 10;
+    const pageSize = parseInt(req.query.pageSize) || 12;
 
     const { inStockProducts, outOfStockProducts, totalProducts, totalPages } =
       await filterProduct(ageRange, brand, country, page, pageSize);

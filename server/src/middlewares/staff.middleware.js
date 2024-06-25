@@ -387,6 +387,44 @@ const updateProductMiddlewares = async (req, res, next) => {
   }
 };
 
+const deleteProductMiddlewares = async (req, res, next) => {
+  try {
+    const errors = [];
+    const pool = await poolPromise;
+    const product_id = req.params.id;
+
+    const productCheckquery = await pool
+      .request()
+      .input("product_id", sql.Int, product_id).query(`
+      SELECT * FROM Products WHERE product_id = @product_id`);
+
+    if (productCheckquery.recordset.length === 0) {
+      errors.push({
+        name: "product_id",
+        success: false,
+        message: "Product not found",
+        status: 404,
+      });
+    }
+
+    if (productCheckquery.recordset[0].stock > 0) {
+      errors.push({
+        name: "product_id",
+        success: false,
+        message: "Product stock must be 0 to delete",
+        status: 400,
+      });
+    }
+
+    if (errors.length > 0) {
+      return next(errors);
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createVoucherMiddleware,
   editVoucherMiddleware,
@@ -394,4 +432,5 @@ module.exports = {
   cancelOrderMiddleware,
   addProductMiddlewares,
   updateProductMiddlewares,
+  deleteProductMiddlewares,
 };

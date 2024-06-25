@@ -22,6 +22,7 @@ const {
   cancelOrderMiddleware,
   addProductMiddlewares,
   updateProductMiddlewares,
+  deleteProductMiddlewares,
 } = require("../middlewares/staff.middleware");
 const { authenticateToken } = require("../middlewares/authJwt.middlewares");
 
@@ -57,7 +58,12 @@ staffRouters.put(
 );
 
 // Export Product
-staffRouters.get("/export/:id", authenticateToken, exportProductController);
+staffRouters.get(
+  "/export/:id",
+  authenticateToken,
+  deleteProductMiddlewares,
+  exportProductController
+);
 
 // Edit quantity Product
 staffRouters.post("/edit", authenticateToken, editProductController);
