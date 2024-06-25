@@ -31,69 +31,65 @@ export default function ConfirmOrder() {
 
     const [dataConfirm, setDataConfirm] = useState([]);
 
-    const fetchData = async () => {
-        try {
-            const response = await fetch(`${MainAPI}/staff/order`, {
-                method: "GET",
-            });
-
-            if (!response.ok) throw new Error("Failed to fetch data get order");
-
-            const data = await response.json();
-            setDataConfirm(data);
-        } catch (error) {
-            console.error("Error fetching data order:", error);
-        }
+    const fetchData = () => {
+        fetch(`${MainAPI}/staff/order`, {
+            method: "GET",
+            headers: { "x-access-token": JSON.parse(localStorage.getItem("accessToken")) }
+        })
+            .then(response => {
+                if (!response.ok) throw new Error("Failed to fetch data get order");
+                return response.json();
+            })
+            .then(data => setDataConfirm(data))
+            .catch(error => console.error("Error fetching data order:", error));
     };
 
     useEffect(() => {
         fetchData();
-    }, [dataConfirm]);
+    }, []);
 
     const handleSetCancel = (confirm) => {
-        const cancelConfirm = async () => {
-            try {
-                const response = await fetch(`${MainAPI}/staff/cancel`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ order_id: confirm.order_id }),
-                });
-
+        fetch(`${MainAPI}/staff/cancel`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "x-access-token": JSON.parse(localStorage.getItem("accessToken"))
+            },
+            body: JSON.stringify({ order_id: confirm.order_id }),
+        })
+            .then(response => {
                 if (!response.ok) throw new Error("Failed to cancel order");
-
-                const data = await response.json();
-                setDataConfirm(prevData => prevData.map(item => item.order_id === confirm.order_id ? { ...item, status: data.status } : item));
-            } catch (error) {
-                console.error("Error canceling order:", error);
-            }
-        };
-
-        cancelConfirm();
+                return response.json();
+            })
+            .then(data => {
+                setDataConfirm(prevData =>
+                    prevData.map(item => item.order_id === confirm.order_id ? { ...item, status: data.status } : item)
+                );
+                fetchData();
+            })
+            .catch(error => console.error("Error canceling order:", error));
     };
 
     const handleSetConfirm = (confirm) => {
-        const Confirm = async () => {
-            try {
-                const response = await fetch(`${MainAPI}/staff/confirm`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ order_id: confirm.order_id }),
-                });
-
+        fetch(`${MainAPI}/staff/confirm`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "x-access-token": JSON.parse(localStorage.getItem("accessToken"))
+            },
+            body: JSON.stringify({ order_id: confirm.order_id }),
+        })
+            .then(response => {
                 if (!response.ok) throw new Error("Failed to confirm order");
-
-                const data = await response.json();
-                setDataConfirm(prevData => prevData.map(item => item.order_id === confirm.order_id ? { ...item, status: data.status } : item));
-            } catch (error) {
-                console.error("Error confirm order:", error);
-            }
-        };
-
-        Confirm();
+                return response.json();
+            })
+            .then(data => {
+                setDataConfirm(prevData =>
+                    prevData.map(item => item.order_id === confirm.order_id ? { ...item, status: data.status } : item)
+                );
+                fetchData();
+            })
+            .catch(error => console.error("Error confirming order:", error));
     };
 
     return (
