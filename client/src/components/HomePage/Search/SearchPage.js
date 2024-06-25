@@ -11,19 +11,22 @@ export default function SearchPage() {
   const location = useLocation();
   const [searchResult, setSearchResult] = useState([]);
   const searchTerm = new URLSearchParams(location.search).get("search_query");
+  const [page, setPage] = useState(1);
+  const [totalProduct, setTotalProduct] = useState(0);
 
   useEffect(() => {
     axios
-      .get(`${MainAPI}/product/search?searchTerm=${searchTerm}`)
+      .get(`${MainAPI}/product/search?searchTerm=${searchTerm}&page=${page}`)
       .then((res) => {
         console.log(res.data);
-        setSearchResult(res.data);
+        setSearchResult(res.data.inStockProducts);
+        setTotalProduct(res.data.totalProducts);
         // nav("/search", { searchResult: res.data });
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [searchTerm]);
+  }, [searchTerm, page]);
 
   console.log(searchResult);
 
@@ -31,7 +34,7 @@ export default function SearchPage() {
     <div>
       <HeaderPage />
       <div className="container">
-        {searchResult.length === 0 ? (
+        {searchResult === undefined ? (
           <>
             <div className="emptyinfo" style={{ marginTop: "80px" }}>
               <img src="https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2Fsearch-empty.png?alt=media&token=478bd46a-1d79-47f3-bcab-898248bc04d5" />
@@ -42,7 +45,13 @@ export default function SearchPage() {
           <>
             {" "}
             <div style={{ marginTop: "80px" }}>
-              <ProductListShow productList={searchResult} />
+              <ProductListShow
+                productList={searchResult}
+                changePage={(page) => {
+                  setPage(page);
+                }}
+                totalProduct={totalProduct}
+              />
             </div>
           </>
         )}

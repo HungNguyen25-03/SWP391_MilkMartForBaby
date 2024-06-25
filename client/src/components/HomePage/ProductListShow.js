@@ -10,13 +10,30 @@ import axios from "axios";
 import { MainAPI } from "../API";
 import { Link } from "react-router-dom";
 
-export default function ProductListShow({ productList, changePage }) {
+export default function ProductListShow({
+  productList,
+  changePage,
+  totalProduct,
+}) {
   const { handleAddToCart } = useContext(CartContext);
   const [ageFilters, setAgeFilters] = useState([]);
   const [countryFilters, setCountryFilters] = useState([]);
-  const [filteredItems, setFilteredItems] = useState(productList);
+  const [filteredItems, setFilteredItems] = useState([]);
+  const [productListAll, setProductListAll] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalProductAll, setTotalProductAll] = useState(0);
   const itemsPerPage = 12;
+  console.log(totalProductAll);
+
+  useEffect(() => {
+    axios
+      .get(`${MainAPI}/product/getAllProductWithoutPagination`)
+      .then((res) => {
+        setProductListAll(res.data.inStockProducts);
+        // console.log(res.data.inStockProducts);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   const handleFilterButtonClick = (
     selectedCategory,
@@ -32,38 +49,36 @@ export default function ProductListShow({ productList, changePage }) {
     }
   };
 
-  const filterItems = () => {
+  useEffect(() => {
     axios
       .post(`${MainAPI}/product/filter`, {
         country: countryFilters,
         ageRange: ageFilters,
+        page: currentPage,
+        pageSize: 12,
       })
       .then((res) => {
-        setFilteredItems(res.data.products);
-        setCurrentPage(1); // Reset to the first page when filters are applied
+        // console.log(res.data);
+        if (res.data.inStockProducts) {
+          setFilteredItems(res.data.inStockProducts);
+        } else {
+          setFilteredItems([]);
+        }
       })
       .catch((err) => {
         console.log(err);
       });
-  };
+  }, [ageFilters, countryFilters, currentPage]);
 
   useEffect(() => {
-    if (countryFilters.length > 0 || ageFilters.length > 0) {
-      filterItems();
-    } else {
-      setFilteredItems(productList);
-    }
-  }, [countryFilters, ageFilters, productList]);
+    setTotalProductAll(totalProduct);
+  }, [totalProduct]);
 
-  useEffect(() => {
-    setFilteredItems(productList);
-  }, [productList]);
+  // console.log(productList);
 
-  console.log(productList);
-
-  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+  const totalPages = Math.ceil(totalProductAll / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentItems = filteredItems.slice(
+  const currentItems = productListAll.slice(
     startIndex,
     startIndex + itemsPerPage
   );
@@ -129,46 +144,88 @@ export default function ProductListShow({ productList, changePage }) {
 
       <div className="product_detail text-center d-flex flex-column">
         <div className="row row-cols-5">
-          {currentItems &&
-            productList.map((product) => (
-              <div key={product.product_id} className="product-card col">
-                <Link
-                  className="product-detail-link"
-                  to={`/home/ProductDetail/${product.product_id}`}
-                >
-                  <div className="home-product-detail-img-container">
-                    <img src={product.image_url} alt={product.title} />
-                  </div>
-                  <div className="mt-2">{product.product_name}</div>
-                  <div>
-                    <span className="star">★</span>
-                    <span className="star">★</span>
-                    <span className="star">★</span>
-                    <span className="star">★</span>
-                    <span className="star">★</span>
-                    <span style={{ fontSize: "10px" }}>{product.sale}</span>
-                  </div>
-                </Link>
-                <div
-                  style={{
-                    display: "flex",
-                    marginTop: "10px",
-                    justifyContent: "space-around",
-                  }}
-                >
-                  <div>{formatVND(product.price)}</div>
-                  <div
-                    className="icon_cart"
-                    onClick={() => handleAddToCart(product)}
+          {ageFilters.length > 0 || countryFilters.length > 0 ? (
+            <>
+              {filteredItems.map((product) => (
+                <div key={product.product_id} className="product-card col">
+                  <Link
+                    className="product-detail-link"
+                    to={`/home/ProductDetail/${product.product_id}`}
                   >
-                    <FaShoppingCart />
+                    <div className="home-product-detail-img-container">
+                      <img src={product.image_url} alt={product.title} />
+                    </div>
+                    <div className="mt-2">{product.product_name}</div>
+                    <div>
+                      <span className="star">★</span>
+                      <span className="star">★</span>
+                      <span className="star">★</span>
+                      <span className="star">★</span>
+                      <span className="star">★</span>
+                      <span style={{ fontSize: "10px" }}>{product.sale}</span>
+                    </div>
+                  </Link>
+                  <div
+                    style={{
+                      display: "flex",
+                      marginTop: "10px",
+                      justifyContent: "space-around",
+                    }}
+                  >
+                    <div>{formatVND(product.price)}</div>
+                    <div
+                      className="icon_cart"
+                      onClick={() => handleAddToCart(product)}
+                    >
+                      <FaShoppingCart />
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </>
+          ) : (
+            <>
+              {productList.map((product) => (
+                <div key={product.product_id} className="product-card col">
+                  <Link
+                    className="product-detail-link"
+                    to={`/home/ProductDetail/${product.product_id}`}
+                  >
+                    <div className="home-product-detail-img-container">
+                      <img src={product.image_url} alt={product.title} />
+                    </div>
+                    <div className="mt-2">{product.product_name}</div>
+                    <div>
+                      <span className="star">★</span>
+                      <span className="star">★</span>
+                      <span className="star">★</span>
+                      <span className="star">★</span>
+                      <span className="star">★</span>
+                      <span style={{ fontSize: "10px" }}>{product.sale}</span>
+                    </div>
+                  </Link>
+                  <div
+                    style={{
+                      display: "flex",
+                      marginTop: "10px",
+                      justifyContent: "space-around",
+                    }}
+                  >
+                    <div>{formatVND(product.price)}</div>
+                    <div
+                      className="icon_cart"
+                      onClick={() => handleAddToCart(product)}
+                    >
+                      <FaShoppingCart />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
         </div>
         <div className="pagination">
-          {Array.from({ length: 3 }, (_, index) => (
+          {Array.from({ length: totalPages }, (_, index) => (
             <button
               key={index}
               onClick={() => handlePageChange(index + 1)}
