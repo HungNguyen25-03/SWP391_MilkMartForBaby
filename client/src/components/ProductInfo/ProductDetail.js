@@ -5,6 +5,8 @@ import InfoDetail from "./DetailOfProduct/InfoDetail";
 import HeaderPage from "../../utils/Header/Header";
 import Rate from "./Rate/Rate";
 import FooterPage from "../../utils/Footer/FooterPage";
+import axios from "axios";
+import { MainAPI } from "../API";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -14,22 +16,14 @@ export default function ProductDetail() {
   const [cus, setCus] = useState();
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:1880/product/${id}`)
-      .then((res) => res.json())
-      .then((data) => setProduct(data));
+    axios
+      .get(`${MainAPI}/product/getProById/${id}`)
+      .then((res) => {
+        console.log(res.data);
+        setProduct(res.data);
+      })
+      .catch((err) => console.log(err));
   }, [id]);
-
-  useEffect(() => {
-    fetch(`http://127.0.0.1:1880/detail/${id}`)
-      .then((res) => res.json())
-      .then((data) => setDataProduct(data));
-  }, [id]);
-
-  useEffect(() => {
-    fetch(`http://127.0.0.1:1880/customer`)
-      .then((res) => res.json())
-      .then((data) => setCus(data));
-  }, []);
 
   return (
     <div>

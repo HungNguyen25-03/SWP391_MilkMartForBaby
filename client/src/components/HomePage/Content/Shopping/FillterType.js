@@ -7,23 +7,21 @@ import ProductListShow from "../../ProductListShow";
 export default function FillterType() {
   const [allProductList, setAllProductList] = useState([]);
   const [page, setPage] = useState(1);
-  const [totalProduct, setTotalProduct] = useState(0);
+  const [totalPage, setTotalPage] = useState(0);
 
   useEffect(() => {
     axios
-      .post(`${MainAPI}/product/getProduct`, {
-        page: page,
-        pageSize: 12,
-      })
+      .get(`${MainAPI}/product/getProduct?page=${page}&pageSize=12`)
       .then((res) => {
         // console.log(res.data.inStockProducts);
         setAllProductList(res.data.inStockProducts);
-        setTotalProduct(res.data.totalProducts);
+        setTotalPage(res.data.totalPages);
       })
       .catch((err) => {
         console.log(err);
       });
   }, [page, setPage]);
+  // console.log(allProductList);
 
   // console.log(page);
 
@@ -33,7 +31,7 @@ export default function FillterType() {
       changePage={(page) => {
         setPage(page);
       }}
-      totalProduct={totalProduct}
+      totalPage={totalPage}
     />
   );
 }

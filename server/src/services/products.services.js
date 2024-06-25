@@ -1,6 +1,6 @@
 const { poolPromise, sql } = require("./database.services");
 
-async function getAllProduct(page = 1, pageSize = 10) {
+async function getAllProduct(page = 1, pageSize = 12) {
   try {
     const pool = await poolPromise;
     const offset = (page - 1) * pageSize;
@@ -71,7 +71,7 @@ async function getProductById(product_id) {
       .query(`SELECT * FROM Products WHERE product_id='${product_id}'`);
     const product = result.recordset;
     if (product) {
-      return { success: true, product };
+      return { success: true, product: product };
     } else {
       return { success: false, message: "Invalid ID product" };
     }
@@ -80,7 +80,7 @@ async function getProductById(product_id) {
   }
 }
 
-async function searchProductByName(searchTerm, page = 1, pageSize = 10) {
+async function searchProductByName(searchTerm, page = 1, pageSize = 12) {
   try {
     const pool = await poolPromise;
     const offset = (page - 1) * pageSize;
@@ -134,7 +134,7 @@ async function filterProduct(
   brand = [],
   country = [],
   page = 1,
-  pageSize = 10
+  pageSize = 12
 ) {
   try {
     const pool = await poolPromise;
