@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 export default function ProductListShow({
   productList,
   changePage,
-  totalProduct,
+  totalPage,
 }) {
   const { handleAddToCart } = useContext(CartContext);
   const [ageFilters, setAgeFilters] = useState([]);
@@ -21,9 +21,9 @@ export default function ProductListShow({
   const [filteredItems, setFilteredItems] = useState([]);
   const [productListAll, setProductListAll] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalProductAll, setTotalProductAll] = useState(0);
+  const [totalPageAll, setTotalPageAll] = useState(0);
+  const [filterPage, setFilterPage] = useState(0);
   const itemsPerPage = 12;
-  console.log(totalProductAll);
 
   useEffect(() => {
     axios
@@ -51,16 +51,15 @@ export default function ProductListShow({
 
   useEffect(() => {
     axios
-      .post(`${MainAPI}/product/filter`, {
+      .post(`${MainAPI}/product/filter?page=${currentPage}`, {
         country: countryFilters,
         ageRange: ageFilters,
-        page: currentPage,
-        pageSize: 12,
       })
       .then((res) => {
         // console.log(res.data);
         if (res.data.inStockProducts) {
           setFilteredItems(res.data.inStockProducts);
+          setFilterPage(res.data.totalPages);
         } else {
           setFilteredItems([]);
         }
@@ -69,14 +68,19 @@ export default function ProductListShow({
         console.log(err);
       });
   }, [ageFilters, countryFilters, currentPage]);
+  // console.log(filteredItems);
 
   useEffect(() => {
-    setTotalProductAll(totalProduct);
-  }, [totalProduct]);
+    if (filteredItems.length > 0) {
+      setTotalPageAll(filterPage);
+    } else {
+      setTotalPageAll(totalPage);
+    }
+  }, [totalPage, filterPage]);
 
   // console.log(productList);
 
-  const totalPages = Math.ceil(totalProductAll / itemsPerPage);
+  const totalPages = totalPageAll;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentItems = productListAll.slice(
     startIndex,

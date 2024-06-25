@@ -9,9 +9,8 @@ import CustomerThanhToan from "./Sidebar/ScreenCustomerAccount/ThanhhToan/Custom
 import CustomerDangGiao from "./Sidebar/ScreenCustomerAccount/DangGiao/CustomerDangGiao";
 import CustomerDaHuy from "./Sidebar/ScreenCustomerAccount/DaHuy/CustomerDaHuy";
 
-
 export default function UserAccount() {
-  const [title, setTitle] = useState("Thanh toán");
+  const [title, setTitle] = useState("Đã giao");
   return (
     <div style={{ " backgroundColor": "#f5f7fd" }}>
       <HeaderPage />
@@ -20,7 +19,10 @@ export default function UserAccount() {
           <Sidebar />
           <div className="account-info col-9">
             <div className="order-list-btn">
-              <ul className="nav d-flex justify-content-between" style={{ cursor: 'pointer' }}>
+              <ul
+                className="nav d-flex justify-content-between"
+                style={{ cursor: "pointer" }}
+              >
                 <li
                   className="nav-item"
                   onClick={() => {
@@ -65,7 +67,6 @@ export default function UserAccount() {
             </div>
 
             <div className="status-content">
-
               <CustomerThanhToan title={title} />
 
               <CustomerChoGiao title={title} />
@@ -81,6 +82,6 @@ export default function UserAccount() {
       </div>
 
       <FooterPage />
-    </div >
+    </div>
   );
 }

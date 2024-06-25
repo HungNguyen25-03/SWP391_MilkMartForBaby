@@ -71,7 +71,7 @@ async function getProductById(product_id) {
       .query(`SELECT * FROM Products WHERE product_id='${product_id}'`);
     const product = result.recordset;
     if (product) {
-      return { success: true, product };
+      return { success: true, product: product };
     } else {
       return { success: false, message: "Invalid ID product" };
     }

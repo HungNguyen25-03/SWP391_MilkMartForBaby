@@ -18,7 +18,7 @@ const config = {
 
 const paymentController = async (req, res) => {
   const embed_data = {
-    redirecturl: "http://localhost:3000/home",
+    redirecturl: "http://localhost:3000/customer-account",
   };
   const pool = await poolPromise;
   const order_id = req.body.order_id;

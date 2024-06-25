@@ -12,7 +12,7 @@ export default function SearchPage() {
   const [searchResult, setSearchResult] = useState([]);
   const searchTerm = new URLSearchParams(location.search).get("search_query");
   const [page, setPage] = useState(1);
-  const [totalProduct, setTotalProduct] = useState(0);
+  const [totalPage, setTotalPage] = useState(0);
 
   useEffect(() => {
     axios
@@ -20,7 +20,7 @@ export default function SearchPage() {
       .then((res) => {
         console.log(res.data);
         setSearchResult(res.data.inStockProducts);
-        setTotalProduct(res.data.totalProducts);
+        setTotalPage(res.data.totalPages);
         // nav("/search", { searchResult: res.data });
       })
       .catch((err) => {
@@ -50,7 +50,7 @@ export default function SearchPage() {
                 changePage={(page) => {
                   setPage(page);
                 }}
-                totalProduct={totalProduct}
+                totalPage={totalPage}
               />
             </div>
           </>

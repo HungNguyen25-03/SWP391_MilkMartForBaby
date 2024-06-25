@@ -49,7 +49,7 @@ const getProById = async (req, res) => {
   try {
     const result = await getProductById(product_id);
     if (result.success) {
-      res.json(result.product);
+      res.json(result.product[0]);
     } else {
       res.json({ message: result.message });
     }
