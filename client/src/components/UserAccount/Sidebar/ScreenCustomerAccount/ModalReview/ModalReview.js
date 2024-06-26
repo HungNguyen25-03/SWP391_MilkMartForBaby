@@ -12,7 +12,12 @@ const colors = {
   grey: "#a9a9a9",
 };
 
-export default function ModalReview({ closeModal, onSubmit, product }) {
+export default function ModalReview({
+  closeModal,
+  onSubmit,
+  product,
+  order_id,
+}) {
   const { auth } = useAuth();
   const stars = Array(5).fill(0);
   const [currentValue, setCurrentValue] = useState(0);
@@ -46,6 +51,7 @@ export default function ModalReview({ closeModal, onSubmit, product }) {
         {
           user_id: auth.user.user_id,
           product_id: product.product_id,
+          order_id: order_id,
           rating: currentValue,
           comment: feedback,
         },

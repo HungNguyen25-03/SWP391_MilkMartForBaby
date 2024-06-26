@@ -23,7 +23,11 @@ export default function Edit() {
   let passwordFromDb;
 
   useEffect(() => {
-    fetch(`${MainAPI}/admin/getUser/${id}`)
+    fetch(`${MainAPI}/admin/getUser/${id}`, {
+      headers: {
+        "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+      },
+    })
       .then((res) => res.json())
       .then((data) => {
         const result = data.user[0];
@@ -44,7 +48,11 @@ export default function Edit() {
     }
     e.preventDefault();
     axios
-      .put(`${MainAPI}/admin/update/${id}`, user)
+      .put(`${MainAPI}/admin/update/${id}`, user, {
+        headers: {
+          "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+        },
+      })
       .then((res) => {
         toast.success(res.data.message);
         nav("/admin/user");

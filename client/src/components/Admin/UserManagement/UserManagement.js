@@ -19,16 +19,21 @@ export default function UserManagement() {
   const [errors, setErrors] = useState([]);
   const [success, setSuccess] = useState(false);
 
+  async function fetchData() {
+    const response = await fetch(`${MainAPI}/admin/allUsers`, {
+      headers: {
+        "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        return data.user;
+      });
+    console.log(response);
+    setRecords(response);
+  }
+
   useEffect(() => {
-    async function fetchData() {
-      const response = await fetch(`${MainAPI}/admin/allUsers`)
-        .then((res) => res.json())
-        .then((data) => {
-          return data.user;
-        });
-      console.log(response);
-      setRecords(response);
-    }
     fetchData();
   }, []);
 
@@ -39,13 +44,21 @@ export default function UserManagement() {
         .includes(event.target.value.toLowerCase());
     });
     setRecords(newData);
+    fetchData();
   }
 
   function handleDelete(id) {
     try {
-      axios.get(`${MainAPI}/admin/delete/${id}`).then((res) => {
-        toast.success(res.data.message);
-      });
+      axios
+        .get(`${MainAPI}/admin/delete/${id}`, {
+          headers: {
+            "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+          },
+        })
+        .then((res) => {
+          fetchData();
+          toast.success(res.data.message);
+        });
     } catch (err) {
       console.log(err);
     }
@@ -53,9 +66,14 @@ export default function UserManagement() {
 
   function handleSubmit(newUser) {
     axios
-      .post("http://localhost:4000/admin/create", newUser)
+      .post("http://localhost:4000/admin/create", newUser, {
+        headers: {
+          "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+        },
+      })
       .then((res) => {
         if (res.status === 200) {
+          fetchData();
           setSuccess(true);
           toast.success(res.data.message);
         }

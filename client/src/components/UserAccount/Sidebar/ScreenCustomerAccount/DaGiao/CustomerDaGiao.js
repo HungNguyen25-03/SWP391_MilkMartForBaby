@@ -87,6 +87,7 @@ export default function CustomerDaGiao({ title }) {
                         </button>
                         {modalOpen && (
                           <ModalReview
+                            order_id={dagiao.order_id}
                             product={productDetail}
                             closeModal={() => {
                               setModalOpen(false);
