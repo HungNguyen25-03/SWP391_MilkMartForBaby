@@ -15,14 +15,13 @@ export default function CustomerDaGiao({ title }) {
   const [productDetail, setProductDetail] = useState({});
   const { auth } = useAuth();
 
-  console.log(auth.user.user_id);
   useEffect(() => {
     axios
-      .post(`${MainAPI}/order/get-order-by-user-id`, {
+      .post(`${MainAPI}/order/get-order-by-user-id/${auth.user.user_id}`, {
         user_id: auth.user.user_id,
       })
       .then((res) => {
-        console.log(res.data);
+        console.log(res);
         setCompleteOrderList(res.data);
       })
       .catch((err) => {
@@ -35,7 +34,7 @@ export default function CustomerDaGiao({ title }) {
   };
 
   return (
-    <div className={title === "Đã giao" ? "chờ giao" : "fade"}>
+    <div className={title === "Đã giao" ? "dagiao" : "fade"}>
       <ToastContainer />
       <h5 className="fw-bold">{title}</h5>
       {completeOrderList.length === 0 ? (

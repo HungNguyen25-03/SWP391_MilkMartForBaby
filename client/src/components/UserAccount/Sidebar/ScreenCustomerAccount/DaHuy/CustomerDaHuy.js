@@ -3,7 +3,7 @@ import { dahuys } from '../ListProduct'
 
 export default function CustomerDaHuy({ title }) {
     return (
-        <div className={title === 'Đã hủy' ? 'chờ giao' : 'fade'}>
+        <div className={title === 'Đã hủy' ? 'dahuy' : 'fade'}>
             <h5 className="fw-bold">{title}</h5>
             {dahuys.length === 0 ?
                 <div className="emptyinfo">

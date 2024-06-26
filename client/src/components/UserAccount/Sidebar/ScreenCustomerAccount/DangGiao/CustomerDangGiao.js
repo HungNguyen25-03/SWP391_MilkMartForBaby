@@ -19,7 +19,7 @@ export default function CustomerDangGiao({ title }) {
   }, []);
 
   return (
-    <div className={title === "Đang giao" ? "chờ giao" : "fade"}>
+    <div className={title === "Đang giao" ? "danggiao" : "fade"}>
       <h5 className="fw-bold">{title}</h5>
       {deliveryOrderList.length === 0 ? (
         <div className="emptyinfo">
