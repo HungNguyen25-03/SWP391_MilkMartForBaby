@@ -37,7 +37,7 @@ export default function SearchPage() {
         {searchResult === undefined ? (
           <>
             <div className="emptyinfo" style={{ marginTop: "80px" }}>
-              <img src="https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2Fsearch-empty.png?alt=media&token=478bd46a-1d79-47f3-bcab-898248bc04d5" />
+              <img style={{ width: '30%', margin: "50px 0 auto" }} src="https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2Fsearch-empty.png?alt=media&token=478bd46a-1d79-47f3-bcab-898248bc04d5" />
               <p>Chưa tìm thấy kết quả phù hợp</p>
             </div>
           </>

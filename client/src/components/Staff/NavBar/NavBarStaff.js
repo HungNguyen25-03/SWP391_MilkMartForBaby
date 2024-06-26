@@ -12,9 +12,10 @@ export default function NavBarStaff() {
         nav('/staff/comfirm_order');
     }, []);
 
-    const getName = localStorage.getItem('name')
     const token = JSON.parse(localStorage.getItem("accessToken"));
-    const { setAuth } = useContext(AuthContext);
+    const { auth, setAuth } = useContext(AuthContext);
+    const getName = auth.user.username
+    console.log(getName)
     const nav = useNavigate();
 
     const handleLogout = () => {

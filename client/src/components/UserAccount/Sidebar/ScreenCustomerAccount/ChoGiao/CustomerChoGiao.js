@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { chogiaos } from "../ListProduct";
 import axios from "axios";
 import { MainAPI } from "../../../../API";
 import { formatVND } from "../../../../../utils/Format";
@@ -20,7 +19,7 @@ export default function CustomerChoGiao({ title }) {
   }, []);
 
   return (
-    <div className={title === "Chờ giao" ? "chờ giao" : "fade"}>
+    <div className={title === "Chờ giao" ? "chogiao" : "fade"}>
       <h5 className="fw-bold">{title}</h5>
       {pendingOrderList.length === 0 ? (
         <div className="emptyinfo">
