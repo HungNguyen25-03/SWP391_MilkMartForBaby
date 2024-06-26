@@ -293,9 +293,39 @@ const reviewsByProductIdMiddlewares = async (req, res, next) => {
   }
 };
 
+const completeOrderMiddlewares = async (req, res, next) => {
+  try {
+    const errors = [];
+    const { order_id } = req.body;
+    const pool = await poolPromise;
+    const hasCompletedOrder = await pool
+      .request()
+      .input("order_id", order_id)
+      .query(
+        `SELECT * FROM Orders WHERE order_id = @order_id AND status = 'Completed'`
+      );
+
+    if (hasCompletedOrder.recordset.length > 0) {
+      errors.push({
+        name: "order",
+        success: false,
+        message: "Order has already been completed",
+        status: 400,
+      });
+    }
+    if (errors.length > 0) {
+      return next(errors);
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   registerUserMiddleware,
   applyVoucherMiddleware,
   claimVoucherMiddleware,
   reviewsByProductIdMiddlewares,
+  completeOrderMiddlewares,
 };
