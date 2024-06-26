@@ -64,4 +64,11 @@ userRoutes.get(
   userController.showReviewsByProductIdController
 );
 
+userRoutes.put(
+  "/complete-order/:id",
+  authJwt.authenticateToken,
+  userMiddleware.completeOrderMiddlewares,
+  userController.completeOrderController
+);
+
 module.exports = userRoutes;

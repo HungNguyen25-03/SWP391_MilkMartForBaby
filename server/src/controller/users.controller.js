@@ -9,6 +9,7 @@ const {
   readyToCheckout,
   reviewsByProductId,
   showReviewsByProductId,
+  completeOrder,
 } = require("../services/users.services");
 
 const authJwt = require("../middlewares/authJwt.middlewares");
@@ -199,6 +200,21 @@ const showReviewsByProductIdController = async (req, res) => {
   }
 };
 
+const completeOrderController = async (req, res) => {
+  const order_id = req.params.id;
+
+  try {
+    const order = await completeOrder(order_id);
+    if (order.success) {
+      res.status(200).json({ message: order.message, status: 200 });
+    } else {
+      res.status(409).json({ message: order.message, status: 409 });
+    }
+  } catch (error) {
+    res.status(500).send("Error completing order");
+  }
+};
+
 module.exports = {
   registerUserController,
   loginUserController,
@@ -211,4 +227,5 @@ module.exports = {
   readyToCheckoutController,
   reviewsByProductIdController,
   showReviewsByProductIdController,
+  completeOrderController,
 };

@@ -247,6 +247,21 @@ async function showReviewsByProductId(product_id) {
   }
 }
 
+async function completeOrder(order_id) {
+  try {
+    const pool = await poolPromise;
+    await pool
+      .request()
+      .input("order_id", sql.Int, order_id)
+      .query(
+        `UPDATE Orders SET status = 'Completed' WHERE order_id = @order_id`
+      );
+    return { success: true, message: "Order completed successfully" };
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   loginUser,
   registerUser,
@@ -258,4 +273,5 @@ module.exports = {
   readyToCheckout,
   reviewsByProductId,
   showReviewsByProductId,
+  completeOrder,
 };
