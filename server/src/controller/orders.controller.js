@@ -99,6 +99,21 @@ const getOrderByUserIdController = async (req, res) => {
   }
 };
 
+const { getOrderByUserIdConfirmStatus } = require("../services/order.services");
+const getOrderByUserIdConfirmStatusController = async (req, res) => {
+  try {
+    const { user_id } = req.body;
+    const result = await getOrderByUserIdConfirmStatus(user_id);
+    if (result.success) {
+      res.json(result.orders);
+    } else {
+      res.json({ message: result.message });
+    }
+  } catch (error) {
+    console.log("Fail to get Orders by User ID");
+  }
+};
+
 module.exports = {
   getOrder,
   getOrderById,
@@ -107,4 +122,5 @@ module.exports = {
   getOrderByConfirmStatus,
   getOrderByDeliveredStatus,
   getOrderByUserIdController,
+  getOrderByUserIdConfirmStatusController,
 };

@@ -1,37 +1,25 @@
 const express = require("express");
 const orderRouters = express.Router();
 
-//get All Order api
-const { getOrder } = require("../controller/orders.controller");
-orderRouters.get("/getOrder", getOrder);
-
-// Get Order By status :
-
-// Completed
-
-const { getOrderByCompleteStatus } = require("../controller/orders.controller");
-orderRouters.get("/CompleteOrder", getOrderByCompleteStatus);
-
-//Pending
-const { getOrderByPendingStatus } = require("../controller/orders.controller");
-orderRouters.get("/PendingOrder", getOrderByPendingStatus);
-
-//Confirmed
-const { getOrderByConfirmStatus } = require("../controller/orders.controller");
-orderRouters.get("/ConfirmOrder", getOrderByConfirmStatus);
-
-//Delivered
 const {
+  getOrder,
+  getOrderByCompleteStatus,
+  getOrderByPendingStatus,
+  getOrderByConfirmStatus,
   getOrderByDeliveredStatus,
-} = require("../controller/orders.controller");
-orderRouters.get("/DeliveredOrder", getOrderByDeliveredStatus);
-
-// Cancelled
-
-// get order by user_id
-const {
   getOrderByUserIdController,
+  getOrderByUserIdConfirmStatusController,
 } = require("../controller/orders.controller");
+
+orderRouters.get("/getOrder", getOrder);
+orderRouters.get("/CompleteOrder", getOrderByCompleteStatus);
+orderRouters.get("/PendingOrder", getOrderByPendingStatus);
+orderRouters.get("/ConfirmOrder", getOrderByConfirmStatus);
+orderRouters.get("/DeliveredOrder", getOrderByDeliveredStatus);
 orderRouters.post("/get-order-by-user-id", getOrderByUserIdController);
+orderRouters.post(
+  "/get-order-by-user-id-confirm-status",
+  getOrderByUserIdConfirmStatusController
+);
 
 module.exports = orderRouters;
