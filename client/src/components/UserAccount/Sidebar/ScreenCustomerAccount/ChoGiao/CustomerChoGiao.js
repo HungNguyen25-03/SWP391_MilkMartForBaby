@@ -6,7 +6,7 @@ import useAuth from "../../../../../hooks/useAuth";
 import { ToastContainer, toast } from "react-toastify";
 
 export default function CustomerChoGiao({ title }) {
-  const [pendingOrderList, setPendingOrderList] = useState([]);
+  const [confirmOrderList, setConfirmOrderList] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [productDetail, setProductDetail] = useState({});
   const { auth } = useAuth();
@@ -21,38 +21,18 @@ export default function CustomerChoGiao({ title }) {
       })
       .then((res) => {
         console.log(res.data);
-        // setPendingOrderList(res.data);
+        setConfirmOrderList(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
 
-  const confirmOrder = (order_id) => {
-    axios
-      .put(
-        `${MainAPI}/user/complete-order/${order_id}`,
-        {},
-        {
-          headers: {
-            "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
-          },
-        }
-      )
-      .then((res) => {
-        toast.success(res.data.message);
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   return (
     <div className={title === "Chờ giao" ? "chogiao" : "fade"}>
       <h5 className="fw-bold">{title}</h5>
       <ToastContainer />
-      {pendingOrderList.length === 0 ? (
+      {confirmOrderList.length === 0 ? (
         <div className="emptyinfo">
           <img
             src={
@@ -65,7 +45,7 @@ export default function CustomerChoGiao({ title }) {
           </p>
         </div>
       ) : (
-        pendingOrderList.map((dagiao) => {
+        confirmOrderList.map((dagiao) => {
           return (
             <>
               <div className="order">
@@ -135,16 +115,7 @@ export default function CustomerChoGiao({ title }) {
                     </span>
                   </span>
 
-                  <span className="d-flex justify-content-end mt-3">
-                    <button
-                      className="btn btn-warning m-0"
-                      onClick={() => {
-                        confirmOrder(dagiao.order_id);
-                      }}
-                    >
-                      Đã nhận được hàng
-                    </button>
-                  </span>
+                  <span className="d-flex justify-content-end mt-3"></span>
                 </div>
               </div>
             </>

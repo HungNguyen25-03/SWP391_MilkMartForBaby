@@ -70,7 +70,7 @@ export default function HeaderPage() {
             <form className="d-flex" onSubmit={handleSearch}>
               <input
                 type="text"
-                placeholder="Hôm nay bạn muốn mua gì?"
+                placeholder="Hôm nay ba mẹ muốn mua gì?"
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
               />
