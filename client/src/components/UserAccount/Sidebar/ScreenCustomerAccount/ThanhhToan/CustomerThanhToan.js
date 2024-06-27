@@ -5,6 +5,7 @@ import { MainAPI } from "../../../../API";
 
 export default function CustomerThanhToan({ title }) {
   const [confirmOrderList, setConfirmOrderList] = useState([]);
+  const [showTrack, setShowTrack] = useState(null)
 
   useEffect(() => {
     axios
@@ -17,6 +18,11 @@ export default function CustomerThanhToan({ title }) {
         console.log(err);
       });
   }, []);
+
+  const handTrackOrder = (index) => {
+    console.log(index)
+    setShowTrack(showTrack === index ? null : index)
+  };
   return (
     <div className={title === "Thanh toán" ? "thanhtoan" : "fade"}>
       <div>
@@ -36,9 +42,40 @@ export default function CustomerThanhToan({ title }) {
           </p>
         </div>
       ) : (
-        confirmOrderList.map((thanhtoan) => {
+        confirmOrderList.map((thanhtoan, index) => {
           return (
             <div className="eachthanhtoan">
+              <div style={{ textAlign: "right" }}>
+                <button
+                  style={{
+                    border: "none",
+                    backgroundColor: "#00CCFF",
+                    borderRadius: "10px",
+                    color: "white",
+                    padding: "10px",
+                  }}
+                  onClick={() => handTrackOrder(index)}
+                >
+                  Order Progress
+                </button>
+              </div>
+              <div>
+                {showTrack === index && <>
+                  <div style={{ display: "flex" }}>
+                    <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white' }}>Chờ thanh toán</span>&nbsp;&nbsp;
+                    <span>------&#62;</span>&nbsp;&nbsp;
+                    <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white' }}>Thanh Toán</span>&nbsp;&nbsp;
+                    <span>------&#62;</span>&nbsp;&nbsp;
+                    <span >Chờ giao</span>&nbsp;&nbsp;
+                    <span>------&#62;</span>&nbsp;&nbsp;
+                    <span>Đang giao</span>&nbsp;&nbsp;
+                    <span>------&#62;</span>&nbsp;&nbsp;
+                    <span>Đã giao</span>&nbsp;&nbsp;
+                    <span>------&#62;</span>&nbsp;&nbsp;
+                    <span>Đã Hủy</span>
+                  </div>
+                </>}
+              </div>
               <div className="tab-content">
                 <div key="1" className="cart-product-line d-flex ">
                   <div className="product-img">
