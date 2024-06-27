@@ -19,7 +19,14 @@ export default function CustomerThanhToan({ title }) {
   }, []);
   return (
     <div className={title === "Thanh toán" ? "thanhtoan" : "fade"}>
-      <h5 className="fw-bold">{title}</h5>
+      <div>
+        <h5 className="fw-bold">{title}</h5>
+        {confirmOrderList.length !== 0 &&
+          <button>
+            Order Progress
+          </button>
+        }
+      </div>
       {confirmOrderList.length === 0 ? (
         <div className="emptyinfo">
           <img src="https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2Faccount%2Fthanhtoan.png?alt=media&token=511e5785-0844-4fea-8530-3124f9296eab" />

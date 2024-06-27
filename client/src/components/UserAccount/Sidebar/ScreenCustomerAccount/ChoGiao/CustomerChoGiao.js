@@ -18,6 +18,7 @@ export default function CustomerChoGiao({ title }) {
       });
   }, []);
 
+
   return (
     <div className={title === "Chờ giao" ? "chogiao" : "fade"}>
       <h5 className="fw-bold">{title}</h5>
@@ -37,6 +38,11 @@ export default function CustomerChoGiao({ title }) {
         pendingOrderList.map((product) => {
           return (
             <div className="eachchogiao" key={product.product_id}>
+              <button
+                style={{ border: 'none', backgroundColor: '#00CCFF', color: 'white', padding: '10px', borderRadius: '20px' }}
+              >
+                Order Progress
+              </button>
               <div className="tab-content">
                 <div key="1" className="cart-product-line d-flex ">
                   <div className="product-img">
