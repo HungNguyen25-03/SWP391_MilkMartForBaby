@@ -296,7 +296,7 @@ const reviewsByProductIdMiddlewares = async (req, res, next) => {
 const completeOrderMiddlewares = async (req, res, next) => {
   try {
     const errors = [];
-    const { order_id } = req.body;
+    const { order_id } = req.params.id;
     const pool = await poolPromise;
     const hasCompletedOrder = await pool
       .request()

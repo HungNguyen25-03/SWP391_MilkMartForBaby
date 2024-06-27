@@ -17,11 +17,11 @@ export default function CustomerDaGiao({ title }) {
 
   useEffect(() => {
     axios
-      .post(`${MainAPI}/order/get-order-by-user-id/${auth.user.user_id}`, {
+      .post(`${MainAPI}/order/get-order-by-user-id`, {
         user_id: auth.user.user_id,
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setCompleteOrderList(res.data);
       })
       .catch((err) => {
@@ -30,7 +30,7 @@ export default function CustomerDaGiao({ title }) {
   }, []);
 
   const handleSubmit = (feedback) => {
-    console.log(feedback);
+    // console.log(feedback);
   };
 
   return (
