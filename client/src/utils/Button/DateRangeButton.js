@@ -4,8 +4,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./DateRangeButton.scss";
 
 const DateRangeButton = ({ onDateChange }) => {
-  const [startDate, setStartDate] = useState(new Date("2021-01-01"));
-  const [endDate, setEndDate] = useState(new Date("2021-12-01"));
+  const [startDate, setStartDate] = useState(new Date("2024-06-01"));
+  const [endDate, setEndDate] = useState(new Date("2024-12-01"));
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDatePicker = () => {
