@@ -146,14 +146,17 @@ async function dashboard(startDate, endDate) {
     const [startYear, startMonth] = startDate.split("-").map(Number);
     const [endYear, endMonth] = endDate.split("-").map(Number);
 
+    console.log(startYear, startMonth, endYear, endMonth);
     // Calculate the start and end date strings in the required format
-    const startDateString = `${startMonth
+    const startDateString = `${startYear}-${startMonth
       .toString()
-      .padStart(2, "0")}-01-${startYear}`;
-    const endDateString = `${(endMonth + 1)
+      .padStart(2, "0")}-01`;
+    const endMonthLastDay = new Date(endYear, endMonth, 0).getDate(); // Get last day of the end month
+    const endDateString = `${endYear}-${endMonth
       .toString()
-      .padStart(2, "0")}-01-${endYear}`;
+      .padStart(2, "0")}-${endMonthLastDay}`;
 
+    console.log(startDateString, endDateString);
     // Query total orders within the specified month-year range
     const totalOrdersResult = await pool
       .request()
@@ -161,7 +164,7 @@ async function dashboard(startDate, endDate) {
       .input("endDateString", sql.DateTime, endDateString).query(`
         SELECT COUNT(*) AS totalOrders 
         FROM Orders 
-        WHERE order_date >= @startDateString AND order_date < @endDateString
+        WHERE order_date >= @startDateString AND order_date <= @endDateString
         AND status IN ('Paid', 'Delivered', 'Completed', 'Confirmed');
       `);
     const totalOrders = totalOrdersResult.recordset[0].totalOrders;
@@ -173,7 +176,7 @@ async function dashboard(startDate, endDate) {
       .input("endDateString", sql.DateTime, endDateString).query(`
         SELECT SUM(total_amount) AS totalRevenue 
         FROM Orders 
-        WHERE order_date >= @startDateString AND order_date < @endDateString
+        WHERE order_date >= @startDateString AND order_date <= @endDateString
         AND status IN ('Paid', 'Delivered', 'Completed', 'Confirmed');
       `);
     const totalRevenue = totalRevenueResult.recordset[0].totalRevenue;
@@ -183,11 +186,11 @@ async function dashboard(startDate, endDate) {
       .request()
       .input("startDateString", sql.DateTime, startDateString)
       .input("endDateString", sql.DateTime, endDateString).query(`
-        SELECT TOP 5 P.*, SUM(OI.quantity) AS totalSold 
+        SELECT TOP 5 P.product_id, P.product_name, SUM(OI.quantity) AS totalSold 
         FROM Order_Items OI
         JOIN Products P ON OI.product_id = P.product_id
         JOIN Orders O ON OI.order_id = O.order_id
-        WHERE O.order_date >= @startDateString AND O.order_date < @endDateString
+        WHERE O.order_date >= @startDateString AND O.order_date <= @endDateString
         AND O.status IN ('Paid', 'Delivered', 'Completed', 'Confirmed')
         GROUP BY P.product_id, P.product_name
         ORDER BY totalSold DESC;
@@ -204,7 +207,7 @@ async function dashboard(startDate, endDate) {
           MONTH(order_date) AS month, 
           COUNT(*) AS successfulOrders 
         FROM Orders 
-        WHERE order_date >= @startDateString AND order_date < @endDateString
+        WHERE order_date >= @startDateString AND order_date <= @endDateString
         AND status IN ('Paid', 'Delivered', 'Completed', 'Confirmed')
         GROUP BY YEAR(order_date), MONTH(order_date)
         ORDER BY year, month;
@@ -221,7 +224,7 @@ async function dashboard(startDate, endDate) {
           MONTH(order_date) AS month, 
           COUNT(*) AS canceledOrders 
         FROM Orders 
-        WHERE order_date >= @startDateString AND order_date < @endDateString
+        WHERE order_date >= @startDateString AND order_date <= @endDateString
         AND status IN ('Cancelled')
         GROUP BY YEAR(order_date), MONTH(order_date)
         ORDER BY year, month;
@@ -238,7 +241,7 @@ async function dashboard(startDate, endDate) {
           MONTH(order_date) AS month, 
           SUM(total_amount) AS totalRevenue 
         FROM Orders 
-        WHERE order_date >= @startDateString AND order_date < @endDateString
+        WHERE order_date >= @startDateString AND order_date <= @endDateString
         AND status IN ('Paid', 'Delivered', 'Completed', 'Confirmed')
         GROUP BY YEAR(order_date), MONTH(order_date)
         ORDER BY year, month;
