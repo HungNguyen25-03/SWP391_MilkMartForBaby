@@ -76,13 +76,15 @@ export default function CustomerDaGiao({ title }) {
               <div>
                 {showTrack === index && <>
                   <div style={{ display: "flex" }}>
+                    <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white' }}>Chờ thanh toán</span>&nbsp;&nbsp;
+                    <span>------&#62;</span>&nbsp;&nbsp;
+                    <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white' }}>Thanh Toán</span>&nbsp;&nbsp;
+                    <span>------&#62;</span>&nbsp;&nbsp;
                     <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white' }}>Chờ giao</span>&nbsp;&nbsp;
                     <span>------&#62;</span>&nbsp;&nbsp;
                     <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white' }}>Đang giao</span>&nbsp;&nbsp;
                     <span>------&#62;</span>&nbsp;&nbsp;
                     <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white' }}>Đã giao</span>&nbsp;&nbsp;
-                    <span>------&#62;</span>&nbsp;&nbsp;
-                    <span>Thanh Toán</span>&nbsp;&nbsp;
                     <span>------&#62;</span>&nbsp;&nbsp;
                     <span>Đã Hủy</span>
                   </div>

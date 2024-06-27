@@ -8,6 +8,7 @@ import useAuth from "../../../../../hooks/useAuth";
 export default function ChoThanhToan({ title }) {
   const [pendingOrderList, setPendingOrderList] = useState([]);
   const { auth } = useAuth();
+  const [showTrack, setShowTrack] = useState(null)
 
   const token = JSON.parse(localStorage.getItem("accessToken"));
   console.log(token);
@@ -26,6 +27,11 @@ export default function ChoThanhToan({ title }) {
       });
   }, []);
 
+  const handTrackOrder = (index) => {
+    console.log(index)
+    setShowTrack(showTrack === index ? null : index)
+  };
+
   return (
     <div className={title === "Chờ thanh toán" ? "chothanhtoan" : "fade"}>
       <h5 className="fw-bold">{title}</h5>
@@ -39,14 +45,47 @@ export default function ChoThanhToan({ title }) {
           />
           <p>
             Hiện chưa có đơn hàng nào <br />
-            đang chờ được giao
+            đang chờ được thanh toán
           </p>
         </div>
       ) : (
-        pendingOrderList.map((dagiao) => {
+        pendingOrderList.map((dagiao, index) => {
           return (
             <>
               <div className="order">
+                <div style={{ textAlign: "right" }}>
+                  <button
+                    style={{
+                      border: "none",
+                      backgroundColor: "#00CCFF",
+                      borderRadius: "10px",
+                      color: "white",
+                      padding: "10px",
+                    }}
+                    onClick={() => handTrackOrder(index)}
+                  >
+                    Order Progress
+                  </button>
+                </div>
+
+                <div>
+                  {showTrack === index && <>
+                    <div style={{ display: "flex" }}>
+                      <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white' }}>Chờ thanh toán</span>&nbsp;&nbsp;
+                      <span>------&#62;</span>&nbsp;&nbsp;
+                      <span>Thanh Toán</span>&nbsp;&nbsp;
+                      <span>------&#62;</span>&nbsp;&nbsp;
+                      <span>Chờ giao</span>&nbsp;&nbsp;
+                      <span>------&#62;</span>&nbsp;&nbsp;
+                      <span>Đang giao</span>&nbsp;&nbsp;
+                      <span>------&#62;</span>&nbsp;&nbsp;
+                      <span>Đã giao</span>&nbsp;&nbsp;
+                      <span>------&#62;</span>&nbsp;&nbsp;
+                      <span>Đã Hủy</span>
+                    </div>
+                  </>}
+                </div>
+
                 {dagiao.products.map((product, index) => {
                   return (
                     <>
@@ -116,9 +155,9 @@ export default function ChoThanhToan({ title }) {
                   <span className="d-flex justify-content-end mt-3">
                     <button
                       className="btn btn-warning m-0"
-                      //   onClick={() => {
-                      //     confirmOrder(dagiao.order_id);
-                      //   }}
+                    //   onClick={() => {
+                    //     confirmOrder(dagiao.order_id);
+                    //   }}
                     >
                       Thanh toán
                     </button>
