@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { thanhtoans } from "../ListProduct";
-import axios from "axios";
-import { MainAPI } from "../../../../API";
-import useAuth from "../../../../../hooks/useAuth";
 import { formatVND } from "../../../../../utils/Format";
+import { ToastContainer, toast } from "react-toastify";
+import { MainAPI } from "../../../../API";
+import axios from "axios";
+import useAuth from "../../../../../hooks/useAuth";
 
-export default function CustomerThanhToan({ title }) {
-  const [paidOrderList, setPaidOrderList] = useState([]);
+export default function ChoThanhToan({ title }) {
+  const [pendingOrderList, setPendingOrderList] = useState([]);
   const { auth } = useAuth();
+
+  const token = JSON.parse(localStorage.getItem("accessToken"));
+  console.log(token);
 
   useEffect(() => {
     axios
-      .post(`${MainAPI}/order/get-order-by-user-id-paid-status`, {
+      .post(`${MainAPI}/order/get-order-by-user-id-pending-status`, {
         user_id: auth.user.user_id,
       })
       .then((res) => {
-        console.log(res);
-        setPaidOrderList(res.data);
+        console.log(res.data);
+        setPendingOrderList(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -24,22 +27,27 @@ export default function CustomerThanhToan({ title }) {
   }, []);
 
   return (
-    <div className={title === "Thanh toán" ? "thanhtoan" : "fade"}>
+    <div className={title === "Chờ thanh toán" ? "chothanhtoan" : "fade"}>
       <h5 className="fw-bold">{title}</h5>
-      {paidOrderList.length === 0 ? (
+      <ToastContainer />
+      {pendingOrderList.length === 0 ? (
         <div className="emptyinfo">
-          <img src="https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2Faccount%2Fthanhtoan.png?alt=media&token=511e5785-0844-4fea-8530-3124f9296eab" />
+          <img
+            src={
+              "https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2Faccount%2Fchogiao.png?alt=media&token=8580382f-7bc6-477f-a95e-38b3a06eb189"
+            }
+          />
           <p>
-            Hiện chưa có đơn hàng <br />
-            nào chờ thanh toán
+            Hiện chưa có đơn hàng nào <br />
+            đang chờ được giao
           </p>
         </div>
       ) : (
-        paidOrderList.map((order) => {
+        pendingOrderList.map((dagiao) => {
           return (
             <>
               <div className="order">
-                {order.products.map((product, index) => {
+                {dagiao.products.map((product, index) => {
                   return (
                     <>
                       <div className="tab-content">
@@ -71,7 +79,7 @@ export default function CustomerThanhToan({ title }) {
                     <span className="w-50">
                       <span className="color-20">Có </span>
                       <span className="font-bold font-15 line-height-15 color-20">
-                        {order.products.length} sản phẩm
+                        {dagiao.products.length} sản phẩm
                       </span>
                     </span>
                     <span
@@ -89,7 +97,7 @@ export default function CustomerThanhToan({ title }) {
                     <span className="w-50 align-items-end d-flex">
                       <span>Mã đơn </span>
                       <span className="font-bold font-15 d-inline-flex align-items-end color-20">
-                        #{order.order_id}
+                        #{dagiao.order_id}
                       </span>
                     </span>
                     <span className=" d-flex  align-items-end  justify-content position-relative color-20 font-13">
@@ -100,12 +108,21 @@ export default function CustomerThanhToan({ title }) {
                         Thành tiền
                       </span>
                       <span className="font-bold font-15 line-height-15 color-20">
-                        {formatVND(order.total_amount)}
+                        {formatVND(dagiao.total_amount)}
                       </span>
                     </span>
                   </span>
 
-                  <span className="d-flex justify-content-end mt-3"></span>
+                  <span className="d-flex justify-content-end mt-3">
+                    <button
+                      className="btn btn-warning m-0"
+                      //   onClick={() => {
+                      //     confirmOrder(dagiao.order_id);
+                      //   }}
+                    >
+                      Thanh toán
+                    </button>
+                  </span>
                 </div>
               </div>
             </>
