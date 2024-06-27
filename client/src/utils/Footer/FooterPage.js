@@ -36,7 +36,7 @@ function FooterPage() {
             </div>
           </div>
         </div>
-        <div className="mission">
+        {/* <div className="mission">
           <div className="mission__title">Sứ mệnh của chúng tôi</div>
           <div className="mission__content">
             Tại Milk Mart For baby, chúng tôi cam kết mang đến cho khách hàng những sản phẩm sữa tinh khiết, bổ dưỡng và chất lượng cao. Sứ mệnh của chúng tôi là:
@@ -53,7 +53,7 @@ function FooterPage() {
           <div className="mission__content__4">
             - Bảo Vệ Môi Trường: Cam kết thực hiện các hoạt động kinh doanh có trách nhiệm, bảo vệ môi trường và đóng góp vào sự phát triển của cộng đồng.
           </div>
-        </div>
+        </div>*/}
       </div>
       <div className="copyright">© {new Date().getFullYear()} Milk Mart For baby. Tất cả các quyền được bảo lưu.</div>
     </div>
