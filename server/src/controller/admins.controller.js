@@ -4,15 +4,15 @@ const {
   DeleteUser,
   getAllUser,
   getUserById,
+  dashboard,
 } = require("../services/admin.services");
-
 
 const createUserController = async (req, res) => {
   const { username, password, email, role_id } = req.body;
-  
+
   try {
     const result = await createUser(username, password, email, role_id);
-    
+
     if (result.success) {
       return res.status(200).json({
         message: result.message,
@@ -108,10 +108,35 @@ const getUserByIdController = async (req, res) => {
     res.status(500).json({ message: "Error getting user" });
   }
 };
+
+const dashboardController = async (req, res) => {
+  const { startDate, endDate } = req.query;
+
+  if (
+    !startDate ||
+    !endDate ||
+    !/^\d{4}-\d{2}$/.test(startDate) ||
+    !/^\d{4}-\d{2}$/.test(endDate)
+  ) {
+    return res.status(400).send({
+      error:
+        "Please provide both startDate and endDate query parameters in the format YYYY-MM.",
+    });
+  }
+
+  try {
+    const data = await dashboard(startDate, endDate);
+    res.send(data);
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+};
+
 module.exports = {
   createUserController,
   updateUserController,
   deleteUserController,
   getAllUserController,
   getUserByIdController,
+  dashboardController,
 };

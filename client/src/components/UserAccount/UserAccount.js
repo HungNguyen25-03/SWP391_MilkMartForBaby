@@ -8,6 +8,7 @@ import CustomerChoGiao from "./Sidebar/ScreenCustomerAccount/ChoGiao/CustomerCho
 import CustomerThanhToan from "./Sidebar/ScreenCustomerAccount/ThanhhToan/CustomerThanhToan";
 import CustomerDangGiao from "./Sidebar/ScreenCustomerAccount/DangGiao/CustomerDangGiao";
 import CustomerDaHuy from "./Sidebar/ScreenCustomerAccount/DaHuy/CustomerDaHuy";
+import ChoThanhToan from "./Sidebar/ScreenCustomerAccount/ChoThanhToan/ChoThanhToan";
 
 export default function UserAccount() {
   const [title, setTitle] = useState("Đã giao");
@@ -23,6 +24,14 @@ export default function UserAccount() {
                 className="nav d-flex justify-content-between"
                 style={{ cursor: "pointer" }}
               >
+                <li
+                  className="nav-item"
+                  onClick={() => {
+                    setTitle("Chờ thanh toán");
+                  }}
+                >
+                  Chờ Thanh toán
+                </li>
                 <li
                   className="nav-item"
                   onClick={() => {
@@ -67,6 +76,8 @@ export default function UserAccount() {
             </div>
 
             <div className="status-content">
+              <ChoThanhToan title={title} />
+
               <CustomerThanhToan title={title} />
 
               <CustomerChoGiao title={title} />
