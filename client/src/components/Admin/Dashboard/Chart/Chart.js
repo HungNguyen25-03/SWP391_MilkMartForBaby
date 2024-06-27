@@ -86,13 +86,13 @@ export default function Chart() {
     <>
       <div className="row-chart">
         <div className="chart-col-vertical col-8">
-          <p className="fw-bold">Tổng doanh thu</p>
+          <p className="fw-bold m-0">Tổng doanh thu</p>
           <div className="chart">
             <Bar options={options} data={data} />
           </div>
         </div>
         <div className="chart-col-pie col-4">
-          <p className="fw-bold">Số lượng đã bán của mỗi sản phẩm</p>
+          <p className="fw-bold m-0">Top sản phẩm đã bán</p>
           <div className="chart">
             <Pie data={data2} />
           </div>
