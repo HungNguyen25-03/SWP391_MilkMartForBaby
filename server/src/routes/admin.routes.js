@@ -44,6 +44,6 @@ adminRoutes.put(
 );
 
 //api dashboard
-adminRoutes.post("/dashboard", authJwt.authenticateToken, dashboardController);
+adminRoutes.get("/dashboard", authJwt.authenticateToken, dashboardController);
 
 module.exports = adminRoutes;
