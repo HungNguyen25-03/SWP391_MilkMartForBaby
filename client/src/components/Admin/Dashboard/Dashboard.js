@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NavBar from "../NavBar/NavBar";
 import "./Dashboard.scss";
 import Chart from "./Chart/Chart";
 import { PiMoney } from "react-icons/pi";
 import { BsBoxSeam, BsCart3 } from "react-icons/bs";
 import DateRangeButton from "../../../utils/Button/DateRangeButton";
-import { formattedDate } from "../../../utils/Format";
+import { formatVND, formattedDate } from "../../../utils/Format";
+import axios from "axios";
+import { MainAPI } from "../../API";
+import { set } from "date-fns";
 
 export default function Dashboard() {
   // State variables for start and end dates
-  const [startDate, setStartDate] = useState(new Date("2021-01-01"));
-  const [endDate, setEndDate] = useState(new Date("2021-12-01"));
+  const [startDate, setStartDate] = useState(new Date("2024-06-01"));
+  const [endDate, setEndDate] = useState(new Date("2024-12-01"));
+  const [data, setData] = useState({});
 
   // Function to receive start and end dates from DateRangeButton
   const handleDateChange = (start, end) => {
@@ -19,6 +23,32 @@ export default function Dashboard() {
   };
 
   console.log(formattedDate(startDate), formattedDate(endDate));
+
+  const fetchData = async () => {
+    const data = await axios
+      .get(`${MainAPI}/admin/dashboard`, {
+        params: {
+          startDate: formattedDate(startDate),
+          endDate: formattedDate(endDate),
+        },
+        headers: {
+          "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+        },
+      })
+      .then((res) => {
+        // console.log(res.data);
+        setData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [startDate, endDate]);
+
+  console.log(data);
 
   return (
     <>
@@ -48,9 +78,9 @@ export default function Dashboard() {
             <div className="col col-md-4">
               <div className="card card-content m-0">
                 <div className="card-body col-10">
-                  <div className="card-title fw-bold">Doanh thu trong ngày</div>
+                  <div className="card-title fw-bold">Tổng doanh thu</div>
                   <div className="d-flex justify-content-between m-0">
-                    <div>100</div>
+                    <div>{formatVND(data.totalRevenue)}</div>
                     <div className="col-2 icon">
                       <PiMoney />
                     </div>
@@ -63,7 +93,7 @@ export default function Dashboard() {
                 <div className="card-body col-10">
                   <div className="card-title fw-bold">Tổng số đơn hàng</div>
                   <div className="d-flex justify-content-between m-0">
-                    <div>100</div>
+                    <div>{data.totalOrders}</div>
                     <div className="col-2 icon">
                       <BsCart3 />
                     </div>
@@ -72,7 +102,10 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-          <Chart />
+          <Chart
+            startDate={formattedDate(startDate)}
+            endDate={formattedDate(endDate)}
+          />
         </div>
       </div>
     </>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -14,6 +14,8 @@ import {
 import { Bar, Pie } from "react-chartjs-2";
 import { faker } from "@faker-js/faker";
 import "./Chart.scss";
+import axios from "axios";
+import { MainAPI } from "../../../API";
 
 ChartJS.register(
   CategoryScale,
@@ -38,63 +40,86 @@ export const options = {
 
 const labels = ["January", "February", "March", "April", "May", "June", "July"];
 
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: "Dataset 1",
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
-    },
-    {
-      label: "Dataset 2",
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      backgroundColor: "rgba(53, 162, 235, 0.5)",
-    },
-  ],
-};
+export default function Chart({ startDate, endDate }) {
+  const [dataChart, setDataChart] = useState({});
+  const [topProducts, setTopProducts] = useState([]);
+  useEffect(() => {
+    axios
+      .get(`${MainAPI}/admin/dashboard`, {
+        params: {
+          startDate: startDate,
+          endDate: endDate,
+        },
+        headers: {
+          "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+        },
+      })
+      .then((res) => {
+        // console.log(res.data);
+        setDataChart(res.data);
+        setTopProducts(res.data.topProducts);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
-export const data2 = {
-  labels: ["Jeans", "Shirts", "Belts", "Caps", "Other"],
-  datasets: [
-    {
-      label: "Số lượng đã bán",
-      data: [12, 19, 3, 5, 2, 3],
-      backgroundColor: [
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(255, 206, 86, 0.2)",
-        "rgba(75, 192, 192, 0.2)",
-        "rgba(153, 102, 255, 0.2)",
-        "rgba(255, 159, 64, 0.2)",
-      ],
-      borderColor: [
-        "rgba(255, 99, 132, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(255, 206, 86, 1)",
-        "rgba(75, 192, 192, 1)",
-        "rgba(153, 102, 255, 1)",
-        "rgba(255, 159, 64, 1)",
-      ],
-      borderWidth: 1,
-    },
-  ],
-};
+  console.log(dataChart);
+  const dataBarChart = {
+    labels,
+    datasets: [
+      {
+        label: "Dataset 1",
+        data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+      },
+      {
+        label: "Dataset 2",
+        data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+        backgroundColor: "rgba(53, 162, 235, 0.5)",
+      },
+    ],
+  };
 
-export default function Chart() {
+  const dataPieChart = {
+    labels: topProducts.map((product) => product.product_name),
+    datasets: [
+      {
+        label: "Số lượng đã bán",
+        data: topProducts.map((product) => product.totalSold),
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(54, 162, 235, 0.2)",
+          "rgba(255, 206, 86, 0.2)",
+          "rgba(75, 192, 192, 0.2)",
+          "rgba(153, 102, 255, 0.2)",
+          "rgba(255, 159, 64, 0.2)",
+        ],
+        borderColor: [
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 206, 86, 1)",
+          "rgba(75, 192, 192, 1)",
+          "rgba(153, 102, 255, 1)",
+          "rgba(255, 159, 64, 1)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
   return (
     <>
       <div className="row-chart">
         <div className="chart-col-vertical col-8">
           <p className="fw-bold m-0">Tổng doanh thu</p>
           <div className="chart">
-            <Bar options={options} data={data} />
+            <Bar options={options} data={dataBarChart} />
           </div>
         </div>
         <div className="chart-col-pie col-4">
           <p className="fw-bold m-0">Top sản phẩm đã bán</p>
           <div className="chart">
-            <Pie data={data2} />
+            <Pie data={dataPieChart} />
           </div>
         </div>
       </div>
