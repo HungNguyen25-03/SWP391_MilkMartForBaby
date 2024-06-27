@@ -4,3 +4,7 @@ export const formatVND = (number) => {
     currency: "VND",
   }).format(number);
 };
+
+export const formattedDate = (date) => {
+  return `${date.getMonth() + 1}-${date.getFullYear()}`;
+};

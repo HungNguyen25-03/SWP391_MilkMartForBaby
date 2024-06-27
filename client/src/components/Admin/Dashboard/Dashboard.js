@@ -1,12 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import NavBar from "../NavBar/NavBar";
 import "./Dashboard.scss";
 import Chart from "./Chart/Chart";
 import { PiMoney } from "react-icons/pi";
 import { BsBoxSeam, BsCart3 } from "react-icons/bs";
 import DateRangeButton from "../../../utils/Button/DateRangeButton";
+import { formattedDate } from "../../../utils/Format";
 
 export default function Dashboard() {
+  // State variables for start and end dates
+  const [startDate, setStartDate] = useState(new Date("2021-01-01"));
+  const [endDate, setEndDate] = useState(new Date("2021-12-01"));
+
+  // Function to receive start and end dates from DateRangeButton
+  const handleDateChange = (start, end) => {
+    setStartDate(start);
+    setEndDate(end);
+  };
+
+  console.log(formattedDate(startDate), formattedDate(endDate));
+
   return (
     <>
       <NavBar />
@@ -15,7 +28,7 @@ export default function Dashboard() {
           <div className="d-flex justify-content-between">
             <h1 className="mt-0">Dashboard</h1>
             <div>
-              <DateRangeButton />
+              <DateRangeButton onDateChange={handleDateChange} />
             </div>
           </div>
           <div className="row justify-content-between">

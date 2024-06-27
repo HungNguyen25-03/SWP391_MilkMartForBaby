@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./DateRangeButton.scss";
 
-const DateRangeButton = () => {
+const DateRangeButton = ({ onDateChange }) => {
   const [startDate, setStartDate] = useState(new Date("2021-01-01"));
   const [endDate, setEndDate] = useState(new Date("2021-12-01"));
   const [isOpen, setIsOpen] = useState(false);
@@ -34,25 +34,31 @@ const DateRangeButton = () => {
             <label>Start Date: </label>
             <DatePicker
               selected={startDate}
-              onChange={(date) => setStartDate(date)}
+              onChange={(date) => {
+                setStartDate(date);
+                onDateChange(date, endDate);
+              }}
               selectsStart
               startDate={startDate}
               endDate={endDate}
               showMonthYearPicker
-              dateFormat="MM/yyyy"
+              dateFormat="MM-yyyy"
             />
           </div>
           <div>
             <label>End Date: </label>
             <DatePicker
               selected={endDate}
-              onChange={(date) => setEndDate(date)}
+              onChange={(date) => {
+                setEndDate(date);
+                onDateChange(startDate, date);
+              }}
               selectsEnd
               startDate={startDate}
               endDate={endDate}
               minDate={startDate}
               showMonthYearPicker
-              dateFormat="MM/yyyy"
+              dateFormat="MM-yyyy"
             />
           </div>
         </div>
