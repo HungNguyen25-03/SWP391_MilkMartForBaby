@@ -6,6 +6,7 @@ const {
   deleteUserController,
   getAllUserController,
   getUserByIdController,
+  dashboardController,
 } = require("../controller/admins.controller");
 
 const {
@@ -41,5 +42,8 @@ adminRoutes.put(
   updateUserMiddleware,
   updateUserController
 );
+
+//api dashboard
+adminRoutes.post("/dashboard", authJwt.authenticateToken, dashboardController);
 
 module.exports = adminRoutes;

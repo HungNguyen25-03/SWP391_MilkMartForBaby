@@ -18,7 +18,11 @@ async function createUser(username, password, email, role_id) {
     const user_id = result.recordset[0].user_id;
     const tokens = await authJwt.generateToken(user_id);
 
-    return { success: true, message: "User registered successfully", ...tokens };
+    return {
+      success: true,
+      message: "User registered successfully",
+      ...tokens,
+    };
   } catch (error) {
     throw new Error("User creation failed: " + error.message);
   }
@@ -134,25 +138,131 @@ async function updateUser(user_id, username, password, email, role_id) {
   }
 }
 
-async function dashboard() {
+async function dashboard(startDate, endDate) {
   try {
     const pool = await poolPromise;
-    const result = await pool.request().query(`
-    SELECT COUNT(*) as totalUsers FROM Users WHERE status = 1;
-    SELECT COUNT(*) as totalProducts FROM Products WHERE status = 1;
-    SELECT COUNT(*) as totalOrders FROM Orders WHERE status = 1;
-  `);
-    const totalUsers = result.recordsets[0][0].totalUsers;
-    const totalProducts = result.recordsets[1][0].totalProducts;
-    const totalOrders = result.recordsets[2][0].totalOrders;
 
-    return { totalUsers, totalProducts, totalOrders };
+    // Extract year and month from startDate and endDate
+    const [startYear, startMonth] = startDate.split("-").map(Number);
+    const [endYear, endMonth] = endDate.split("-").map(Number);
+
+    // Calculate the start and end date strings in the required format
+    const startDateString = `${startMonth
+      .toString()
+      .padStart(2, "0")}-01-${startYear}`;
+    const endDateString = `${(endMonth + 1)
+      .toString()
+      .padStart(2, "0")}-01-${endYear}`;
+
+    // Query total orders within the specified month-year range
+    const totalOrdersResult = await pool
+      .request()
+      .input("startDateString", sql.DateTime, startDateString)
+      .input("endDateString", sql.DateTime, endDateString).query(`
+        SELECT COUNT(*) AS totalOrders 
+        FROM Orders 
+        WHERE order_date >= @startDateString AND order_date < @endDateString
+        AND status IN ('Paid', 'Delivered', 'Completed', 'Confirmed');
+      `);
+    const totalOrders = totalOrdersResult.recordset[0].totalOrders;
+
+    // Query total revenue within the specified month-year range
+    const totalRevenueResult = await pool
+      .request()
+      .input("startDateString", sql.DateTime, startDateString)
+      .input("endDateString", sql.DateTime, endDateString).query(`
+        SELECT SUM(total_amount) AS totalRevenue 
+        FROM Orders 
+        WHERE order_date >= @startDateString AND order_date < @endDateString
+        AND status IN ('Paid', 'Delivered', 'Completed', 'Confirmed');
+      `);
+    const totalRevenue = totalRevenueResult.recordset[0].totalRevenue;
+
+    // Query top 5 best-selling products within the specified month-year range
+    const topProductsResult = await pool
+      .request()
+      .input("startDateString", sql.DateTime, startDateString)
+      .input("endDateString", sql.DateTime, endDateString).query(`
+        SELECT TOP 5 P.*, SUM(OI.quantity) AS totalSold 
+        FROM Order_Items OI
+        JOIN Products P ON OI.product_id = P.product_id
+        JOIN Orders O ON OI.order_id = O.order_id
+        WHERE O.order_date >= @startDateString AND O.order_date < @endDateString
+        AND O.status IN ('Paid', 'Delivered', 'Completed', 'Confirmed')
+        GROUP BY P.product_id, P.product_name
+        ORDER BY totalSold DESC;
+      `);
+    const topProducts = topProductsResult.recordset;
+
+    // Query total successful orders per month within the specified month-year range
+    const successfulOrdersPerMonthResult = await pool
+      .request()
+      .input("startDateString", sql.DateTime, startDateString)
+      .input("endDateString", sql.DateTime, endDateString).query(`
+        SELECT 
+          YEAR(order_date) AS year, 
+          MONTH(order_date) AS month, 
+          COUNT(*) AS successfulOrders 
+        FROM Orders 
+        WHERE order_date >= @startDateString AND order_date < @endDateString
+        AND status IN ('Paid', 'Delivered', 'Completed', 'Confirmed')
+        GROUP BY YEAR(order_date), MONTH(order_date)
+        ORDER BY year, month;
+      `);
+    const successfulOrdersPerMonth = successfulOrdersPerMonthResult.recordset;
+
+    // Query total canceled orders per month within the specified month-year range
+    const canceledOrdersPerMonthResult = await pool
+      .request()
+      .input("startDateString", sql.DateTime, startDateString)
+      .input("endDateString", sql.DateTime, endDateString).query(`
+        SELECT 
+          YEAR(order_date) AS year, 
+          MONTH(order_date) AS month, 
+          COUNT(*) AS canceledOrders 
+        FROM Orders 
+        WHERE order_date >= @startDateString AND order_date < @endDateString
+        AND status IN ('Cancelled')
+        GROUP BY YEAR(order_date), MONTH(order_date)
+        ORDER BY year, month;
+      `);
+    const canceledOrdersPerMonth = canceledOrdersPerMonthResult.recordset;
+
+    // Query total revenue per month within the specified month-year range
+    const totalRevenuePerMonthResult = await pool
+      .request()
+      .input("startDateString", sql.DateTime, startDateString)
+      .input("endDateString", sql.DateTime, endDateString).query(`
+        SELECT 
+          YEAR(order_date) AS year, 
+          MONTH(order_date) AS month, 
+          SUM(total_amount) AS totalRevenue 
+        FROM Orders 
+        WHERE order_date >= @startDateString AND order_date < @endDateString
+        AND status IN ('Paid', 'Delivered', 'Completed', 'Confirmed')
+        GROUP BY YEAR(order_date), MONTH(order_date)
+        ORDER BY year, month;
+      `);
+    const totalRevenuePerMonth = totalRevenuePerMonthResult.recordset;
+
+    return {
+      totalOrders,
+      totalRevenue,
+      topProducts,
+      successfulOrdersPerMonth,
+      canceledOrdersPerMonth,
+      totalRevenuePerMonth,
+    };
   } catch (error) {
     console.error("Error getting dashboard data:", error);
     return {
-      totalUsers: 0,
-      totalProducts: 0,
       totalOrders: 0,
+      totalRevenue: 0,
+      topProducts: [],
+      successfulOrdersPerMonth: [],
+      canceledOrdersPerMonth: [],
+      totalRevenuePerMonth: [],
+      error: error.message,
     };
   }
 }
@@ -163,4 +273,5 @@ module.exports = {
   getAllUser,
   DeleteUser,
   updateUser,
+  dashboard,
 };
