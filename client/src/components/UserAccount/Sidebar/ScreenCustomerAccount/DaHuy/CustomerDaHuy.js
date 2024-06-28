@@ -3,11 +3,12 @@ import useAuth from "../../../../../hooks/useAuth";
 import axios from "axios";
 import { MainAPI } from "../../../../API";
 import { formatVND } from "../../../../../utils/Format";
+import { useNavigate } from "react-router-dom";
 
 export default function CustomerDaHuy({ title }) {
   const [cancelledOrderList, setCancelledOrderList] = useState([]);
   const { auth } = useAuth();
-  const [showTrack, setShowTrack] = useState(null);
+  const nav = useNavigate()
 
   useEffect(() => {
     axios
@@ -23,9 +24,9 @@ export default function CustomerDaHuy({ title }) {
       });
   }, []);
 
-  const handTrackOrder = (index) => {
-    console.log(index);
-    setShowTrack(showTrack === index ? null : index);
+  const handTrackOrder = (id) => {
+    console.log(id)
+    nav(`/trackorder/${id}`)
   };
 
   return (
@@ -52,39 +53,10 @@ export default function CustomerDaHuy({ title }) {
                           color: "white",
                           padding: "10px",
                         }}
-                        onClick={() => handTrackOrder(index)}
+                        onClick={() => handTrackOrder(product.order_id)}
                       >
                         Order Progress
                       </button>
-                    </div>
-                    <div>
-                      {showTrack === index && (
-                        <>
-                          <div style={{ display: "flex" }}>
-                            <span>Chờ thanh toán</span>&nbsp;&nbsp;
-                            <span>------&#62;</span>&nbsp;&nbsp;
-                            <span>Thanh Toán</span>&nbsp;&nbsp;
-                            <span>------&#62;</span>&nbsp;&nbsp;
-                            <span>Chờ giao</span>&nbsp;&nbsp;
-                            <span>------&#62;</span>&nbsp;&nbsp;
-                            <span>Đang giao</span>&nbsp;&nbsp;
-                            <span>------&#62;</span>&nbsp;&nbsp;
-                            <span>Đã giao</span>&nbsp;&nbsp;
-                            <span>------&#62;</span>&nbsp;&nbsp;
-                            <span
-                              style={{
-                                border: "1px solid #67b14e",
-                                borderRadius: "10px",
-                                backgroundColor: "#67b14e",
-                                padding: "3px",
-                                color: "white",
-                              }}
-                            >
-                              Đã Hủy
-                            </span>
-                          </div>
-                        </>
-                      )}
                     </div>
                     <div className="tab-content">
                       <div key={index} className="cart-product-line d-flex ">

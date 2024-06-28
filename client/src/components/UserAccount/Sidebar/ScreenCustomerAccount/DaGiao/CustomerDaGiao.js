@@ -5,21 +5,16 @@ import { formatVND } from "../../../../../utils/Format";
 import ModalReview from "../ModalReview/ModalReview";
 import useAuth from "../../../../../hooks/useAuth";
 import { ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom"
 import "react-toastify/dist/ReactToastify.css";
 import "./CompletedOrder.scss";
-import { MdOutlinePendingActions } from "react-icons/md";
-import { FaMoneyCheckDollar } from "react-icons/fa6";
-import { FaBox } from "react-icons/fa";
-import { FaMotorcycle } from "react-icons/fa6";
-import { IoBagCheck } from "react-icons/io5";
-import { MdCancel } from "react-icons/md";
 
 export default function CustomerDaGiao({ title }) {
   const [completeOrderList, setCompleteOrderList] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [productDetail, setProductDetail] = useState({});
   const { auth } = useAuth();
-  const [showTrack, setShowTrack] = useState(null);
+  const nav = useNavigate()
 
   useEffect(() => {
     axios
@@ -39,13 +34,12 @@ export default function CustomerDaGiao({ title }) {
     console.log(feedback);
   };
 
-  const handTrackOrder = (index) => {
-    console.log(index);
-    setShowTrack(showTrack === index ? null : index);
+  const handTrackOrder = (id) => {
+    console.log(id)
+    nav(`/trackorder/${id}`)
   };
 
-  console.log(completeOrderList);
-  console.log(showTrack);
+  console.log(completeOrderList)
 
   return (
     <div className={title === "Đã giao" ? "dagiao" : "fade"}>
@@ -72,89 +66,11 @@ export default function CustomerDaGiao({ title }) {
                     color: "white",
                     padding: "10px",
                   }}
-                  onClick={() => handTrackOrder(index)}
+                  onClick={() => handTrackOrder(dagiao.order_id)}
                 >
                   Order Progress
                 </button>
               </div>
-
-              <div style={{ margin: "10px 0px" }}>
-                {showTrack === index && (
-                  <>
-                    <div style={{ display: "flex" }}>
-                      <span
-                        style={{
-                          border: "1px solid #67b14e",
-                          borderRadius: "10px",
-                          backgroundColor: "#67b14e",
-                          padding: "3px",
-                          color: "white",
-                        }}
-                      >
-                        <MdOutlinePendingActions /> Chờ thanh toán
-                      </span>
-                      &nbsp;&nbsp;
-                      <span>----&#62;</span>&nbsp;&nbsp;
-                      <span
-                        style={{
-                          border: "1px solid #67b14e",
-                          borderRadius: "10px",
-                          backgroundColor: "#67b14e",
-                          padding: "3px",
-                          color: "white",
-                        }}
-                      >
-                        <FaMoneyCheckDollar /> Thanh Toán
-                      </span>
-                      &nbsp;&nbsp;
-                      <span>----&#62;</span>&nbsp;&nbsp;
-                      <span
-                        style={{
-                          border: "1px solid #67b14e",
-                          borderRadius: "10px",
-                          backgroundColor: "#67b14e",
-                          padding: "3px",
-                          color: "white",
-                        }}
-                      >
-                        <FaBox /> Chờ giao
-                      </span>
-                      &nbsp;&nbsp;
-                      <span>----&#62;</span>&nbsp;&nbsp;
-                      <span
-                        style={{
-                          border: "1px solid #67b14e",
-                          borderRadius: "10px",
-                          backgroundColor: "#67b14e",
-                          padding: "3px",
-                          color: "white",
-                        }}
-                      >
-                        <FaMotorcycle /> Đang giao
-                      </span>
-                      &nbsp;&nbsp;
-                      <span>----&#62;</span>&nbsp;&nbsp;
-                      <span
-                        style={{
-                          border: "1px solid #67b14e",
-                          borderRadius: "10px",
-                          backgroundColor: "#67b14e",
-                          padding: "3px",
-                          color: "white",
-                        }}
-                      >
-                        <IoBagCheck /> Đã giao
-                      </span>
-                      &nbsp;&nbsp;
-                      <span>----&#62;</span>&nbsp;&nbsp;
-                      <span style={{}}>
-                        <MdCancel /> Đã Hủy
-                      </span>
-                    </div>
-                  </>
-                )}
-              </div>
-
               {dagiao.products.map((product, index) => {
                 return (
                   <div key={index} className="tab-content">
