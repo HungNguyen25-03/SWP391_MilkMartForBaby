@@ -14,7 +14,10 @@ export default function FillterType() {
       .get(`${MainAPI}/product/getProduct?page=${page}&pageSize=12`)
       .then((res) => {
         // console.log(res.data.inStockProducts);
-        setAllProductList(res.data.inStockProducts);
+        setAllProductList([
+          ...res.data.inStockProducts,
+          ...res.data.outOfStockProducts,
+        ]);
         setTotalPage(res.data.totalPages);
       })
       .catch((err) => {
