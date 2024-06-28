@@ -8,7 +8,7 @@ import useAuth from "../../../../../hooks/useAuth";
 export default function ChoThanhToan({ title }) {
   const [pendingOrderList, setPendingOrderList] = useState([]);
   const { auth } = useAuth();
-  const [showTrack, setShowTrack] = useState(null)
+  const [showTrack, setShowTrack] = useState(null);
 
   const token = JSON.parse(localStorage.getItem("accessToken"));
   console.log(token);
@@ -19,7 +19,7 @@ export default function ChoThanhToan({ title }) {
         user_id: auth.user.user_id,
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setPendingOrderList(res.data);
       })
       .catch((err) => {
@@ -28,8 +28,8 @@ export default function ChoThanhToan({ title }) {
   }, []);
 
   const handTrackOrder = (index) => {
-    console.log(index)
-    setShowTrack(showTrack === index ? null : index)
+    console.log(index);
+    setShowTrack(showTrack === index ? null : index);
   };
 
   return (
@@ -69,21 +69,34 @@ export default function ChoThanhToan({ title }) {
                 </div>
 
                 <div>
-                  {showTrack === index && <>
-                    <div style={{ display: "flex" }}>
-                      <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white' }}>Chờ thanh toán</span>&nbsp;&nbsp;
-                      <span>------&#62;</span>&nbsp;&nbsp;
-                      <span>Thanh Toán</span>&nbsp;&nbsp;
-                      <span>------&#62;</span>&nbsp;&nbsp;
-                      <span>Chờ giao</span>&nbsp;&nbsp;
-                      <span>------&#62;</span>&nbsp;&nbsp;
-                      <span>Đang giao</span>&nbsp;&nbsp;
-                      <span>------&#62;</span>&nbsp;&nbsp;
-                      <span>Đã giao</span>&nbsp;&nbsp;
-                      <span>------&#62;</span>&nbsp;&nbsp;
-                      <span>Đã Hủy</span>
-                    </div>
-                  </>}
+                  {showTrack === index && (
+                    <>
+                      <div style={{ display: "flex" }}>
+                        <span
+                          style={{
+                            border: "1px solid #67b14e",
+                            borderRadius: "10px",
+                            backgroundColor: "#67b14e",
+                            padding: "3px",
+                            color: "white",
+                          }}
+                        >
+                          Chờ thanh toán
+                        </span>
+                        &nbsp;&nbsp;
+                        <span>------&#62;</span>&nbsp;&nbsp;
+                        <span>Thanh Toán</span>&nbsp;&nbsp;
+                        <span>------&#62;</span>&nbsp;&nbsp;
+                        <span>Chờ giao</span>&nbsp;&nbsp;
+                        <span>------&#62;</span>&nbsp;&nbsp;
+                        <span>Đang giao</span>&nbsp;&nbsp;
+                        <span>------&#62;</span>&nbsp;&nbsp;
+                        <span>Đã giao</span>&nbsp;&nbsp;
+                        <span>------&#62;</span>&nbsp;&nbsp;
+                        <span>Đã Hủy</span>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 {dagiao.products.map((product, index) => {
@@ -155,9 +168,9 @@ export default function ChoThanhToan({ title }) {
                   <span className="d-flex justify-content-end mt-3">
                     <button
                       className="btn btn-warning m-0"
-                    //   onClick={() => {
-                    //     confirmOrder(dagiao.order_id);
-                    //   }}
+                      //   onClick={() => {
+                      //     confirmOrder(dagiao.order_id);
+                      //   }}
                     >
                       Thanh toán
                     </button>

@@ -19,7 +19,7 @@ export default function CustomerDaGiao({ title }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [productDetail, setProductDetail] = useState({});
   const { auth } = useAuth();
-  const [showTrack, setShowTrack] = useState(null)
+  const [showTrack, setShowTrack] = useState(null);
 
   useEffect(() => {
     axios
@@ -27,7 +27,7 @@ export default function CustomerDaGiao({ title }) {
         user_id: auth.user.user_id,
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setCompleteOrderList(res.data);
       })
       .catch((err) => {
@@ -35,18 +35,17 @@ export default function CustomerDaGiao({ title }) {
       });
   }, []);
 
-
   const handleSubmit = (feedback) => {
     console.log(feedback);
   };
 
   const handTrackOrder = (index) => {
-    console.log(index)
-    setShowTrack(showTrack === index ? null : index)
+    console.log(index);
+    setShowTrack(showTrack === index ? null : index);
   };
 
-  console.log(completeOrderList)
-  console.log(showTrack)
+  console.log(completeOrderList);
+  console.log(showTrack);
 
   return (
     <div className={title === "Đã giao" ? "dagiao" : "fade"}>
@@ -80,21 +79,80 @@ export default function CustomerDaGiao({ title }) {
               </div>
 
               <div style={{ margin: "10px 0px" }}>
-                {showTrack === index && <>
-                  <div style={{ display: "flex" }}>
-                    <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white', }}><MdOutlinePendingActions /> Chờ thanh toán</span>&nbsp;&nbsp;
-                    <span>----&#62;</span>&nbsp;&nbsp;
-                    <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white', }}><FaMoneyCheckDollar /> Thanh Toán</span>&nbsp;&nbsp;
-                    <span>----&#62;</span>&nbsp;&nbsp;
-                    <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white', }}><FaBox /> Chờ giao</span>&nbsp;&nbsp;
-                    <span>----&#62;</span>&nbsp;&nbsp;
-                    <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white', }}><FaMotorcycle /> Đang giao</span>&nbsp;&nbsp;
-                    <span>----&#62;</span>&nbsp;&nbsp;
-                    <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white', }}><IoBagCheck /> Đã giao</span>&nbsp;&nbsp;
-                    <span>----&#62;</span>&nbsp;&nbsp;
-                    <span style={{}}><MdCancel /> Đã Hủy</span>
-                  </div>
-                </>}
+                {showTrack === index && (
+                  <>
+                    <div style={{ display: "flex" }}>
+                      <span
+                        style={{
+                          border: "1px solid #67b14e",
+                          borderRadius: "10px",
+                          backgroundColor: "#67b14e",
+                          padding: "3px",
+                          color: "white",
+                        }}
+                      >
+                        <MdOutlinePendingActions /> Chờ thanh toán
+                      </span>
+                      &nbsp;&nbsp;
+                      <span>----&#62;</span>&nbsp;&nbsp;
+                      <span
+                        style={{
+                          border: "1px solid #67b14e",
+                          borderRadius: "10px",
+                          backgroundColor: "#67b14e",
+                          padding: "3px",
+                          color: "white",
+                        }}
+                      >
+                        <FaMoneyCheckDollar /> Thanh Toán
+                      </span>
+                      &nbsp;&nbsp;
+                      <span>----&#62;</span>&nbsp;&nbsp;
+                      <span
+                        style={{
+                          border: "1px solid #67b14e",
+                          borderRadius: "10px",
+                          backgroundColor: "#67b14e",
+                          padding: "3px",
+                          color: "white",
+                        }}
+                      >
+                        <FaBox /> Chờ giao
+                      </span>
+                      &nbsp;&nbsp;
+                      <span>----&#62;</span>&nbsp;&nbsp;
+                      <span
+                        style={{
+                          border: "1px solid #67b14e",
+                          borderRadius: "10px",
+                          backgroundColor: "#67b14e",
+                          padding: "3px",
+                          color: "white",
+                        }}
+                      >
+                        <FaMotorcycle /> Đang giao
+                      </span>
+                      &nbsp;&nbsp;
+                      <span>----&#62;</span>&nbsp;&nbsp;
+                      <span
+                        style={{
+                          border: "1px solid #67b14e",
+                          borderRadius: "10px",
+                          backgroundColor: "#67b14e",
+                          padding: "3px",
+                          color: "white",
+                        }}
+                      >
+                        <IoBagCheck /> Đã giao
+                      </span>
+                      &nbsp;&nbsp;
+                      <span>----&#62;</span>&nbsp;&nbsp;
+                      <span style={{}}>
+                        <MdCancel /> Đã Hủy
+                      </span>
+                    </div>
+                  </>
+                )}
               </div>
 
               {dagiao.products.map((product, index) => {

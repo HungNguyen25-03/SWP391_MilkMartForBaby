@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 export default function CustomerDangGiao({ title }) {
   const [deliveredOrderList, setDeliveredOrderList] = useState([]);
   const { auth } = useAuth();
-  const [showTrack, setShowTrack] = useState(null)
+  const [showTrack, setShowTrack] = useState(null);
 
   useEffect(() => {
     axios
@@ -17,7 +17,7 @@ export default function CustomerDangGiao({ title }) {
         user_id: auth.user.user_id,
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setDeliveredOrderList(res.data);
       })
       .catch((err) => {
@@ -46,8 +46,8 @@ export default function CustomerDangGiao({ title }) {
   };
 
   const handTrackOrder = (index) => {
-    console.log(index)
-    setShowTrack(showTrack === index ? null : index)
+    console.log(index);
+    setShowTrack(showTrack === index ? null : index);
   };
 
   return (
@@ -84,21 +84,67 @@ export default function CustomerDangGiao({ title }) {
                 </button>
               </div>
               <div>
-                {showTrack === index && <>
-                  <div style={{ display: "flex" }}>
-                    <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white' }}>Chờ thanh toán</span>&nbsp;&nbsp;
-                    <span>------&#62;</span>&nbsp;&nbsp;
-                    <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white' }}>Thanh Toán</span>&nbsp;&nbsp;
-                    <span>------&#62;</span>&nbsp;&nbsp;
-                    <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white' }}>Chờ giao</span>&nbsp;&nbsp;
-                    <span>------&#62;</span>&nbsp;&nbsp;
-                    <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white' }}>Đang giao</span>&nbsp;&nbsp;
-                    <span>------&#62;</span>&nbsp;&nbsp;
-                    <span>Đã giao</span>&nbsp;&nbsp;
-                    <span>------&#62;</span>&nbsp;&nbsp;
-                    <span>Đã Hủy</span>
-                  </div>
-                </>}
+                {showTrack === index && (
+                  <>
+                    <div style={{ display: "flex" }}>
+                      <span
+                        style={{
+                          border: "1px solid #67b14e",
+                          borderRadius: "10px",
+                          backgroundColor: "#67b14e",
+                          padding: "3px",
+                          color: "white",
+                        }}
+                      >
+                        Chờ thanh toán
+                      </span>
+                      &nbsp;&nbsp;
+                      <span>------&#62;</span>&nbsp;&nbsp;
+                      <span
+                        style={{
+                          border: "1px solid #67b14e",
+                          borderRadius: "10px",
+                          backgroundColor: "#67b14e",
+                          padding: "3px",
+                          color: "white",
+                        }}
+                      >
+                        Thanh Toán
+                      </span>
+                      &nbsp;&nbsp;
+                      <span>------&#62;</span>&nbsp;&nbsp;
+                      <span
+                        style={{
+                          border: "1px solid #67b14e",
+                          borderRadius: "10px",
+                          backgroundColor: "#67b14e",
+                          padding: "3px",
+                          color: "white",
+                        }}
+                      >
+                        Chờ giao
+                      </span>
+                      &nbsp;&nbsp;
+                      <span>------&#62;</span>&nbsp;&nbsp;
+                      <span
+                        style={{
+                          border: "1px solid #67b14e",
+                          borderRadius: "10px",
+                          backgroundColor: "#67b14e",
+                          padding: "3px",
+                          color: "white",
+                        }}
+                      >
+                        Đang giao
+                      </span>
+                      &nbsp;&nbsp;
+                      <span>------&#62;</span>&nbsp;&nbsp;
+                      <span>Đã giao</span>&nbsp;&nbsp;
+                      <span>------&#62;</span>&nbsp;&nbsp;
+                      <span>Đã Hủy</span>
+                    </div>
+                  </>
+                )}
               </div>
               <div className="order">
                 {order.products.map((product, index) => {
