@@ -13,6 +13,7 @@ const {
   getOrderByUserIdDeliveredStatusController,
   getOrderByUserIdPendingStatusController,
   getOrderByUserIdCancelledStatusController,
+  getAllOrderStatusByUserIdController,
 } = require("../controller/orders.controller");
 
 orderRouters.get("/getOrder", getOrder);
@@ -41,4 +42,7 @@ orderRouters.post(
   "/get-order-by-user-id-cancelled-status",
   getOrderByUserIdCancelledStatusController
 );
+orderRouters.post("/get-order-all-status-by-user-id",
+  getAllOrderStatusByUserIdController
+)
 module.exports = orderRouters;

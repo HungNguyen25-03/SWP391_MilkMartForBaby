@@ -7,6 +7,12 @@ import useAuth from "../../../../../hooks/useAuth";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./CompletedOrder.scss";
+import { MdOutlinePendingActions } from "react-icons/md";
+import { FaMoneyCheckDollar } from "react-icons/fa6";
+import { FaBox } from "react-icons/fa";
+import { FaMotorcycle } from "react-icons/fa6";
+import { IoBagCheck } from "react-icons/io5";
+import { MdCancel } from "react-icons/md";
 
 export default function CustomerDaGiao({ title }) {
   const [completeOrderList, setCompleteOrderList] = useState([]);
@@ -73,20 +79,20 @@ export default function CustomerDaGiao({ title }) {
                 </button>
               </div>
 
-              <div>
+              <div style={{ margin: "10px 0px" }}>
                 {showTrack === index && <>
                   <div style={{ display: "flex" }}>
-                    <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white' }}>Chờ thanh toán</span>&nbsp;&nbsp;
-                    <span>------&#62;</span>&nbsp;&nbsp;
-                    <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white' }}>Thanh Toán</span>&nbsp;&nbsp;
-                    <span>------&#62;</span>&nbsp;&nbsp;
-                    <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white' }}>Chờ giao</span>&nbsp;&nbsp;
-                    <span>------&#62;</span>&nbsp;&nbsp;
-                    <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white' }}>Đang giao</span>&nbsp;&nbsp;
-                    <span>------&#62;</span>&nbsp;&nbsp;
-                    <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white' }}>Đã giao</span>&nbsp;&nbsp;
-                    <span>------&#62;</span>&nbsp;&nbsp;
-                    <span>Đã Hủy</span>
+                    <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white', }}><MdOutlinePendingActions /> Chờ thanh toán</span>&nbsp;&nbsp;
+                    <span>----&#62;</span>&nbsp;&nbsp;
+                    <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white', }}><FaMoneyCheckDollar /> Thanh Toán</span>&nbsp;&nbsp;
+                    <span>----&#62;</span>&nbsp;&nbsp;
+                    <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white', }}><FaBox /> Chờ giao</span>&nbsp;&nbsp;
+                    <span>----&#62;</span>&nbsp;&nbsp;
+                    <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white', }}><FaMotorcycle /> Đang giao</span>&nbsp;&nbsp;
+                    <span>----&#62;</span>&nbsp;&nbsp;
+                    <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white', }}><IoBagCheck /> Đã giao</span>&nbsp;&nbsp;
+                    <span>----&#62;</span>&nbsp;&nbsp;
+                    <span style={{}}><MdCancel /> Đã Hủy</span>
                   </div>
                 </>}
               </div>
