@@ -2,17 +2,23 @@ import React, { useEffect, useState } from "react";
 import { thanhtoans } from "../ListProduct";
 import axios from "axios";
 import { MainAPI } from "../../../../API";
+import useAuth from "../../../../../hooks/useAuth";
+import { formatVND } from "../../../../../utils/Format";
 import { useNavigate } from "react-router-dom";
 
 export default function CustomerThanhToan({ title }) {
   const [confirmOrderList, setConfirmOrderList] = useState([]);
-  const nav = useNavigate()
+  const [showTrack, setShowTrack] = useState(null);
+  const { auth } = useAuth();
+  const nav = useNavigate();
 
   useEffect(() => {
     axios
-      .get(`${MainAPI}/order/ConfirmOrder`)
+      .post(`${MainAPI}/order/get-order-by-user-id-paid-status`, {
+        user_id: auth.user.user_id,
+      })
       .then((res) => {
-        // console.log(res.data);
+        console.log(res.data);
         setConfirmOrderList(res.data);
       })
       .catch((err) => {
@@ -24,15 +30,11 @@ export default function CustomerThanhToan({ title }) {
     console.log(id)
     nav(`/trackorder/${id}`)
   };
+
   return (
     <div className={title === "Thanh toán" ? "thanhtoan" : "fade"}>
       <div>
         <h5 className="fw-bold">{title}</h5>
-        {confirmOrderList.length !== 0 &&
-          <button>
-            Order Progress
-          </button>
-        }
       </div>
       {confirmOrderList.length === 0 ? (
         <div className="emptyinfo">
@@ -43,81 +45,94 @@ export default function CustomerThanhToan({ title }) {
           </p>
         </div>
       ) : (
-        confirmOrderList.map((thanhtoan, index) => {
+        confirmOrderList.map((order) => {
           return (
-            <div className="eachthanhtoan">
-              <div style={{ textAlign: "right" }}>
-                <button
-                  style={{
-                    border: "none",
-                    backgroundColor: "#00CCFF",
-                    borderRadius: "10px",
-                    color: "white",
-                    padding: "10px",
-                  }}
-                  onClick={() => handTrackOrder(thanhtoan.order_id)}
-                >
-                  Order Progress
-                </button>
-              </div>
-              <div className="tab-content">
-                <div key="1" className="cart-product-line d-flex ">
-                  <div className="product-img">
-                    <img src={thanhtoan.img} />
-                  </div>
-                  <div className="product-info w-100">
-                    <div className="item-cart-product-name">
-                      {thanhtoan.info}
-                    </div>
-                    <div className="d-flex w-100 align-center product-info-bottom">
-                      <span style={{ width: 600 }}></span>
-                      <div className="item-cart-quantity-pro">
-                        x{thanhtoan.quantity}
+            <>
+              <div className="order">
+                <div style={{ textAlign: "right" }}>
+                  <button
+                    style={{
+                      border: "none",
+                      backgroundColor: "#00CCFF",
+                      borderRadius: "10px",
+                      color: "white",
+                      padding: "10px",
+                    }}
+                    onClick={() => handTrackOrder(order.order_id)}
+                  >
+                    Order Progress
+                  </button>
+                </div>
+                {order.products.map((product, index) => {
+                  return (
+                    <>
+                      <div className="tab-content">
+                        <div key={index} className="cart-product-line d-flex ">
+                          <div className="product-img">
+                            <img src={product.image_url} alt="1" />
+                          </div>
+                          <div className="product-info w-100">
+                            <div className="item-cart-product-name">
+                              {product.product_name}
+                            </div>
+                            <div className="d-flex w-100 align-center product-info-bottom">
+                              <span style={{ width: 600 }}></span>
+                              <div className="item-cart-quantity-pro">
+                                x{product.quantity}
+                              </div>
+                              <div className="item-cart-price-pro mr-0 ">
+                                {formatVND(product.price)}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div className="item-cart-price-pro mr-0 ">100000đ</div>
-                    </div>
-                  </div>
+                    </>
+                  );
+                })}
+                <div className="px-20 container font-13 mt-20 color-20 pb-20 line-height-13 border-top-f2 block-end">
+                  <span className="d-flex w-100  align-center justify-content-between">
+                    <span className="w-50">
+                      <span className="color-20">Có </span>
+                      <span className="font-bold font-15 line-height-15 color-20">
+                        {order.products.length} sản phẩm
+                      </span>
+                    </span>
+                    <span
+                      className=" d-flex justify-content-between align-items-end"
+                      style={{ width: 180 }}
+                    >
+                      <span>Tiền tích lũy</span>
+                      <span className="font-bold font-15 line-height-15 cc-pink-primary">
+                        100000đ
+                      </span>
+                    </span>
+                  </span>
+
+                  <span className="d-flex align-center align-items-end w-100 justify-content-between">
+                    <span className="w-50 align-items-end d-flex">
+                      <span>Mã đơn </span>
+                      <span className="font-bold font-15 d-inline-flex align-items-end color-20">
+                        #{order.order_id}
+                      </span>
+                    </span>
+                    <span className=" d-flex  align-items-end  justify-content position-relative color-20 font-13">
+                      <span
+                        className=" d-flex  align-items-end  justify-content position-relative color-20 font-13"
+                        style={{ width: 115 }}
+                      >
+                        Thành tiền
+                      </span>
+                      <span className="font-bold font-15 line-height-15 color-20">
+                        {formatVND(order.total_amount)}
+                      </span>
+                    </span>
+                  </span>
+
+                  <span className="d-flex justify-content-end mt-3"></span>
                 </div>
               </div>
-              <div className="px-20 container font-13 mt-20 color-20 pb-20 line-height-13 border-top-f2 block-end">
-                <span className="d-flex w-100  align-center justify-content-between">
-                  <span className="w-50">
-                    <span className="color-20">Có</span>
-                    <span className="font-bold font-15 line-height-15 color-20">
-                      1 sản phẩm
-                    </span>
-                  </span>
-                  <span
-                    className=" d-flex justify-content-between align-items-end"
-                    style={{ width: 180 }}
-                  >
-                    <span>Tiền tích lũy</span>
-                    <span className="font-bold font-15 line-height-15 cc-pink-primary">
-                      100000đ
-                    </span>
-                  </span>
-                </span>
-                <span className="d-flex align-center align-items-end w-100 justify-content-between">
-                  <span className="w-50 align-items-end d-flex">
-                    <span>Mã đơn </span>
-                    <span className="font-bold font-15 d-inline-flex align-items-end color-20">
-                      #123123
-                    </span>
-                  </span>
-                  <span className=" d-flex  align-items-end  justify-content position-relative color-20 font-13">
-                    <span
-                      className=" d-flex  align-items-end  justify-content position-relative color-20 font-13"
-                      style={{ width: 115 }}
-                    >
-                      Thành tiền
-                    </span>
-                    <span className="font-bold font-15 line-height-15 color-20">
-                      790000đ
-                    </span>
-                  </span>
-                </span>
-              </div>
-            </div>
+            </>
           );
         })
       )}
