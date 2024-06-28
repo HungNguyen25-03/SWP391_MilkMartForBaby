@@ -436,6 +436,48 @@ async function getOrderByUserIdCancelledStatus(user_id) {
   }
 }
 
+async function getAllOrderStatusByUserId(user_id) {
+  try {
+    const pool = await poolPromise;
+    const request = pool.request();
+
+    request.input("user_id", sql.Int, user_id);
+    const orderQuery = `
+      SELECT * FROM Orders 
+      WHERE user_id = @user_id
+    `;
+    const orderResult = await request.query(orderQuery);
+    const orders = orderResult.recordset;
+    if (orders.length === 0) {
+      return {
+        success: true,
+        orders: [],
+      };
+    }
+
+    const orderWithProducts = [];
+
+    for (const order of orders) {
+      const productRequest = pool.request();
+      productRequest.input("user_id", sql.Int, order.user_id);
+      productRequest.input("order_id", sql.Int, order.order_id);
+      const productQuery = `SELECT p.*, o.total_amount, oi. quantity 
+      FROM Orders o JOIN Order_Items oi ON o.order_id = oi.order_id 
+      JOIN Products p ON oi.product_id = p.product_id 
+      WHERE o.user_id = @user_id AND o.order_id = @order_id
+      `;
+      const productResult = await productRequest.query(productQuery);
+      const products = productResult.recordset;
+
+      orderWithProducts.push({ ...order, products });
+    }
+
+    return { success: true, orders: orderWithProducts };
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   getAllOrder,
   getOrderById,
@@ -449,4 +491,5 @@ module.exports = {
   getOrderByUserIdDeliveredStatus,
   getOrderByUserIdPendingStatus,
   getOrderByUserIdCancelledStatus,
+  getAllOrderStatusByUserId,
 };

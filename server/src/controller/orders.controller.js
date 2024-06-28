@@ -11,6 +11,7 @@ const {
   getOrderByUserIdDeliveredStatus,
   getOrderByUserIdPendingStatus,
   getOrderByUserIdCancelledStatus,
+  getAllOrderStatusByUserId,
 } = require("../services/order.services");
 
 const getOrder = async (req, res) => {
@@ -175,6 +176,20 @@ const getOrderByUserIdCancelledStatusController = async (req, res) => {
   }
 };
 
+const getAllOrderStatusByUserIdController = async (req, res) => {
+  try {
+    const { user_id } = req.body;
+    const result = await getAllOrderStatusByUserId(user_id);
+    if (result.success) {
+      res.json(result.orders);
+    } else {
+      res.json({ message: result.message })
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   getOrder,
   getOrderId,
@@ -188,4 +203,5 @@ module.exports = {
   getOrderByUserIdDeliveredStatusController,
   getOrderByUserIdPendingStatusController,
   getOrderByUserIdCancelledStatusController,
+  getAllOrderStatusByUserIdController,
 };
