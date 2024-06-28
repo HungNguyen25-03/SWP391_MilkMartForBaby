@@ -4,11 +4,12 @@ import { ToastContainer, toast } from "react-toastify";
 import { MainAPI } from "../../../../API";
 import axios from "axios";
 import useAuth from "../../../../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 export default function ChoThanhToan({ title }) {
   const [pendingOrderList, setPendingOrderList] = useState([]);
   const { auth } = useAuth();
-  const [showTrack, setShowTrack] = useState(null)
+  const nav = useNavigate()
 
   const token = JSON.parse(localStorage.getItem("accessToken"));
   console.log(token);
@@ -27,9 +28,9 @@ export default function ChoThanhToan({ title }) {
       });
   }, []);
 
-  const handTrackOrder = (index) => {
-    console.log(index)
-    setShowTrack(showTrack === index ? null : index)
+  const handTrackOrder = (id) => {
+    console.log(id)
+    nav(`/trackorder/${id}`)
   };
 
   return (
@@ -62,30 +63,11 @@ export default function ChoThanhToan({ title }) {
                       color: "white",
                       padding: "10px",
                     }}
-                    onClick={() => handTrackOrder(index)}
+                    onClick={() => handTrackOrder(dagiao.order_id)}
                   >
                     Order Progress
                   </button>
                 </div>
-
-                <div>
-                  {showTrack === index && <>
-                    <div style={{ display: "flex" }}>
-                      <span style={{ border: '1px solid #67b14e', borderRadius: '10px', backgroundColor: '#67b14e', padding: '3px', color: 'white' }}>Chờ thanh toán</span>&nbsp;&nbsp;
-                      <span>------&#62;</span>&nbsp;&nbsp;
-                      <span>Thanh Toán</span>&nbsp;&nbsp;
-                      <span>------&#62;</span>&nbsp;&nbsp;
-                      <span>Chờ giao</span>&nbsp;&nbsp;
-                      <span>------&#62;</span>&nbsp;&nbsp;
-                      <span>Đang giao</span>&nbsp;&nbsp;
-                      <span>------&#62;</span>&nbsp;&nbsp;
-                      <span>Đã giao</span>&nbsp;&nbsp;
-                      <span>------&#62;</span>&nbsp;&nbsp;
-                      <span>Đã Hủy</span>
-                    </div>
-                  </>}
-                </div>
-
                 {dagiao.products.map((product, index) => {
                   return (
                     <>
