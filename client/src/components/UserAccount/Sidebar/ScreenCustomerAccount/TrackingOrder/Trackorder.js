@@ -75,22 +75,35 @@ export default function Trackorder() {
                                         <span style={{ fontSize: '70px' }}> <MdOutlinePendingActions color='#67b14e' /></span>
                                         <span>Chờ thanh toán</span>
                                     </div>&nbsp;
-                                    <span>----&#62;</span>&nbsp;&nbsp;
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ marginTop: '-2%' }}>&#62;</span>
+                                    </div>
+
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontSize: '70px' }}> <FaMoneyCheckDollar color='#67b14e' /></span>
                                         <span>Thanh Toán</span>
                                     </div>&nbsp;&nbsp;
-                                    <span>----&#62;</span>&nbsp;&nbsp;
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ marginTop: '-2%' }}>&#62;</span>
+                                    </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontSize: '70px' }}> <FaBox color='#67b14e' /></span>
                                         <span>Chờ giao</span>
                                     </div>&nbsp;&nbsp;
-                                    <span>----&#62;</span>&nbsp;&nbsp;
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ marginTop: '-2%' }}>&#62;</span>
+                                    </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontSize: '70px' }}> <FaMotorcycle color='#67b14e' /></span>
                                         <span>Đang giao</span>
                                     </div>&nbsp;&nbsp;
-                                    <span>----&#62;</span>&nbsp;&nbsp;
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ marginTop: '-2%' }}>&#62;</span>
+                                    </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontSize: '70px' }}> <IoBagCheck color='#67b14e' /></span>
                                         <span>Đã giao</span>
@@ -104,22 +117,34 @@ export default function Trackorder() {
                                         <span style={{ fontSize: '70px' }}> <MdOutlinePendingActions color='#67b14e' /></span>
                                         <span>Chờ thanh toán</span>
                                     </div>&nbsp;
-                                    <span>----&#62;</span>&nbsp;&nbsp;
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ marginTop: '-2%' }}>&#62;</span>
+                                    </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontSize: '70px' }}> <FaMoneyCheckDollar color='#67b14e' /></span>
                                         <span>Thanh Toán</span>
                                     </div>&nbsp;&nbsp;
-                                    <span>----&#62;</span>&nbsp;&nbsp;
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ marginTop: '-2%' }}>&#62;</span>
+                                    </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontSize: '70px' }}> <FaBox color='#67b14e' /></span>
                                         <span>Chờ giao</span>
                                     </div>&nbsp;&nbsp;
-                                    <span>----&#62;</span>&nbsp;&nbsp;
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ marginTop: '-2%' }}>&#62;</span>
+                                    </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontSize: '70px' }}> <FaMotorcycle color='#67b14e' /></span>
                                         <span>Đang giao</span>
                                     </div>&nbsp;&nbsp;
-                                    <span>----&#62;</span>&nbsp;&nbsp;
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ marginTop: '-2%' }}>&#62;</span>
+                                    </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontSize: '70px' }}> <IoBagCheck /></span>
                                         <span>Đã giao</span>
@@ -133,22 +158,34 @@ export default function Trackorder() {
                                         <span style={{ fontSize: '70px' }}> <MdOutlinePendingActions color='#67b14e' /></span>
                                         <span>Chờ thanh toán</span>
                                     </div>&nbsp;
-                                    <span>----&#62;</span>&nbsp;&nbsp;
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ marginTop: '-2%' }}>&#62;</span>
+                                    </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontSize: '70px' }}> <FaMoneyCheckDollar /></span>
                                         <span>Thanh Toán</span>
                                     </div>&nbsp;&nbsp;
-                                    <span>----&#62;</span>&nbsp;&nbsp;
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ marginTop: '-2%' }}>&#62;</span>
+                                    </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontSize: '70px' }}> <FaBox /></span>
                                         <span>Chờ giao</span>
                                     </div>&nbsp;&nbsp;
-                                    <span>----&#62;</span>&nbsp;&nbsp;
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ marginTop: '-2%' }}>&#62;</span>
+                                    </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontSize: '70px' }}> <FaMotorcycle /></span>
                                         <span>Đang giao</span>
                                     </div>&nbsp;&nbsp;
-                                    <span>----&#62;</span>&nbsp;&nbsp;
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ marginTop: '-2%' }}>&#62;</span>
+                                    </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontSize: '70px' }}> <IoBagCheck /></span>
                                         <span>Đã giao</span>
@@ -162,22 +199,34 @@ export default function Trackorder() {
                                         <span style={{ fontSize: '70px' }}> <MdOutlinePendingActions color='#67b14e' /></span>
                                         <span>Chờ thanh toán</span>
                                     </div>&nbsp;
-                                    <span>----&#62;</span>&nbsp;&nbsp;
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ marginTop: '-2%' }}>&#62;</span>
+                                    </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontSize: '70px' }}> <FaMoneyCheckDollar color='#67b14e' /></span>
                                         <span>Thanh Toán</span>
                                     </div>&nbsp;&nbsp;
-                                    <span>----&#62;</span>&nbsp;&nbsp;
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ marginTop: '-2%' }}>&#62;</span>
+                                    </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontSize: '70px' }}> <FaBox /></span>
                                         <span>Chờ giao</span>
                                     </div>&nbsp;&nbsp;
-                                    <span>----&#62;</span>&nbsp;&nbsp;
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ marginTop: '-2%' }}>&#62;</span>
+                                    </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontSize: '70px' }}> <FaMotorcycle /></span>
                                         <span>Đang giao</span>
                                     </div>&nbsp;&nbsp;
-                                    <span>----&#62;</span>&nbsp;&nbsp;
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ marginTop: '-2%' }}>&#62;</span>
+                                    </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontSize: '70px' }}> <IoBagCheck /></span>
                                         <span>Đã giao</span>
@@ -191,29 +240,44 @@ export default function Trackorder() {
                                         <span style={{ fontSize: '70px' }}> <MdOutlinePendingActions /></span>
                                         <span>Chờ thanh toán</span>
                                     </div>&nbsp;
-                                    <span>----&#62;</span>&nbsp;&nbsp;
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ marginTop: '-2%' }}>&#62;</span>
+                                    </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontSize: '70px' }}> <FaMoneyCheckDollar /></span>
                                         <span>Thanh Toán</span>
                                     </div>&nbsp;&nbsp;
-                                    <span>----&#62;</span>&nbsp;&nbsp;
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ marginTop: '-2%' }}>&#62;</span>
+                                    </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontSize: '70px' }}> <FaBox /></span>
                                         <span>Chờ giao</span>
                                     </div>&nbsp;&nbsp;
-                                    <span>----&#62;</span>&nbsp;&nbsp;
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ marginTop: '-2%' }}>&#62;</span>
+                                    </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontSize: '70px' }}> <FaMotorcycle /></span>
                                         <span>Đang giao</span>
                                     </div>&nbsp;&nbsp;
-                                    <span>----&#62;</span>&nbsp;&nbsp;
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ marginTop: '-2%' }}>&#62;</span>
+                                    </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontSize: '70px' }}> <IoBagCheck /></span>
                                         <span>Đã giao</span>
                                     </div>&nbsp;&nbsp;
-                                    <span>----&#62;</span>&nbsp;&nbsp;
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ marginTop: '-2%' }}>&#62;</span>
+                                    </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                        <span style={{ fontSize: '70px' }}> <MdCancel color='#67b14e' /></span>
+                                        <span style={{ fontSize: '70px' }}> <MdCancel color='red' /></span>
                                         <span>Đã Hủy</span>
                                     </div>&nbsp;&nbsp;
                                 </div>
