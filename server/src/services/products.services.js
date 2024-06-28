@@ -87,10 +87,13 @@ async function searchProductByName(searchTerm, page = 1, pageSize = 12) {
     const pool = await poolPromise;
     const offset = (page - 1) * pageSize;
 
+    // Modify the searchTerm to include wildcards
+    const modifiedSearchTerm = `%${searchTerm}%`;
+
     // Query to get the total count of products matching the search term
     const countResult = await pool
       .request()
-      .input("searchTerm", sql.VarChar, `%${searchTerm}%`)
+      .input("searchTerm", sql.NVarChar, modifiedSearchTerm)
       .query(
         "SELECT COUNT(*) as total FROM Products WHERE product_name LIKE @searchTerm"
       );
@@ -100,7 +103,7 @@ async function searchProductByName(searchTerm, page = 1, pageSize = 12) {
     // Query to get the paginated products matching the search term
     const result = await pool
       .request()
-      .input("searchTerm", sql.VarChar, `%${searchTerm}%`).query(`
+      .input("searchTerm", sql.NVarChar, modifiedSearchTerm).query(`
         SELECT * FROM Products
         WHERE product_name LIKE @searchTerm
         ORDER BY product_id
