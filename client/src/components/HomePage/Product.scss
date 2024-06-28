@@ -72,10 +72,47 @@
           border-radius: 10px;
         }
       }
+
+      :hover {
+        color: #03afffbe;
+      }
     }
 
-    .product-detail-link:hover {
-      color: #03afffbe;
+    .sold-out {
+      color: black;
+      text-decoration: none;
+      transition: color 0.3s;
+      opacity: 0.5;
+
+      .home-product-detail-img-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+        margin-bottom: 15px;
+        position: relative;
+
+        .sold-out-button {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: #ff0000; // Example button background color
+          color: #ffffff; // Example button text color
+          padding: 10px 20px;
+          border: none;
+          border-radius: 5px;
+          cursor: not-allowed; // Change cursor to indicate the button is not clickable
+          z-index: 2; // Ensure button appears above the overlay
+        }
+
+        img {
+          max-width: 100%;
+          max-height: 100%;
+          object-fit: cover;
+          border-radius: 10px;
+        }
+      }
     }
   }
 

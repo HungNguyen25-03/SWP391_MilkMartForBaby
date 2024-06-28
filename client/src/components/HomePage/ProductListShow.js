@@ -49,6 +49,7 @@ export default function ProductListShow({
     }
   };
 
+  //FILTER ITEMS // Nếu đang chưa filter mà đang ở trang 2 thì khi filter (data trả về có về 1 trang) thì sẽ bị lỗi (vì currentPage vẫn là 2)
   useEffect(() => {
     axios
       .post(`${MainAPI}/product/filter?page=${currentPage}`, {
@@ -56,10 +57,14 @@ export default function ProductListShow({
         ageRange: ageFilters,
       })
       .then((res) => {
-        // console.log(res.data);
+        console.log(res.data);
         if (res.data.inStockProducts) {
-          setFilteredItems(res.data.inStockProducts);
+          setFilteredItems([
+            ...res.data.inStockProducts,
+            ...res.data.outOfStockProducts,
+          ]);
           setFilterPage(res.data.totalPages);
+          // setCurrentPage(1);
         } else {
           setFilteredItems([]);
         }
@@ -70,6 +75,7 @@ export default function ProductListShow({
   }, [ageFilters, countryFilters, currentPage]);
   // console.log(filteredItems);
 
+  //SET TOTAL PAGE
   useEffect(() => {
     if (filteredItems.length > 0) {
       setTotalPageAll(filterPage);
@@ -81,11 +87,6 @@ export default function ProductListShow({
   // console.log(productList);
 
   const totalPages = totalPageAll;
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentItems = productListAll.slice(
-    startIndex,
-    startIndex + itemsPerPage
-  );
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -192,11 +193,16 @@ export default function ProductListShow({
               {productList.map((product) => (
                 <div key={product.product_id} className="product-card col">
                   <Link
-                    className="product-detail-link"
+                    className={
+                      product.stock === 0 ? "sold-out" : "product-detail-link"
+                    }
                     to={`/home/ProductDetail/${product.product_id}`}
                   >
                     <div className="home-product-detail-img-container">
                       <img src={product.image_url} alt={product.title} />
+                      {product.stock === 0 && (
+                        <button className="sold-out-button">Sold Out</button>
+                      )}
                     </div>
                     <div className="mt-2">{product.product_name}</div>
                     <div>
