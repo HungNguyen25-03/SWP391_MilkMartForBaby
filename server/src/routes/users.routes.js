@@ -71,4 +71,10 @@ userRoutes.put(
   userController.completeOrderController
 );
 
+userRoutes.post(
+  "/report-product",
+  authJwt.authenticateToken,
+  userController.reportProductController
+);
+
 module.exports = userRoutes;

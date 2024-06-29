@@ -262,6 +262,51 @@ async function completeOrder(order_id) {
   }
 }
 
+async function reportProduct(
+  user_id,
+  product_id,
+  order_id,
+  report_description
+) {
+  try {
+    const pool = await poolPromise;
+
+    // Check if the user has already reported this product in this order
+    const result = await pool
+      .request()
+      .input("user_id", sql.Int, user_id)
+      .input("product_id", sql.Int, product_id)
+      .input("order_id", sql.Int, order_id).query(`
+        SELECT COUNT(*) AS count
+        FROM Reports
+        WHERE user_id = @user_id AND product_id = @product_id AND order_id = @order_id
+      `);
+
+    if (result.recordset[0].count > 0) {
+      return {
+        success: false,
+        message: "You have already reported this product",
+      };
+    }
+
+    // Insert the report into the database
+    await pool
+      .request()
+      .input("user_id", sql.Int, user_id)
+      .input("product_id", sql.Int, product_id)
+      .input("order_id", sql.Int, order_id)
+      .input("report_description", sql.NVarChar(sql.MAX), report_description)
+      .query(`
+        INSERT INTO Reports (user_id, product_id, order_id, report_description)
+        VALUES (@user_id, @product_id, @order_id, @report_description)
+      `);
+    return { success: true, message: "Report created successfully" };
+  } catch (err) {
+    console.error("Error creating report:", err);
+    throw err;
+  }
+}
+
 module.exports = {
   loginUser,
   registerUser,
@@ -274,4 +319,5 @@ module.exports = {
   reviewsByProductId,
   showReviewsByProductId,
   completeOrder,
+  reportProduct,
 };
