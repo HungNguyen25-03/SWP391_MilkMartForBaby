@@ -258,6 +258,26 @@ async function getAllCategory() {
   }
 }
 
+async function getAvgRatingByProductId(product_id) {
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input("product_id", sql.Int, product_id)
+      .query(
+        `SELECT CAST(AVG(CAST(rating AS decimal(10,2))) AS decimal(10,2)) 
+        as avg_rating FROM Reviews WHERE product_id = @product_id`
+      );
+    const avg_rating = result.recordset[0].avg_rating;
+    if (avg_rating) {
+      return { success: true, avg_rating };
+    }
+  } catch (error) {
+    console.error("Error getting average rating", error);
+    throw error;
+  }
+}
+
 module.exports = {
   getAllProduct,
   getProductById,
@@ -265,4 +285,5 @@ module.exports = {
   filterProduct,
   getAllProductWihoutPagination,
   getAllCategory,
+  getAvgRatingByProductId,
 };

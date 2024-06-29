@@ -146,7 +146,6 @@ async function dashboard(startDate, endDate) {
     const [startYear, startMonth] = startDate.split("-").map(Number);
     const [endYear, endMonth] = endDate.split("-").map(Number);
 
-    console.log(startYear, startMonth, endYear, endMonth);
     // Calculate the start and end date strings in the required format
     const startDateString = `${startYear}-${startMonth
       .toString()
@@ -156,7 +155,6 @@ async function dashboard(startDate, endDate) {
       .toString()
       .padStart(2, "0")}-${endMonthLastDay}`;
 
-    console.log(startDateString, endDateString);
     // Query total orders within the specified month-year range
     const totalOrdersResult = await pool
       .request()
@@ -181,18 +179,19 @@ async function dashboard(startDate, endDate) {
       `);
     const totalRevenue = totalRevenueResult.recordset[0].totalRevenue;
 
-    // Query top 5 best-selling products within the specified month-year range
+    // Query top 12 best-selling brands within the specified month-year range
     const topProductsResult = await pool
       .request()
       .input("startDateString", sql.DateTime, startDateString)
       .input("endDateString", sql.DateTime, endDateString).query(`
-        SELECT TOP 5 P.product_id, P.product_name, SUM(OI.quantity) AS totalSold 
-        FROM Order_Items OI
-        JOIN Products P ON OI.product_id = P.product_id
-        JOIN Orders O ON OI.order_id = O.order_id
-        WHERE O.order_date >= @startDateString AND O.order_date <= @endDateString
-        AND O.status IN ('Paid', 'Delivered', 'Completed', 'Confirmed')
-        GROUP BY P.product_id, P.product_name
+        SELECT TOP 12 b.brand_id, b.brand_name, SUM(oi.quantity) AS totalSold 
+        FROM Order_Items oi 
+        JOIN Products p ON oi.product_id = p.product_id 
+        JOIN Orders o ON oi.order_id = o.order_id 
+        JOIN Brands b ON p.brand_id = b.brand_id 
+        WHERE o.order_date >= @startDateString AND o.order_date <= @endDateString
+        AND o.status IN ('Paid', 'Delivered', 'Completed', 'Confirmed') 
+        GROUP BY b.brand_id, b.brand_name
         ORDER BY totalSold DESC;
       `);
     const topProducts = topProductsResult.recordset;
@@ -203,14 +202,13 @@ async function dashboard(startDate, endDate) {
       .input("startDateString", sql.DateTime, startDateString)
       .input("endDateString", sql.DateTime, endDateString).query(`
         SELECT 
-          YEAR(order_date) AS year, 
-          MONTH(order_date) AS month, 
+          FORMAT(order_date, 'MM-yyyy') AS yearMonth, 
           COUNT(*) AS successfulOrders 
         FROM Orders 
         WHERE order_date >= @startDateString AND order_date <= @endDateString
         AND status IN ('Paid', 'Delivered', 'Completed', 'Confirmed')
-        GROUP BY YEAR(order_date), MONTH(order_date)
-        ORDER BY year, month;
+        GROUP BY FORMAT(order_date, 'MM-yyyy')
+        ORDER BY yearMonth;
       `);
     const successfulOrdersPerMonth = successfulOrdersPerMonthResult.recordset;
 
@@ -220,14 +218,13 @@ async function dashboard(startDate, endDate) {
       .input("startDateString", sql.DateTime, startDateString)
       .input("endDateString", sql.DateTime, endDateString).query(`
         SELECT 
-          YEAR(order_date) AS year, 
-          MONTH(order_date) AS month, 
+          FORMAT(order_date, 'MM-yyyy') AS yearMonth, 
           COUNT(*) AS canceledOrders 
         FROM Orders 
         WHERE order_date >= @startDateString AND order_date <= @endDateString
         AND status IN ('Cancelled')
-        GROUP BY YEAR(order_date), MONTH(order_date)
-        ORDER BY year, month;
+        GROUP BY FORMAT(order_date, 'MM-yyyy')
+        ORDER BY yearMonth;
       `);
     const canceledOrdersPerMonth = canceledOrdersPerMonthResult.recordset;
 
@@ -236,15 +233,30 @@ async function dashboard(startDate, endDate) {
       .request()
       .input("startDateString", sql.DateTime, startDateString)
       .input("endDateString", sql.DateTime, endDateString).query(`
+        WITH DateSeries AS (
+          SELECT 
+            DATEFROMPARTS(YEAR(@startDateString), MONTH(@startDateString), 1) AS monthStart
+          UNION ALL
+          SELECT 
+            DATEADD(MONTH, 1, monthStart)
+          FROM 
+            DateSeries
+          WHERE 
+            monthStart < DATEFROMPARTS(YEAR(@endDateString), MONTH(@endDateString), 1)
+        )
         SELECT 
-          YEAR(order_date) AS year, 
-          MONTH(order_date) AS month, 
-          SUM(total_amount) AS totalRevenue 
-        FROM Orders 
-        WHERE order_date >= @startDateString AND order_date <= @endDateString
-        AND status IN ('Paid', 'Delivered', 'Completed', 'Confirmed')
-        GROUP BY YEAR(order_date), MONTH(order_date)
-        ORDER BY year, month;
+          FORMAT(ds.monthStart, 'MM-yyyy') AS yearMonth, 
+          ISNULL(SUM(o.total_amount), 0) AS totalRevenue
+        FROM 
+          DateSeries ds
+          LEFT JOIN Orders o ON YEAR(o.order_date) = YEAR(ds.monthStart) AND MONTH(o.order_date) = MONTH(ds.monthStart)
+          AND o.order_date >= @startDateString AND o.order_date <= @endDateString
+          AND o.status IN ('Paid', 'Delivered', 'Completed', 'Confirmed')
+        GROUP BY 
+          FORMAT(ds.monthStart, 'MM-yyyy')
+        ORDER BY 
+          FORMAT(ds.monthStart, 'MM-yyyy')
+        OPTION (MAXRECURSION 0);
       `);
     const totalRevenuePerMonth = totalRevenuePerMonthResult.recordset;
 

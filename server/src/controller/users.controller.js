@@ -10,6 +10,7 @@ const {
   reviewsByProductId,
   showReviewsByProductId,
   completeOrder,
+  reportProduct,
   getPostById,
 } = require("../services/users.services");
 
@@ -216,6 +217,26 @@ const completeOrderController = async (req, res) => {
   }
 };
 
+const reportProductController = async (req, res) => {
+  const { user_id, product_id, order_id, report_description } = req.body;
+
+  try {
+    const report = await reportProduct(
+      user_id,
+      product_id,
+      order_id,
+      report_description
+    );
+    if (report.success) {
+      res.status(200).json({ message: report.message, status: 200 });
+    } else {
+      res.status(409).json({ message: report.message, status: 409 });
+    }
+  } catch (error) {
+    res.status(500).send("Error reporting product");
+  }
+};
+
 const getPostByIdController = async (req, res) => {
   const post_id = parseInt(req.params.id, 10);
   try {
@@ -243,5 +264,6 @@ module.exports = {
   reviewsByProductIdController,
   showReviewsByProductIdController,
   completeOrderController,
+  reportProductController,
   getPostByIdController
 };
