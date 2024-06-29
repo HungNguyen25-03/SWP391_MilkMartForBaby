@@ -67,7 +67,7 @@ export default function Trackorder() {
                 {(
                     trackOrderList.filter(order => order.order_id === parseInt(id)).map(order => (
                         <div key={order.order_id} style={{ margin: "2% 0px 15% 0px" }}>
-                            <p style={{ fontSize: '30' }}>Mã đơn hàng: {order.order_id}</p>
+                            <p style={{ fontSize: '30px' }}>Mã đơn hàng: {order.order_id}</p>
                             <p>Ngày đặt hàng: {new Date(order.order_date).toLocaleDateString("vi-VN", { day: 'numeric', month: 'numeric', year: 'numeric' })}</p>
                             {order.status === "Completed" && <>
                                 <div style={{ display: "flex", alignItems: 'center', justifyContent: 'center', marginTop: '80px' }}>
@@ -142,7 +142,7 @@ export default function Trackorder() {
                                         <span>Đang giao</span>
                                     </div>&nbsp;&nbsp;
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ border: '1px solid black', width: '100px' }}></span>
                                         <span style={{ marginTop: '-2%' }}>&#62;</span>
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -175,7 +175,7 @@ export default function Trackorder() {
                                         <span>Chờ giao</span>
                                     </div>&nbsp;&nbsp;
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ border: '1px solid black', width: '100px' }}></span>
                                         <span style={{ marginTop: '-2%' }}>&#62;</span>
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -183,7 +183,7 @@ export default function Trackorder() {
                                         <span>Đang giao</span>
                                     </div>&nbsp;&nbsp;
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ border: '1px solid black', width: '100px' }}></span>
                                         <span style={{ marginTop: '-2%' }}>&#62;</span>
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -193,7 +193,7 @@ export default function Trackorder() {
                                 </div>
                             </>}
 
-                            {order.status === "confirm" && <>
+                            {order.status === "paid" && <>
                                 <div style={{ display: "flex", alignItems: 'center', justifyContent: 'center', marginTop: '80px' }}>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontSize: '70px' }}> <MdOutlinePendingActions color='#67b14e' /></span>
@@ -208,7 +208,7 @@ export default function Trackorder() {
                                         <span>Thanh Toán</span>
                                     </div>&nbsp;&nbsp;
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ border: '1px solid black', width: '100px' }}></span>
                                         <span style={{ marginTop: '-2%' }}>&#62;</span>
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -216,7 +216,7 @@ export default function Trackorder() {
                                         <span>Chờ giao</span>
                                     </div>&nbsp;&nbsp;
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ border: '1px solid black', width: '100px' }}></span>
                                         <span style={{ marginTop: '-2%' }}>&#62;</span>
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -224,7 +224,7 @@ export default function Trackorder() {
                                         <span>Đang giao</span>
                                     </div>&nbsp;&nbsp;
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ border: '1px solid black', width: '100px' }}></span>
                                         <span style={{ marginTop: '-2%' }}>&#62;</span>
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -241,7 +241,7 @@ export default function Trackorder() {
                                         <span>Chờ thanh toán</span>
                                     </div>&nbsp;
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ border: '1px solid black', width: '100px' }}></span>
                                         <span style={{ marginTop: '-2%' }}>&#62;</span>
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -249,7 +249,7 @@ export default function Trackorder() {
                                         <span>Thanh Toán</span>
                                     </div>&nbsp;&nbsp;
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ border: '1px solid black', width: '100px' }}></span>
                                         <span style={{ marginTop: '-2%' }}>&#62;</span>
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -257,7 +257,7 @@ export default function Trackorder() {
                                         <span>Chờ giao</span>
                                     </div>&nbsp;&nbsp;
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ border: '1px solid black', width: '100px' }}></span>
                                         <span style={{ marginTop: '-2%' }}>&#62;</span>
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -265,7 +265,7 @@ export default function Trackorder() {
                                         <span>Đang giao</span>
                                     </div>&nbsp;&nbsp;
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ border: '1px solid black', width: '100px' }}></span>
                                         <span style={{ marginTop: '-2%' }}>&#62;</span>
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -273,7 +273,7 @@ export default function Trackorder() {
                                         <span>Đã giao</span>
                                     </div>&nbsp;&nbsp;
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                                        <span style={{ border: '1px solid green', width: '100px' }}></span>
+                                        <span style={{ border: '1px solid black', width: '100px' }}></span>
                                         <span style={{ marginTop: '-2%' }}>&#62;</span>
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
