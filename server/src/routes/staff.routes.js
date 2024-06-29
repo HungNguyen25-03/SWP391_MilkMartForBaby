@@ -26,6 +26,10 @@ const {
 } = require("../middlewares/staff.middleware");
 const { authenticateToken } = require("../middlewares/authJwt.middlewares");
 
+const multer = require("multer");
+const path = require("path");
+const { v4: uuidv4 } = require("uuid");
+
 // Create Voucher
 staffRouters.post(
   "/createVoucher",
@@ -97,5 +101,22 @@ staffRouters.put(
   updateProductMiddlewares,
   updateProductController
 );
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./uploads");
+  },
+  filename: function (req, file, cb) {
+    cb(null, uuidv4() + path.extname(file.originalname));
+  },
+});
+var upload = multer({ storage: storage });
+
+staffRouters.post("/uploads", upload.single("uploads"), function (req, res, next) {
+  // req.file is the `profile-file` file
+  // req.body will hold the text fields, if there were any
+  // console.log(JSON.stringify(req.file))
+  res.json({ url: req.file.path });
+});
 
 module.exports = staffRouters;
