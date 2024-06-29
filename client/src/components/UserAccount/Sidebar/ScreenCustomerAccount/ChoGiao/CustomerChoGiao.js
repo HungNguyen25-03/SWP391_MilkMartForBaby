@@ -3,16 +3,20 @@ import axios from "axios";
 import { MainAPI } from "../../../../API";
 import { formatVND } from "../../../../../utils/Format";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../../../../hooks/useAuth";
 
 export default function CustomerChoGiao({ title }) {
   const [pendingOrderList, setPendingOrderList] = useState([]);
   const nav = useNavigate()
+  const { auth } = useAuth();
 
   useEffect(() => {
     axios
-      .get(`${MainAPI}/order/PendingOrder`)
+      .post(`${MainAPI}/order/get-order-by-user-id-confirm-status`, {
+        user_id: auth.user.user_id,
+      })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setPendingOrderList(res.data);
       })
       .catch((err) => {

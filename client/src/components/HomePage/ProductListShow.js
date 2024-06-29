@@ -110,9 +110,8 @@ export default function ProductListShow({
                       setCountryFilters
                     );
                   }}
-                  className={`btn ${
-                    countryFilters?.includes(cate.country) ? "active" : ""
-                  }`}
+                  className={`btn ${countryFilters?.includes(cate.country) ? "active" : ""
+                    }`}
                   key={`filters-${index}`}
                 >
                   {cate.title}
@@ -134,9 +133,8 @@ export default function ProductListShow({
                       setAgeFilters
                     );
                   }}
-                  className={`btn ${
-                    ageFilters?.includes(age.title) ? "active" : ""
-                  }`}
+                  className={`btn ${ageFilters?.includes(age.title) ? "active" : ""
+                    }`}
                   key={`filters-${index}`}
                 >
                   {age.title}
@@ -194,13 +192,13 @@ export default function ProductListShow({
                 <div key={product.product_id} className="product-card col">
                   <Link
                     className={
-                      product.stock === 0 ? "sold-out" : "product-detail-link"
+                      product.stock <= 0 ? "sold-out" : "product-detail-link"
                     }
                     to={`/home/ProductDetail/${product.product_id}`}
                   >
                     <div className="home-product-detail-img-container">
                       <img src={product.image_url} alt={product.title} />
-                      {product.stock === 0 && (
+                      {product.stock <= 0 && (
                         <button className="sold-out-button">Sold Out</button>
                       )}
                     </div>
@@ -239,9 +237,8 @@ export default function ProductListShow({
             <button
               key={index}
               onClick={() => handlePageChange(index + 1)}
-              className={`pagination-button ${
-                index + 1 === currentPage ? "active" : ""
-              }`}
+              className={`pagination-button ${index + 1 === currentPage ? "active" : ""
+                }`}
             >
               {index + 1}
             </button>

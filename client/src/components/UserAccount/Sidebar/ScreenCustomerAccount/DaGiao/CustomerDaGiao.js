@@ -22,14 +22,13 @@ export default function CustomerDaGiao({ title }) {
         user_id: auth.user.user_id,
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setCompleteOrderList(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
-
 
   const handleSubmit = (feedback) => {
     console.log(feedback);
@@ -87,7 +86,7 @@ export default function CustomerDaGiao({ title }) {
                           <span style={{ width: 600 }}></span>
                           <div className="item-cart-quantity-pro">
                             x{product.quantity}
-                          </div>
+                          </div>&nbsp;
                           <div className="item-cart-price-pro mr-0">
                             {formatVND(product.price)}
                           </div>
