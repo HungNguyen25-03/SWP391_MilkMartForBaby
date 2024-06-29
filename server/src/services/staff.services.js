@@ -428,15 +428,15 @@ async function updateProduct(
   }
 }
 
-async function createPost(description) {
+async function createPost(user_id, description) {
   try {
     const pool = await poolPromise;
     const result = await pool
       .request()
-      .input("description", sql.NVarChar, description)
-      .query(`
-      INSERT INTO Posts (description)
-      VALUES (@description)
+      .input("user_id", sql.Int, user_id)
+      .input("description", sql.NVarChar, description).query(`
+      INSERT INTO Posts (user_id, description)
+      VALUES (@user_id, @description)
     `);
 
     return { success: true, message: "Post created successfully" };
