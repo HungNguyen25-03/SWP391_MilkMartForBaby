@@ -76,5 +76,6 @@ userRoutes.post(
   authJwt.authenticateToken,
   userController.reportProductController
 );
+userRoutes.get("/get-post/:id", userController.getPostByIdController)
 
 module.exports = userRoutes;

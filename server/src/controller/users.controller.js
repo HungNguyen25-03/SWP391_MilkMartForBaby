@@ -11,6 +11,7 @@ const {
   showReviewsByProductId,
   completeOrder,
   reportProduct,
+  getPostById,
 } = require("../services/users.services");
 
 const authJwt = require("../middlewares/authJwt.middlewares");
@@ -236,6 +237,20 @@ const reportProductController = async (req, res) => {
   }
 };
 
+const getPostByIdController = async (req, res) => {
+  const post_id = parseInt(req.params.id, 10);
+  try {
+    const result = await getPostById(post_id);
+    if (result.success) {
+      res.json(result.post);
+    } else {
+      res.json({ message: result.message });
+    }
+  } catch (error) {
+    console.log("Fail to get Post");
+  }
+}
+
 module.exports = {
   registerUserController,
   loginUserController,
@@ -250,4 +265,5 @@ module.exports = {
   showReviewsByProductIdController,
   completeOrderController,
   reportProductController,
+  getPostByIdController
 };

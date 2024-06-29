@@ -193,7 +193,7 @@ export default function Trackorder() {
                                 </div>
                             </>}
 
-                            {order.status === "confirm" && <>
+                            {order.status === "paid" && <>
                                 <div style={{ display: "flex", alignItems: 'center', justifyContent: 'center', marginTop: '80px' }}>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontSize: '70px' }}> <MdOutlinePendingActions color='#67b14e' /></span>

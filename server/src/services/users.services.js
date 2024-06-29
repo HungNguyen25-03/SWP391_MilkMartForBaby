@@ -307,6 +307,28 @@ async function reportProduct(
   }
 }
 
+async function getPostById(post_id) {
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input("post_id", sql.Int, post_id)
+      .query(`
+      SELECT * FROM Posts WHERE post_id = @post_id
+    `);
+
+    if (result.recordset.length === 0) {
+      return { success: false, message: "Post not found" };
+    }
+
+    return { success: true, post: result.recordset[0] };
+  } catch (error) {
+    console.error("Error getting post by ID:", error);
+    throw error;
+  }
+}
+
+
 module.exports = {
   loginUser,
   registerUser,
@@ -320,4 +342,5 @@ module.exports = {
   showReviewsByProductId,
   completeOrder,
   reportProduct,
+  getPostById
 };

@@ -16,7 +16,7 @@ export default function CustomerDaHuy({ title }) {
         user_id: auth.user.user_id,
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setCancelledOrderList(res.data);
       })
       .catch((err) => {
