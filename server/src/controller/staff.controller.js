@@ -281,10 +281,10 @@ const updateProductController = async (req, res) => {
 };
 
 const createPostController = async (req, res) => {
-  const { description } = req.body;
+  const { user_id, description } = req.body;
   console.log(req.body);
   try {
-    const result = await createPost(description);
+    const result = await createPost(user_id, description);
     console.log(result);
     if (result.success) {
       return res.status(200).json({
@@ -295,7 +295,7 @@ const createPostController = async (req, res) => {
   } catch (error) {
     console.log("fail to create a post");
   }
-}
+};
 
 module.exports = {
   createVoucherController,
