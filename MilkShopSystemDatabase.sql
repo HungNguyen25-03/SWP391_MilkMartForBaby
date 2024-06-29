@@ -1,4 +1,4 @@
-﻿﻿CREATE DATABASE MilkShop
+﻿CREATE DATABASE MilkShop
 USE MilkShop
 
 DROP DATABASE MilkShop
@@ -56,14 +56,6 @@ CREATE TABLE Products (
 	image_url VARCHAR(512)
 );
 
-CREATE TABLE Orders (
-    order_id INT IDENTITY(1,1) PRIMARY KEY,
-    user_id INT NOT NULL REFERENCES Users(user_id),
-    order_date DATETIME DEFAULT GETDATE(),
-    status NVARCHAR(10),
-    total_amount DECIMAL(10, 2) NOT NULL CHECK (total_amount >= 0)
-);
-
 CREATE TABLE Reviews (
     review_id INT IDENTITY(1,1) PRIMARY KEY,
     user_id INT NOT NULL REFERENCES Users(user_id),
@@ -74,6 +66,13 @@ CREATE TABLE Reviews (
     review_date DATETIME DEFAULT GETDATE()
 );
 
+CREATE TABLE Orders (
+    order_id INT IDENTITY(1,1) PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES Users(user_id),
+    order_date DATETIME DEFAULT GETDATE(),
+    status NVARCHAR(10),
+    total_amount DECIMAL(10, 2) NOT NULL CHECK (total_amount >= 0)
+);
 CREATE TABLE Order_Items (
     order_item_id INT IDENTITY(1,1) PRIMARY KEY,
     order_id INT NOT NULL REFERENCES Orders(order_id),
@@ -81,7 +80,7 @@ CREATE TABLE Order_Items (
     quantity INT NOT NULL CHECK (quantity > 0),
     price DECIMAL(10, 2) NOT NULL CHECK (price >= 0)
 );
-SELECT * FROM Reviews
+
 CREATE TABLE Vouchers (
     voucher_id INT IDENTITY(1,1) PRIMARY KEY,
     code NVARCHAR(50) UNIQUE NOT NULL,
@@ -114,7 +113,18 @@ CREATE TABLE Payments (
 
 CREATE TABLE Posts (
     post_id INT IDENTITY(1,1) PRIMARY KEY,
-    description NVARCHAR(MAX),
+    user_id INT NOT NULL REFERENCES Users(user_id),
+    content NVARCHAR(MAX),
+    post_date DATETIME DEFAULT GETDATE(),
+);
+
+CREATE TABLE Reports (
+    report_id INT IDENTITY(1,1) PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES Users(user_id),
+    product_id INT NOT NULL REFERENCES Products(product_id),
+    order_id INT NOT NULL REFERENCES Orders(order_id),
+    report_description NVARCHAR(MAX) NOT NULL,
+    report_date DATETIME DEFAULT GETDATE()
 );
 
 CREATE TABLE RefreshTokens (
@@ -239,7 +249,6 @@ INSERT INTO Products (product_name, description, price, stock, brand_id, country
 (N'Sữa Abbott Grow 2 900g (6-12 tháng)', N'Sản phẩm dinh dưỡng công thức cho trẻ 6-12 tháng tuổi: Abbott Grow 2', 329000, 900, 12, 'IRE', '0-1 year', 'https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2FabbottGrow%2Fsua-abbott-grow-2-6-12-thang-900g.png?alt=media&token=810c28e3-754c-4ce5-b171-6fcaaa1027d4'),
 (N'Sữa Abbott Grow 3 900g (1-2 tuổi)', N'Sản phẩm dinh dưỡng công thức cho trẻ 1-2 tuổi: Abbott Grow 3', 299000, 320, 12, 'IRE', '1-2 years', 'https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2FabbottGrow%2Fsua-abbott-grow-3-900g-1-2-tuoi.png?alt=media&token=3de16752-0d09-4fa2-9556-6c31a6adba7b')
 
-
 -- Insert into Orders
 INSERT INTO Orders (user_id, order_date, status, total_amount) VALUES
 (4, '2024-06-18', 'Pending', 1200000),
@@ -274,11 +283,7 @@ INSERT INTO Payment_Methods (method_name, details) VALUES
 ('Bank Transfer', 'Account Number: 123456789, Bank: ABC Bank'),
 ('Cash on Delivery', 'Payment upon delivery'),
 ('Gift Card', 'Gift card code can be applied at checkout');
-SELECT p.*, o.total_amount, oi. quantity 
-      FROM Orders o JOIN Order_Items oi ON o.order_id = oi.order_id 
-      JOIN Products p ON oi.product_id = p.product_id 
-      WHERE o.user_id = 4
-      AND status = 'completed'
+
 -- Insert into Payments
 INSERT INTO Payments (order_id, payment_method_id, transaction_date, amount, transaction_status, payment_details) VALUES
 (1, 1, '2024-06-01', 55.98, 'Completed', 'Visa ending in 1234'),
