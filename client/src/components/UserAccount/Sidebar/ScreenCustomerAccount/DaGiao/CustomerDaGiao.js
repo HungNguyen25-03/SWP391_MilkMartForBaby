@@ -86,7 +86,7 @@ export default function CustomerDaGiao({ title }) {
                           <span style={{ width: 600 }}></span>
                           <div className="item-cart-quantity-pro">
                             x{product.quantity}
-                          </div>
+                          </div>&nbsp;
                           <div className="item-cart-price-pro mr-0">
                             {formatVND(product.price)}
                           </div>

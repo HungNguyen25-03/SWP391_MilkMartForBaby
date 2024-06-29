@@ -28,6 +28,26 @@ export default function ChoThanhToan({ title }) {
       });
   }, []);
 
+  const handleOrder = (order_id) => {
+    axios
+      .post(
+        `${MainAPI}/payment/zalopay`,
+        { order_id: order_id },
+        {
+          headers: {
+            "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        window.location.href = res.data.order_url;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const handTrackOrder = (id) => {
     console.log(id)
     nav(`/trackorder/${id}`)
@@ -137,9 +157,9 @@ export default function ChoThanhToan({ title }) {
                   <span className="d-flex justify-content-end mt-3">
                     <button
                       className="btn btn-warning m-0"
-                    //   onClick={() => {
-                    //     confirmOrder(dagiao.order_id);
-                    //   }}
+                      onClick={() => {
+                        handleOrder(dagiao.order_id);
+                      }}
                     >
                       Thanh toán
                     </button>
