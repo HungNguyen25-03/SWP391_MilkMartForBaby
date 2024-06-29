@@ -71,4 +71,6 @@ userRoutes.put(
   userController.completeOrderController
 );
 
+userRoutes.get("/get-post/:id", userController.getPostByIdController)
+
 module.exports = userRoutes;

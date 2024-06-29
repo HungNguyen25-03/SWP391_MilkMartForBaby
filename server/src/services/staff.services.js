@@ -428,6 +428,24 @@ async function updateProduct(
   }
 }
 
+async function createPost(description) {
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input("description", sql.NVarChar, description)
+      .query(`
+      INSERT INTO Posts (description)
+      VALUES (@description)
+    `);
+
+    return { success: true, message: "Post created successfully" };
+  } catch (error) {
+    console.error("Error creating post:", error);
+    throw error;
+  }
+}
+
 module.exports = {
   createVoucher,
   getAllUser,
@@ -442,4 +460,5 @@ module.exports = {
   cancelOrder,
   addProduct,
   updateProduct,
+  createPost,
 };
