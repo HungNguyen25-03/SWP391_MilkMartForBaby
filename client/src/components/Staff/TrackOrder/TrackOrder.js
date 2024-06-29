@@ -1,35 +1,84 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './TrackOrder.scss'
+import { MainAPI } from '../../API';
+import useAuth from '../../../hooks/useAuth';
 
-export default function TrackOrder({ tracks }) {
+export default function TrackOrder() {
+    const [trackOrderList, setTrackOrderList] = useState([])
+
+    const fetchData = () => {
+        fetch(`${MainAPI}/staff/order`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "x-access-token": JSON.parse(localStorage.getItem("accessToken"))
+            },
+        })
+
+            .then(res => {
+                if (!res.ok) throw new Error("Failed to fetch data get order")
+                return res.json()
+            })
+            .then(data => setTrackOrderList(data))
+            .catch(error => console.error("Error fetching data order:", error));
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+    const getStatusClass = (status) => {
+        if (!status) return '';
+        switch (status.toLowerCase()) {
+            case 'cancel':
+                return 'status-cancel';
+            case 'completed':
+                return 'status-complete';
+            case 'pending':
+                return 'status-pending';
+            case 'complete':
+                return 'status-delivery';
+            case 'confirm':
+                return 'status-confirm';
+            default:
+                return '';
+        }
+    };
+
     return (
-        <>
-            <table className='track_order'>
-                <thead>
-                    <tr>
-                        <th>Order ID</th>
-                        <th>Date</th>
-                        <th>Customer Name</th>
-                        <th>Status</th>
-                        <th>Amount</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {tracks.map((track, index) => (
-                        <tr key={index}>
-                            <td>{track.orderID}</td>
-                            <td>{track.date}</td>
-                            <td>{track.cusName}</td>
-                            <td>{track.status}</td>
-                            <td>{track.amount}</td>
-                            <td>
-                                <button className="action-btn">▪▪▪</button>
-                            </td>
+        <div className='track'>
+            <div className='track-th'>
+                <table className='table-track-th'>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Date</th>
+                            <th>Customer Name</th>
+                            <th>Status</th>
+                            <th>Amount</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
-        </>
-    )
+                    </thead>
+                </table>
+            </div>
+
+            <div className='track-tb'>
+                <table className='table-track-tb'>
+                    <tbody>
+                        {trackOrderList.map((confirm) => (
+                            <tr key={confirm.order_id}>
+                                <td>{confirm.order_id}</td>
+                                <td>{confirm.order_date}</td>
+                                <td>{confirm.username}</td>
+                                <td className={getStatusClass(confirm.status)}>
+                                    <span className="status-dot"></span>
+                                    {confirm.status}
+                                </td>
+                                <td>{confirm.total_amount} đ</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div >
+    );
 }
