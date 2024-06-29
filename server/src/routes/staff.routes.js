@@ -14,6 +14,7 @@ const {
   cancelOrderController,
   addProductController,
   updateProductController,
+  createPostController,
 } = require("../controller/staff.controller");
 const {
   createVoucherMiddleware,
@@ -118,5 +119,9 @@ staffRouters.post("/uploads", upload.single("uploads"), function (req, res, next
   // console.log(JSON.stringify(req.file))
   res.json({ url: req.file.path });
 });
+
+staffRouters.post("/create-post", createPostController)
+
+
 
 module.exports = staffRouters;

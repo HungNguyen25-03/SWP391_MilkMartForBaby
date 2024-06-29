@@ -5,7 +5,7 @@ const cors = require("cors");
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use("staff/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static(path.join(__dirname, 'uploads')));
 
 const userRoutes = require("../server/src/routes/users.routes");
 const productRoutes = require("../server/src/routes/products.routes");
