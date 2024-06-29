@@ -1,4 +1,4 @@
-﻿CREATE DATABASE MilkShop
+﻿﻿CREATE DATABASE MilkShop
 USE MilkShop
 
 DROP DATABASE MilkShop
@@ -56,6 +56,14 @@ CREATE TABLE Products (
 	image_url VARCHAR(512)
 );
 
+CREATE TABLE Orders (
+    order_id INT IDENTITY(1,1) PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES Users(user_id),
+    order_date DATETIME DEFAULT GETDATE(),
+    status NVARCHAR(10),
+    total_amount DECIMAL(10, 2) NOT NULL CHECK (total_amount >= 0)
+);
+
 CREATE TABLE Reviews (
     review_id INT IDENTITY(1,1) PRIMARY KEY,
     user_id INT NOT NULL REFERENCES Users(user_id),
@@ -66,13 +74,6 @@ CREATE TABLE Reviews (
     review_date DATETIME DEFAULT GETDATE()
 );
 
-CREATE TABLE Orders (
-    order_id INT IDENTITY(1,1) PRIMARY KEY,
-    user_id INT NOT NULL REFERENCES Users(user_id),
-    order_date DATETIME DEFAULT GETDATE(),
-    status NVARCHAR(10),
-    total_amount DECIMAL(10, 2) NOT NULL CHECK (total_amount >= 0)
-);
 CREATE TABLE Order_Items (
     order_item_id INT IDENTITY(1,1) PRIMARY KEY,
     order_id INT NOT NULL REFERENCES Orders(order_id),
@@ -113,10 +114,7 @@ CREATE TABLE Payments (
 
 CREATE TABLE Posts (
     post_id INT IDENTITY(1,1) PRIMARY KEY,
-    user_id INT NOT NULL REFERENCES Users(user_id),
-    content NVARCHAR(MAX),
-    post_date DATETIME DEFAULT GETDATE(),
-    product_id INT REFERENCES Products(product_id)
+    description NVARCHAR(MAX),
 );
 
 CREATE TABLE RefreshTokens (
