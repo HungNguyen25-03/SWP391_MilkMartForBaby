@@ -38,11 +38,17 @@ export const options = {
   },
 };
 
-const labels = ["January", "February", "March", "April", "May", "June", "July"];
+
 
 export default function Chart({ startDate, endDate }) {
   const [dataChart, setDataChart] = useState({});
   const [topProducts, setTopProducts] = useState([]);
+  const [totalRevenuePerMonth, setTotalRevenuePerMonth] = useState([])
+
+  const barChartLabels = totalRevenuePerMonth.map((revenue) => revenue.yearMonth)
+  const barChartData = totalRevenuePerMonth.map((revenue) => revenue.totalRevenue)
+
+  console.log(barChartData)
   useEffect(() => {
     axios
       .get(`${MainAPI}/admin/dashboard`, {
@@ -58,26 +64,27 @@ export default function Chart({ startDate, endDate }) {
         // console.log(res.data);
         setDataChart(res.data);
         setTopProducts(res.data.topProducts);
+        setTotalRevenuePerMonth(res.data.totalRevenuePerMonth)
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [startDate, endDate]);
 
   console.log(dataChart);
   const dataBarChart = {
-    labels,
+    labels: barChartLabels,
     datasets: [
       {
         label: "Dataset 2",
-        data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+        data: barChartLabels.map((__, index) => barChartData[index]),
         backgroundColor: "rgba(53, 162, 235, 0.5)",
       },
     ],
   };
 
   const dataPieChart = {
-    labels: topProducts.map((product) => product.product_name),
+    labels: topProducts.map((product) => product.brand_name),
     datasets: [
       {
         label: "Số lượng đã bán",
