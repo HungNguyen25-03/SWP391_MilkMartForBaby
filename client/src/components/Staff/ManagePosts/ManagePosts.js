@@ -5,6 +5,7 @@ import axios from "axios";
 import { MainAPI } from "../../API";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import useAuth from "../../../hooks/useAuth";
 
 const ENDPOINT = "staff/uploads";
 
@@ -43,10 +44,11 @@ function uploadPlugin(editor) {
 export default function ManagePosts() {
   const [description, setDescription] = useState("");
   console.log(description);
+  const { auth } = useAuth();
 
   const handleCreatePost = () => {
     axios
-      .post(`${MainAPI}/staff/create-post`, { description: description })
+      .post(`${MainAPI}/staff/create-post`, { description: description, user_id: auth.user.user_id })
       .then((res) => {
         console.log(res);
         toast.success(res.data.message);
