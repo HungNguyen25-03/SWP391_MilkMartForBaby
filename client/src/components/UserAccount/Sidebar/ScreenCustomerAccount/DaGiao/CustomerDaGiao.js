@@ -12,6 +12,7 @@ import "./CompletedOrder.scss";
 export default function CustomerDaGiao({ title }) {
   const [completeOrderList, setCompleteOrderList] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalReportOpen, setModalReportOpen] = useState(false);
   const [productDetail, setProductDetail] = useState({});
   const { auth } = useAuth();
   const nav = useNavigate()
@@ -93,26 +94,50 @@ export default function CustomerDaGiao({ title }) {
                         </div>
                       </div>
                     </div>
-                    <div className="d-flex justify-content-end mt-3">
-                      <button
-                        className="btn btn-warning m-0"
-                        onClick={() => {
-                          setModalOpen(true);
-                          setProductDetail(product);
-                        }}
-                      >
-                        Đánh giá
-                      </button>
-                      {modalOpen && (
-                        <ModalReview
-                          order_id={dagiao.order_id}
-                          product={productDetail}
-                          closeModal={() => {
-                            setModalOpen(false);
+                    <div className="d-flex justify-content-end">
+                      <div className="mt-3 ">
+                        <button
+                          className="btn btn-warning m-0"
+                          onClick={() => {
+                            setModalReportOpen(true);
+                            setProductDetail(product);
                           }}
-                          onSubmit={handleSubmit}
-                        />
-                      )}
+                        >
+                          Report
+                        </button>
+                        {modalReportOpen && (
+                          <ModalReview
+                            report={true}
+                            order_id={dagiao.order_id}
+                            product={productDetail}
+                            closeModal={() => {
+                              setModalReportOpen(false);
+                            }}
+                            onSubmit={handleSubmit}
+                          />
+                        )}
+                      </div>
+                      <div className=" mt-3 ms-3">
+                        <button
+                          className="btn btn-warning m-0"
+                          onClick={() => {
+                            setModalOpen(true);
+                            setProductDetail(product);
+                          }}
+                        >
+                          Đánh giá
+                        </button>
+                        {modalOpen && (
+                          <ModalReview
+                            order_id={dagiao.order_id}
+                            product={productDetail}
+                            closeModal={() => {
+                              setModalOpen(false);
+                            }}
+                            onSubmit={handleSubmit}
+                          />
+                        )}
+                      </div>
                     </div>
                   </div>
                 );
