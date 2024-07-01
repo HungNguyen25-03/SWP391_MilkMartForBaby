@@ -249,7 +249,20 @@ const getPostByIdController = async (req, res) => {
   } catch (error) {
     console.log("Fail to get Post");
   }
-}
+};
+
+const showAllPostsController = async (req, res) => {
+  try {
+    const result = await getAllPosts();
+    if (result.success) {
+      res.status(200).json(result.posts);
+    } else {
+      res.status(409).json({ message: result.message });
+    }
+  } catch (error) {
+    console.log("Fail to get Posts");
+  }
+};
 
 module.exports = {
   registerUserController,
@@ -265,5 +278,6 @@ module.exports = {
   showReviewsByProductIdController,
   completeOrderController,
   reportProductController,
-  getPostByIdController
+  getPostByIdController,
+  showAllPostsController,
 };

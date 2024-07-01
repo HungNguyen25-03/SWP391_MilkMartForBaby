@@ -428,16 +428,17 @@ async function updateProduct(
   }
 }
 
-async function createPost(user_id, description, image_url) {
+async function createPost(user_id, title, description, image_url) {
   try {
     const pool = await poolPromise;
     const result = await pool
       .request()
       .input("user_id", sql.Int, user_id)
+      .input("title", sql.NVarChar, title)
       .input("description", sql.NVarChar, description)
       .input("image_url", sql.NVarChar, image_url).query(`
-      INSERT INTO Posts (user_id, description, image_url)
-      VALUES (@user_id, @description, @image_url)
+      INSERT INTO Posts (user_id, title, description, image_url)
+      VALUES (@user_id, @title, @description, @image_url)
     `);
 
     return { success: true, message: "Post created successfully" };
@@ -447,13 +448,17 @@ async function createPost(user_id, description, image_url) {
   }
 }
 
-async function updatePost(post_id, user_id, description, image_url) {
+async function updatePost(post_id, user_id, title, description, image_url) {
   try {
     const pool = await poolPromise;
     const request = pool.request().input("post_id", post_id);
     let updatedFields = [];
     request.input("user_id", user_id);
     updatedFields.push("user_id = @user_id");
+    if (title) {
+      request.input("title", title);
+      updatedFields.push("title = @title");
+    }
     if (description) {
       request.input("description", description);
       updatedFields.push("description = @description");

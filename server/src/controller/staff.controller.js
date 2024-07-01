@@ -283,10 +283,10 @@ const updateProductController = async (req, res) => {
 };
 
 const createPostController = async (req, res) => {
-  const { user_id, description } = req.body;
+  const { user_id, title, description, image_url } = req.body;
   console.log(req.body);
   try {
-    const result = await createPost(user_id, description);
+    const result = await createPost(user_id, title, description, image_url);
     console.log(result);
     if (result.success) {
       return res.status(200).json({
@@ -301,10 +301,16 @@ const createPostController = async (req, res) => {
 
 const updatePostController = async (req, res) => {
   const post_id = parseInt(req.params.id, 10);
-  const { user_id, description, image_url } = req.body;
+  const { user_id, title, description, image_url } = req.body;
   console.log(req.body);
   try {
-    const result = await updatePost(post_id, user_id, description, image_url);
+    const result = await updatePost(
+      post_id,
+      user_id,
+      title,
+      description,
+      image_url
+    );
     console.log(result);
     if (result.success) {
       return res.status(200).json({
