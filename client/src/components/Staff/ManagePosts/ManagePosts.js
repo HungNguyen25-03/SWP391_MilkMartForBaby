@@ -45,6 +45,7 @@ export default function ManagePosts() {
   const [description, setDescription] = useState("");
   console.log(description);
   const { auth } = useAuth();
+  const [modalOpen, setModalOpen] = useState(false);
 
   const handleCreatePost = () => {
     axios
@@ -60,8 +61,10 @@ export default function ManagePosts() {
 
   return (
     <>
-      <div className="App">
+      <div className="manapost-container">
         <ToastContainer autoClose={2000} />
+
+        <button className="btn btn-primary">Thêm bài</button>
         <h2>Manage Post</h2>
         <CKEditor
           config={{
