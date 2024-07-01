@@ -18,7 +18,7 @@ export default function CustomerDangGiao({ title }) {
         user_id: auth.user.user_id,
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setDeliveredOrderList(res.data);
       })
       .catch((err) => {

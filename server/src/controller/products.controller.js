@@ -5,6 +5,7 @@ const {
   filterProduct,
   getAllProductWihoutPagination,
   getAllCategory,
+  getAvgRatingByProductId,
 } = require("../services/products.services");
 
 //Get All Product Controller
@@ -124,6 +125,20 @@ const getAllCategoryController = async (req, res) => {
   }
 };
 
+const getAvgRatingByProductIdController = async (req, res) => {
+  const product_id = parseInt(req.params.id, 10);
+  try {
+    const result = await getAvgRatingByProductId(product_id);
+    if (result.success) {
+      res.json({ avg_rating: result.avg_rating });
+    } else {
+      res.json({ message: result.message });
+    }
+  } catch (error) {
+    console.log("Fail to get average rating by product ID");
+  }
+};
+
 module.exports = {
   getProduct,
   getProById,
@@ -131,4 +146,5 @@ module.exports = {
   filtering,
   getAllProductWithoutPaginationController,
   getAllCategoryController,
+  getAvgRatingByProductIdController,
 };

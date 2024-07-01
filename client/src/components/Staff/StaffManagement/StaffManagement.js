@@ -6,6 +6,7 @@ import ConfirmOrder from '../ConfirmOrder/ConfirmOrder';
 import ManageVoucher from '../CreateVoucher/ManageVoucher';
 import ManageInventory from '../ManageInventory/ManageInventory';
 import TrackOrder from '../TrackOrder/TrackOrder'
+import ManagePosts from '../ManagePosts/ManagePosts';
 
 export default function StaffManagement() {
 
@@ -22,7 +23,7 @@ export default function StaffManagement() {
                         <Route path='/manage_users' element={<GetManageUser />} />
                         <Route path='/create_voucher_codes' element={<ManageVoucher />} />
                         <Route path='/track_orders' element={<TrackOrder />} />
-                        {/* <Route path='/manage_posts' element={<GetManagePosts />} /> */}
+                        <Route path='/manage_posts' element={<ManagePosts />} />
                     </Routes>
                 </div>
             </div>

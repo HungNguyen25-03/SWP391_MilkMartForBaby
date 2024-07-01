@@ -14,6 +14,7 @@ const {
   cancelOrderController,
   addProductController,
   updateProductController,
+  createPostController,
 } = require("../controller/staff.controller");
 const {
   createVoucherMiddleware,
@@ -25,6 +26,10 @@ const {
   deleteProductMiddlewares,
 } = require("../middlewares/staff.middleware");
 const { authenticateToken } = require("../middlewares/authJwt.middlewares");
+
+const multer = require("multer");
+const path = require("path");
+const { v4: uuidv4 } = require("uuid");
 
 // Create Voucher
 staffRouters.post(
@@ -97,5 +102,26 @@ staffRouters.put(
   updateProductMiddlewares,
   updateProductController
 );
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./uploads");
+  },
+  filename: function (req, file, cb) {
+    cb(null, uuidv4() + path.extname(file.originalname));
+  },
+});
+var upload = multer({ storage: storage });
+
+staffRouters.post("/uploads", upload.single("uploads"), function (req, res, next) {
+  // req.file is the `profile-file` file
+  // req.body will hold the text fields, if there were any
+  // console.log(JSON.stringify(req.file))
+  res.json({ url: req.file.path });
+});
+
+staffRouters.post("/create-post", createPostController)
+
+
 
 module.exports = staffRouters;

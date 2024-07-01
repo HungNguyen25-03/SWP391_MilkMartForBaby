@@ -20,13 +20,33 @@ export default function ChoThanhToan({ title }) {
         user_id: auth.user.user_id,
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setPendingOrderList(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
+
+  const handleOrder = (order_id) => {
+    axios
+      .post(
+        `${MainAPI}/payment/zalopay`,
+        { order_id: order_id },
+        {
+          headers: {
+            "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        window.location.href = res.data.order_url;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const handTrackOrder = (id) => {
     console.log(id)
@@ -137,9 +157,9 @@ export default function ChoThanhToan({ title }) {
                   <span className="d-flex justify-content-end mt-3">
                     <button
                       className="btn btn-warning m-0"
-                    //   onClick={() => {
-                    //     confirmOrder(dagiao.order_id);
-                    //   }}
+                      onClick={() => {
+                        handleOrder(dagiao.order_id);
+                      }}
                     >
                       Thanh toán
                     </button>

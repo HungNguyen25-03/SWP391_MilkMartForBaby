@@ -15,10 +15,12 @@ export default function ConfirmOrder() {
                 return 'status-complete';
             case 'pending':
                 return 'status-pending';
-            case 'complete':
+            case 'Completed':
                 return 'status-delivery';
             case 'confirm':
                 return 'status-confirm';
+            case 'paid':
+                return 'status-paid';
             default:
                 return '';
         }
@@ -26,7 +28,7 @@ export default function ConfirmOrder() {
 
     const checkStatusIsPending = (status) => {
         if (!status) return false;
-        return status.toLowerCase() === 'pending';
+        return status.toLowerCase() === 'paid';
     };
 
     const [dataConfirm, setDataConfirm] = useState([]);

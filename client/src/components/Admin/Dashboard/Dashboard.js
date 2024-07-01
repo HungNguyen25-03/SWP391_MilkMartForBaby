@@ -16,6 +16,8 @@ export default function Dashboard() {
   const [endDate, setEndDate] = useState(new Date("2024-12-01"));
   const [data, setData] = useState({});
 
+  const [cancelOrder, setCancelOrder] = useState(0);
+
   // Function to receive start and end dates from DateRangeButton
   const handleDateChange = (start, end) => {
     setStartDate(start);
@@ -36,8 +38,9 @@ export default function Dashboard() {
         },
       })
       .then((res) => {
-        // console.log(res.data);
+        console.log(res.data);
         setData(res.data);
+        setCancelOrder(res.data.canceledOrdersPerMont);
       })
       .catch((err) => {
         console.log(err);
@@ -65,9 +68,9 @@ export default function Dashboard() {
             <div className="col col-md-4">
               <div className="card card-content m-0">
                 <div className="card-body col-10">
-                  <div className="card-title fw-bold">Tổng số sản phẩm</div>
+                  <div className="card-title fw-bold">Số đơn hàng đã hủy</div>
                   <div className="d-flex justify-content-between m-0">
-                    <div>20tr</div>
+                    <div>20</div>
                     <div className="col-2 icon">
                       <BsBoxSeam />
                     </div>
