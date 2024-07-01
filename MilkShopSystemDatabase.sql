@@ -116,6 +116,7 @@ CREATE TABLE Posts (
     user_id INT NOT NULL REFERENCES Users(user_id),
     content NVARCHAR(MAX),
     post_date DATETIME DEFAULT GETDATE(),
+	image_url NVARCHAR(MAX)
 );
 
 CREATE TABLE Reports (
