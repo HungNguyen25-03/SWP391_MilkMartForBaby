@@ -217,16 +217,13 @@ async function dashboard(startDate, endDate) {
       .request()
       .input("startDateString", sql.DateTime, startDateString)
       .input("endDateString", sql.DateTime, endDateString).query(`
-        SELECT 
-          FORMAT(order_date, 'MM-yyyy') AS yearMonth, 
-          COUNT(*) AS canceledOrders 
-        FROM Orders 
-        WHERE order_date >= @startDateString AND order_date <= @endDateString
-        AND status IN ('Cancelled')
-        GROUP BY FORMAT(order_date, 'MM-yyyy')
-        ORDER BY yearMonth;
+      SELECT COUNT(*) AS totalCancelledOrders 
+      FROM Orders 
+      WHERE order_date >= @startDateString AND order_date <= @endDateString
+      AND status IN ('Cancelled');
       `);
-    const canceledOrdersPerMonth = canceledOrdersPerMonthResult.recordset;
+    const canceledOrdersPerMonth =
+      canceledOrdersPerMonthResult.recordset[0].totalCancelledOrders;
 
     // Query total revenue per month within the specified month-year range
     const totalRevenuePerMonthResult = await pool

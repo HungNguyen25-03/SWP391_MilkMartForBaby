@@ -15,6 +15,7 @@ const {
   addProductController,
   updateProductController,
   createPostController,
+  updatePostController,
 } = require("../controller/staff.controller");
 const {
   createVoucherMiddleware,
@@ -113,15 +114,19 @@ var storage = multer.diskStorage({
 });
 var upload = multer({ storage: storage });
 
-staffRouters.post("/uploads", upload.single("uploads"), function (req, res, next) {
-  // req.file is the `profile-file` file
-  // req.body will hold the text fields, if there were any
-  // console.log(JSON.stringify(req.file))
-  res.json({ url: req.file.path });
-});
+staffRouters.post(
+  "/uploads",
+  upload.single("uploads"),
+  function (req, res, next) {
+    // req.file is the `profile-file` file
+    // req.body will hold the text fields, if there were any
+    // console.log(JSON.stringify(req.file))
+    res.json({ url: req.file.path });
+  }
+);
 
-staffRouters.post("/create-post", createPostController)
+staffRouters.put("/update-post/:id", authenticateToken, updatePostController);
 
-
+staffRouters.post("/create-post", createPostController);
 
 module.exports = staffRouters;
