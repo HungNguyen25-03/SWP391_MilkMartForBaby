@@ -428,15 +428,16 @@ async function updateProduct(
   }
 }
 
-async function createPost(user_id, description) {
+async function createPost(user_id, description, image_url) {
   try {
     const pool = await poolPromise;
     const result = await pool
       .request()
       .input("user_id", sql.Int, user_id)
-      .input("description", sql.NVarChar, description).query(`
-      INSERT INTO Posts (user_id, description)
-      VALUES (@user_id, @description)
+      .input("description", sql.NVarChar, description)
+      .input("image_url", sql.NVarChar, image_url).query(`
+      INSERT INTO Posts (user_id, description, image_url)
+      VALUES (@user_id, @description, @image_url)
     `);
 
     return { success: true, message: "Post created successfully" };
@@ -444,6 +445,38 @@ async function createPost(user_id, description) {
     console.error("Error creating post:", error);
     throw error;
   }
+}
+
+async function updatePost(post_id, user_id, description, image_url) {
+  try {
+    const pool = await poolPromise;
+    const request = pool.request().input("post_id", post_id);
+    let updatedFields = [];
+    request.input("user_id", user_id);
+    updatedFields.push("user_id = @user_id");
+    if (description) {
+      request.input("description", description);
+      updatedFields.push("description = @description");
+    }
+    if (image_url) {
+      request.input("image_url", image_url);
+      updatedFields.push("image_url = @image_url");
+    }
+    if (updatedFields.length === 0) {
+      return { success: false, message: "No fields to update" };
+    }
+    const query = `
+      UPDATE Posts
+      SET ${updatedFields.join(", ")}
+      WHERE post_id = @post_id
+    `;
+    const result = await request.query(query);
+    if (result.rowsAffected && result.rowsAffected[0] > 0) {
+      return { success: true, message: "Post updated successfully" };
+    } else {
+      return { success: false, message: "Failed to update post" };
+    }
+  } catch (error) {}
 }
 
 module.exports = {
@@ -461,4 +494,5 @@ module.exports = {
   addProduct,
   updateProduct,
   createPost,
+  updatePost,
 };
