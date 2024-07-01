@@ -2,19 +2,18 @@ import React, { useEffect, useState } from "react";
 import { thanhtoans } from "../ListProduct";
 import axios from "axios";
 import { MainAPI } from "../../../../API";
-import useAuth from "../../../../../hooks/useAuth";
 import { formatVND } from "../../../../../utils/Format";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../../../../hooks/useAuth";
 
 export default function CustomerThanhToan({ title }) {
   const [confirmOrderList, setConfirmOrderList] = useState([]);
-  const [showTrack, setShowTrack] = useState(null);
+  const nav = useNavigate()
   const { auth } = useAuth();
-  const nav = useNavigate();
 
   useEffect(() => {
     axios
-      .post(`${MainAPI}/order/get-order-by-user-id-paid-status`, {
+      .post(`${MainAPI}/order/get-order-by-user-id-paid-status/`, {
         user_id: auth.user.user_id,
       })
       .then((res) => {
@@ -31,11 +30,10 @@ export default function CustomerThanhToan({ title }) {
     nav(`/trackorder/${id}`)
   };
 
+  console.log(confirmOrderList)
   return (
     <div className={title === "Thanh toán" ? "thanhtoan" : "fade"}>
-      <div>
-        <h5 className="fw-bold">{title}</h5>
-      </div>
+      <h5 className="fw-bold">{title}</h5>
       {confirmOrderList.length === 0 ? (
         <div className="emptyinfo">
           <img src="https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2Faccount%2Fthanhtoan.png?alt=media&token=511e5785-0844-4fea-8530-3124f9296eab" />
