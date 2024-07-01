@@ -310,11 +310,9 @@ async function reportProduct(
 async function getPostById(post_id) {
   try {
     const pool = await poolPromise;
-    const result = await pool
-      .request()
-      .input("post_id", sql.Int, post_id)
+    const result = await pool.request().input("post_id", sql.Int, post_id)
       .query(`
-      SELECT * FROM Posts WHERE post_id = @post_id
+      SELECT p.*, u.username FROM Posts p JOIN Users u ON p.user_id = u.user_id WHERE post_id = @post_id
     `);
 
     if (result.recordset.length === 0) {
@@ -328,6 +326,19 @@ async function getPostById(post_id) {
   }
 }
 
+async function showAllPosts() {
+  try {
+    const pool = await poolPromise;
+    const result = await pool.request().query(`
+      SELECT p.*, u.username FROM Posts p JOIN Users u ON p.user_id = u.user_id
+    `);
+
+    return { success: true, posts: result.recordset };
+  } catch (error) {
+    console.error("Error getting all posts:", error);
+    throw error;
+  }
+}
 
 module.exports = {
   loginUser,
@@ -342,5 +353,6 @@ module.exports = {
   showReviewsByProductId,
   completeOrder,
   reportProduct,
-  getPostById
+  getPostById,
+  showAllPosts,
 };

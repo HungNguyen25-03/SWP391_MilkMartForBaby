@@ -76,6 +76,8 @@ userRoutes.post(
   authJwt.authenticateToken,
   userController.reportProductController
 );
-userRoutes.get("/get-post/:id", userController.getPostByIdController)
+userRoutes.get("/get-post/:id", userController.getPostByIdController);
+
+userRoutes.get("/show-all-posts", userController.showAllPostsController);
 
 module.exports = userRoutes;
