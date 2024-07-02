@@ -282,7 +282,9 @@ async function cancelOrder(order_id) {
     const result = await pool
       .request()
       .input("order_id", sql.Int, order_id)
-      .query(`UPDATE Orders SET status = 'cancel' WHERE order_id = @order_id;`);
+      .query(
+        `UPDATE Orders SET status = 'Cancelled' WHERE order_id = @order_id;`
+      );
     if (result.rowsAffected[0] > 0) {
       return { success: true, message: "Order cancel successfully" };
     } else {
