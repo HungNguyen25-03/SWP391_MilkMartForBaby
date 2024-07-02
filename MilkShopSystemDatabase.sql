@@ -115,7 +115,7 @@ CREATE TABLE Posts (
     post_id INT IDENTITY(1,1) PRIMARY KEY,
     user_id INT NOT NULL REFERENCES Users(user_id),
 	title NVARCHAR(255),
-    content NVARCHAR(MAX),
+    description NVARCHAR(MAX),
     post_date DATETIME DEFAULT GETDATE(),
 	image_url NVARCHAR(MAX)
 );
