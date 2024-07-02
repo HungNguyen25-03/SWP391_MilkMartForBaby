@@ -11,19 +11,21 @@ export default function ProductInfo({ product }) {
   const { handleAddToCart, decrementQuantity, incrementQuantity } =
     useContext(CartContext);
 
+  console.log(product)
+
   const [quantity, setQuantity] = useState(1);
 
-  const handleIncreaseQuantity = () => {
-    if (quantity < product.stock) {
-      setQuantity(quantity + 1);
-    }
-  };
+  // const handleIncreaseQuantity = () => {
+  //   if (quantity < product.stock) {
+  //     setQuantity(quantity + 1);
+  //   }
+  // };
 
-  const handleDescreaseQuantity = () => {
-    if (quantity > 0) {
-      setQuantity(quantity - 1);
-    }
-  };
+  // const handleDescreaseQuantity = () => {
+  //   if (quantity > 0) {
+  //     setQuantity(quantity - 1);
+  //   }
+  // };
 
   return (
     <>
@@ -49,7 +51,7 @@ export default function ProductInfo({ product }) {
             <div className="col-md-6 info">
               <div className="brand">
                 Brand:&nbsp;&nbsp;&nbsp;&nbsp;
-                <span style={{ color: "pink" }}>{product.brand}</span>
+                <span style={{ color: "#DB7093" }}>{product.brand_name}</span>
               </div>
 
               <div className="name">
@@ -99,9 +101,6 @@ export default function ProductInfo({ product }) {
                   >
                     Add To Cart
                   </button>
-                </span>
-                <span>
-                  <button className="btn_buy">Buy</button>
                 </span>
               </div>
             </div>

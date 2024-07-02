@@ -11,12 +11,14 @@ import "react-toastify/dist/ReactToastify.css";
 import useOrder from "../../hooks/useOrder";
 import { MdLogin } from "react-icons/md";
 import { RiLogoutBoxLine } from "react-icons/ri";
+import { CartContext } from "../../components/Cart/CartContext";
 
 export default function HeaderPage() {
   const [searchValue, setSearchValue] = useState("");
   const { setAuth } = useContext(AuthContext);
   const { setOrderInfomation } = useOrder();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { cartList } = useContext(CartContext)
 
   const token = JSON.parse(localStorage.getItem("accessToken"));
   const nav = useNavigate();
@@ -85,7 +87,7 @@ export default function HeaderPage() {
               <div className="acc_icon">
                 <FaShoppingCart />
               </div>
-              <div className="detail">Giỏ hàng</div>
+              <div className="detail">Giỏ hàng({cartList.length})</div>&nbsp;
             </Link>
             <Link to="/customer-account" className="acc">
               <div className="acc_icon">

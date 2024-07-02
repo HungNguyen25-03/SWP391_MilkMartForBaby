@@ -1,7 +1,7 @@
 import React from "react";
 import "./InfoDetail.scss";
 
-export default function InfoDetail({ dataProduct }) {
+export default function InfoDetail({ product }) {
   return (
     <>
       <h3>Detail Of Product:</h3>
@@ -13,31 +13,31 @@ export default function InfoDetail({ dataProduct }) {
                 <tbody>
                   <tr>
                     <td className="th">Brand</td>
-                    <td>{dataProduct.brand}</td>
+                    <td>{product.brand_name}</td>
                   </tr>
                   <tr>
                     <td className="th">Ogrigin</td>
-                    <td>{dataProduct.origin}</td>
+                    <td>America</td>
                   </tr>
                   <tr>
                     <td className="th">Country</td>
-                    <td>{dataProduct.country}</td>
+                    <td>Ireland</td>
                   </tr>
                   <tr>
                     <td className="th">Weight</td>
-                    <td>{dataProduct.wieght}</td>
+                    <td>900g</td>
                   </tr>
                   <tr>
                     <td className="th">Producer</td>
-                    <td>{dataProduct.producer}</td>
+                    <td>{product.brand_name}  Ireland, Cootehill, Co. Cavan, Ireland</td>
                   </tr>
                   <tr>
                     <td className="th">User manual</td>
-                    <td>{dataProduct.use}</td>
+                    <td>-Sử dụng theo hướng dẫn của nhân viên y tế.<br />-Nếu pha hơn 1 lần dùng thì lượng pha dư phải giữ lạnh ở nhiệt độ 2-4 độ C và dùng trong 24h.</td>
                   </tr>
                   <tr>
                     <td className="th">Storage instructions</td>
-                    <td>{dataProduct.ins}</td>
+                    <td>-Bảo quản hộp chưa mở nắp ở nhiệt độ phòng.<br />-Hộp đã mở nắp nên sử dụng trong vòng 3 tuần.</td>
                   </tr>
                 </tbody>
               </table>

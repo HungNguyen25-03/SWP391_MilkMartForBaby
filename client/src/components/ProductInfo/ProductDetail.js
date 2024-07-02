@@ -12,8 +12,8 @@ export default function ProductDetail() {
   const { id } = useParams();
 
   const [product, setProduct] = useState();
-  const [dataProduct, setDataProduct] = useState();
-  const [cus, setCus] = useState();
+  // const [dataProduct, setDataProduct] = useState();
+  // const [cus, setCus] = useState();
 
   useEffect(() => {
     axios
@@ -29,8 +29,8 @@ export default function ProductDetail() {
     <div>
       <HeaderPage />
       {product && <ProductInfo product={product} />}
-      {dataProduct && <InfoDetail dataProduct={dataProduct} />}
-      {cus && <Rate cus={cus} />}
+      {product && <InfoDetail product={product} />}
+      {/* {cus && <Rate cus={cus} />} */}
       <FooterPage />
     </div>
   );
