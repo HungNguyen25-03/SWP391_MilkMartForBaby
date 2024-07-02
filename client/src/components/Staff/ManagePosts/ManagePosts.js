@@ -43,13 +43,19 @@ function uploadPlugin(editor) {
 
 export default function ManagePosts() {
   const [description, setDescription] = useState("");
-  console.log(description);
+  // console.log(description);
   const { auth } = useAuth();
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleCreatePost = () => {
     axios
-      .post(`${MainAPI}/staff/create-post`, { description: description, user_id: auth.user.user_id })
+      .post(`${MainAPI}/staff/create-post`, { description: description, user_id: auth.user.user_id, title: "First post", image_url: "https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2Fyokogold%2Fvinamilk-yoko-gold-1-0-1-tuoi-350g.png?alt=media&token=290cc729-d928-4c6f-933d-9ad5f9557bdd" },
+        {
+          headers: {
+            "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+          }
+        }
+      )
       .then((res) => {
         console.log(res);
         toast.success(res.data.message);
