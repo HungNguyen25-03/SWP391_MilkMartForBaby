@@ -33,11 +33,11 @@ export default function InfoDetail({ product }) {
                   </tr>
                   <tr>
                     <td className="th">User manual</td>
-                    <td>-Sử dụng theo hướng dẫn của nhân viên y tế.<br />-Nếu pha hơn 1 lần dùng thì lượng pha dư phải giữ lạnh ở nhiệt độ 2-4 độ C và dùng trong 24h.</td>
+                    <td>- Sử dụng theo hướng dẫn của nhân viên y tế.<br />- Nếu pha hơn 1 lần dùng thì lượng pha dư phải giữ lạnh ở nhiệt độ 2-4 độ C và dùng trong 24h.</td>
                   </tr>
                   <tr>
                     <td className="th">Storage instructions</td>
-                    <td>-Bảo quản hộp chưa mở nắp ở nhiệt độ phòng.<br />-Hộp đã mở nắp nên sử dụng trong vòng 3 tuần.</td>
+                    <td>- Bảo quản hộp chưa mở nắp ở nhiệt độ phòng.<br />- Hộp đã mở nắp nên sử dụng trong vòng 3 tuần.</td>
                   </tr>
                 </tbody>
               </table>

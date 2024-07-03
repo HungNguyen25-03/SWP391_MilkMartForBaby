@@ -7,6 +7,7 @@ import Rate from "./Rate/Rate";
 import FooterPage from "../../utils/Footer/FooterPage";
 import axios from "axios";
 import { MainAPI } from "../API";
+import Review from "./Reviews/Review";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -30,7 +31,7 @@ export default function ProductDetail() {
       <HeaderPage />
       {product && <ProductInfo product={product} />}
       {product && <InfoDetail product={product} />}
-      {/* {cus && <Rate cus={cus} />} */}
+      {product && <Review product={product} />}
       <FooterPage />
     </div>
   );
