@@ -234,7 +234,7 @@ export default function Trackorder() {
                                 </div>
                             </>}
 
-                            {order.status === "cancel" && <>
+                            {order.status === "cancelled" && <>
                                 <div style={{ display: "flex", alignItems: 'center', justifyContent: 'center', marginTop: '80px' }}>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontSize: '70px' }}> <MdOutlinePendingActions /></span>
@@ -283,7 +283,11 @@ export default function Trackorder() {
                                 </div>
                             </>}
 
-                            <p style={{ textAlign: 'left', marginLeft: '20px', marginTop: '5%', marginBottom: '-13%' }}><TiPencil size='25px' /> Đơn hàng dự kiến sẽ được giao tới người mua sau 3 ngày <br />kể từ ngày đơn hàng được xác nhận.</p>
+                            {order.status === 'cancelled' ?
+                                <p style={{ textAlign: 'left', marginLeft: '20px', marginTop: '5%', marginBottom: '-13%' }}><TiPencil size='25px' /> Đơn hàng đã được hủy</p>
+                                :
+                                <p style={{ textAlign: 'left', marginLeft: '20px', marginTop: '5%', marginBottom: '-13%' }}><TiPencil size='25px' /> Đơn hàng dự kiến sẽ được giao tới người mua sau 3 ngày <br />kể từ ngày đơn hàng được xác nhận.</p>
+                            }
                         </div>
                     ))
                 )}
