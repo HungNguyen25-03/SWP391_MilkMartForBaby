@@ -80,4 +80,16 @@ userRoutes.get("/get-post/:id", userController.getPostByIdController);
 
 userRoutes.get("/show-all-posts", userController.showAllPostsController);
 
+userRoutes.post(
+  "/request-password-reset",
+  userMiddleware.requestPasswordResetMiddleware,
+  userController.requestPasswordResetController
+);
+
+userRoutes.post(
+  "/reset-password",
+  userMiddleware.resetPasswordMiddleware,
+  userController.resetPasswordController
+);
+
 module.exports = userRoutes;

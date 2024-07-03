@@ -2,6 +2,8 @@ const { poolPromise, sql } = require("./database.services");
 const authJwt = require("../middlewares/authJwt.middlewares");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
+const crypto = require("crypto");
 require("dotenv").config();
 const secretKey = process.env.SECRET_KEY;
 const refreshSecretKey = process.env.REFRESH_SECRET_KEY;
@@ -31,6 +33,96 @@ async function loginUser(email, password) {
     throw new Error("Database query failed");
   }
 }
+
+if (
+  !process.env.EMAIL ||
+  !process.env.EMAIL_PASSWORD ||
+  !process.env.FRONTEND_URL
+) {
+  throw new Error("Missing required environment variables");
+}
+
+const transporter = nodemailer.createTransport({
+  service: "Gmail",
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+});
+
+const requestPasswordReset = async (email) => {
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input("email", sql.VarChar, email)
+      .query("SELECT user_id FROM Users WHERE email = @email AND status = 1");
+    const user = result.recordset[0];
+
+    if (!user) {
+      return { success: false, message: "User not found" };
+    }
+
+    const token = crypto.randomBytes(32).toString("hex");
+    const expiresAt = new Date(Date.now() + 3600000); // Token valid for 1 hour
+
+    await pool
+      .request()
+      .input("user_id", sql.Int, user.user_id)
+      .input("token", sql.VarChar, token)
+      .input("expires_at", sql.DateTime, expiresAt)
+      .query(
+        "INSERT INTO PasswordResetTokens (user_id, token, expires_at) VALUES (@user_id, @token, @expires_at)"
+      );
+
+    const mailOptions = {
+      to: email,
+      from: process.env.EMAIL,
+      subject: "Password Reset Request For Milk Shop Online Store",
+      text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n
+            You recently requested to reset your password. Click on the link below to change your password.\n
+             ${process.env.FRONTEND_URL}/reset-password?token=${token}\n
+             If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    return { success: true, message: "Password reset token sent" };
+  } catch (error) {
+    console.error("Error in requestPasswordReset:", error);
+    throw new Error("Failed to request password reset");
+  }
+};
+
+const resetPassword = async (token, newPassword) => {
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input("token", sql.VarChar, token)
+      .query(
+        "SELECT user_id, expires_at FROM PasswordResetTokens WHERE token = @token"
+      );
+    const resetToken = result.recordset[0];
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await pool
+      .request()
+      .input("user_id", sql.Int, resetToken.user_id)
+      .input("password", sql.VarChar, hashedPassword)
+      .query("UPDATE Users SET password = @password WHERE user_id = @user_id");
+
+    await pool
+      .request()
+      .input("token", sql.VarChar, token)
+      .query("DELETE FROM PasswordResetTokens WHERE token = @token");
+
+    return { success: true, message: "Password reset successful" };
+  } catch (error) {
+    console.error("Error in resetPassword:", error);
+    throw new Error("Failed to reset password");
+  }
+};
 
 async function registerUser(username, password, email) {
   try {
@@ -355,4 +447,6 @@ module.exports = {
   reportProduct,
   getPostById,
   showAllPosts,
+  requestPasswordReset,
+  resetPassword,
 };

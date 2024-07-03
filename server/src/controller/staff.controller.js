@@ -14,6 +14,7 @@ const {
   createPost,
   editVoucher,
   updatePost,
+  deletePost,
 } = require("../services/staff.services");
 
 const createVoucherController = async (req, res) => {
@@ -323,6 +324,22 @@ const updatePostController = async (req, res) => {
   }
 };
 
+const deletePostController = async (req, res) => {
+  const post_id = parseInt(req.params.id, 10);
+  try {
+    const result = await deletePost(post_id);
+    console.log(result);
+    if (result.success) {
+      return res.status(200).json({
+        message: result.message,
+        status: 200,
+      });
+    }
+  } catch (error) {
+    console.log("fail to delete a post");
+  }
+};
+
 module.exports = {
   createVoucherController,
   getAllUserController,
@@ -339,4 +356,5 @@ module.exports = {
   updateProductController,
   createPostController,
   updatePostController,
+  deletePostController,
 };
