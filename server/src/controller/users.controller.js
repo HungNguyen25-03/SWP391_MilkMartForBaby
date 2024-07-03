@@ -12,6 +12,9 @@ const {
   completeOrder,
   reportProduct,
   getPostById,
+  showAllPosts,
+  requestPasswordReset,
+  resetPassword,
 } = require("../services/users.services");
 
 const authJwt = require("../middlewares/authJwt.middlewares");
@@ -193,7 +196,7 @@ const showReviewsByProductIdController = async (req, res) => {
   try {
     const reviews = await showReviewsByProductId(product_id);
     if (reviews) {
-      res.status(200).json({ reviews });
+      res.status(200).json(reviews);
     } else {
       res.status(404).json({ message: "No reviews found" });
     }
@@ -253,7 +256,7 @@ const getPostByIdController = async (req, res) => {
 
 const showAllPostsController = async (req, res) => {
   try {
-    const result = await getAllPosts();
+    const result = await showAllPosts();
     if (result.success) {
       res.status(200).json(result.posts);
     } else {
@@ -261,6 +264,46 @@ const showAllPostsController = async (req, res) => {
     }
   } catch (error) {
     console.log("Fail to get Posts");
+  }
+};
+
+const requestPasswordResetController = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const response = await requestPasswordReset(email);
+    if (response.success) {
+      res.status(200).json({ message: response.message, status: 200 });
+    } else {
+      res.status(404).json({ message: response.message, status: 404 });
+    }
+  } catch (error) {
+    console.error("Error in requestPasswordResetController:", error);
+    res.status(500).send("Error requesting password reset");
+  }
+};
+
+const resetPasswordController = async (req, res) => {
+  const { token } = req.query;
+  const { newPassword } = req.body;
+
+  // Add checks to ensure the token and newPassword are defined
+  if (!token || !newPassword) {
+    return res
+      .status(400)
+      .json({ error: "Token and newPassword are required" });
+  }
+
+  try {
+    const response = await resetPassword(token, newPassword);
+    if (response.success) {
+      res.status(200).json({ message: response.message, status: 200 });
+    } else {
+      res.status(400).json({ message: response.message, status: 400 });
+    }
+  } catch (error) {
+    console.error("Error in resetPasswordController:", error);
+    res.status(500).send("Error resetting password");
   }
 };
 
@@ -280,4 +323,6 @@ module.exports = {
   reportProductController,
   getPostByIdController,
   showAllPostsController,
+  requestPasswordResetController,
+  resetPasswordController,
 };

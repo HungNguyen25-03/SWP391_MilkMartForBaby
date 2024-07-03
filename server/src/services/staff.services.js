@@ -483,7 +483,26 @@ async function updatePost(post_id, user_id, title, description, image_url) {
     } else {
       return { success: false, message: "Failed to update post" };
     }
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function deletePost(post_id) {
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input("post_id", sql.Int, post_id)
+      .query(`DELETE FROM Posts WHERE post_id = @post_id`);
+    if (result.rowsAffected[0] > 0) {
+      return { success: true, message: "Post deleted successfully" };
+    } else {
+      return { success: false, message: "Failed to delete post" };
+    }
+  } catch (error) {
+    throw error;
+  }
 }
 
 module.exports = {
@@ -502,4 +521,5 @@ module.exports = {
   updateProduct,
   createPost,
   updatePost,
+  deletePost,
 };

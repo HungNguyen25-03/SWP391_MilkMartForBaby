@@ -107,6 +107,112 @@ const registerUserMiddleware = async (req, res, next) => {
   }
 };
 
+const requestPasswordResetMiddleware = async (req, res, next) => {
+  try {
+    const errors = [];
+    const { email } = req.body;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!email) {
+      errors.push({
+        name: "email",
+        success: false,
+        message: "Email is required",
+        status: 400,
+      });
+    }
+
+    if (!emailRegex.test(email)) {
+      errors.push({
+        name: "email",
+        success: false,
+        message: "Invalid email format",
+        status: 400,
+      });
+    }
+
+    if (errors.length > 0) {
+      return next(errors);
+    }
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
+const resetPasswordMiddleware = async (req, res, next) => {
+  try {
+    const errors = [];
+    const pool = await poolPromise;
+    const { token } = req.query;
+    const { newPassword, confirmPassword } = req.body;
+    const result = await pool
+      .request()
+      .input("token", sql.VarChar, token)
+      .query(
+        "SELECT user_id, expires_at FROM PasswordResetTokens WHERE token = @token"
+      );
+    const resetToken = result.recordset[0];
+
+    if (!resetToken) {
+      errors.push({
+        name: "token",
+        success: false,
+        message: "Invalid or expired token",
+        status: 400,
+      });
+    }
+    if (resetToken.expires_at < new Date()) {
+      errors.push({
+        name: "token",
+        success: false,
+        message: "Token has expired",
+        status: 400,
+      });
+    }
+    if (!newPassword) {
+      errors.push({
+        name: "newPassword",
+        success: false,
+        message: "New password is required",
+        status: 400,
+      });
+    }
+    if (newPassword.length < 8 && newPassword.length > 0) {
+      errors.push({
+        name: "newPassword",
+        success: false,
+        message: "Password must be at least 8 characters long",
+        status: 400,
+      });
+    }
+    if (newPassword && newPassword.length > 20) {
+      errors.push({
+        name: "newPassword",
+        success: false,
+        message: "Password must be less than 20 characters long",
+        status: 400,
+      });
+    }
+    if (newPassword !== confirmPassword) {
+      errors.push({
+        name: "confirmPassword",
+        success: false,
+        message: "Passwords do not match",
+        status: 400,
+      });
+    }
+
+    if (errors.length > 0) {
+      return next(errors);
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
 const applyVoucherMiddleware = async (req, res, next) => {
   try {
     const errors = [];
@@ -328,4 +434,6 @@ module.exports = {
   claimVoucherMiddleware,
   reviewsByProductIdMiddlewares,
   completeOrderMiddlewares,
+  resetPasswordMiddleware,
+  requestPasswordResetMiddleware,
 };
