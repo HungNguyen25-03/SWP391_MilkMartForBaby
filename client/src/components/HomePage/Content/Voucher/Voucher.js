@@ -11,7 +11,8 @@ import { useNavigate } from "react-router-dom";
 
 export default function Voucher() {
   const [voucherList, setVoucherList] = useState([]);
-  const nav = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
   const [isGet, setIsGet] = useState({
     get: false,
     voucher_id: "",
@@ -22,17 +23,16 @@ export default function Voucher() {
     axios
       .get(`${MainAPI}/user/show-all-voucher`)
       .then((res) => {
-        // console.log(res.data.vouchers.vouchers);
         setVoucherList(res.data.vouchers.vouchers);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
+        setLoading(false);
       });
   }, []);
 
   const handleClick = (e) => {
-    console.log(e.target.value);
-    console.log(auth.user.user_id);
     axios
       .post(
         `${MainAPI}/user/claim-voucher`,
@@ -47,7 +47,6 @@ export default function Voucher() {
         }
       )
       .then((res) => {
-        console.log(res.data);
         setIsGet({
           get: true,
           voucher_id: e.target.value,
@@ -63,85 +62,64 @@ export default function Voucher() {
   return (
     <div className="voucher-container">
       <ToastContainer autoClose={2000} />
-      <h2 style={{ marginLeft: "20px", paddingTop: "20px" }}>Nhận voucher</h2>
-
-      <Slide
-        slidesToScroll={1}
-        slidesToShow={3}
-        autoplay={false}
-        indicators={true}
-        responsive={[
-          {
-            breakpoint: 800,
-            settings: {
-              slidesToShow: 3,
-              slidesToScroll: 1,
+      <h2 className="voucher-title">Nhận voucher</h2>
+      {loading ? (
+        <p>Loading vouchers...</p>
+      ) : (
+        <Slide
+          slidesToScroll={1}
+          slidesToShow={3}
+          autoplay={false}
+          indicators={true}
+          responsive={[
+            {
+              breakpoint: 800,
+              settings: {
+                slidesToShow: 3,
+                slidesToScroll: 1,
+              },
             },
-          },
-          {
-            breakpoint: 500,
-            settings: {
-              slidesToShow: 2,
-              slidesToScroll: 2,
+            {
+              breakpoint: 500,
+              settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+              },
             },
-          },
-        ]}
-      >
-        {voucherList.map((voucher) => (
-          <div
-            key={voucher.code}
-            style={{
-              textAlign: "center",
-              // background: "red",
-              padding: "30px 0",
-              fontSize: "20px",
-            }}
-            className="each-slide"
-          >
-            <div className="first-part">
-              <p className="fw-bold">{voucher.discount}%</p>
-            </div>
-
-            <div className="second-part">
-              <p style={{ fontSize: "15px" }} className="fw-bold">
-                Tất cả sản phẩm
-              </p>
-              <p style={{ fontSize: "13px" }}>{voucher.code}</p>
-              <div className="d-flex justify-content-between">
-                <span style={{ fontSize: "13px" }}>
-                  HSD:{voucher.expiration_date}
-                </span>
-                {isGet.get && isGet.voucher_id === voucher.voucher_id ? (
-                  <>
+          ]}
+        >
+          {voucherList.map((voucher) => (
+            <div key={voucher.code} className="each-slide">
+              <div className="first-part">
+                <p className="fw-bold">{voucher.discount}%</p>
+              </div>
+              <div className="second-part">
+                <p className="fw-bold">Tất cả sản phẩm</p>
+                <p>{voucher.code}</p>
+                <div className="button-container">
+                  <span>HSD: {voucher.expiration_date}</span>
+                  {isGet.get && isGet.voucher_id === voucher.voucher_id ? (
                     <button
                       className="btn btn-danger fw-bold px-4"
-                      style={{ borderRadius: "20px" }}
-                      value={voucher.voucher_id}
-                      onClick={() => {
-                        nav("/cart");
-                      }}
+                      onClick={() => navigate("/cart")}
                     >
                       Mua hàng
                     </button>
-                  </>
-                ) : (
-                  <>
-                    {" "}
+                  ) : (
                     <button
                       className="btn btn-danger fw-bold px-4"
-                      style={{ borderRadius: "20px" }}
                       value={voucher.voucher_id}
                       onClick={handleClick}
                     >
                       Lấy mã
                     </button>
-                  </>
-                )}
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </Slide>
+          ))}
+        </Slide>
+      )}
     </div>
   );
 }
