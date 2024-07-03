@@ -12,6 +12,7 @@ const {
   completeOrder,
   reportProduct,
   getPostById,
+  showAllPosts,
 } = require("../services/users.services");
 
 const authJwt = require("../middlewares/authJwt.middlewares");
@@ -253,7 +254,7 @@ const getPostByIdController = async (req, res) => {
 
 const showAllPostsController = async (req, res) => {
   try {
-    const result = await getAllPosts();
+    const result = await showAllPosts();
     if (result.success) {
       res.status(200).json(result.posts);
     } else {

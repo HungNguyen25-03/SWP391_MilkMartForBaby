@@ -163,7 +163,7 @@ export default function UserManagement() {
             data={records}
             selectableRows
             pagination
-            paginationRowsPerPageOptions={[6, 10]}
+            paginationRowsPerPageOptions={[5, 10]}
             className="table-content"
           />
         </div>
