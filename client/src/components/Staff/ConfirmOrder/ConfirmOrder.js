@@ -9,7 +9,7 @@ export default function ConfirmOrder() {
     const getStatusClass = (status) => {
         if (!status) return '';
         switch (status.toLowerCase()) {
-            case 'cancel':
+            case 'cancelled':
                 return 'status-cancel';
             case 'completed':
                 return 'status-complete';
@@ -17,7 +17,7 @@ export default function ConfirmOrder() {
                 return 'status-pending';
             case 'Completed':
                 return 'status-delivery';
-            case 'confirm':
+            case 'confirmed':
                 return 'status-confirm';
             case 'paid':
                 return 'status-paid';
