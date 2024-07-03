@@ -29,6 +29,8 @@ export default function CustomerDaHuy({ title }) {
     nav(`/trackorder/${id}`)
   };
 
+  console.log(cancelledOrderList)
+
   return (
     <div className={title === "Đã hủy" ? "dahuy" : "fade"}>
       <h5 className="fw-bold">{title}</h5>
@@ -41,23 +43,23 @@ export default function CustomerDaHuy({ title }) {
         cancelledOrderList.map((order) => {
           return (
             <div className="order">
+              <div style={{ textAlign: "right" }}>
+                <button
+                  style={{
+                    border: "none",
+                    backgroundColor: "#00CCFF",
+                    borderRadius: "10px",
+                    color: "white",
+                    padding: "10px",
+                  }}
+                  onClick={() => handTrackOrder(order.order_id)}
+                >
+                  Order Progress
+                </button>
+              </div>
               {order.products.map((product, index) => {
                 return (
                   <>
-                    <div style={{ textAlign: "right" }}>
-                      <button
-                        style={{
-                          border: "none",
-                          backgroundColor: "#00CCFF",
-                          borderRadius: "10px",
-                          color: "white",
-                          padding: "10px",
-                        }}
-                        onClick={() => handTrackOrder(product.order_id)}
-                      >
-                        Order Progress
-                      </button>
-                    </div>
                     <div className="tab-content">
                       <div key={index} className="cart-product-line d-flex ">
                         <div className="product-img">

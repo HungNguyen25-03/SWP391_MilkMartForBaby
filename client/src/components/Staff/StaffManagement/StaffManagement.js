@@ -7,6 +7,8 @@ import ManageVoucher from '../CreateVoucher/ManageVoucher';
 import ManageInventory from '../ManageInventory/ManageInventory';
 import TrackOrder from '../TrackOrder/TrackOrder'
 import ManagePosts from '../ManagePosts/ManagePosts';
+import ModalCreatePost from '../ManagePosts/ModalCreatePost/ModalCreatePost';
+import EditPost from '../ManagePosts/EditPost/EditPost';
 
 export default function StaffManagement() {
 
@@ -24,6 +26,8 @@ export default function StaffManagement() {
                         <Route path='/create_voucher_codes' element={<ManageVoucher />} />
                         <Route path='/track_orders' element={<TrackOrder />} />
                         <Route path='/manage_posts' element={<ManagePosts />} />
+                        <Route path='/create-post' element={<ModalCreatePost />} />
+                        <Route path='/edit-post/:id' element={<EditPost />} />
                     </Routes>
                 </div>
             </div>
