@@ -136,6 +136,14 @@ CREATE TABLE RefreshTokens (
   FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
+CREATE TABLE PasswordResetTokens (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    user_id INT NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
 -- Insert into Roles
 INSERT INTO Roles (role_id, role_name) VALUES
 ('admin', 'Admin'),
