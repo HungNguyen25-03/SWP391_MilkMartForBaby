@@ -18,6 +18,8 @@ import Unauthorized from "./components/Unauthorized/Unauthorized.js";
 import OrderPayment from "./components/OrderPayment/OrderPayment.js";
 import SearchPage from "./components/HomePage/Search/SearchPage.js";
 import Trackorder from "./components/UserAccount/Sidebar/ScreenCustomerAccount/TrackingOrder/Trackorder.js";
+import ForgotPassword from "./components/ForgotPassword/ForgotPassword.js";
+import ResetPassword from "./components/ForgotPassword/ResetPassword.js";
 
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
           <Route path="/register" element={<Register />}></Route>
           <Route path="/blogs" element={<Blog />}></Route>
           <Route path="/search" element={<SearchPage />}></Route>
+          <Route path="/reset-password" element={<ResetPassword />}></Route>
+          <Route path="/forgot-password" element={<ForgotPassword />}></Route>
           <Route path="/trackorder/:id" element={<Trackorder />}></Route>
           <Route
             path="/home/productdetail/:id"
