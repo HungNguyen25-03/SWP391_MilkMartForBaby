@@ -105,7 +105,7 @@ function Login() {
             </div>
             <div className="other">
               <Link to="/register">Register an account</Link>
-              <a href="#">Forget Password?</a>
+              <Link to="/forgot-password">Forget Password?</Link>
             </div>
 
             <input type="submit" value="Log In" className="login-btn"></input>
