@@ -345,7 +345,7 @@ const claimVoucherMiddleware = async (req, res, next) => {
     const usageResult = await pool.request()
       .query(`SELECT used FROM User_Vouchers WHERE user_id = '${user_id}' 
     AND voucher_id = '${voucher_id}'`);
-    console.log(usageResult.recordset);
+
     if (
       usageResult.recordset.length > 0 &&
       usageResult.recordset[0].used === false
