@@ -71,8 +71,7 @@ async function DeleteUser(user_id) {
      UPDATE Users SET status = 0 WHERE user_id = @user_id;
    `);
     const user = result.rowsAffected[0];
-    console.log(user);
-    console.log(result);
+
     if (user != 0) {
       return { success: true, user };
     } else {
