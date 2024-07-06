@@ -231,8 +231,7 @@ async function exportProduct(product_id) {
   `);
 
     const product = result.rowsAffected[0];
-    console.log(product);
-    console.log(result);
+
     if (product != 0) {
       return { success: true, product };
     } else {
@@ -303,7 +302,6 @@ async function confirmOrder(order_id) {
       .query(`
     UPDATE Orders SET status = 'Confirmed' WHERE order_id = @order_id;
   `);
-    console.log(result);
     if (result.rowsAffected[0] > 0) {
       return { success: true, message: "Order confirm successfully" };
     } else {

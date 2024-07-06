@@ -207,7 +207,6 @@ const showReviewsByProductIdController = async (req, res) => {
 
 const completeOrderController = async (req, res) => {
   const order_id = req.params.id;
-
   try {
     const order = await completeOrder(order_id);
     if (order.success) {

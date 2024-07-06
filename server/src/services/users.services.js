@@ -139,7 +139,10 @@ async function registerUser(username, password, email) {
       );
     const user_id = result.recordset[0].user_id;
     const tokens = await authJwt.generateToken(user_id);
-
+    await pool
+      .request()
+      .input("customer_id", sql.Int, user_id)
+      .query(`INSERT INTO Customer (customer_id) VALUES (@customer_id)`);
     return {
       success: true,
       message: "User registered successfully",
@@ -348,6 +351,29 @@ async function completeOrder(order_id) {
       .query(
         `UPDATE Orders SET status = 'Completed' WHERE order_id = @order_id`
       );
+
+    const completedOrderResult = await pool
+      .request()
+      .input("order_id", sql.Int, order_id)
+      .query(
+        `SELECT user_id, total_amount FROM Orders WHERE order_id = @order_id`
+      );
+    const completedOrder = completedOrderResult.recordset[0];
+    if (!completedOrder) {
+      return { success: false, message: "Order not found" };
+    }
+    const { user_id, total_amount } = completedOrder;
+    const loyaltyPoints = Math.floor(total_amount / 10000) * 100;
+    if (loyaltyPoints > 0) {
+      // Update customer's loyalty points
+      await pool
+        .request()
+        .input("user_id", sql.Int, user_id)
+        .input("loyaltyPoints", sql.Int, loyaltyPoints)
+        .query(
+          `UPDATE Customer SET loyalty_points = loyalty_points + @loyaltyPoints WHERE customer_id = @user_id`
+        );
+    }
     return { success: true, message: "Order completed successfully" };
   } catch (error) {
     throw error;

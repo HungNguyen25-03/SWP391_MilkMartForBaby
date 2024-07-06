@@ -408,7 +408,7 @@ const completeOrderMiddlewares = async (req, res, next) => {
       .request()
       .input("order_id", order_id)
       .query(
-        `SELECT * FROM Orders WHERE order_id = @order_id AND status = 'Completed'`
+        `SELECT COUNT(*) FROM Orders WHERE order_id = @order_id AND status = 'Completed'`
       );
 
     if (hasCompletedOrder.recordset.length > 0) {
