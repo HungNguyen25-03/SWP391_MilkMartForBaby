@@ -95,7 +95,7 @@ export default function ProductListShow({
 
   return (
     <div className="fillter_container">
-      <ToastContainer />
+      <ToastContainer autoClose={2000} />
       <div className="type">
         <div className="category">
           <p className="m-0">Loại Sữa:</p>
@@ -110,8 +110,9 @@ export default function ProductListShow({
                       setCountryFilters
                     );
                   }}
-                  className={`btn ${countryFilters?.includes(cate.country) ? "active" : ""
-                    }`}
+                  className={`btn ${
+                    countryFilters?.includes(cate.country) ? "active" : ""
+                  }`}
                   key={`filters-${index}`}
                 >
                   {cate.title}
@@ -133,8 +134,9 @@ export default function ProductListShow({
                       setAgeFilters
                     );
                   }}
-                  className={`btn ${ageFilters?.includes(age.title) ? "active" : ""
-                    }`}
+                  className={`btn ${
+                    ageFilters?.includes(age.title) ? "active" : ""
+                  }`}
                   key={`filters-${index}`}
                 >
                   {age.title}
@@ -237,8 +239,9 @@ export default function ProductListShow({
             <button
               key={index}
               onClick={() => handlePageChange(index + 1)}
-              className={`pagination-button ${index + 1 === currentPage ? "active" : ""
-                }`}
+              className={`pagination-button ${
+                index + 1 === currentPage ? "active" : ""
+              }`}
             >
               {index + 1}
             </button>

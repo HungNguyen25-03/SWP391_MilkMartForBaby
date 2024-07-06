@@ -38,7 +38,7 @@ export default function Voucher() {
         `${MainAPI}/user/claim-voucher`,
         {
           user_id: auth.user.user_id,
-          voucher_id: e.target.value,
+          voucher_id: parseInt(e.target.value),
         },
         {
           headers: {
@@ -55,7 +55,7 @@ export default function Voucher() {
       })
       .catch((err) => {
         console.log(err);
-        toast.error(err.response.data.errors[0].message);
+        // toast.error(err.response.data.errors[0].message)
       });
   };
 
