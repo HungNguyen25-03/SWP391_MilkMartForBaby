@@ -1,5 +1,4 @@
 .fixed-cart {
-  width: 30%;
   margin-left: 20px;
 
   .box-block {
@@ -23,6 +22,33 @@
 
       span {
         font-size: medium;
+      }
+
+      .custom-button {
+        border: none;
+        background-color: white;
+        color: lightgray;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      .custom-button.checked {
+        color: black;
+      }
+
+      .custom-button .number {
+        margin-right: 10px;
+      }
+
+      .custom-button .checkmark {
+        font-size: 20px;
+        color: lightgray;
+      }
+
+      .custom-button.checked .checkmark {
+        color: black;
       }
     }
 

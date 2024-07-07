@@ -25,9 +25,13 @@ export default function Cart() {
           <FaLongArrowAltLeft /> Tiếp tục mua hàng
         </button>
       </div>
-      <div className="order-information">
-        <OrderDetail />
-        <OrderUserInfo />
+      <div className="order-information row">
+        <div className="col-md-8">
+          <OrderDetail />
+        </div>
+        <div className="col-md-4">
+          <OrderUserInfo />
+        </div>
       </div>
       <FooterPage />
     </div>
