@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { productList } from "./Product";
 import axios from "axios";
 import { MainAPI } from "../../../API";
 import ProductListShow from "../../ProductListShow";
