@@ -503,6 +503,35 @@ async function deletePost(post_id) {
   }
 }
 
+async function showAllReport() {
+  try {
+    const pool = await poolPromise;
+    const result = await pool.request().query(`
+    SELECT 
+    Reports.report_id,
+    Reports.report_date,
+    Reports.report_description,
+    Users.username,
+    Products.product_name
+
+    FROM Reports
+    JOIN Users
+    ON Reports.user_id = Users.user_id
+    JOIN Products
+    ON Reports.product_id = Products.product_id
+    `);
+    const report = result.recordset;
+
+    if (report) {
+      return { success: true, report };
+    } else {
+      return { success: false, message: "Fail to connect Report" };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   createVoucher,
   getAllUser,
@@ -520,4 +549,5 @@ module.exports = {
   createPost,
   updatePost,
   deletePost,
+  showAllReport,
 };

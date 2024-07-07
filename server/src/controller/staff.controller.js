@@ -15,6 +15,7 @@ const {
   editVoucher,
   updatePost,
   deletePost,
+  showAllReport,
 } = require("../services/staff.services");
 
 const createVoucherController = async (req, res) => {
@@ -340,6 +341,21 @@ const deletePostController = async (req, res) => {
   }
 };
 
+const showAllReportController = async (req, res) => {
+  try {
+    const result = await showAllReport();
+    console.log(result);
+    if (result.success) {
+      return res.status(200).json(result.report);
+    } else {
+      return res.status(404).json({ message: result.message });
+    }
+  } catch (error) {
+    console.log("Fail to get all report", error);
+    res.status(500).json({ message: "Error getting all report" });
+  }
+};
+
 module.exports = {
   createVoucherController,
   getAllUserController,
@@ -357,4 +373,5 @@ module.exports = {
   createPostController,
   updatePostController,
   deletePostController,
+  showAllReportController,
 };
