@@ -79,7 +79,6 @@ async function getCompleteStatus() {
     const result = await request.query(query);
 
     const order = result.recordset;
-    console.log(order);
     if (order) {
       return { success: true, order };
     } else {
