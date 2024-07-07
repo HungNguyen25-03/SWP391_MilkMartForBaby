@@ -7,15 +7,18 @@ import { Link } from "react-router-dom";
 
 export default function UseFull() {
   return (
-    <div style={{ marginTop: '15px' }}>
+    <div style={{ marginTop: "15px" }}>
       <div className="d-flex justify-content-between align-center">
         <h2>Thông tin bổ ích</h2>
         <span>
           <Link
             to={"/blogs"}
-            style={{ textDecoration: "none", color: "black" }}
+            style={{
+              textDecoration: "none",
+              color: "FF3E9F",
+            }}
           >
-            Xem tất cả
+            Xem tất cả <IoIosArrowDropright />
           </Link>
         </span>
       </div>

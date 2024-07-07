@@ -68,7 +68,7 @@ export default function OrderUserInfo() {
 
     return { temporaryTemp, discountTemp, totalTemp };
   };
-  console.log(orderItem)
+  console.log(orderItem);
 
   useEffect(() => {
     const { temporaryTemp, discountTemp, totalTemp } = handleCalculate();
@@ -145,11 +145,12 @@ export default function OrderUserInfo() {
                 closeModal={() => {
                   setShow(false);
                 }}
-                onSubmit={() => { }}
+                onSubmit={() => {}}
                 errors={[]}
               />
             )}
           </div>
+          <div>Mart Xu</div>
         </div>
       </div>
       <div className="box-block">

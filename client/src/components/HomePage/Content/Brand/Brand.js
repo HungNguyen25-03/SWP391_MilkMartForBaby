@@ -5,7 +5,7 @@ import "./slick-theme.css";
 import "./Brand.scss";
 import { useState, useEffect, useRef } from "react";
 import { listBrand } from "./BrandList";
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
 
 function Arrow(props) {
   const { className, style, onClick } = props;
@@ -46,24 +46,40 @@ export default function Brand({ initialSlide = 0 }) {
 
   return (
     <>
-      <div className="titleBrand mt-5">
-        <h2>Brand</h2>
-      </div>
-
-      <div className="brand_container">
+      <div
+        className="brand_container mt-4"
+        style={{
+          backgroundColor: "white",
+          padding: "15px",
+          borderRadius: "15px",
+        }}
+      >
+        <div className="titleBrand m-0">
+          <h2>Brand</h2>
+        </div>
         <Slider ref={slider} {...settings}>
           {groupedBrands.map((group, index) => (
             <div key={index} className="slide-brand">
-              <div className="brand_row">
+              <div className="brand_row m-0">
                 {group.slice(0, 4).map((brand) => (
-                  <Link to={brand.title} className="brand_detail" key={brand.id}>
+                  <Link
+                    to={brand.title}
+                    className="brand_detail m-0"
+                    style={{ border: "0.1px solid gray" }}
+                    key={brand.id}
+                  >
                     <img src={brand.img} alt={brand.alt} />
                   </Link>
                 ))}
               </div>
               <div className="brand_row">
                 {group.slice(4, 8).map((brand) => (
-                  <Link to={brand.title} className="brand_detail" key={brand.id}>
+                  <Link
+                    to={brand.title}
+                    className="brand_detail m-0"
+                    style={{ border: "0.1px solid gray" }}
+                    key={brand.id}
+                  >
                     <img src={brand.img} alt={brand.alt} />
                   </Link>
                 ))}

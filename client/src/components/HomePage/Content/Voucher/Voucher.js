@@ -33,36 +33,41 @@ export default function Voucher() {
   }, []);
 
   const handleClick = (e) => {
-    axios
-      .post(
-        `${MainAPI}/user/claim-voucher`,
-        {
-          user_id: auth.user.user_id,
-          voucher_id: parseInt(e.target.value),
-        },
-        {
-          headers: {
-            "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+    try {
+      axios
+        .post(
+          `${MainAPI}/user/claim-voucher`,
+          {
+            user_id: auth.user.user_id,
+            voucher_id: parseInt(e.target.value),
           },
-        }
-      )
-      .then((res) => {
-        setIsGet({
-          get: true,
-          voucher_id: e.target.value,
+          {
+            headers: {
+              "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+            },
+          }
+        )
+        .then((res) => {
+          setIsGet({
+            get: true,
+            voucher_id: e.target.value,
+          });
+          toast.success(res.data.message);
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error(err.response.data.errors[0].message);
         });
-        toast.success(res.data.message);
-      })
-      .catch((err) => {
-        console.log(err);
-        // toast.error(err.response.data.errors[0].message)
-      });
+    } catch (err) {
+      console.log(err);
+      toast.error("Đăng nhập để nhận voucher");
+    }
   };
 
   return (
-    <div className="voucher-container">
+    <div className="voucher-container p-3">
       <ToastContainer autoClose={2000} />
-      <h2 className="voucher-title">Nhận voucher</h2>
+      <h2 className="voucher-title mb-2">Nhận voucher</h2>
       {loading ? (
         <p>Loading vouchers...</p>
       ) : (
