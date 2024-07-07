@@ -67,7 +67,13 @@ async function getProductById(product_id) {
   try {
     const pool = await poolPromise;
     const result = await pool.request().query(
-      `SELECT p.*, b.brand_name, oc.country_name FROM Products p JOIN Brands b ON p.brand_id = b.brand_id JOIN Originated_Country oc 
+      `SELECT p.*, 
+      b.brand_name,
+       oc.country_name 
+       FROM Products p 
+       JOIN Brands b
+        ON p.brand_id = b.brand_id
+         JOIN Originated_Country oc 
          ON p.country_id = oc.country_id WHERE product_id='${product_id}'`
     );
     const product = result.recordset;
@@ -277,6 +283,72 @@ async function getAvgRatingByProductId(product_id) {
   }
 }
 
+
+
+
+
+async function getAllProductWithBrand(page = 1, pageSize = 12, brand_name) {
+  try {
+    const pool = await poolPromise;
+    const offset = (page - 1) * pageSize;
+
+    // Query to get the total count of products
+    const countResult = await pool
+      .request()
+      .query("SELECT COUNT(*) as total FROM Products");
+    const totalProducts = countResult.recordset[0].total;
+    const totalPages = Math.ceil(totalProducts / pageSize);
+
+    // Query to get the paginated products with brand filter
+    let query = `
+      SELECT p.*, b.brand_name
+      FROM Products p 
+      JOIN Brands b ON p.brand_id = b.brand_id
+      WHERE 1=1
+    `;
+    const params = {};
+    if (brand_name) {
+      query += ` AND b.brand_name = @brand_name`;
+      params.brand_name = brand_name;
+    }
+    query += `
+      ORDER BY p.product_id
+      OFFSET @offset ROWS
+      FETCH NEXT @pageSize ROWS ONLY
+    `;
+
+    const result = await pool.request()
+      .input('offset', sql.Int, offset)
+      .input('pageSize', sql.Int, pageSize)
+      .input('brand_name', sql.NVarChar, brand_name)
+      .query(query);
+
+    const products = result.recordset;
+
+    if (products) {
+      const inStockProducts = products.filter((product) => product.stock > 0);
+      const outOfStockProducts = products.filter(
+        (product) => product.stock <= 0
+      );
+      return {
+        inStockProducts,
+        outOfStockProducts,
+        totalProducts,
+        currentPage: page,
+        totalPages,
+        pageSize,
+      };
+    } else {
+      throw new Error("Failed to retrieve products.");
+    }
+  } catch (error) {
+    console.error("Error in getAllProductWithBrand:", error.message);
+    throw error;
+  }
+}
+
+
+
 module.exports = {
   getAllProduct,
   getProductById,
@@ -285,4 +357,5 @@ module.exports = {
   getAllProductWihoutPagination,
   getAllCategory,
   getAvgRatingByProductId,
+  getAllProductWithBrand
 };
