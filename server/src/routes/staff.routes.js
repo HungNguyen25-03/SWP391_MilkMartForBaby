@@ -17,6 +17,7 @@ const {
   createPostController,
   updatePostController,
   deletePostController,
+  showAllReportController,
 } = require("../controller/staff.controller");
 const {
   createVoucherMiddleware,
@@ -140,6 +141,12 @@ staffRouters.delete(
   "/delete-post/:id",
   authenticateToken,
   deletePostController
+);
+
+staffRouters.get(
+  "/show-all-report",
+  authenticateToken,
+  showAllReportController
 );
 
 module.exports = staffRouters;
