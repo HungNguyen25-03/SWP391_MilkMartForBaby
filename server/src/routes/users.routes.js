@@ -92,4 +92,15 @@ userRoutes.post(
   userController.resetPasswordController
 );
 
+userRoutes.get(
+  "/loyalty-points/:id",
+  authJwt.authenticateToken,
+  userController.showLoyaltyPointsController
+);
+
+userRoutes.get(
+  "/mark-order-as-delivered/:id",
+  authJwt.authenticateToken,
+  userController.markOrderAsDeliveredController
+);
 module.exports = userRoutes;

@@ -15,6 +15,8 @@ const {
   showAllPosts,
   requestPasswordReset,
   resetPassword,
+  showLoyaltyPoints,
+  markOrderAsDelivered,
 } = require("../services/users.services");
 
 const authJwt = require("../middlewares/authJwt.middlewares");
@@ -253,6 +255,20 @@ const getPostByIdController = async (req, res) => {
   }
 };
 
+const showLoyaltyPointsController = async (req, res) => {
+  const customer_id = req.params.id;
+  try {
+    const result = await showLoyaltyPoints(customer_id);
+    if (result.success) {
+      res.json(result.loyaltyPoints);
+    } else {
+      res.json({ message: result.message });
+    }
+  } catch (error) {
+    console.log("Fail to get Points");
+  }
+};
+
 const showAllPostsController = async (req, res) => {
   try {
     const result = await showAllPosts();
@@ -306,6 +322,17 @@ const resetPasswordController = async (req, res) => {
   }
 };
 
+const markOrderAsDeliveredController = async (req, res) => {
+  const order_id = req.params.id;
+
+  try {
+    const result = await markOrderAsDelivered(order_id);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 module.exports = {
   registerUserController,
   loginUserController,
@@ -324,4 +351,6 @@ module.exports = {
   showAllPostsController,
   requestPasswordResetController,
   resetPasswordController,
+  showLoyaltyPointsController,
+  markOrderAsDeliveredController,
 };
