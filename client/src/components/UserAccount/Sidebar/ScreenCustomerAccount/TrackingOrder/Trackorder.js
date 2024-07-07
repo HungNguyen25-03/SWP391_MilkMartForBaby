@@ -164,7 +164,85 @@ export default function Trackorder() {
                 </>
               )}
 
-              {order.status === "delevered" && (
+              {order.status === "Confirmed" && (
+                <>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginTop: "80px",
+                    }}
+                  >
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                      <span style={{ fontSize: "70px" }}>
+                        {" "}
+                        <MdOutlinePendingActions color="#67b14e" />
+                      </span>
+                      <span>Chờ thanh toán</span>
+                    </div>
+                    &nbsp;
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <span
+                        style={{ border: "1px solid green", width: "100px" }}
+                      ></span>
+                      <span style={{ marginTop: "-2%" }}>&#62;</span>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                      <span style={{ fontSize: "70px" }}>
+                        {" "}
+                        <FaMoneyCheckDollar color="#67b14e" />
+                      </span>
+                      <span>Thanh Toán</span>
+                    </div>
+                    &nbsp;&nbsp;
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <span
+                        style={{ border: "1px solid green", width: "100px" }}
+                      ></span>
+                      <span style={{ marginTop: "-2%" }}>&#62;</span>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                      <span style={{ fontSize: "70px" }}>
+                        {" "}
+                        <FaBox color="#67b14e" />
+                      </span>
+                      <span>Chờ giao</span>
+                    </div>
+                    &nbsp;&nbsp;
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <span
+                        style={{ border: "1px solid black", width: "100px" }}
+                      ></span>
+                      <span style={{ marginTop: "-2%" }}>&#62;</span>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                      <span style={{ fontSize: "70px" }}>
+                        {" "}
+                        <FaMotorcycle />
+                      </span>
+                      <span>Đang giao</span>
+                    </div>
+                    &nbsp;&nbsp;
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <span
+                        style={{ border: "1px solid black", width: "100px" }}
+                      ></span>
+                      <span style={{ marginTop: "-2%" }}>&#62;</span>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                      <span style={{ fontSize: "70px" }}>
+                        {" "}
+                        <IoBagCheck />
+                      </span>
+                      <span>Đã giao</span>
+                    </div>
+                    &nbsp;&nbsp;
+                  </div>
+                </>
+              )}
+
+              {order.status === "Delevered" && (
                 <>
                   <div
                     style={{
@@ -242,7 +320,7 @@ export default function Trackorder() {
                 </>
               )}
 
-              {order.status === "pending" && (
+              {order.status === "Pending" && (
                 <>
                   <div
                     style={{
@@ -320,7 +398,7 @@ export default function Trackorder() {
                 </>
               )}
 
-              {order.status === "paid" && (
+              {order.status === "Paid" && (
                 <>
                   <div
                     style={{
@@ -398,7 +476,7 @@ export default function Trackorder() {
                 </>
               )}
 
-              {order.status === "cancelled" && (
+              {order.status === "Cancelled" && (
                 <>
                   <div
                     style={{
@@ -490,7 +568,7 @@ export default function Trackorder() {
                 </>
               )}
 
-              {order.status === "cancelled" ? (
+              {order.status === "Cancelled" ? (
                 <p
                   style={{
                     textAlign: "left",
