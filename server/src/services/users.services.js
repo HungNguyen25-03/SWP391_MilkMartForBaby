@@ -458,6 +458,62 @@ async function showAllPosts() {
   }
 }
 
+async function showLoyaltyPoints(customer_id) {
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input("customer_id", sql.Int, customer_id)
+      .query(
+        `SELECT loyalty_points FROM Customer WHERE customer_id = @customer_id`
+      );
+    return { success: true, loyaltyPoints: result.recordset[0].loyalty_points };
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function markOrderAsDelivered(order_id) {
+  try {
+    const pool = await poolPromise;
+    const currentStatusResult = await pool
+      .request()
+      .input("order_id", sql.Int, order_id)
+      .query(`SELECT status FROM Orders WHERE order_id = @order_id`);
+
+    if (currentStatusResult.recordset.length === 0) {
+      return { success: false, message: "Order not found" };
+    }
+
+    const currentStatus = currentStatusResult.recordset[0].status;
+
+    if (currentStatus !== "Confirmed") {
+      return {
+        success: false,
+        message: "Order status must be 'Confirmed' to change to 'Delivered'",
+      };
+    }
+
+    setTimeout(async () => {
+      await pool
+        .request()
+        .input("order_id", sql.Int, order_id)
+        .query(
+          `UPDATE Orders SET status = 'Delivered' WHERE order_id = @order_id`
+        );
+      console.log(`Order ${order_id} status changed to Delivered`);
+    }, 180000); // 3 minutes in milliseconds
+
+    return {
+      success: true,
+      message: `Order ${order_id} will be marked as Delivered in 3 minutes`,
+    };
+  } catch (error) {
+    console.error("Error in markOrderAsDelivered:", error);
+    throw new Error("Failed to mark order as Delivered");
+  }
+}
+
 module.exports = {
   loginUser,
   registerUser,
@@ -475,4 +531,6 @@ module.exports = {
   showAllPosts,
   requestPasswordReset,
   resetPassword,
+  showLoyaltyPoints,
+  markOrderAsDelivered,
 };
