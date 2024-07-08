@@ -12,7 +12,6 @@ export default function OrderDetail() {
     localCartList,
   } = useContext(CartContext);
 
-  console.log(localCartList);
 
   return (
     <>
