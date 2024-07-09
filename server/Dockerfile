@@ -1,5 +1,6 @@
-# Example Dockerfile for backend-container using Node.js image
-FROM node:20
+
+# Use the Node.js image based on Alpine Linux for a smaller footprint
+FROM node:20-alpine3.20
 
 
 # Set the working directory inside the container
@@ -10,6 +11,7 @@ COPY package*.json ./
 
 # Install dependencies
 RUN npm install
+
 
 
 # Copy your application code into the container

@@ -140,18 +140,21 @@ const getAvgRatingByProductIdController = async (req, res) => {
   }
 };
 
+
 const getProductByBrandName = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 12;
+
     const brand_name = req.params.brand_name;
+
 
     const { inStockProducts, outOfStockProducts, totalProducts, totalPages } = await getAllProductWithBrand(page, pageSize, brand_name);
 
     res.json({
       inStockProducts,
       outOfStockProducts,
-      page,
+      currentPage: page,
       pageSize,
       totalProducts,
       totalPages,
@@ -163,6 +166,7 @@ const getProductByBrandName = async (req, res) => {
 };
 
 
+
 module.exports = {
   getProduct,
   getProById,
@@ -171,5 +175,7 @@ module.exports = {
   getAllProductWithoutPaginationController,
   getAllCategoryController,
   getAvgRatingByProductIdController,
-  getProductByBrandName
+
+  getProductByBrandName,
+
 };

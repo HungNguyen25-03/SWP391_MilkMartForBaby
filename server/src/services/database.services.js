@@ -11,6 +11,7 @@ const sqlConfig = {
     trustServerCertificate: true,
     trustedConnection: false,
     enableArithAbort: true,
+    encrypt: true,
   },
 };
 

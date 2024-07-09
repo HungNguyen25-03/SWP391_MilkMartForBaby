@@ -25,4 +25,5 @@ productRouters.get(
 productRouters.get("/get-all-category", getAllCategoryController);
 productRouters.get("/get-avg-rating/:id", getAvgRatingByProductIdController);
 productRouters.get("/getProductBrand", getProductByBrandName);
+
 module.exports = productRouters;

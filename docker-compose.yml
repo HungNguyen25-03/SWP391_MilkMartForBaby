@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   sqlserver-container:
     image: mcr.microsoft.com/azure-sql-edge
@@ -12,9 +13,9 @@ services:
   backend-container:
     build:
       context: ./server
-      dockerfile: Dockerfile
+
     container_name: backend-container
-    restart: unless-stopped
+
     environment:
       SQL_USER: sa
       SQL_PASSWORD: YourStrongPassword123
