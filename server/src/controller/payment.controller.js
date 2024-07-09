@@ -71,8 +71,7 @@ const paymentController = async (req, res) => {
       amount: orderData.total_amount,
       description: `MilkMartSystem - Payment for the order #${transID}`,
       bank_code: "",
-      callback_url:
-        "https://71d3-113-172-57-171.ngrok-free.app/payment/callback",
+      callback_url: "https://deploy-be-render.onrender.com/payment/callback",
     };
 
     const data = `${config.app_id}|${order.app_trans_id}|${order.app_user}|${order.amount}|${order.app_time}|${order.embed_data}|${order.item}`;
