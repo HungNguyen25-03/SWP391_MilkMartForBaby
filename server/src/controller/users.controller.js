@@ -16,7 +16,6 @@ const {
   requestPasswordReset,
   resetPassword,
   showLoyaltyPoints,
-  markOrderAsDelivered,
 } = require("../services/users.services");
 
 const authJwt = require("../middlewares/authJwt.middlewares");
@@ -322,17 +321,6 @@ const resetPasswordController = async (req, res) => {
   }
 };
 
-const markOrderAsDeliveredController = async (req, res) => {
-  const order_id = req.params.id;
-
-  try {
-    const result = await markOrderAsDelivered(order_id);
-    res.status(200).json(result);
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-};
-
 module.exports = {
   registerUserController,
   loginUserController,
@@ -352,5 +340,4 @@ module.exports = {
   requestPasswordResetController,
   resetPasswordController,
   showLoyaltyPointsController,
-  markOrderAsDeliveredController,
 };
