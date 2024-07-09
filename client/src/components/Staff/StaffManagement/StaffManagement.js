@@ -9,6 +9,7 @@ import TrackOrder from '../TrackOrder/TrackOrder'
 import ManagePosts from '../ManagePosts/ManagePosts';
 import ModalCreatePost from '../ManagePosts/ModalCreatePost/ModalCreatePost';
 import EditPost from '../ManagePosts/EditPost/EditPost';
+import Report from '../Report/Report';
 
 export default function StaffManagement() {
 
@@ -27,6 +28,7 @@ export default function StaffManagement() {
                         <Route path='/track_orders' element={<TrackOrder />} />
                         <Route path='/manage_posts' element={<ManagePosts />} />
                         <Route path='/create-post' element={<ModalCreatePost />} />
+                        <Route path='/report' element={<Report />} />
                         <Route path='/edit-post/:id' element={<EditPost />} />
                     </Routes>
                 </div>
