@@ -6,6 +6,7 @@ const {
   getAllProductWihoutPagination,
   getAllCategory,
   getAvgRatingByProductId,
+  getAllProductWithBrand,
 } = require("../services/products.services");
 
 //Get All Product Controller
@@ -139,6 +140,29 @@ const getAvgRatingByProductIdController = async (req, res) => {
   }
 };
 
+const getProductByBrandName = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 12;
+    const brand_name = req.params.brand_name;
+
+    const { inStockProducts, outOfStockProducts, totalProducts, totalPages } = await getAllProductWithBrand(page, pageSize, brand_name);
+
+    res.json({
+      inStockProducts,
+      outOfStockProducts,
+      page,
+      pageSize,
+      totalProducts,
+      totalPages,
+    });
+  } catch (error) {
+    console.error("Failed to get products:", error.message);
+    res.status(500).json({ message: "Failed to retrieve products." });
+  }
+};
+
+
 module.exports = {
   getProduct,
   getProById,
@@ -147,4 +171,5 @@ module.exports = {
   getAllProductWithoutPaginationController,
   getAllCategoryController,
   getAvgRatingByProductIdController,
+  getProductByBrandName
 };

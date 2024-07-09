@@ -10,6 +10,7 @@ const {
   getAllProductWithoutPaginationController,
   getAllCategoryController,
   getAvgRatingByProductIdController,
+  getProductByBrandName,
 } = require("../controller/products.controller");
 
 // Define the routes with their corresponding controller functions
@@ -23,5 +24,5 @@ productRouters.get(
 );
 productRouters.get("/get-all-category", getAllCategoryController);
 productRouters.get("/get-avg-rating/:id", getAvgRatingByProductIdController);
-
+productRouters.get("/getProductBrand", getProductByBrandName);
 module.exports = productRouters;
