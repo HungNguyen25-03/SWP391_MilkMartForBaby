@@ -298,17 +298,59 @@ async function confirmOrder(order_id) {
   try {
     const pool = await poolPromise;
 
-    const result = await pool.request().input("order_id", sql.Int, order_id)
-      .query(`
-    UPDATE Orders SET status = 'Confirmed' WHERE order_id = @order_id;
-  `);
-    if (result.rowsAffected[0] > 0) {
-      return { success: true, message: "Order confirm successfully" };
-    } else {
+    // Confirm the order
+    const confirmResult = await pool
+      .request()
+      .input("order_id", sql.Int, order_id)
+      .query(
+        `UPDATE Orders SET status = 'Confirmed' WHERE order_id = @order_id`
+      );
+
+    if (confirmResult.rowsAffected[0] === 0) {
       return { success: false, message: "Failed to confirm order" };
     }
+
+    // Verify if the status is 'Confirmed'
+    const currentStatusResult = await pool
+      .request()
+      .input("order_id", sql.Int, order_id)
+      .query(`SELECT status FROM Orders WHERE order_id = @order_id`);
+
+    if (currentStatusResult.recordset.length === 0) {
+      return { success: false, message: "Order not found" };
+    }
+
+    const currentStatus = currentStatusResult.recordset[0].status;
+    console.log("Current status:", currentStatus);
+    if (currentStatus !== "Confirmed") {
+      return {
+        success: false,
+        message: "Order status must be 'Confirmed' to change to 'Delivered'",
+      };
+    }
+
+    // Set timeout to change status to 'Delivered'
+    setTimeout(async () => {
+      try {
+        await pool
+          .request()
+          .input("order_id", sql.Int, order_id)
+          .query(
+            `UPDATE Orders SET status = 'Delivered' WHERE order_id = @order_id`
+          );
+        console.log(`Order ${order_id} status changed to Delivered`);
+      } catch (error) {
+        console.error(`Error updating order ${order_id} to Delivered:`, error);
+      }
+    }, 60000); // 1 minute in milliseconds
+
+    return {
+      success: true,
+      message: `Order ${order_id} confirmed and will be marked as Delivered in 1 minute`,
+    };
   } catch (error) {
-    throw error;
+    console.error("Error in updateOrderStatus:", error);
+    throw new Error("Failed to update order status");
   }
 }
 

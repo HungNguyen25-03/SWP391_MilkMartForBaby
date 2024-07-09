@@ -98,9 +98,4 @@ userRoutes.get(
   userController.showLoyaltyPointsController
 );
 
-userRoutes.get(
-  "/mark-order-as-delivered/:id",
-  authJwt.authenticateToken,
-  userController.markOrderAsDeliveredController
-);
 module.exports = userRoutes;
