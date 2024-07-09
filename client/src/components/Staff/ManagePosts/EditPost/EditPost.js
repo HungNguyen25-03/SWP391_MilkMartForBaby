@@ -5,7 +5,8 @@ import { MainAPI } from "../../../API";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ENDPOINT = "staff/uploads";
 
@@ -75,15 +76,20 @@ export default function EditPost() {
       .then((res) => {
         console.log(res);
         toast.success(res.data.message);
-        nav("/staff/manage_posts");
+        setTimeout(() => {
+          nav("/staff/manage_posts");
+        }, 2000);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
+  console.log(post);
+
   return (
     <div className="create-post-container">
+      <ToastContainer />
       <div className="create-post-content">
         <h2 className="mb-3 mt-3">Edit Post</h2>
         <form class="row g-3">
@@ -104,6 +110,7 @@ export default function EditPost() {
               class="form-control"
               placeholder="Thumbnail Image URL"
               name="image_url"
+              value={post.image_url}
               onChange={(e) => {
                 setPost({ ...post, image_url: e.target.value });
               }}

@@ -6,8 +6,6 @@ import "./Header.scss";
 import axios from "axios";
 import { MainAPI } from "../../components/API";
 import AuthContext from "../../context/AuthProvider";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import useOrder from "../../hooks/useOrder";
 import { MdLogin } from "react-icons/md";
 import { RiLogoutBoxLine } from "react-icons/ri";
@@ -82,37 +80,42 @@ export default function HeaderPage() {
           </div>
 
           <div className="other_header d-flex align-center justify-content-space col-3">
-            <Link to="/cart" className="acc">
-              <div className="acc_icon">
-                <FaShoppingCart />
-              </div>
-              <div className="detail">Giỏ hàng({cartList.length})</div>&nbsp;
-            </Link>
-            <Link to="/customer-account" className="acc">
-              <div className="acc_icon">
-                <FaUser />
-              </div>
-              <div className="detail">Tài khoản</div>
-            </Link>
             {token ? (
-              <div className="acc" onClick={handleLogout}>
-                <div className="acc_icon">
-                  <RiLogoutBoxLine />
+              <>
+                <Link to="/cart" className="acc">
+                  <div className="acc_icon">
+                    <FaShoppingCart />
+                  </div>
+                  <div className="detail">Giỏ hàng({cartList.length})</div>
+                  &nbsp;
+                </Link>
+                <Link to="/customer-account" className="acc">
+                  <div className="acc_icon">
+                    <FaUser />
+                  </div>
+                  <div className="detail">Tài khoản</div>
+                </Link>{" "}
+                <div className="acc" onClick={handleLogout}>
+                  <div className="acc_icon">
+                    <RiLogoutBoxLine />
+                  </div>
+                  <div className="detail">Đăng xuất</div>
                 </div>
-                <div className="detail">Đăng xuất</div>
-              </div>
+              </>
             ) : (
-              <div
-                className="acc"
-                onClick={() => {
-                  nav("/login");
-                }}
-              >
-                <div className="acc_icon">
-                  <MdLogin />
+              <>
+                <div
+                  className="acc"
+                  onClick={() => {
+                    nav("/login");
+                  }}
+                >
+                  <div className="acc_icon">
+                    <MdLogin />
+                  </div>
+                  <div className="detail">Đăng Nhập</div>
                 </div>
-                <div className="detail">Đăng Nhập</div>
-              </div>
+              </>
             )}
           </div>
         </div>
