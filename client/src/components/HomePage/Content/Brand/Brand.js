@@ -63,7 +63,7 @@ export default function Brand({ initialSlide = 0 }) {
               <div className="brand_row m-0">
                 {group.slice(0, 4).map((brand) => (
                   <Link
-                    to={brand.title}
+                    to={`/brand/${brand.title}`}
                     className="brand_detail m-0"
                     style={{ border: "0.1px solid gray" }}
                     key={brand.id}
@@ -75,7 +75,7 @@ export default function Brand({ initialSlide = 0 }) {
               <div className="brand_row">
                 {group.slice(4, 8).map((brand) => (
                   <Link
-                    to={brand.title}
+                    to={`/brand/${brand.title}`}
                     className="brand_detail m-0"
                     style={{ border: "0.1px solid gray" }}
                     key={brand.id}

@@ -14,6 +14,7 @@ export default function ProductListShow({
   productList,
   changePage,
   totalPage,
+  isBrandPage,
 }) {
   const { handleAddToCart } = useContext(CartContext);
   const [ageFilters, setAgeFilters] = useState([]);
@@ -24,6 +25,7 @@ export default function ProductListShow({
   const [totalPageAll, setTotalPageAll] = useState(0);
   const [filterPage, setFilterPage] = useState(0);
   const itemsPerPage = 12;
+  console.log(isBrandPage);
 
   useEffect(() => {
     axios
@@ -96,56 +98,62 @@ export default function ProductListShow({
   return (
     <div className="fillter_container">
       <ToastContainer autoClose={2000} />
-      <div className="type">
-        <div className="category">
-          <p className="m-0">Loại Sữa:</p>
-          <div style={{ marginLeft: "25px" }}>
-            {categoryList.map((cate, index) => (
-              <div className="cate" key={cate.id}>
-                <button
-                  onClick={() => {
-                    handleFilterButtonClick(
-                      cate.country,
-                      countryFilters,
-                      setCountryFilters
-                    );
-                  }}
-                  className={`btn ${
-                    countryFilters?.includes(cate.country) ? "active" : ""
-                  }`}
-                  key={`filters-${index}`}
-                >
-                  {cate.title}
-                </button>
+      {!isBrandPage ? (
+        <>
+          <div className="type">
+            <div className="category">
+              <p className="m-0">Loại Sữa:</p>
+              <div style={{ marginLeft: "25px" }}>
+                {categoryList.map((cate, index) => (
+                  <div className="cate" key={cate.id}>
+                    <button
+                      onClick={() => {
+                        handleFilterButtonClick(
+                          cate.country,
+                          countryFilters,
+                          setCountryFilters
+                        );
+                      }}
+                      className={`btn ${
+                        countryFilters?.includes(cate.country) ? "active" : ""
+                      }`}
+                      key={`filters-${index}`}
+                    >
+                      {cate.title}
+                    </button>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-        <div className="category">
-          <p className="m-0">Độ tuổi:</p>
-          <div style={{ marginLeft: "25px" }}>
-            {ageList.map((age, index) => (
-              <div className="cate" key={age.id}>
-                <button
-                  onClick={() => {
-                    handleFilterButtonClick(
-                      age.title,
-                      ageFilters,
-                      setAgeFilters
-                    );
-                  }}
-                  className={`btn ${
-                    ageFilters?.includes(age.title) ? "active" : ""
-                  }`}
-                  key={`filters-${index}`}
-                >
-                  {age.title}
-                </button>
+            </div>
+            <div className="category">
+              <p className="m-0">Độ tuổi:</p>
+              <div style={{ marginLeft: "25px" }}>
+                {ageList.map((age, index) => (
+                  <div className="cate" key={age.id}>
+                    <button
+                      onClick={() => {
+                        handleFilterButtonClick(
+                          age.title,
+                          ageFilters,
+                          setAgeFilters
+                        );
+                      }}
+                      className={`btn ${
+                        ageFilters?.includes(age.title) ? "active" : ""
+                      }`}
+                      key={`filters-${index}`}
+                    >
+                      {age.title}
+                    </button>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      ) : (
+        <></>
+      )}
 
       <div className="product_detail text-center d-flex flex-column">
         <div className="row row-cols-5">
