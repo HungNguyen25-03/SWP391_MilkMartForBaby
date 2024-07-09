@@ -68,7 +68,9 @@ export default function ModalCreatePost() {
       .then((res) => {
         console.log(res);
         toast.success(res.data.message);
-        nav("/staff/manage_posts");
+        setTimeout(() => {
+          nav("/staff/manage_posts");
+        }, 2000);
       })
       .catch((err) => {
         console.log(err);
