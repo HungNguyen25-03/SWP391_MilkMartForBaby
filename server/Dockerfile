@@ -1,5 +1,7 @@
+
 # Use the Node.js image based on Alpine Linux for a smaller footprint
 FROM node:20-alpine3.20
+
 
 # Set the working directory inside the container
 WORKDIR /MilkShop/server
@@ -10,8 +12,7 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
-# Rebuild bcrypt for the current environment
-RUN npm rebuild bcrypt
+
 
 # Copy your application code into the container
 COPY . .

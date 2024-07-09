@@ -2,6 +2,8 @@ const { poolPromise, sql } = require("./database.services");
 const authJwt = require("../middlewares/authJwt.middlewares");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
+const crypto = require("crypto");
 require("dotenv").config();
 const secretKey = process.env.SECRET_KEY;
 const refreshSecretKey = process.env.REFRESH_SECRET_KEY;
@@ -32,6 +34,96 @@ async function loginUser(email, password) {
   }
 }
 
+if (
+  !process.env.EMAIL ||
+  !process.env.EMAIL_PASSWORD ||
+  !process.env.FRONTEND_URL
+) {
+  throw new Error("Missing required environment variables");
+}
+
+const transporter = nodemailer.createTransport({
+  service: "Gmail",
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+});
+
+const requestPasswordReset = async (email) => {
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input("email", sql.VarChar, email)
+      .query("SELECT user_id FROM Users WHERE email = @email AND status = 1");
+    const user = result.recordset[0];
+
+    if (!user) {
+      return { success: false, message: "User not found" };
+    }
+
+    const token = crypto.randomBytes(32).toString("hex");
+    const expiresAt = new Date(Date.now() + 3600000); // Token valid for 1 hour
+
+    await pool
+      .request()
+      .input("user_id", sql.Int, user.user_id)
+      .input("token", sql.VarChar, token)
+      .input("expires_at", sql.DateTime, expiresAt)
+      .query(
+        "INSERT INTO PasswordResetTokens (user_id, token, expires_at) VALUES (@user_id, @token, @expires_at)"
+      );
+
+    const mailOptions = {
+      to: email,
+      from: process.env.EMAIL,
+      subject: "Password Reset Request For Milk Shop Online Store",
+      text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n
+            You recently requested to reset your password. Click on the link below to change your password.\n
+             ${process.env.FRONTEND_URL}/reset-password?token=${token}\n
+             If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    return { success: true, message: "Password reset token sent" };
+  } catch (error) {
+    console.error("Error in requestPasswordReset:", error);
+    throw new Error("Failed to request password reset");
+  }
+};
+
+const resetPassword = async (token, newPassword) => {
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input("token", sql.VarChar, token)
+      .query(
+        "SELECT user_id, expires_at FROM PasswordResetTokens WHERE token = @token"
+      );
+    const resetToken = result.recordset[0];
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await pool
+      .request()
+      .input("user_id", sql.Int, resetToken.user_id)
+      .input("password", sql.VarChar, hashedPassword)
+      .query("UPDATE Users SET password = @password WHERE user_id = @user_id");
+
+    await pool
+      .request()
+      .input("token", sql.VarChar, token)
+      .query("DELETE FROM PasswordResetTokens WHERE token = @token");
+
+    return { success: true, message: "Password reset successful" };
+  } catch (error) {
+    console.error("Error in resetPassword:", error);
+    throw new Error("Failed to reset password");
+  }
+};
+
 async function registerUser(username, password, email) {
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -47,7 +139,10 @@ async function registerUser(username, password, email) {
       );
     const user_id = result.recordset[0].user_id;
     const tokens = await authJwt.generateToken(user_id);
-
+    await pool
+      .request()
+      .input("customer_id", sql.Int, user_id)
+      .query(`INSERT INTO Customer (customer_id) VALUES (@customer_id)`);
     return {
       success: true,
       message: "User registered successfully",
@@ -256,6 +351,29 @@ async function completeOrder(order_id) {
       .query(
         `UPDATE Orders SET status = 'Completed' WHERE order_id = @order_id`
       );
+
+    const completedOrderResult = await pool
+      .request()
+      .input("order_id", sql.Int, order_id)
+      .query(
+        `SELECT user_id, total_amount FROM Orders WHERE order_id = @order_id`
+      );
+    const completedOrder = completedOrderResult.recordset[0];
+    if (!completedOrder) {
+      return { success: false, message: "Order not found" };
+    }
+    const { user_id, total_amount } = completedOrder;
+    const loyaltyPoints = Math.floor(total_amount / 10000) * 100;
+    if (loyaltyPoints > 0) {
+      // Update customer's loyalty points
+      await pool
+        .request()
+        .input("user_id", sql.Int, user_id)
+        .input("loyaltyPoints", sql.Int, loyaltyPoints)
+        .query(
+          `UPDATE Customer SET loyalty_points = loyalty_points + @loyaltyPoints WHERE customer_id = @user_id`
+        );
+    }
     return { success: true, message: "Order completed successfully" };
   } catch (error) {
     throw error;
@@ -340,6 +458,62 @@ async function showAllPosts() {
   }
 }
 
+async function showLoyaltyPoints(customer_id) {
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input("customer_id", sql.Int, customer_id)
+      .query(
+        `SELECT loyalty_points FROM Customer WHERE customer_id = @customer_id`
+      );
+    return { success: true, loyaltyPoints: result.recordset[0].loyalty_points };
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function markOrderAsDelivered(order_id) {
+  try {
+    const pool = await poolPromise;
+    const currentStatusResult = await pool
+      .request()
+      .input("order_id", sql.Int, order_id)
+      .query(`SELECT status FROM Orders WHERE order_id = @order_id`);
+
+    if (currentStatusResult.recordset.length === 0) {
+      return { success: false, message: "Order not found" };
+    }
+
+    const currentStatus = currentStatusResult.recordset[0].status;
+
+    if (currentStatus !== "Confirmed") {
+      return {
+        success: false,
+        message: "Order status must be 'Confirmed' to change to 'Delivered'",
+      };
+    }
+
+    setTimeout(async () => {
+      await pool
+        .request()
+        .input("order_id", sql.Int, order_id)
+        .query(
+          `UPDATE Orders SET status = 'Delivered' WHERE order_id = @order_id`
+        );
+      console.log(`Order ${order_id} status changed to Delivered`);
+    }, 180000); // 3 minutes in milliseconds
+
+    return {
+      success: true,
+      message: `Order ${order_id} will be marked as Delivered in 3 minutes`,
+    };
+  } catch (error) {
+    console.error("Error in markOrderAsDelivered:", error);
+    throw new Error("Failed to mark order as Delivered");
+  }
+}
+
 module.exports = {
   loginUser,
   registerUser,
@@ -355,4 +529,8 @@ module.exports = {
   reportProduct,
   getPostById,
   showAllPosts,
+  requestPasswordReset,
+  resetPassword,
+  showLoyaltyPoints,
+  markOrderAsDelivered,
 };

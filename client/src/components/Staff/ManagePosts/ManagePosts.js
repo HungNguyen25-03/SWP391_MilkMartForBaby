@@ -10,30 +10,44 @@ import { DeleteIcon } from "../../../utils/Icon/DeleteIcon";
 import { MdModeEdit } from "react-icons/md";
 import "./ManagePost.scss";
 
-
 export default function ManagePosts() {
-
   // console.log(description);
   const { auth } = useAuth();
   const nav = useNavigate();
   const [records, setRecords] = useState([]);
 
+  const fetchData = () => {
+    axios
+      .get(`${MainAPI}/user/show-all-posts`)
+      .then((res) => {
+        console.log(res.data);
+        setRecords(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
-    axios.get(`${MainAPI}/user/show-all-posts`).then((res) => {
-      console.log(res.data);
-      setRecords(res.data)
-    }).catch((err) => {
-      console.log(err)
-    })
-  }, [])
+    fetchData();
+  }, []);
 
   const handleDelete = (id) => {
-
-  }
-
-  const handleEdit = (id) => {
-
-  }
+    axios
+      .delete(`${MainAPI}/staff/delete-post/${id}`, {
+        headers: {
+          "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        toast.success(res.data.message);
+        fetchData();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const column = [
     {
@@ -57,15 +71,12 @@ export default function ManagePosts() {
           <span
             className="action-btn"
             onClick={() => {
-              handleDelete(row.user_id);
+              handleDelete(row.post_id);
             }}
           >
             <DeleteIcon color="red" />
           </span>
-          <Link
-            className="action-btn"
-            to={`/staff/edit-post/${row.post_id}`}
-          >
+          <Link className="action-btn" to={`/staff/edit-post/${row.post_id}`}>
             <MdModeEdit color="green" />
           </Link>
         </div>
@@ -73,13 +84,14 @@ export default function ManagePosts() {
     },
   ];
 
-
   return (
     <>
       <div className="manage-post-container">
         <ToastContainer autoClose={2000} />
 
-        <Link to={"/staff/create-post"} className="create-post-btn">Thêm bài</Link>
+        <Link to={"/staff/create-post"} className="create-post-btn">
+          Thêm bài
+        </Link>
 
         <div className="table-post mt-3">
           <DataTable
@@ -87,7 +99,7 @@ export default function ManagePosts() {
             data={records}
             selectableRows
             pagination
-            paginationRowsPerPageOptions={[5, 10]}
+            paginationRowsPerPageOptions={[5]}
             className="table-content"
           />
         </div>

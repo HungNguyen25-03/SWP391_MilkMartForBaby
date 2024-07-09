@@ -3,17 +3,15 @@ import { useParams } from "react-router-dom";
 import ProductInfo from "./Detail/ProductInfo";
 import InfoDetail from "./DetailOfProduct/InfoDetail";
 import HeaderPage from "../../utils/Header/Header";
-import Rate from "./Rate/Rate";
 import FooterPage from "../../utils/Footer/FooterPage";
 import axios from "axios";
 import { MainAPI } from "../API";
+import Review from "./Reviews/Review";
 
 export default function ProductDetail() {
   const { id } = useParams();
 
   const [product, setProduct] = useState();
-  // const [dataProduct, setDataProduct] = useState();
-  // const [cus, setCus] = useState();
 
   useEffect(() => {
     axios
@@ -30,7 +28,7 @@ export default function ProductDetail() {
       <HeaderPage />
       {product && <ProductInfo product={product} />}
       {product && <InfoDetail product={product} />}
-      {/* {cus && <Rate cus={cus} />} */}
+      <Review />
       <FooterPage />
     </div>
   );

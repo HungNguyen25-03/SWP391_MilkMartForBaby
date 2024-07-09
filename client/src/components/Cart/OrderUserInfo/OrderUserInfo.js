@@ -8,6 +8,7 @@ import ModalVoucher from "../../../utils/ModalVoucher/ModalVoucher";
 import useOrder from "../../../hooks/useOrder";
 import { CartContext } from "../CartContext";
 import { formatVND } from "../../../utils/Format";
+import { FaBitcoin } from "react-icons/fa";
 
 export default function OrderUserInfo() {
   /* USESTATE */
@@ -29,6 +30,12 @@ export default function OrderUserInfo() {
   const { auth } = useAuth();
 
   const nav = useNavigate();
+
+  const [checked, setChecked] = useState(false);
+
+  const handleToggle = () => {
+    setChecked(!checked);
+  };
 
   /* USEEFFECT GET VOUCHER BY USER ID */
   useEffect(() => {
@@ -68,7 +75,7 @@ export default function OrderUserInfo() {
 
     return { temporaryTemp, discountTemp, totalTemp };
   };
-  console.log(orderItem)
+  console.log(orderItem);
 
   useEffect(() => {
     const { temporaryTemp, discountTemp, totalTemp } = handleCalculate();
@@ -145,10 +152,22 @@ export default function OrderUserInfo() {
                 closeModal={() => {
                   setShow(false);
                 }}
-                onSubmit={() => { }}
+                onSubmit={() => {}}
                 errors={[]}
               />
             )}
+          </div>
+          <div className="mt-2 ms-3 d-flex justify-content-between">
+            <h5>
+              Mart Xu <FaBitcoin color="yellow" />
+            </h5>
+            <button
+              className={`custom-button ${checked ? "checked" : ""}`}
+              onClick={handleToggle}
+            >
+              <span className="number">[-200đ]</span>
+              <span className="checkmark">{checked ? "✔" : "✖"}</span>
+            </button>
           </div>
         </div>
       </div>
@@ -160,9 +179,11 @@ export default function OrderUserInfo() {
         <div className="summary-item">
           Giảm giá sản phẩm: <span>-{formatVND(discount)}</span>
         </div>
-        <div className="summary-item">
-          Phí vận chuyển: <span>+0 ₫</span>
-        </div>
+        {checked && (
+          <div className="summary-item">
+            Đã dùng Mart Xu: <span>+0 ₫</span>
+          </div>
+        )}
         <div className="summary-item">
           Tổng tiền: <span>{formatVND(total)} (Đã bao gồm VAT)</span>
         </div>

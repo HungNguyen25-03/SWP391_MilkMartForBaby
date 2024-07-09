@@ -13,6 +13,10 @@ const {
   reportProduct,
   getPostById,
   showAllPosts,
+  requestPasswordReset,
+  resetPassword,
+  showLoyaltyPoints,
+  markOrderAsDelivered,
 } = require("../services/users.services");
 
 const authJwt = require("../middlewares/authJwt.middlewares");
@@ -194,7 +198,7 @@ const showReviewsByProductIdController = async (req, res) => {
   try {
     const reviews = await showReviewsByProductId(product_id);
     if (reviews) {
-      res.status(200).json({ reviews });
+      res.status(200).json(reviews);
     } else {
       res.status(404).json({ message: "No reviews found" });
     }
@@ -205,7 +209,6 @@ const showReviewsByProductIdController = async (req, res) => {
 
 const completeOrderController = async (req, res) => {
   const order_id = req.params.id;
-
   try {
     const order = await completeOrder(order_id);
     if (order.success) {
@@ -252,6 +255,20 @@ const getPostByIdController = async (req, res) => {
   }
 };
 
+const showLoyaltyPointsController = async (req, res) => {
+  const customer_id = req.params.id;
+  try {
+    const result = await showLoyaltyPoints(customer_id);
+    if (result.success) {
+      res.json(result.loyaltyPoints);
+    } else {
+      res.json({ message: result.message });
+    }
+  } catch (error) {
+    console.log("Fail to get Points");
+  }
+};
+
 const showAllPostsController = async (req, res) => {
   try {
     const result = await showAllPosts();
@@ -262,6 +279,57 @@ const showAllPostsController = async (req, res) => {
     }
   } catch (error) {
     console.log("Fail to get Posts");
+  }
+};
+
+const requestPasswordResetController = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const response = await requestPasswordReset(email);
+    if (response.success) {
+      res.status(200).json({ message: response.message, status: 200 });
+    } else {
+      res.status(404).json({ message: response.message, status: 404 });
+    }
+  } catch (error) {
+    console.error("Error in requestPasswordResetController:", error);
+    res.status(500).send("Error requesting password reset");
+  }
+};
+
+const resetPasswordController = async (req, res) => {
+  const { token } = req.query;
+  const { newPassword } = req.body;
+
+  // Add checks to ensure the token and newPassword are defined
+  if (!token || !newPassword) {
+    return res
+      .status(400)
+      .json({ error: "Token and newPassword are required" });
+  }
+
+  try {
+    const response = await resetPassword(token, newPassword);
+    if (response.success) {
+      res.status(200).json({ message: response.message, status: 200 });
+    } else {
+      res.status(400).json({ message: response.message, status: 400 });
+    }
+  } catch (error) {
+    console.error("Error in resetPasswordController:", error);
+    res.status(500).send("Error resetting password");
+  }
+};
+
+const markOrderAsDeliveredController = async (req, res) => {
+  const order_id = req.params.id;
+
+  try {
+    const result = await markOrderAsDelivered(order_id);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -281,4 +349,8 @@ module.exports = {
   reportProductController,
   getPostByIdController,
   showAllPostsController,
+  requestPasswordResetController,
+  resetPasswordController,
+  showLoyaltyPointsController,
+  markOrderAsDeliveredController,
 };

@@ -12,12 +12,11 @@ export default function OrderDetail() {
     localCartList,
   } = useContext(CartContext);
 
-  console.log(localCartList);
 
   return (
     <>
       {cartList.length === 0 ? (
-        <div className="cart_empty">
+        <div className="order-product-list d-flex flex-column justify-content-center align-items-center">
           <div>
             <img
               src="https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2Fcart-empty.png?alt=media&token=e796d2a1-62c9-4415-a878-c88499ed01e7"

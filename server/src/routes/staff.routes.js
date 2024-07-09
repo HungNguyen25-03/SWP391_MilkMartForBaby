@@ -16,6 +16,8 @@ const {
   updateProductController,
   createPostController,
   updatePostController,
+  deletePostController,
+  showAllReportController,
 } = require("../controller/staff.controller");
 const {
   createVoucherMiddleware,
@@ -25,6 +27,7 @@ const {
   addProductMiddlewares,
   updateProductMiddlewares,
   deleteProductMiddlewares,
+  createPostMiddlewares,
 } = require("../middlewares/staff.middleware");
 const { authenticateToken } = require("../middlewares/authJwt.middlewares");
 
@@ -127,6 +130,23 @@ staffRouters.post(
 
 staffRouters.put("/update-post/:id", authenticateToken, updatePostController);
 
-staffRouters.post("/create-post", createPostController);
+staffRouters.post(
+  "/create-post",
+  authenticateToken,
+  createPostMiddlewares,
+  createPostController
+);
+
+staffRouters.delete(
+  "/delete-post/:id",
+  authenticateToken,
+  deletePostController
+);
+
+staffRouters.get(
+  "/show-all-report",
+  authenticateToken,
+  showAllReportController
+);
 
 module.exports = staffRouters;

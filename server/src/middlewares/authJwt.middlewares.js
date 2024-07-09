@@ -7,10 +7,14 @@ const refreshSecretKey = process.env.REFRESH_SECRET_KEY;
 
 async function authenticateToken(req, res, next) {
   const token = req.headers["x-access-token"];
-  if (!token) return res.status(403).send("Token is required");
+  if (!token) {
+    return res.status(401).json({ message: "Token is required" });
+  }
 
   jwt.verify(token, secretKey, (err, user) => {
-    if (err) return res.status(403).send("Invalid token");
+    if (err) {
+      return res.status(403).json({ message: "Invalid token" });
+    }
     req.user = user;
     next();
   });

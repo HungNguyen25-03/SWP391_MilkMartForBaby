@@ -1,31 +1,19 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./Productinfo.scss";
 import { FaFacebookSquare } from "react-icons/fa";
 import { FaInstagramSquare } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { FaHome } from "react-icons/fa";
 import { CartContext } from "../../Cart/CartContext";
+import { formatVND } from "../../../utils/Format";
+import { MainAPI } from "../../API";
 
 export default function ProductInfo({ product }) {
-  const { handleAddToCart, decrementQuantity, incrementQuantity } =
-    useContext(CartContext);
+  const { handleAddToCart } = useContext(CartContext);
+  const { id } = useParams()
 
-  console.log(product)
-
-  const [quantity, setQuantity] = useState(1);
-
-  // const handleIncreaseQuantity = () => {
-  //   if (quantity < product.stock) {
-  //     setQuantity(quantity + 1);
-  //   }
-  // };
-
-  // const handleDescreaseQuantity = () => {
-  //   if (quantity > 0) {
-  //     setQuantity(quantity - 1);
-  //   }
-  // };
+  console.log(id)
 
   return (
     <>
@@ -37,18 +25,17 @@ export default function ProductInfo({ product }) {
           </Link>
         </div>
         <div className="container">
-          <div className="milk_name">
-            <h3>{product.product_name}</h3>
-          </div>
-
           <div className="row">
-            <div className="col-md-6">
+            <div className="col-md-6 info">
               <div className="ptc">
                 <img src={product.image_url} />
               </div>
             </div>
 
             <div className="col-md-6 info">
+              <div className="milk_name">
+                <h3>{product.product_name}</h3>
+              </div>
               <div className="brand">
                 Brand:&nbsp;&nbsp;&nbsp;&nbsp;
                 <span style={{ color: "#DB7093" }}>{product.brand_name}</span>
@@ -59,36 +46,16 @@ export default function ProductInfo({ product }) {
               </div>
 
               <div className="feed_rate">
-                Rating: &nbsp;&nbsp;{product.rate}&nbsp;
-                <span style={{ color: "orange" }}>★</span>&nbsp;&nbsp;&nbsp;
-                <span>||</span>&nbsp;&nbsp;&nbsp; FeedBack: &nbsp;&nbsp;
-                {product.feed}
+                Rating: &nbsp;&nbsp;<span style={{ color: 'red' }}>{product.age_range}</span>
+              </div>
+
+              <div className="feed_rate">
+                Description: &nbsp;&nbsp;{product.description}
               </div>
 
               <div className="price">
                 Price:&nbsp;&nbsp;&nbsp;
-                <span style={{ color: "red" }}>{product.price}</span>
-              </div>
-
-              <div className="quantity">
-                Quantity:&nbsp;&nbsp;
-                <button
-                  className="btn"
-                  onClick={() => {
-                    decrementQuantity(product);
-                  }}
-                >
-                  -
-                </button>
-                <span>{quantity}</span>
-                <button
-                  className="btn"
-                  onClick={() => {
-                    incrementQuantity(product);
-                  }}
-                >
-                  +
-                </button>
+                <span style={{ color: "red" }}>{formatVND(product.price)}</span>
               </div>
 
               <div className="add_buy">
@@ -103,6 +70,7 @@ export default function ProductInfo({ product }) {
                   </button>
                 </span>
               </div>
+
             </div>
           </div>
         </div>
@@ -123,7 +91,7 @@ export default function ProductInfo({ product }) {
         </a>
         &nbsp;&nbsp;<span>||</span>&nbsp;&nbsp;
         <FaHeart color="red" /> &nbsp;&nbsp;Liked! &nbsp;{" "}
-        <span>({product.like})</span>
+        <span>(100)</span>
       </div>
     </>
   );

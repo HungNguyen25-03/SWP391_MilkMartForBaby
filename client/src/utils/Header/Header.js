@@ -18,7 +18,7 @@ export default function HeaderPage() {
   const { setAuth } = useContext(AuthContext);
   const { setOrderInfomation } = useOrder();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { cartList } = useContext(CartContext)
+  const { cartList } = useContext(CartContext);
 
   const token = JSON.parse(localStorage.getItem("accessToken"));
   const nav = useNavigate();
@@ -37,7 +37,7 @@ export default function HeaderPage() {
         localStorage.removeItem("auth");
         setAuth({});
         setOrderInfomation({});
-        toast.success("Đăng xuất thành công");
+        // toast.success("Đăng xuất thành công");
         nav("/home");
       })
       .catch((err) => {
@@ -57,7 +57,6 @@ export default function HeaderPage() {
   return (
     <div className=" search-bar">
       <div className="container">
-        <ToastContainer />
         <div className="row justify-content-between align-items-center">
           <div
             className="logo col-3"

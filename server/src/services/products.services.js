@@ -67,7 +67,13 @@ async function getProductById(product_id) {
   try {
     const pool = await poolPromise;
     const result = await pool.request().query(
-      `SELECT p.*, b.brand_name, oc.country_name FROM Products p JOIN Brands b ON p.brand_id = b.brand_id JOIN Originated_Country oc 
+      `SELECT p.*, 
+      b.brand_name,
+       oc.country_name 
+       FROM Products p 
+       JOIN Brands b
+        ON p.brand_id = b.brand_id
+         JOIN Originated_Country oc 
          ON p.country_id = oc.country_id WHERE product_id='${product_id}'`
     );
     const product = result.recordset;
@@ -276,6 +282,7 @@ async function getAvgRatingByProductId(product_id) {
     throw error;
   }
 }
+
 
 
 async function getAllProductWithBrand(page = 1, pageSize = 12, brand_name) {

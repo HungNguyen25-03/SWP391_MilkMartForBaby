@@ -13,7 +13,9 @@ services:
   backend-container:
     build:
       context: ./server
+
     container_name: backend-container
+
     environment:
       SQL_USER: sa
       SQL_PASSWORD: YourStrongPassword123

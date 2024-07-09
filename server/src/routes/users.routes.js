@@ -80,4 +80,27 @@ userRoutes.get("/get-post/:id", userController.getPostByIdController);
 
 userRoutes.get("/show-all-posts", userController.showAllPostsController);
 
+userRoutes.post(
+  "/request-password-reset",
+  userMiddleware.requestPasswordResetMiddleware,
+  userController.requestPasswordResetController
+);
+
+userRoutes.post(
+  "/reset-password",
+  userMiddleware.resetPasswordMiddleware,
+  userController.resetPasswordController
+);
+
+userRoutes.get(
+  "/loyalty-points/:id",
+  authJwt.authenticateToken,
+  userController.showLoyaltyPointsController
+);
+
+userRoutes.get(
+  "/mark-order-as-delivered/:id",
+  authJwt.authenticateToken,
+  userController.markOrderAsDeliveredController
+);
 module.exports = userRoutes;
