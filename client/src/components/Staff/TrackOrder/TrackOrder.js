@@ -30,15 +30,15 @@ export default function TrackOrder() {
     const getStatusClass = (status) => {
         if (!status) return '';
         switch (status.toLowerCase()) {
-            case 'cancel':
+            case 'cancelled':
                 return 'status-cancel';
             case 'completed':
                 return 'status-complete';
             case 'pending':
                 return 'status-pending';
-            case 'complete':
+            case 'completed':
                 return 'status-delivery';
-            case 'confirm':
+            case 'confirmed':
                 return 'status-confirm';
             default:
                 return '';

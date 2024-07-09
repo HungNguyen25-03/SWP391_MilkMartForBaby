@@ -242,7 +242,7 @@ export default function Trackorder() {
                                 </>
                             )}
 
-                            {order.status === "Delevered" && (
+                            {order.status === "Delivered" && (
                                 <>
                                     <div
                                         style={{
