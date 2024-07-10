@@ -8,7 +8,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { MainAPI } from "../API";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 export default function ProductListShow({
   productList,
@@ -25,7 +25,8 @@ export default function ProductListShow({
   const [totalPageAll, setTotalPageAll] = useState(0);
   const [filterPage, setFilterPage] = useState(0);
   const itemsPerPage = 12;
-  console.log(isBrandPage);
+  const { brand_name } = useParams()
+  console.log(brand_name);
 
   useEffect(() => {
     axios
@@ -96,67 +97,61 @@ export default function ProductListShow({
   };
 
   return (
-    <div className="fillter_container">
+    <div className={brand_name !== undefined ? "filterBrand" : "fillter_container"}>
       <ToastContainer autoClose={2000} />
-      {!isBrandPage ? (
-        <>
-          <div className="type">
-            <div className="category">
-              <p className="m-0">Loại Sữa:</p>
-              <div style={{ marginLeft: "25px" }}>
-                {categoryList.map((cate, index) => (
-                  <div className="cate" key={cate.id}>
-                    <button
-                      onClick={() => {
-                        handleFilterButtonClick(
-                          cate.country,
-                          countryFilters,
-                          setCountryFilters
-                        );
-                      }}
-                      className={`btn ${
-                        countryFilters?.includes(cate.country) ? "active" : ""
+      <>
+        <div className="type">
+          <div className="category">
+            <p className="m-0">Loại Sữa:</p>
+            <div style={{ marginLeft: "25px" }}>
+              {categoryList.map((cate, index) => (
+                <div className="cate" key={cate.id}>
+                  <button
+                    onClick={() => {
+                      handleFilterButtonClick(
+                        cate.country,
+                        countryFilters,
+                        setCountryFilters
+                      );
+                    }}
+                    className={`btn ${countryFilters?.includes(cate.country) ? "active" : ""
                       }`}
-                      key={`filters-${index}`}
-                    >
-                      {cate.title}
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="category">
-              <p className="m-0">Độ tuổi:</p>
-              <div style={{ marginLeft: "25px" }}>
-                {ageList.map((age, index) => (
-                  <div className="cate" key={age.id}>
-                    <button
-                      onClick={() => {
-                        handleFilterButtonClick(
-                          age.title,
-                          ageFilters,
-                          setAgeFilters
-                        );
-                      }}
-                      className={`btn ${
-                        ageFilters?.includes(age.title) ? "active" : ""
-                      }`}
-                      key={`filters-${index}`}
-                    >
-                      {age.title}
-                    </button>
-                  </div>
-                ))}
-              </div>
+                    key={`filters-${index}`}
+                  >
+                    {cate.title}
+                  </button>
+                </div>
+              ))}
             </div>
           </div>
-        </>
-      ) : (
-        <></>
-      )}
+          <div className="category">
+            <p className="m-0">Độ tuổi:</p>
+            <div style={{ marginLeft: "25px" }}>
+              {ageList.map((age, index) => (
+                <div className="cate" key={age.id}>
+                  <button
+                    onClick={() => {
+                      handleFilterButtonClick(
+                        age.title,
+                        ageFilters,
+                        setAgeFilters
+                      );
+                    }}
+                    className={`btn ${ageFilters?.includes(age.title) ? "active" : ""
+                      }`}
+                    key={`filters-${index}`}
+                  >
+                    {age.title}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </>
 
-      <div className="product_detail text-center d-flex flex-column">
-        <div className="row row-cols-5">
+      <div className="product_detail text-center d-flex flex-column" >
+        <div className="row row-cols-5" style={{ justifyContent: 'center' }}>
           {ageFilters.length > 0 || countryFilters.length > 0 ? (
             <>
               {filteredItems.map((product) => (
@@ -247,15 +242,14 @@ export default function ProductListShow({
             <button
               key={index}
               onClick={() => handlePageChange(index + 1)}
-              className={`pagination-button ${
-                index + 1 === currentPage ? "active" : ""
-              }`}
+              className={`pagination-button ${index + 1 === currentPage ? "active" : ""
+                }`}
             >
               {index + 1}
             </button>
           ))}
         </div>
       </div>
-    </div>
+    </div >
   );
 }

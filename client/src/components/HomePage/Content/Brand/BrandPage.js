@@ -11,7 +11,7 @@ export default function BrandPage() {
   const [allProductList, setAllProductList] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
-  const [isBrandPage, setIsBrandPage] = useState(true);
+  const [isBrandPage, setIsBrandPage] = useState(false);
   console.log(brand_name);
 
   useEffect(() => {
