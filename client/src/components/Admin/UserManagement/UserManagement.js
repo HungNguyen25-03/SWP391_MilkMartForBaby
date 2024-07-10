@@ -38,7 +38,7 @@ export default function UserManagement() {
   }, []);
 
   function handleFilter(event) {
-    const newData = data.filter((record) => {
+    const newData = records.filter((record) => {
       return record.username
         .toLowerCase()
         .includes(event.target.value.toLowerCase());
@@ -132,10 +132,10 @@ export default function UserManagement() {
         <ToastContainer autoClose={2000} />
         <h1 className="mt-0">User Management</h1>
         <div className="user_manage mt-4">
-          <div className="search">
+          {/* <div className="search">
             <label>Search: </label>
             <input type="text" onChange={handleFilter}></input>
-          </div>
+          </div> */}
           <div className="add">
             <button
               className="btn"
