@@ -5,6 +5,7 @@ import FooterPage from "../../utils/Footer/FooterPage";
 import { Link } from "react-router-dom";
 import { MainAPI } from "../API";
 import axios from "axios";
+import { convertSQLDate } from "../../utils/Format";
 
 export default function Blog() {
   const [blogs, setBlogs] = useState([]);
@@ -37,7 +38,7 @@ export default function Blog() {
                     <h4>{blog.title}</h4>
                     <div className="blog-content">{blog.content}</div>
                     <div className="text-end mt-3 ">
-                      <p className="fs-6">{blog.post_date}</p>
+                      <p className="fs-6">{convertSQLDate(blog.post_date)}</p>
                     </div>
                   </div>
                 </div>

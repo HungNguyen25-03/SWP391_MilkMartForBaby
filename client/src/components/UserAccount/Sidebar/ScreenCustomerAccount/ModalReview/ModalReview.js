@@ -69,10 +69,13 @@ export default function ModalReview({
       )
       .then((res) => {
         closeModal();
+        console.log(res);
         toast.success("Report thành công");
       })
       .catch((err) => {
-        toast.error("Report thất bại");
+        closeModal();
+        console.log(err);
+        toast.error("Bạn đã đánh giá sản phẩm này");
       });
   };
 
@@ -100,7 +103,8 @@ export default function ModalReview({
       })
       .catch((err) => {
         console.log(err);
-        toast.error("Đánh giá thất bại");
+        closeModal();
+        toast.error("Bạn đã đánh giá sản phẩm này");
       });
     onSubmit({ feedback, currentValue });
   };

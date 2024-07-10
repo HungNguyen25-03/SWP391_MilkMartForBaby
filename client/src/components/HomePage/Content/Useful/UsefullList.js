@@ -1,23 +1,16 @@
 export const listUsefull = [
   {
-    id: 1,
-    title: "Enfamama A+ và Similac Mom",
-    img: "assest/images/usefull/use1.png",
-    info: "So sánh 2 dòng sữa phổ biến cho mẹ bầu - Enfamama A+ và Similac Mom",
-    view: "19k",
-  },
-  {
-    id: 2,
+    id: 10,
     title: "Vinamilk Organic Gold",
     img: "assest/images/usefull/use2.png",
     info: "5 lý do mẹ nên tin chọn sữa Vinamilk Organic Gold cho bé yêu",
     view: "29k",
   },
   {
-    id: 3,
+    id: 9,
     title: " Meiji",
     img: "assest/images/usefull/use3.png",
-    info: "Hướng dẫn cách pha và bảo quản sữa Meiji nhập khẩu",
+    info: "Review sữa bầu Morinaga có tốt không?",
     view: "9k",
   },
   {

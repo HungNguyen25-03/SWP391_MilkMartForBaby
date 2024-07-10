@@ -10,3 +10,9 @@ export const formattedDate = (date) => {
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
   return `${year}-${month}`;
 };
+
+export function convertSQLDate(sqlDate) {
+  const date = new Date(sqlDate);
+  const options = { year: "numeric", month: "short", day: "2-digit" };
+  return date.toLocaleDateString("en-US", options);
+}
