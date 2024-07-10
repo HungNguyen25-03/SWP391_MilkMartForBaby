@@ -15,7 +15,7 @@ export default function ConfirmOrder() {
                 return 'status-complete';
             case 'pending':
                 return 'status-pending';
-            case 'Completed':
+            case 'Delivered':
                 return 'status-delivery';
             case 'confirmed':
                 return 'status-confirm';
