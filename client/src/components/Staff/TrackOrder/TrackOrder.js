@@ -36,10 +36,12 @@ export default function TrackOrder() {
                 return 'status-complete';
             case 'pending':
                 return 'status-pending';
-            case 'completed':
+            case 'Completed':
                 return 'status-delivery';
             case 'confirmed':
                 return 'status-confirm';
+            case 'paid':
+                return 'status-paid';
             default:
                 return '';
         }

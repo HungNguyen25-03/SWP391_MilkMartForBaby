@@ -7,25 +7,25 @@ import "react-toastify/dist/ReactToastify.css";
 import { MainAPI } from "../../API";
 
 export default function ConfirmOrder() {
-  const getStatusClass = (status) => {
-    if (!status) return "";
-    switch (status.toLowerCase()) {
-      case "cancelled":
-        return "status-cancel";
-      case "completed":
-        return "status-complete";
-      case "pending":
-        return "status-pending";
-      case "Completed":
-        return "status-delivery";
-      case "confirmed":
-        return "status-confirm";
-      case "paid":
-        return "status-paid";
-      default:
-        return "";
-    }
-  };
+    const getStatusClass = (status) => {
+        if (!status) return '';
+        switch (status.toLowerCase()) {
+            case 'cancelled':
+                return 'status-cancel';
+            case 'completed':
+                return 'status-complete';
+            case 'pending':
+                return 'status-pending';
+            case 'Delivered':
+                return 'status-delivery';
+            case 'confirmed':
+                return 'status-confirm';
+            case 'paid':
+                return 'status-paid';
+            default:
+                return '';
+        }
+    };
 
   const checkStatusIsPending = (status) => {
     if (!status) return false;
