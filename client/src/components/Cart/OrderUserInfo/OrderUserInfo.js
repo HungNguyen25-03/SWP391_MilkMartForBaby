@@ -23,6 +23,7 @@ export default function OrderUserInfo() {
   const [temporary, setTemporary] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [total, setTotal] = useState(0);
+  const [point, setPoint] = useState(0);
 
   /* USECONTEXT */
   const { orderInfomation, setOrderInfomation } = useOrder();
@@ -54,29 +55,23 @@ export default function OrderUserInfo() {
       });
   }, []);
 
-  const handleCalculate = () => {
-    const temporaryTemp = cartList.reduce((total, item) => {
-      return total + item.price * item.quantity;
-    }, 0);
+  useEffect(() => {
+    axios
+      .get(`${MainAPI}/user/loyalty-points/${auth.user.user_id}`, {
+        headers: {
+          "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        setPoint(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
-    let discountTemp = orderInfomation.discount * temporaryTemp;
-    if (isNaN(discountTemp)) {
-      discountTemp = 0;
-    }
-
-    const totalTemp = temporaryTemp - discountTemp;
-
-    setOrderItem({
-      ...orderItem,
-      total_amount: totalTemp,
-      user_id: auth.user.user_id,
-      orderItems: cartList,
-    });
-
-    return { temporaryTemp, discountTemp, totalTemp };
-  };
-  console.log(orderItem);
-
+  // USEEFFECT CALCULATE TOTAL
   useEffect(() => {
     const { temporaryTemp, discountTemp, totalTemp } = handleCalculate();
 
@@ -89,7 +84,7 @@ export default function OrderUserInfo() {
       temporary: temporary,
       total: total,
     });
-  }, [cartList, orderInfomation.discount]);
+  }, [cartList, orderInfomation.discount, checked]);
 
   console.log(orderItem);
   const handleClick = () => {
@@ -111,6 +106,33 @@ export default function OrderUserInfo() {
         console.log(err);
       });
   };
+
+  const handleCalculate = () => {
+    const temporaryTemp = cartList.reduce((total, item) => {
+      return total + item.price * item.quantity;
+    }, 0);
+
+    let discountTemp = orderInfomation.discount * temporaryTemp;
+    if (isNaN(discountTemp)) {
+      discountTemp = 0;
+    }
+
+    let totalTemp = temporaryTemp - discountTemp;
+
+    if (checked) {
+      totalTemp -= point;
+    }
+
+    setOrderItem({
+      ...orderItem,
+      total_amount: totalTemp,
+      user_id: auth.user.user_id,
+      orderItems: cartList,
+    });
+
+    return { temporaryTemp, discountTemp, totalTemp };
+  };
+  console.log(orderItem);
 
   return (
     <div className="fixed-cart">
@@ -165,7 +187,7 @@ export default function OrderUserInfo() {
               className={`custom-button ${checked ? "checked" : ""}`}
               onClick={handleToggle}
             >
-              <span className="number">[-200đ]</span>
+              <span className="number">[-{point}đ]</span>
               <span className="checkmark">{checked ? "✔" : "✖"}</span>
             </button>
           </div>
@@ -181,7 +203,7 @@ export default function OrderUserInfo() {
         </div>
         {checked && (
           <div className="summary-item">
-            Đã dùng Mart Xu: <span>+0 ₫</span>
+            Đã dùng Mart Xu: <span>-{point} ₫</span>
           </div>
         )}
         <div className="summary-item">

@@ -18,7 +18,7 @@ const config = {
 
 const paymentController = async (req, res) => {
   const embed_data = {
-    redirecturl: "http://localhost:3000/customer-account",
+    redirecturl: "https://swp391-milkmartforbaby.onrender.com/customer-account",
   };
   const pool = await poolPromise;
   const order_id = req.body.order_id;
@@ -72,7 +72,7 @@ const paymentController = async (req, res) => {
       description: `MilkMartSystem - Payment for the order #${transID}`,
       bank_code: "",
       callback_url:
-        "https://71d3-113-172-57-171.ngrok-free.app/payment/callback",
+        "https://swp391-milkmartforbaby-be.onrender.com/payment/callback",
     };
 
     const data = `${config.app_id}|${order.app_trans_id}|${order.app_user}|${order.amount}|${order.app_time}|${order.embed_data}|${order.item}`;
