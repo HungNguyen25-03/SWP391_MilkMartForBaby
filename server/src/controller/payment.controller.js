@@ -18,7 +18,7 @@ const config = {
 
 const paymentController = async (req, res) => {
   const embed_data = {
-    redirecturl: "https://swp391-milkmartforbaby.onrender.com/customer-account",
+    redirecturl: "https://deploy-fe-gtv7.vercel.app/customer-account",
   };
   const pool = await poolPromise;
   const order_id = req.body.order_id;
