@@ -174,7 +174,7 @@ export default function OrderUserInfo() {
                 closeModal={() => {
                   setShow(false);
                 }}
-                onSubmit={() => {}}
+                onSubmit={() => { }}
                 errors={[]}
               />
             )}
@@ -217,6 +217,6 @@ export default function OrderUserInfo() {
           Tiếp tục
         </button>
       </div>
-    </div>
+    </div >
   );
 }

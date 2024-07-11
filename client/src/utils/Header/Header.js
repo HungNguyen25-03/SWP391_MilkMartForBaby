@@ -58,6 +58,7 @@ export default function HeaderPage() {
         <div className="row justify-content-between align-items-center">
           <div
             className="logo col-3"
+            style={{ cursor: "pointer" }}
             onClick={() => {
               nav("/home");
             }}
