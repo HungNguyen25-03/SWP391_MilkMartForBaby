@@ -4,7 +4,7 @@ import NavBar from "../NavBar/NavBar";
 import "./Edit.scss";
 import { MainAPI } from "../../API";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Edit() {
@@ -31,7 +31,6 @@ export default function Edit() {
       .then((res) => res.json())
       .then((data) => {
         const result = data.user[0];
-        passwordFromDb = result.password;
         setUser({
           username: result.username,
           role_id: result.role_id,
@@ -43,9 +42,6 @@ export default function Edit() {
   }, []);
 
   const handleSubmit = (e) => {
-    if (user.password === "") {
-      user.password = passwordFromDb;
-    }
     e.preventDefault();
     axios
       .put(`${MainAPI}/admin/update/${id}`, user, {
@@ -55,7 +51,9 @@ export default function Edit() {
       })
       .then((res) => {
         toast.success(res.data.message);
-        nav("/admin/user");
+        setTimeout(() => {
+          nav("/admin/user");
+        }, 2000);
       })
       .catch((err) => {
         console.log(err.response.data.errors);
@@ -71,6 +69,7 @@ export default function Edit() {
 
   return (
     <div className="edit-container">
+      <ToastContainer />
       <NavBar />
       <div className="content">
         <div className="d-flex w-100 vh-100 justify-content-center align-items-center">
@@ -95,28 +94,6 @@ export default function Edit() {
               {specificError("username") && (
                 <p className="text-danger fw-bold m-0">
                   {specificError("username").message}
-                </p>
-              )}
-
-              <div>
-                <label htmlFor="password">Password: </label>
-                <input
-                  type="text"
-                  name="password"
-                  className="form-control"
-                  placeholder="Enterpassword"
-                  value=""
-                  onChange={(e) => {
-                    setUser({
-                      ...user,
-                      password: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-              {specificError("password") && (
-                <p className="text-danger fw-bold m-0">
-                  {specificError("password").message}
                 </p>
               )}
 

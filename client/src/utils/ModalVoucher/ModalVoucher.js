@@ -73,7 +73,7 @@ export default function ModalVoucher({
                 Tất cả sản phẩm
               </p>
               <p style={{ fontSize: "13px" }}>{voucher.code}</p>
-              <div className="d-flex justify-content-between">
+              <div className="m-0">
                 <span style={{ fontSize: "13px" }}>
                   HSD:{voucher.expiration_date}
                 </span>
@@ -81,11 +81,12 @@ export default function ModalVoucher({
                   <>
                     {" "}
                     <button
-                      className="btn btn-danger fw-bold px-4 "
+                      className="btn btn-danger fw-bold "
                       style={{
                         borderRadius: "20px",
                         color: "Black",
                         backgroundColor: "#F5F7FD",
+                        margin: 0,
                       }}
                       value={voucher.voucher_id}
                     >
@@ -100,6 +101,7 @@ export default function ModalVoucher({
                         borderRadius: "20px",
                         color: "white",
                         backgroundColor: "#ff0064",
+                        margin: 0,
                       }}
                       value={voucher.voucher_id}
                       onClick={handleApplyVoucher}

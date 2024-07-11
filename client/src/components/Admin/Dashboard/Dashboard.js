@@ -40,7 +40,7 @@ export default function Dashboard() {
       .then((res) => {
         console.log(res.data);
         setData(res.data);
-        setCancelOrder(res.data.canceledOrdersPerMont);
+        setCancelOrder(res.data.canceledOrdersPerMonth);
       })
       .catch((err) => {
         console.log(err);
@@ -70,7 +70,7 @@ export default function Dashboard() {
                 <div className="card-body col-10">
                   <div className="card-title fw-bold">Số đơn hàng đã hủy</div>
                   <div className="d-flex justify-content-between m-0">
-                    <div>20</div>
+                    <div>{cancelOrder}</div>
                     <div className="col-2 icon">
                       <BsBoxSeam />
                     </div>
