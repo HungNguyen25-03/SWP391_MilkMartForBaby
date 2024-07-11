@@ -151,7 +151,7 @@ export default function ProductListShow({
       </>
 
       <div className="product_detail text-center d-flex flex-column" >
-        <div className="row row-cols-5" style={{ justifyContent: 'center' }}>
+        <div className="row row-cols-4 cardRow">
           {ageFilters.length > 0 || countryFilters.length > 0 ? (
             <>
               {filteredItems.map((product) => (

@@ -39,7 +39,6 @@
 
   .product_detail {
     display: flex;
-    flex-wrap: wrap;
     justify-content: space-between;
     width: 75%;
   }
@@ -208,7 +207,7 @@
 
       .btn:hover {
         box-shadow: 3px 3px 0px 0px rgba(0, 0, 0);
-      }
+      }    
 
       .active {
         background-color: #1e293b;
@@ -219,8 +218,7 @@
 
   .product_detail {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    text-align: left;
     width: 75%;
   }
 
