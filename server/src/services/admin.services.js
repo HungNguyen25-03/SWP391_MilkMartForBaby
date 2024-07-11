@@ -82,7 +82,7 @@ async function DeleteUser(user_id) {
   }
 }
 
-async function updateUser(user_id, username, password, email, role_id) {
+async function updateUser(user_id, username, email, role_id) {
   try {
     const pool = await poolPromise;
     const request = pool.request().input("user_id", user_id);
@@ -92,12 +92,6 @@ async function updateUser(user_id, username, password, email, role_id) {
     if (username) {
       request.input("username", username);
       updateFields.push("username = @username");
-    }
-
-    if (password) {
-      // Ensure password is hashed before this step
-      request.input("password", password);
-      updateFields.push("password = @password");
     }
 
     if (email) {

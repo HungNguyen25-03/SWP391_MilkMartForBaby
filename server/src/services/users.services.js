@@ -380,7 +380,20 @@ async function completeOrder(order_id) {
           `UPDATE Customer SET loyalty_points = loyalty_points + @loyaltyPoints WHERE customer_id = @user_id`
         );
     }
-    return { success: true, message: "Order completed successfully" };
+    const updatedLoyaltyPointsResult = await pool
+      .request()
+      .input("user_id", sql.Int, user_id)
+      .query(
+        `SELECT loyalty_points FROM Customer WHERE customer_id = @user_id`
+      );
+
+    const updatedLoyaltyPoints =
+      updatedLoyaltyPointsResult.recordset[0]?.loyalty_points;
+
+    return {
+      success: true,
+      message: `Order completed successfully. You have earned ${loyaltyPoints} points. Your total loyalty points are now ${updatedLoyaltyPoints}.`,
+    };
   } catch (error) {
     throw error;
   }
