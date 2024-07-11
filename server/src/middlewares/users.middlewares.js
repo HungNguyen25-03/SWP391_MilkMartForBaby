@@ -408,10 +408,10 @@ const completeOrderMiddlewares = async (req, res, next) => {
       .request()
       .input("order_id", order_id)
       .query(
-        `SELECT COUNT(*) FROM Orders WHERE order_id = @order_id AND status = 'Completed'`
+        `SELECT COUNT(*) AS completedOrder FROM Orders WHERE order_id = @order_id AND status = 'Completed'`
       );
 
-    if (hasCompletedOrder.recordset.length > 0) {
+    if (hasCompletedOrder.recordset.completedOrder > 0) {
       errors.push({
         name: "order",
         success: false,

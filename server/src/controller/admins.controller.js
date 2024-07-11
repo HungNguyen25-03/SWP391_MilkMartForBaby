@@ -31,16 +31,10 @@ const createUserController = async (req, res) => {
 
 const updateUserController = async (req, res) => {
   const user_id = parseInt(req.params.id, 10);
-  const { username, password, email, role_id } = req.body;
+  const { username, email, role_id } = req.body;
   console.log(req.body);
   try {
-    const result = await updateUser(
-      user_id,
-      username,
-      password,
-      email,
-      role_id
-    );
+    const result = await updateUser(user_id, username, email, role_id);
     if (result.success) {
       return res.status(200).json({
         message: result.message,

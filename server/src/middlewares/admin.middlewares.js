@@ -21,7 +21,7 @@ const createUserMiddleware = async (req, res, next) => {
       message: "Password is required",
       status: 400,
     });
-    
+
   if (!role_id)
     errors.push({ name: "role_id", message: "Role is required", status: 400 });
 
@@ -31,7 +31,7 @@ const createUserMiddleware = async (req, res, next) => {
       message: "Invalid email format",
       status: 400,
     });
-    
+
   if (password.length < 8)
     errors.push({
       name: "password",
@@ -107,15 +107,6 @@ const updateUserMiddleware = async (req, res, next) => {
       });
     }
 
-    if (!password) {
-      errors.push({
-        name: "password",
-        success: false,
-        message: "Password is required",
-        status: 400,
-      });
-    }
-
     if (!role_id) {
       errors.push({
         name: "role_id",
@@ -130,24 +121,6 @@ const updateUserMiddleware = async (req, res, next) => {
         name: "email",
         success: false,
         message: "Invalid email format",
-        status: 400,
-      });
-    }
-
-    if (password.length < 8 && password.length > 0) {
-      errors.push({
-        name: "password",
-        success: false,
-        message: "Password must be at least 8 characters long",
-        status: 400,
-      });
-    }
-
-    if (password && password.length > 20) {
-      errors.push({
-        name: "password",
-        success: false,
-        message: "Password must be less than 20 characters long",
         status: 400,
       });
     }
