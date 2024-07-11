@@ -12,7 +12,7 @@ function Arrow(props) {
   return (
     <div
       className={className}
-      style={{ ...style, display: "block", background: "none" }}
+      style={{ ...style, display: "block" }}
       onClick={onClick}
     />
   );
@@ -45,49 +45,38 @@ export default function Brand({ initialSlide = 0 }) {
   }
 
   return (
-    <>
-      <div
-        className="brand_container mt-4"
-        style={{
-          backgroundColor: "white",
-          padding: "15px",
-          borderRadius: "15px",
-        }}
-      >
-        <div className="titleBrand m-0">
-          <h2>Brand</h2>
-        </div>
-        <Slider ref={slider} {...settings}>
-          {groupedBrands.map((group, index) => (
-            <div key={index} className="slide-brand">
-              <div className="brand_row m-0">
-                {group.slice(0, 4).map((brand) => (
-                  <Link
-                    to={`/brand/${brand.title}`}
-                    className="brand_detail m-0"
-                    style={{ border: "0.1px solid gray" }}
-                    key={brand.id}
-                  >
-                    <img src={brand.img} alt={brand.alt} />
-                  </Link>
-                ))}
-              </div>
-              <div className="brand_row">
-                {group.slice(4, 8).map((brand) => (
-                  <Link
-                    to={`/brand/${brand.title}`}
-                    className="brand_detail m-0"
-                    style={{ border: "0.1px solid gray" }}
-                    key={brand.id}
-                  >
-                    <img src={brand.img} alt={brand.alt} />
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ))}
-        </Slider>
+    <div className="brand_container mt-4">
+      <div className="titleBrand m-0">
+        <h2>Brand</h2>
       </div>
-    </>
+      <Slider ref={slider} {...settings}>
+        {groupedBrands.map((group, index) => (
+          <div key={index} className="slide-brand">
+            <div className="brand_row m-0">
+              {group.slice(0, 4).map((brand) => (
+                <Link
+                  to={`/brand/${brand.title}`}
+                  className="brand_detail m-0"
+                  key={brand.id}
+                >
+                  <img src={brand.img} alt={brand.alt} />
+                </Link>
+              ))}
+            </div>
+            <div className="brand_row">
+              {group.slice(4, 8).map((brand) => (
+                <Link
+                  to={`/brand/${brand.title}`}
+                  className="brand_detail m-0"
+                  key={brand.id}
+                >
+                  <img src={brand.img} alt={brand.alt} />
+                </Link>
+              ))}
+            </div>
+          </div>
+        ))}
+      </Slider>
+    </div>
   );
 }
