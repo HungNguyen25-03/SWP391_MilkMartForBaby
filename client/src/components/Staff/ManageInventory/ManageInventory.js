@@ -14,6 +14,7 @@ export default function ManageInventory() {
   const [proName, setProName] = useState("");
   const [price, setPrice] = useState("");
   const [stock, setStock] = useState("");
+  const [img, setImg] = useState("");
   const [editProductId, setEditProductId] = useState(null);
   const [showAdd, setShowAdd] = useState(false);
 
@@ -36,6 +37,8 @@ export default function ManageInventory() {
     fetchData();
   }, []);
 
+  console.log(inventory);
+
   const handleActionClick = (index) => {
     setActionVisible(actionVisible === index ? null : index);
   };
@@ -46,6 +49,7 @@ export default function ManageInventory() {
     setProName(product.product_name);
     setPrice(product.price);
     setStock(product.stock);
+    setImg(product.image_url);
     setShowEditProduct(true);
   };
 
@@ -62,6 +66,7 @@ export default function ManageInventory() {
       },
       body: JSON.stringify({
         product_name: proName,
+        image_url: img,
         price: price,
         stock: stock,
       }),
@@ -78,6 +83,7 @@ export default function ManageInventory() {
         setProName("");
         setPrice("");
         setStock("");
+        setImg("");
         setEditProductId(null);
       })
       .catch((error) => console.error("Error updating product:", error));
@@ -117,6 +123,7 @@ export default function ManageInventory() {
       },
       body: JSON.stringify({
         product_name: proName,
+        image_url: img,
         price: price,
         stock: stock,
       }),
@@ -131,23 +138,38 @@ export default function ManageInventory() {
         setProName("");
         setPrice("");
         setStock("");
+        setImg("");
         setShowAdd(false);
         toast.success("Product added successfully");
       })
       .catch((error) => console.error("Error adding product:", error));
   };
 
+  const handleCancelAddProduct = () => {
+    setProName("");
+    setPrice("");
+    setStock("");
+    setImg("");
+    setShowAdd(false);
+  }
+  const handleCancelEditProduct = () => {
+    setProName("");
+    setPrice("");
+    setStock("");
+    setImg("");
+    setShowEditProduct(false)
+  }
+
   return (
     <div className="inventory">
       <ToastContainer />
       <div className="create-inventory-btn">
-        <button
+        <button className="btn btn-primary"
           style={{
             border: "none",
             borderRadius: "20px",
             marginRight: "20px",
             marginTop: "20px",
-            backgroundColor: "#00CCFF",
           }}
           onClick={() => setShowAdd(true)}
         >
@@ -158,6 +180,15 @@ export default function ManageInventory() {
         <div className="add-voucher" style={{ marginLeft: "10px" }}>
           <div className="add-voucvher-detail">
             <h4>Add New Product</h4>
+            <div>
+              <label>Image URL:</label>
+              <input
+                type="text"
+                value={img}
+                style={{ width: "80%", marginBottom: '5px' }}
+                onChange={(event) => setImg(event.target.value)}
+              />
+            </div>
             <label>Product Name:</label>
             <input
               type="text"
@@ -179,7 +210,10 @@ export default function ManageInventory() {
             <button className="add-cancel" onClick={handleAddProduct}>
               Add
             </button>
-            <button className="add-cancel" onClick={() => setShowAdd(false)}>
+            <button className="add-cancel"
+              // onClick={() => setShowAdd(false)}
+              onClick={() => handleCancelAddProduct()}
+            >
               Cancel
             </button>
           </div>
@@ -189,6 +223,15 @@ export default function ManageInventory() {
         <div className="edit-voucher" style={{ marginLeft: "10px" }}>
           <div className="edit-voucvher-detail">
             <h4>Edit Product</h4>
+            <div>
+              <label>Image URL:</label>
+              <input
+                type="text"
+                value={img}
+                style={{ width: "80%", marginBottom: '5px' }}
+                onChange={(event) => setImg(event.target.value)}
+              />
+            </div>
             <label>Product Name:</label>
             <input
               type="text"
@@ -212,7 +255,8 @@ export default function ManageInventory() {
             </button>
             <button
               className="add-cancel"
-              onClick={() => setShowEditProduct(false)}
+              // onClick={() => setShowEditProduct(false)}
+              onClick={() => handleCancelEditProduct()}
             >
               Cancel
             </button>
@@ -224,6 +268,7 @@ export default function ManageInventory() {
           <thead>
             <tr>
               <th>Product ID</th>
+              <th>Image</th>
               <th>Product Name</th>
               <th>Price</th>
               <th>Stock</th>
@@ -239,6 +284,11 @@ export default function ManageInventory() {
             {inventory.map((invent, index) => (
               <tr key={index}>
                 <td style={{ padding: "10px" }}>{invent.product_id}</td>
+                <td style={{ textAlign: 'center' }}>
+                  <div style={{ width: '90px', height: '120px', marginLeft: '9%' }}>
+                    <img style={{ width: '100%', height: '100%' }} src={invent.image_url} alt={invent.image_url} />
+                  </div>
+                </td>
                 <td>{invent.product_name}</td>
                 <td>{formatVND(invent.price)}</td>
                 <td>{invent.stock}</td>
@@ -250,8 +300,8 @@ export default function ManageInventory() {
                     ▪▪▪
                   </button>
                   {actionVisible === index && (
-                    <div className="action-menu">
-                      <button
+                    <div className="action-menu" style={{ marginTop: '10px' }}>
+                      <button className="icon_btn"
                         style={{
                           border: "none",
                           backgroundColor: "none",
@@ -262,7 +312,7 @@ export default function ManageInventory() {
                         <BsJournalCheck color="green" />
                       </button>
 
-                      <button
+                      <button className="icon_btn"
                         style={{
                           border: "none",
                           backgroundColor: "none",

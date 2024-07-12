@@ -44,6 +44,13 @@
         background: none;
         border: none;
         font-size: 16px;
+        border-radius: 10px;
+        border: 1px solid #000000;
+        transition: transform 0.3s, box-shadow 0.3s;
+        &:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+          }
     }
 
     .create-inventory-btn {
@@ -60,4 +67,14 @@
     .code-dis {
         margin-left: 10px;
     }
+}
+
+.icon_btn {
+    border-radius: 10px;
+    border: 1px solid #ffffff;
+    transition: transform 0.3s, box-shadow 0.3s;
+    &:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      }
 }
