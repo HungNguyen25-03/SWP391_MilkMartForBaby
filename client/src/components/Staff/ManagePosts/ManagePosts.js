@@ -9,6 +9,7 @@ import DataTable from "react-data-table-component";
 import { DeleteIcon } from "../../../utils/Icon/DeleteIcon";
 import { MdModeEdit } from "react-icons/md";
 import "./ManagePost.scss";
+import { convertSQLDate } from "../../../utils/Format";
 
 export default function ManagePosts() {
   // console.log(description);
@@ -62,7 +63,7 @@ export default function ManagePosts() {
     },
     {
       name: "Post date",
-      selector: (row) => row.post_date,
+      selector: (row) => convertSQLDate(row.post_date),
       sortable: true,
     },
     {

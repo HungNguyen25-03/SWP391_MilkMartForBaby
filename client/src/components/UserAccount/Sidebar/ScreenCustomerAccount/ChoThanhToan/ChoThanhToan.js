@@ -75,10 +75,9 @@ export default function ChoThanhToan({ title }) {
             <>
               <div className="order">
                 <div style={{ textAlign: "right" }}>
-                  <button
+                  <button className="btn btn-primary m-0"
                     style={{
                       border: "none",
-                      backgroundColor: "#00CCFF",
                       borderRadius: "10px",
                       color: "white",
                       padding: "10px",

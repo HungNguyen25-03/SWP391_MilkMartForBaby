@@ -50,8 +50,8 @@ export default function NavBarStaff() {
             </div>
 
             <div>
-                <button
-                    style={{ textAlign: 'center', backgroundColor: '#00ccff', borderRadius: '50px', border: 'none' }}
+                <button className="btn btn-primary"
+                    style={{ textAlign: 'center', borderRadius: '50px', border: 'none' }}
                     onClick={handleLogout}
                 >
                     Đăng xuất

@@ -85,9 +85,13 @@ export default function HeaderPage() {
               <>
                 <Link to="/cart" className="acc">
                   <div className="acc_icon">
-                    <FaShoppingCart />
+                    <button type="button" class="btn position-relative">
+                      <FaShoppingCart />
+                      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {cartList.length <= 10 ? cartList.length : 10 + "+"}
+                      </span>
+                    </button>
                   </div>
-                  <div className="detail">Giỏ hàng({cartList.length})</div>
                   &nbsp;
                 </Link>
                 <Link to="/customer-account" className="acc">

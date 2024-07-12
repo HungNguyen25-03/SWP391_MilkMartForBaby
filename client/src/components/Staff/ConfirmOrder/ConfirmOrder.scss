@@ -54,7 +54,7 @@
                 color: #ffc107;
             }
     
-            .status-delevery {
+            .status-delivered {
                 color: #a304ff;
             }
     
@@ -86,7 +86,7 @@
                 background-color: #ffc107;
             }
     
-            .status-delevery .status-dot {
+            .status-delivered .status-dot {
                 background-color: #a304ff;
             }
     
@@ -96,10 +96,26 @@
         }
     
 
-        .action-btn {
+        .action-btn-confirm {
             background: none;
             border: none;
             font-size: 16px;
+            transition: transform 0.3s, box-shadow 0.3s;
+
+            &:hover {
+                transform: scale(1.5);
+            }
+        }
+
+        .action-btn-cancel {
+            background: none;
+            border: none;
+            font-size: 16px;
+            transition: transform 0.3s, box-shadow 0.3s;
+
+            &:hover {
+                transform: scale(1.5);
+            }
         }
     }
 }

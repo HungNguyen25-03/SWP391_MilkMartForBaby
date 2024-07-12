@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './TrackOrder.scss'
 import { MainAPI } from '../../API';
-import useAuth from '../../../hooks/useAuth';
+import { convertSQLDate } from '../../../utils/Format';
 
 export default function TrackOrder() {
     const [trackOrderList, setTrackOrderList] = useState([])
@@ -36,8 +36,8 @@ export default function TrackOrder() {
                 return 'status-complete';
             case 'pending':
                 return 'status-pending';
-            case 'Completed':
-                return 'status-delivery';
+            case 'delivered':
+                return 'status-delivered';
             case 'confirmed':
                 return 'status-confirm';
             case 'paid':
@@ -69,7 +69,7 @@ export default function TrackOrder() {
                         {trackOrderList.map((confirm) => (
                             <tr key={confirm.order_id}>
                                 <td>{confirm.order_id}</td>
-                                <td>{confirm.order_date}</td>
+                                <td>{convertSQLDate(confirm.order_date)}</td>
                                 <td>{confirm.username}</td>
                                 <td className={getStatusClass(confirm.status)}>
                                     <span className="status-dot"></span>

@@ -50,12 +50,11 @@ export default function Trackorder() {
   return (
     <div>
       <Header />
-      <button
+      <button className="btn btn-primary"
         style={{
           margin: "7% 0px 2% 3%",
           padding: "6px 30px",
           borderRadius: "10px",
-          backgroundColor: "#33adff",
           border: "none",
           color: "white",
         }}
