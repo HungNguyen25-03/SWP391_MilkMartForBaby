@@ -506,6 +506,21 @@ async function showLoyaltyPoints(customer_id) {
   }
 }
 
+async function useLoyaltyPoints(customer_id) {
+  try {
+    const pool = await poolPromise;
+    await pool
+      .request()
+      .input("customer_id", sql.Int, customer_id)
+      .query(
+        `UPDATE Customer SET loyalty_points = loyalty_points - loyalty_points WHERE customer_id = @customer_id`
+      );
+    return { success: true, message: "Loyalty points used successfully" };
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function showTop4Post() {
   try {
     const pool = await poolPromise;
@@ -538,4 +553,5 @@ module.exports = {
   resetPassword,
   showLoyaltyPoints,
   showTop4Post,
+  useLoyaltyPoints,
 };

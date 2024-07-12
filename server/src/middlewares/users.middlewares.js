@@ -428,6 +428,35 @@ const completeOrderMiddlewares = async (req, res, next) => {
   }
 };
 
+const useLoyaltyPointsMiddlewares = async (req, res, next) => {
+  try {
+    const errors = [];
+    const customer_id = req.params.id;
+    const pool = await poolPromise;
+    const customer = await pool
+      .request()
+      .input("customer_id", sql.Int, customer_id)
+      .query(
+        `SELECT loyalty_points FROM Customer WHERE customer_id = @customer_id`
+      );
+    if (customer.recordset[0].loyalty_points === 0) {
+      errors.push({
+        name: "loyalty_points",
+        success: false,
+        message: "Insufficient loyalty points",
+        status: 400,
+      });
+    }
+
+    if (errors.length > 0) {
+      return res.status(400).json(errors);
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   registerUserMiddleware,
   applyVoucherMiddleware,
@@ -436,4 +465,5 @@ module.exports = {
   completeOrderMiddlewares,
   resetPasswordMiddleware,
   requestPasswordResetMiddleware,
+  useLoyaltyPointsMiddlewares,
 };
