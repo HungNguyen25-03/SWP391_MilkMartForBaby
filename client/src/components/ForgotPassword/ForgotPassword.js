@@ -38,7 +38,7 @@ export default function ForgotPassword() {
         <ToastContainer autoClose={2000} />
         <div className="login-form">
           <div
-            className="fs-3 text-start"
+            className="fs-3 text-start back-btn"
             onClick={() => {
               nav("/login");
             }}

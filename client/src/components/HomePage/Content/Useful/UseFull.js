@@ -1,11 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./UseFull.scss";
 import { listUsefull } from "./UsefullList";
 import { FaRegEye } from "react-icons/fa";
 import { IoIosArrowDropright } from "react-icons/io";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { MainAPI } from "../../../API";
+import { convertSQLDate } from "../../../../utils/Format";
 
 export default function UseFull() {
+  const [blogs, setBlogs] = useState([]);
+  useEffect(() => {
+    axios
+      .get(`${MainAPI}/user/show-top-4-post`)
+      .then((res) => {
+        console.log(res.data);
+        setBlogs(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <div style={{ marginTop: "2%" }}>
       <div className="use_container">
@@ -24,27 +40,24 @@ export default function UseFull() {
           </span>
         </div>
         <div className="usefull_container ">
-          {listUsefull.map((usefull) => {
+          {blogs.map((usefull) => {
             return (
               <Link
-                to={`/blogs/post/${usefull.id}`}
+                to={`/blogs/post/${usefull.post_id}`}
                 className="usefull_detail"
-                key={usefull.id}
+                key={usefull.post_id}
               >
                 <div className="usefull-img-container">
-                  <img src={usefull.img} />
+                  <img src={usefull.image_url} />
                 </div>
                 <p
                   className="fw-bold mt-2"
                   style={{ lineHeight: "17px", fontSize: "14px" }}
                 >
-                  {usefull.info}
+                  {usefull.title}
                 </p>
                 <p className="mt-auto d-flex justify-content-between">
-                  <span>
-                    {" "}
-                    <FaRegEye /> {usefull.view}
-                  </span>
+                  <span> {convertSQLDate(usefull.post_date)}</span>
                   <span className="fs-5">
                     <IoIosArrowDropright />
                   </span>
@@ -54,6 +67,6 @@ export default function UseFull() {
           })}
         </div>
       </div>
-    </div >
+    </div>
   );
 }

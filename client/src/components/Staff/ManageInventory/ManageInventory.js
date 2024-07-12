@@ -5,6 +5,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { MainAPI } from "../../API";
+import { formatVND } from "../../../utils/Format";
 
 export default function ManageInventory() {
   const [inventory, setInventory] = useState([]);
@@ -239,7 +240,7 @@ export default function ManageInventory() {
               <tr key={index}>
                 <td style={{ padding: "10px" }}>{invent.product_id}</td>
                 <td>{invent.product_name}</td>
-                <td>{invent.price} đ</td>
+                <td>{formatVND(invent.price)}</td>
                 <td>{invent.stock}</td>
                 <td>
                   <button

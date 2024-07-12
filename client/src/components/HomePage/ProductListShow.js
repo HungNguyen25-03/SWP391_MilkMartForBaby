@@ -25,8 +25,8 @@ export default function ProductListShow({
   const [totalPageAll, setTotalPageAll] = useState(0);
   const [filterPage, setFilterPage] = useState(0);
   const itemsPerPage = 12;
-  const { brand_name } = useParams()
-  console.log(brand_name);
+  const { brand_name } = useParams();
+  console.log(totalPage);
 
   useEffect(() => {
     axios
@@ -88,6 +88,7 @@ export default function ProductListShow({
   }, [totalPage, filterPage]);
 
   // console.log(productList);
+  console.log(totalPageAll);
 
   const totalPages = totalPageAll;
 
@@ -97,7 +98,9 @@ export default function ProductListShow({
   };
 
   return (
-    <div className={brand_name !== undefined ? "filterBrand" : "fillter_container"}>
+    <div
+      className={brand_name !== undefined ? "filterBrand" : "fillter_container"}
+    >
       <ToastContainer autoClose={2000} />
       <>
         <div className="type">
@@ -114,8 +117,9 @@ export default function ProductListShow({
                         setCountryFilters
                       );
                     }}
-                    className={`btn ${countryFilters?.includes(cate.country) ? "active" : ""
-                      }`}
+                    className={`btn ${
+                      countryFilters?.includes(cate.country) ? "active" : ""
+                    }`}
                     key={`filters-${index}`}
                   >
                     {cate.title}
@@ -137,8 +141,9 @@ export default function ProductListShow({
                         setAgeFilters
                       );
                     }}
-                    className={`btn ${ageFilters?.includes(age.title) ? "active" : ""
-                      }`}
+                    className={`btn ${
+                      ageFilters?.includes(age.title) ? "active" : ""
+                    }`}
                     key={`filters-${index}`}
                   >
                     {age.title}
@@ -150,7 +155,7 @@ export default function ProductListShow({
         </div>
       </>
 
-      <div className="product_detail text-center d-flex flex-column" >
+      <div className="product_detail text-center d-flex flex-column">
         <div className="row row-cols-4 cardRow">
           {ageFilters.length > 0 || countryFilters.length > 0 ? (
             <>
@@ -242,14 +247,15 @@ export default function ProductListShow({
             <button
               key={index}
               onClick={() => handlePageChange(index + 1)}
-              className={`pagination-button ${index + 1 === currentPage ? "active" : ""
-                }`}
+              className={`pagination-button ${
+                index + 1 === currentPage ? "active" : ""
+              }`}
             >
               {index + 1}
             </button>
           ))}
         </div>
       </div>
-    </div >
+    </div>
   );
 }

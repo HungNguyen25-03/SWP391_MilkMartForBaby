@@ -66,16 +66,7 @@ async function getAllProduct() {
   try {
     const pool = await poolPromise;
     const result = await pool.request().query(`
-    SELECT 
-    Products.product_id,
-    Products.product_name,
-    Products.price,
-    Products.stock
-    
-
-    FROM Products
-    
-    `);
+    SELECT * FROM Products `);
     const product = result.recordset;
 
     if (product) {

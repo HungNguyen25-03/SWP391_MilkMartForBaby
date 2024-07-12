@@ -21,6 +21,7 @@ import Trackorder from "./components/UserAccount/Sidebar/ScreenCustomerAccount/T
 import ForgotPassword from "./components/ForgotPassword/ForgotPassword.js";
 import ResetPassword from "./components/ForgotPassword/ResetPassword.js";
 import BrandPage from "./components/HomePage/Content/Brand/BrandPage.js";
+import CreateUser from "./components/Admin/Create/CreateUser.js";
 
 function App() {
   return (
@@ -57,6 +58,7 @@ function App() {
             <Route path="/admin" element={<NavBar />}></Route>
             <Route path="/admin/user" element={<UserManagement />}></Route>
             <Route path="/admin/edit/:id" element={<Edit />}></Route>
+            <Route path="/admin/create" element={<CreateUser />}></Route>
             <Route path="/admin/dashboard" element={<Dashboard />}></Route>
           </Route>
 

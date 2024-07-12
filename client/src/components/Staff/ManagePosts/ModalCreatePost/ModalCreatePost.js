@@ -128,6 +128,14 @@ export default function ModalCreatePost() {
         />
       </div>
       <div className="d-flex justify-content-end mt-3">
+        <button
+          className="btn btn-danger"
+          onClick={() => {
+            nav("/staff/manage_posts");
+          }}
+        >
+          Cancel
+        </button>
         <button className="btn btn-primary" onClick={handleCreatePost}>
           Submit
         </button>

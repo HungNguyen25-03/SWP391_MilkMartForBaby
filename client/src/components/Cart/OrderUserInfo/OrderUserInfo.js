@@ -9,6 +9,7 @@ import useOrder from "../../../hooks/useOrder";
 import { CartContext } from "../CartContext";
 import { formatVND } from "../../../utils/Format";
 import { FaBitcoin } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 export default function OrderUserInfo() {
   /* USESTATE */
@@ -95,7 +96,12 @@ export default function OrderUserInfo() {
         },
       })
       .then((res) => {
-        console.log(res.data);
+        localStorage.setItem(
+          "total_amount",
+          res.data.orderInfo[0].total_amount
+        );
+        // console.log(res.data.orderInfo[0].total_amount);
+
         setOrderInfomation({
           ...orderInfomation,
           order_id: res.data.order_id,
@@ -104,6 +110,7 @@ export default function OrderUserInfo() {
       })
       .catch((err) => {
         console.log(err);
+        toast.error(err.response.data.message);
       });
   };
 
@@ -174,7 +181,7 @@ export default function OrderUserInfo() {
                 closeModal={() => {
                   setShow(false);
                 }}
-                onSubmit={() => { }}
+                onSubmit={() => {}}
                 errors={[]}
               />
             )}
@@ -217,6 +224,6 @@ export default function OrderUserInfo() {
           Tiếp tục
         </button>
       </div>
-    </div >
+    </div>
   );
 }

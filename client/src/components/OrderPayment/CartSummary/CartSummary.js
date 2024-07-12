@@ -13,7 +13,7 @@ const CartSummary = () => {
   const [temporary, setTemporary] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [total, setTotal] = useState(0);
-
+  const total_amount = localStorage.getItem("total_amount");
   const handleCalculate = () => {
     const temporaryTemp = cartList.reduce((total, item) => {
       return total + item.price * item.quantity;
@@ -69,7 +69,7 @@ const CartSummary = () => {
         Phí vận chuyển: <span>+0 ₫</span>
       </div>
       <div className="summary-item">
-        Tổng tiền: <span>{formatVND(total)} (Đã bao gồm VAT)</span>
+        Tổng tiền: <span>{formatVND(total_amount)} (Đã bao gồm VAT)</span>
       </div>
       <button
         className="btn"

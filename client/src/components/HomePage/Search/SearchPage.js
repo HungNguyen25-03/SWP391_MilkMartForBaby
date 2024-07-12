@@ -36,7 +36,7 @@ export default function SearchPage() {
     <div>
       <HeaderPage />
       <div className="container">
-        {searchResult === undefined ? (
+        {searchResult.length === 0 ? (
           <>
             <div className="emptyinfo" style={{ marginTop: "80px" }}>
               <img
