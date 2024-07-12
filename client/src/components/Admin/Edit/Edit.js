@@ -76,7 +76,7 @@ export default function Edit() {
           <div className="w-50 border bg-secondary text-white p-5">
             <form onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="name">Username: </label>
+                <label htmlFor="name">Tên đăng nhập: </label>
                 <input
                   type="text"
                   name="name"
@@ -132,7 +132,7 @@ export default function Edit() {
                 </select>
               </div>
               <br />
-              <button className="btn btn-info">Save</button>
+              <button className="btn btn-info">Lưu</button>
             </form>
           </div>
         </div>

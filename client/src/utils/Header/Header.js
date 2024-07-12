@@ -10,6 +10,8 @@ import useOrder from "../../hooks/useOrder";
 import { MdLogin } from "react-icons/md";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { CartContext } from "../../components/Cart/CartContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function HeaderPage() {
   const [searchValue, setSearchValue] = useState("");
@@ -35,8 +37,10 @@ export default function HeaderPage() {
         localStorage.removeItem("auth");
         setAuth({});
         setOrderInfomation({});
-        // toast.success("Đăng xuất thành công");
-        nav("/home");
+        toast.success("Đăng xuất thành công");
+        setTimeout(() => {
+          nav("/home");
+        }, 2000);
       })
       .catch((err) => {
         console.log(err);
@@ -54,6 +58,7 @@ export default function HeaderPage() {
 
   return (
     <div className=" search-bar">
+      <ToastContainer />
       <div className="container">
         <div className="row justify-content-between align-items-center">
           <div

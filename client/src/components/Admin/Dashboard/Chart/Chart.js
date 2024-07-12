@@ -38,17 +38,19 @@ export const options = {
   },
 };
 
-
-
 export default function Chart({ startDate, endDate }) {
   const [dataChart, setDataChart] = useState({});
   const [topProducts, setTopProducts] = useState([]);
-  const [totalRevenuePerMonth, setTotalRevenuePerMonth] = useState([])
+  const [totalRevenuePerMonth, setTotalRevenuePerMonth] = useState([]);
 
-  const barChartLabels = totalRevenuePerMonth.map((revenue) => revenue.yearMonth)
-  const barChartData = totalRevenuePerMonth.map((revenue) => revenue.totalRevenue)
+  const barChartLabels = totalRevenuePerMonth.map(
+    (revenue) => revenue.yearMonth
+  );
+  const barChartData = totalRevenuePerMonth.map(
+    (revenue) => revenue.totalRevenue
+  );
 
-  console.log(barChartData)
+  console.log(barChartData);
   useEffect(() => {
     axios
       .get(`${MainAPI}/admin/dashboard`, {
@@ -64,7 +66,7 @@ export default function Chart({ startDate, endDate }) {
         // console.log(res.data);
         setDataChart(res.data);
         setTopProducts(res.data.topProducts);
-        setTotalRevenuePerMonth(res.data.totalRevenuePerMonth)
+        setTotalRevenuePerMonth(res.data.totalRevenuePerMonth);
       })
       .catch((err) => {
         console.log(err);
@@ -76,7 +78,7 @@ export default function Chart({ startDate, endDate }) {
     labels: barChartLabels,
     datasets: [
       {
-        label: "Dataset 2",
+        label: "Doanh thu theo tháng",
         data: barChartLabels.map((__, index) => barChartData[index]),
         backgroundColor: "rgba(53, 162, 235, 0.5)",
       },

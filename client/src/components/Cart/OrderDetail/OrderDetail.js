@@ -12,7 +12,6 @@ export default function OrderDetail() {
     localCartList,
   } = useContext(CartContext);
 
-
   return (
     <>
       {cartList.length === 0 ? (
@@ -42,7 +41,7 @@ export default function OrderDetail() {
                     <img src={product.image_url} alt={product.name} />
                   </div>
                   <div className="item-cart-product-name">
-                    {product.description}
+                    {product.product_name}
                   </div>
                 </div>
                 <div className="block-cart-end">
