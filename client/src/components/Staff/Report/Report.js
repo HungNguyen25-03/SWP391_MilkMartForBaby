@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './Report.scss'
 import { MainAPI } from '../../API';
+import { convertSQLDate } from '../../../utils/Format';
 
 export default function Report() {
 
@@ -47,7 +48,7 @@ export default function Report() {
                         {reports.map((report) => (
                             <tr key={report.report_id}>
                                 <td>{report.report_id}</td>
-                                <td>{report.report_date}</td>
+                                <td>{convertSQLDate(report.report_date)}</td>
                                 <td>{report.report_description}</td>
                                 <td>{report.username}</td>
                                 <td>{report.product_name}</td>
