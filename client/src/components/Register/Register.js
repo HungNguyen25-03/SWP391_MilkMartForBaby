@@ -31,8 +31,10 @@ export default function Register() {
     axios
       .post(`${MainAPI}/user/register`, user)
       .then((res) => {
-        toast.success(res.data.message);
-        nav("/login");
+        toast.success("Đăng kí thành công! Đang chuyển hướng");
+        setTimeout(() => {
+          nav("/login");
+        });
       })
       .catch((err) => {
         console.log(err.response.data.errors);
@@ -59,7 +61,7 @@ export default function Register() {
       <div className="register_container d-flex justify-content-center align-items-center">
         <ToastContainer autoClose={2000} />
         <div className="register-form">
-          <h2 className="mt-2">Sign up</h2>
+          <h2 className="mt-2">Đăng kí</h2>
           <form onSubmit={handleSubmit}>
             <div className="register_info">
               <div className="register_detail">
@@ -67,7 +69,7 @@ export default function Register() {
                 <input
                   type="text"
                   value={user.username}
-                  placeholder="Username"
+                  placeholder="Tên đăng nhập"
                   name="username"
                   onChange={handleChange}
                 />
@@ -99,7 +101,7 @@ export default function Register() {
                 <input
                   type={showPassword === false ? "password" : "text"}
                   value={user.password}
-                  placeholder="Password"
+                  placeholder="Mật khẩu"
                   name="password"
                   onChange={handleChange}
                 />
@@ -118,12 +120,16 @@ export default function Register() {
                 <input
                   type={ShowPasswordConfirm === false ? "password" : "text"}
                   value={user.confirmPassword}
-                  placeholder="Confirm password"
+                  placeholder="Nhập lại mật khẩu"
                   name="confirmPassword"
                   onChange={handleChange}
                 />
                 <span className="eyes" onClick={handleShowPassConfirm}>
-                  {ShowPasswordConfirm === true ? <FaEyeSlash /> : <IoEyeSharp />}
+                  {ShowPasswordConfirm === true ? (
+                    <FaEyeSlash />
+                  ) : (
+                    <IoEyeSharp />
+                  )}
                 </span>
               </div>
               {specificError("confirm password") && (
@@ -134,7 +140,7 @@ export default function Register() {
             </div>
             <div className="other">
               <div>
-                <Link to="/login">Already have an account?</Link>
+                <Link to="/login">Ba mẹ đã có tài khoản?</Link>
               </div>
             </div>
 

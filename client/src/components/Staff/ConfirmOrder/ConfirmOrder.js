@@ -9,22 +9,22 @@ import { convertSQLDate } from "../../../utils/Format";
 
 export default function ConfirmOrder() {
   const getStatusClass = (status) => {
-    if (!status) return '';
+    if (!status) return "";
     switch (status.toLowerCase()) {
-      case 'cancelled':
-        return 'status-cancel';
-      case 'completed':
-        return 'status-complete';
-      case 'pending':
-        return 'status-pending';
-      case 'delivered':
-        return 'status-delivered';
-      case 'confirmed':
-        return 'status-confirm';
-      case 'paid':
-        return 'status-paid';
+      case "cancelled":
+        return "status-cancel";
+      case "completed":
+        return "status-complete";
+      case "pending":
+        return "status-pending";
+      case "delivered":
+        return "status-delivery";
+      case "confirmed":
+        return "status-confirm";
+      case "paid":
+        return "status-paid";
       default:
-        return '';
+        return "";
     }
   };
 

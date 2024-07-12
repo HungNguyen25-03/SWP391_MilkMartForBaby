@@ -74,7 +74,7 @@ function Login() {
       <div className="login-container">
         <ToastContainer autoClose={2000} />
         <div className="login-form">
-          <h2>Log In</h2>
+          <h2>Đăng nhập</h2>
 
           <form onSubmit={handleSubmit}>
             <div className="login-info">
@@ -94,7 +94,7 @@ function Login() {
                 <input
                   type={showPassword === false ? "password" : "text"}
                   value={password}
-                  placeholder="Password"
+                  placeholder="Mật khẩu"
                   onChange={handleOnchangePassWord}
                   required
                 />
@@ -104,8 +104,8 @@ function Login() {
               </div>
             </div>
             <div className="other">
-              <Link to="/register">Register an account</Link>
-              <Link to="/forgot-password">Forget Password?</Link>
+              <Link to="/register">Tạo tài khoản</Link>
+              <Link to="/forgot-password">Quên mật khẩu?</Link>
             </div>
 
             <input type="submit" value="Log In" className="login-btn"></input>
