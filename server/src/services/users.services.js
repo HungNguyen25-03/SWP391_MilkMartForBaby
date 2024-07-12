@@ -130,7 +130,7 @@ async function registerUser(username, password, email) {
     const pool = await poolPromise;
     const result = await pool
       .request()
-      .input("username", sql.VarChar, username)
+      .input("username", sql.NVarChar, username)
       .input("password", sql.VarChar, hashedPassword)
       .input("email", sql.VarChar, email)
       .input("role_id", sql.VarChar, "customer")
