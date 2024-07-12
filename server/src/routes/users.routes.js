@@ -98,4 +98,5 @@ userRoutes.get(
   userController.showLoyaltyPointsController
 );
 
+userRoutes.get("/show-top-4-post", userController.showTop4PostController);
 module.exports = userRoutes;

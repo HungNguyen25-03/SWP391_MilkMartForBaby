@@ -5,6 +5,7 @@ import "./ConfirmOrder.scss";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { MainAPI } from "../../API";
+import { convertSQLDate } from "../../../utils/Format";
 
 export default function ConfirmOrder() {
   const getStatusClass = (status) => {
@@ -131,7 +132,7 @@ export default function ConfirmOrder() {
             {dataConfirm.map((confirm) => (
               <tr key={confirm.order_id}>
                 <td>{confirm.order_id}</td>
-                <td>{confirm.order_date}</td>
+                <td>{convertSQLDate(confirm.order_date)}</td>
                 <td>{confirm.username}</td>
                 <td className={getStatusClass(confirm.status)}>
                   <span className="status-dot"></span>
@@ -141,13 +142,13 @@ export default function ConfirmOrder() {
                 {checkStatusIsPending(confirm.status) ? (
                   <td>
                     <button
-                      className="action-btn"
+                      className="action-btn-confirm"
                       onClick={() => handleSetConfirm(confirm)}
                     >
                       <IoMdCheckbox color="green" size="25px" />
                     </button>
                     <button
-                      className="action-btn"
+                      className="action-btn-cancel"
                       onClick={() => handleSetCancel(confirm)}
                     >
                       <FaWindowClose color="red" size="22px" />

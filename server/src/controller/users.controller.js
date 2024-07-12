@@ -16,6 +16,7 @@ const {
   requestPasswordReset,
   resetPassword,
   showLoyaltyPoints,
+  showTop4Post,
 } = require("../services/users.services");
 
 const authJwt = require("../middlewares/authJwt.middlewares");
@@ -160,6 +161,7 @@ const readyToCheckoutController = async (req, res) => {
       res.status(200).json({
         message: order.message,
         order_id: order.order_id,
+        orderInfo: order.orderInfo,
         status: 200,
       });
     } else {
@@ -321,6 +323,19 @@ const resetPasswordController = async (req, res) => {
   }
 };
 
+const showTop4PostController = async (req, res) => {
+  try {
+    const result = await showTop4Post();
+    if (result.success) {
+      res.status(200).json(result.posts);
+    } else {
+      res.status(409).json({ message: result.message });
+    }
+  } catch (error) {
+    console.log("Fail to get Posts");
+  }
+};
+
 module.exports = {
   registerUserController,
   loginUserController,
@@ -340,4 +355,5 @@ module.exports = {
   requestPasswordResetController,
   resetPasswordController,
   showLoyaltyPointsController,
+  showTop4PostController,
 };
