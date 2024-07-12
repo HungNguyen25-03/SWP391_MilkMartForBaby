@@ -353,7 +353,25 @@ const claimVoucherMiddleware = async (req, res, next) => {
       errors.push({
         name: "voucher_id",
         success: false,
-        message: "Voucher has already been claimed",
+        message: "You have claimed this voucher",
+        status: 400,
+      });
+    }
+
+    // Validate if voucher is already used
+    const usedVoucher = await pool
+      .request()
+      .input("user_id", sql.Int, user_id)
+      .input("voucher_id", sql.Int, voucher_id)
+      .query(
+        `SELECT used FROM User_Vouchers WHERE user_id = @user_id AND voucher_id = @voucher_id`
+      );
+
+    if (usedVoucher.recordset.length > 0 && usedVoucher.recordset[0].used) {
+      errors.push({
+        name: "voucher_id",
+        success: false,
+        message: "You have already used this voucher",
         status: 400,
       });
     }
