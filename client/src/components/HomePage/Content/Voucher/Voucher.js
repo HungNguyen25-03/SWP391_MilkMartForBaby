@@ -66,7 +66,7 @@ export default function Voucher() {
 
   return (
     <div className="voucher-container p-3">
-      <ToastContainer autoClose={2000} />
+      {/* <ToastContainer autoClose={2000} /> */}
       <h2 className="voucher-title mb-2">Nhận voucher</h2>
       {loading ? (
         <p>Loading vouchers...</p>

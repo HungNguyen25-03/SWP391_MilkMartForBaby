@@ -51,7 +51,7 @@ export default function ModalVoucher({
       }}
     >
       <div className="modal-content">
-        <ToastContainer autoClose={2000} />
+        {/* <ToastContainer autoClose={2000} /> */}
         <h3 className="d-flex justify-content-start">Voucher của bạn</h3>
         {listOfVoucher.map((voucher) => (
           <div

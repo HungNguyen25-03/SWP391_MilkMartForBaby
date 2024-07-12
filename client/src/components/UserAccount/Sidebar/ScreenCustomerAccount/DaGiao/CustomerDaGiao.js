@@ -5,7 +5,7 @@ import { formatVND } from "../../../../../utils/Format";
 import ModalReview from "../ModalReview/ModalReview";
 import useAuth from "../../../../../hooks/useAuth";
 import { ToastContainer } from "react-toastify";
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import "./CompletedOrder.scss";
 
@@ -15,7 +15,7 @@ export default function CustomerDaGiao({ title }) {
   const [modalReportOpen, setModalReportOpen] = useState(false);
   const [productDetail, setProductDetail] = useState({});
   const { auth } = useAuth();
-  const nav = useNavigate()
+  const nav = useNavigate();
 
   useEffect(() => {
     axios
@@ -36,15 +36,15 @@ export default function CustomerDaGiao({ title }) {
   };
 
   const handTrackOrder = (id) => {
-    console.log(id)
-    nav(`/trackorder/${id}`)
+    console.log(id);
+    nav(`/trackorder/${id}`);
   };
 
-  console.log(completeOrderList)
+  console.log(completeOrderList);
 
   return (
     <div className={title === "Đã giao" ? "dagiao" : "fade"}>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <h5 className="fw-bold">{title}</h5>
       {completeOrderList.length === 0 ? (
         <div className="emptyinfo">
@@ -59,7 +59,8 @@ export default function CustomerDaGiao({ title }) {
           return (
             <div key={dagiao.order_id} className="order">
               <div style={{ textAlign: "right" }}>
-                <button className="btn btn-primary m-0"
+                <button
+                  className="btn btn-primary m-0"
                   style={{
                     border: "none",
                     borderRadius: "10px",
@@ -86,7 +87,8 @@ export default function CustomerDaGiao({ title }) {
                           <span style={{ width: 600 }}></span>
                           <div className="item-cart-quantity-pro">
                             x{product.quantity}
-                          </div>&nbsp;
+                          </div>
+                          &nbsp;
                           <div className="item-cart-price-pro mr-0">
                             {formatVND(product.price)}
                           </div>

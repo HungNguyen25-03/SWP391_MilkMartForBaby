@@ -112,6 +112,25 @@ export default function OrderUserInfo() {
         console.log(err);
         toast.error(err.response.data.message);
       });
+
+    if (checked) {
+      axios
+        .put(
+          `${MainAPI}/user/use-loyalty-points/${auth.user.user_id}`,
+          {},
+          {
+            headers: {
+              "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const handleCalculate = () => {

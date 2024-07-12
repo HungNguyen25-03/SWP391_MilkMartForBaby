@@ -53,7 +53,7 @@ export default function ProductListShow({
   };
 
   //FILTER ITEMS // Nếu đang chưa filter mà đang ở trang 2 thì khi filter (data trả về có về 1 trang) thì sẽ bị lỗi (vì currentPage vẫn là 2)
-  useEffect(() => {
+  const fetchDataFilter = () => {
     axios
       .post(`${MainAPI}/product/filter?page=${currentPage}`, {
         country: countryFilters,
@@ -75,19 +75,28 @@ export default function ProductListShow({
       .catch((err) => {
         console.log(err);
       });
-  }, [ageFilters, countryFilters, currentPage]);
+  };
+
+  // useEffect(() => {}, [ageFilters, countryFilters, currentPage]);
   // console.log(filteredItems);
+
+  // console.log(productList);
 
   //SET TOTAL PAGE
   useEffect(() => {
-    if (filteredItems.length > 0) {
+    if (ageFilters.length > 0 || countryFilters.length > 0) {
+      fetchDataFilter();
       setTotalPageAll(filterPage);
     } else {
       setTotalPageAll(totalPage);
     }
-  }, [totalPage, filterPage]);
+    // if (filteredItems.length > 0) {
+    //   setTotalPageAll(filterPage);
+    // } else {
+    //   setTotalPageAll(totalPage);
+    // }
+  }, [totalPage, filterPage, ageFilters, countryFilters, currentPage]);
 
-  // console.log(productList);
   console.log(totalPageAll);
 
   const totalPages = totalPageAll;
@@ -101,7 +110,7 @@ export default function ProductListShow({
     <div
       className={brand_name !== undefined ? "filterBrand" : "fillter_container"}
     >
-      <ToastContainer autoClose={2000} />
+      {/* <ToastContainer autoClose={2000} /> */}
       <>
         <div className="type">
           <div className="category">

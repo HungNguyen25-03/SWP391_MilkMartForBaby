@@ -34,7 +34,7 @@ export default function Register() {
         toast.success("Đăng kí thành công! Đang chuyển hướng");
         setTimeout(() => {
           nav("/login");
-        });
+        }, 2000);
       })
       .catch((err) => {
         console.log(err.response.data.errors);
