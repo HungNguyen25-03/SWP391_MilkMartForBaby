@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 export default function ChoThanhToan({ title }) {
   const [pendingOrderList, setPendingOrderList] = useState([]);
   const { auth } = useAuth();
-  const nav = useNavigate()
+  const nav = useNavigate();
 
   const token = JSON.parse(localStorage.getItem("accessToken"));
   console.log(token);
@@ -49,14 +49,14 @@ export default function ChoThanhToan({ title }) {
   };
 
   const handTrackOrder = (id) => {
-    console.log(id)
-    nav(`/trackorder/${id}`)
+    console.log(id);
+    nav(`/trackorder/${id}`);
   };
 
   return (
     <div className={title === "Chờ thanh toán" ? "chothanhtoan" : "fade"}>
       <h5 className="fw-bold">{title}</h5>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       {pendingOrderList.length === 0 ? (
         <div className="emptyinfo">
           <img
@@ -75,7 +75,8 @@ export default function ChoThanhToan({ title }) {
             <>
               <div className="order">
                 <div style={{ textAlign: "right" }}>
-                  <button className="btn btn-primary m-0"
+                  <button
+                    className="btn btn-primary m-0"
                     style={{
                       border: "none",
                       borderRadius: "10px",
