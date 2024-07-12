@@ -99,4 +99,11 @@ userRoutes.get(
 );
 
 userRoutes.get("/show-top-4-post", userController.showTop4PostController);
+
+userRoutes.put(
+  "/use-loyalty-points/:id",
+  authJwt.authenticateToken,
+  userMiddleware.useLoyaltyPointsMiddlewares,
+  userController.useLoyaltyPointsController
+);
 module.exports = userRoutes;

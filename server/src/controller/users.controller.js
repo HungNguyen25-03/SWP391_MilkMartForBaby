@@ -17,6 +17,7 @@ const {
   resetPassword,
   showLoyaltyPoints,
   showTop4Post,
+  useLoyaltyPoints,
 } = require("../services/users.services");
 
 const authJwt = require("../middlewares/authJwt.middlewares");
@@ -336,6 +337,22 @@ const showTop4PostController = async (req, res) => {
   }
 };
 
+const useLoyaltyPointsController = async (req, res) => {
+  const customer_id = req.params.id;
+  try {
+    const result = await useLoyaltyPoints(customer_id);
+    console.log(result);
+    if (result.success) {
+      res.json({ message: result.message });
+    } else {
+      res.json({ message: result.message });
+    }
+  } catch (error) {
+    console.error("Error in useLoyaltyPointsController:", error);
+    res.status(500).send("Error use Loyalty Points");
+  }
+};
+
 module.exports = {
   registerUserController,
   loginUserController,
@@ -356,4 +373,5 @@ module.exports = {
   resetPasswordController,
   showLoyaltyPointsController,
   showTop4PostController,
+  useLoyaltyPointsController,
 };
