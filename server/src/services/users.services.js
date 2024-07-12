@@ -279,10 +279,14 @@ async function readyToCheckout(user_id, total_amount, orderItems) {
 
     // insert order_items
     await insertOrderItems(order_id, orderItems);
+
+    const orderInfo = await getOrderInfo(order_id);
+
     return {
       success: true,
       order_id: order_id,
       message: "Ready to checkout successfully",
+      orderInfo: orderInfo,
     };
   } catch (error) {
     throw error;
@@ -304,6 +308,16 @@ async function insertOrderItems(order_id, orderItems) {
         VALUES (@order_id, @product_id, @quantity, @price)`
       );
   }
+}
+
+async function getOrderInfo(order_id) {
+  const pool = await poolPromise;
+  const result = await pool.request().input("order_id", sql.Int, order_id)
+    .query(`SELECT o.order_id, o.user_id, o.order_date, o.status, o.total_amount,
+            oi.order_item_id, oi.product_id, oi.quantity, oi.price
+            FROM Orders o JOIN Order_Items oi ON o.order_id = oi.order_id 
+            WHERE o.order_id = @order_id`);
+  return result.recordset;
 }
 
 async function reviewsByProductId(
@@ -492,6 +506,19 @@ async function showLoyaltyPoints(customer_id) {
   }
 }
 
+async function showTop4Post() {
+  try {
+    const pool = await poolPromise;
+    const result = await pool.request().query(`
+    SELECT TOP 4 p.*, u.username FROM Posts p JOIN Users u ON p.user_id = u.user_id
+    ORDER BY p.post_date DESC
+    `);
+    return { success: true, posts: result.recordset };
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   loginUser,
   registerUser,
@@ -510,4 +537,5 @@ module.exports = {
   requestPasswordReset,
   resetPassword,
   showLoyaltyPoints,
+  showTop4Post,
 };
