@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import "./Modal.scss";
-import axios from "axios";
-import { MainAPI } from "../../API";
 import useAuth from "../../../hooks/useAuth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 export default function Modal({
   closeModal,

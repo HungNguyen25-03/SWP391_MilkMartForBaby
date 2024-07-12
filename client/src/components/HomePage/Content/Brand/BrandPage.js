@@ -20,7 +20,7 @@ export default function BrandPage() {
         `${MainAPI}/product/getProductBrand?brand_name=${brand_name}&page=${page}&pageSize=12`
       )
       .then((res) => {
-        // console.log(res.data.inStockProducts);
+        console.log(res.data);
         setAllProductList([
           ...res.data.inStockProducts,
           ...res.data.outOfStockProducts,

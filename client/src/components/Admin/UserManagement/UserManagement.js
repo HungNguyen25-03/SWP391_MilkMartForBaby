@@ -140,7 +140,7 @@ export default function UserManagement() {
             <button
               className="btn"
               onClick={() => {
-                setModalOpen(true);
+                nav("/admin/create");
               }}
             >
               Add User

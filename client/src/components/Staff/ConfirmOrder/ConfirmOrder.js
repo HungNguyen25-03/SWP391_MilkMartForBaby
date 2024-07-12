@@ -5,7 +5,7 @@ import "./ConfirmOrder.scss";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { MainAPI } from "../../API";
-import { convertSQLDate } from "../../../utils/Format";
+import { convertSQLDate, formatVND } from "../../../utils/Format";
 
 export default function ConfirmOrder() {
   const getStatusClass = (status) => {
@@ -138,7 +138,7 @@ export default function ConfirmOrder() {
                   <span className="status-dot"></span>
                   {confirm.status}
                 </td>
-                <td>{confirm.total_amount} đ</td>
+                <td>{formatVND(confirm.total_amount)}</td>
                 {checkStatusIsPending(confirm.status) ? (
                   <td>
                     <button
