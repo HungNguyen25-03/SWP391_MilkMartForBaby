@@ -4,7 +4,7 @@ const createVoucherMiddleware = async (req, res, next) => {
   try {
     const errors = [];
     const { discount, expiration_date } = req.body;
-
+    const pool = await poolPromise;
     if (!discount) {
       errors.push({
         name: "discount",
@@ -39,6 +39,23 @@ const createVoucherMiddleware = async (req, res, next) => {
         message: "Voucher expiry date must be in the future",
         status: 400,
       });
+    }
+
+    if (errors.length === 0) {
+      const checkExpDateAndDiscount = await pool
+        .request()
+        .input("discount", sql.Decimal(5, 2), discount)
+        .input("expiration_date", sql.Date, expiration_date)
+        .query(`SELECT discount, expiration_date FROM Vouchers WHERE discount = @discount AND expiration_date = @expiration_date`);
+
+      if (checkExpDateAndDiscount.recordset.length > 0) {
+        errors.push({
+          name: "voucher",
+          success: false,
+          message: "There is already a voucher with this discount and this expiration date",
+          status: 400,
+        });
+      }
     }
 
     if (errors.length > 0) {
