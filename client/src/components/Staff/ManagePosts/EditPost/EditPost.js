@@ -7,6 +7,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Select from "react-select";
 
 const ENDPOINT = "staff/uploads";
 
@@ -46,33 +47,78 @@ export default function EditPost() {
   const { id } = useParams();
   const { auth } = useAuth();
   const nav = useNavigate();
-  const [post, setPost] = useState({
-    post_id: "",
-    title: "",
-    description: "",
-    image_url: "",
-    post_date: "",
-  });
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState("");
+  const [product, setProduct] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState([
+    {
+      value: 2,
+      label: "Vinamilk Yoko Gold 2 850g",
+    },
+  ]);
 
   useEffect(() => {
     axios
       .get(`${MainAPI}/user/get-post/${id}`)
       .then((res) => {
         console.log(res.data);
-        setPost(res.data);
+        setTitle(res.data.title);
+        setDescription(res.data.description);
+        setImage(res.data.image_url);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
 
-  const handleEditPost = () => {
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const options = product.map((item) => {
+    return {
+      value: item.product_id,
+      label: item.product_name,
+    };
+  });
+
+  const handleChange = (selectedOption) => {
+    setSelectedOptions(selectedOption);
+  };
+
+  const fetchData = () => {
     axios
-      .put(`${MainAPI}/staff/update-post/${id}`, post, {
+      .get(`${MainAPI}/staff/product`, {
         headers: {
           "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
         },
       })
+      .then((res) => {
+        console.log(res.data);
+        setProduct(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleEditPost = () => {
+    axios
+      .put(
+        `${MainAPI}/staff/update-post/${id}`,
+        {
+          title: title,
+          description: description,
+          image_url: image,
+          user_id: auth.user.user_id,
+        },
+        {
+          headers: {
+            "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         toast.success(res.data.message);
@@ -84,8 +130,6 @@ export default function EditPost() {
         console.log(err);
       });
   };
-
-  console.log(post);
 
   return (
     <div className="create-post-container">
@@ -99,9 +143,9 @@ export default function EditPost() {
               class="form-control"
               placeholder="Post title"
               name="title"
-              value={post.title}
+              value={title}
               onChange={(e) => {
-                setPost({ ...post, title: e.target.value });
+                setTitle(e.target.value);
               }}
             />
           </div>
@@ -110,26 +154,34 @@ export default function EditPost() {
               class="form-control"
               placeholder="Thumbnail Image URL"
               name="image_url"
-              value={post.image_url}
+              value={image}
               onChange={(e) => {
-                setPost({ ...post, image_url: e.target.value });
+                setImage(e.target.value);
               }}
             ></input>
           </div>
         </form>
+        <div style={{ marginBottom: "30px" }}>
+          <Select
+            options={options}
+            onChange={handleChange}
+            value={selectedOptions}
+            isMulti={true}
+          />
+        </div>
         <CKEditor
           config={{
             extraPlugins: [uploadPlugin],
           }}
           editor={ClassicEditor}
-          data={post.description}
+          data={description}
           onReady={(editor) => {
             // You can store the "editor" and use when it is needed.
             console.log("Editor is ready to use!", editor);
           }}
           onChange={(event, editor) => {
             const data = editor.getData();
-            setPost({ ...post, description: data });
+            setDescription(data);
             // console.log(data);
           }}
           onBlur={(event, editor) => {

@@ -22,7 +22,7 @@ export default function ManageInventory() {
   const nav = useNavigate();
 
   const fetchData = () => {
-    fetch(`${MainAPI}/staff/product`, {
+    fetch(${MainAPI}/staff/product, {
       method: "GET",
       headers: {
         "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
@@ -54,7 +54,7 @@ export default function ManageInventory() {
     // setStock(product.stock);
     // setImg(product.image_url);
     // setShowEditProduct(true);
-    nav(`/edit-product/${product.product_id}`);
+    nav(/edit-product/${product.product_id});
   };
 
   // const handleUpdateProduct = () => {
@@ -62,7 +62,7 @@ export default function ManageInventory() {
 
   //   console.log(editProductId);
 
-  //   fetch(`${MainAPI}/staff/update-product/${editProductId}`, {
+  //   fetch(${MainAPI}/staff/update-product/${editProductId}, {
   //     method: "PUT",
   //     headers: {
   //       "Content-Type": "application/json",
@@ -94,9 +94,9 @@ export default function ManageInventory() {
   // };
 
   const handleDelete = async (productId) => {
-    console.log(`Delete product with ID: ${productId}`);
+    console.log(Delete product with ID: ${productId});
     try {
-      const data = await fetch(`${MainAPI}/staff/export/${productId}`, {
+      const data = await fetch(${MainAPI}/staff/export/${productId}, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -119,7 +119,7 @@ export default function ManageInventory() {
   };
 
   // const handleAddProduct = () => {
-  //   fetch(`${MainAPI}/staff/add-product`, {
+  //   fetch(${MainAPI}/staff/add-product, {
   //     method: "POST",
   //     headers: {
   //       "Content-Type": "application/json",
@@ -171,8 +171,9 @@ export default function ManageInventory() {
       sortable: true,
     },
     {
-      name: "Brand ID",
-      selector: (row) => row.brand_id,
+      name: "Brand Name",
+      selector: (row) => row.brand_name
+      ,
       sortable: true,
     },
     {

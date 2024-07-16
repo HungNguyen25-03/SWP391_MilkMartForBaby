@@ -105,7 +105,10 @@ export default function ConfirmOrder() {
         toast.success("Order confirmed successfully");
         fetchData();
       })
-      .catch((error) => console.error("Error confirming order:", error));
+      .catch((error) => {
+        console.error("Error confirming order:", error);
+        toast.error("Hàng trong kho không đủ");
+      });
   };
 
   return (
