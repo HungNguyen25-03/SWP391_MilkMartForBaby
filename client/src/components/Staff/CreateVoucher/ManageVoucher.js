@@ -3,6 +3,7 @@ import "./Voucher.scss";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { MainAPI } from "../../API";
+import { convertSQLDate } from "../../../utils/Format";
 
 export default function ManageVoucher() {
   const [vouchers, setVouchers] = useState([]);
@@ -21,7 +22,10 @@ export default function ManageVoucher() {
         if (!res.ok) throw new Error("Failed to fetch data get voucher");
         return res.json();
       })
-      .then((data) => setVouchers(data))
+      .then((data) => {
+        console.log(data);
+        setVouchers(data);
+      })
       .catch((error) => {
         console.error("Error fetching data voucher:", error);
       });
@@ -44,17 +48,24 @@ export default function ManageVoucher() {
       }),
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Failed to add voucher");
+        if (!res.ok) {
+          // console.log(res.json());
+          return res.json();
+        }
         return res.json();
       })
       .then((data) => {
         console.log(data);
-        fetchData();
-        setShowAdd(false);
-        setExDate("");
-        setDiscount("");
-        toast.success("Voucher added successfully");
-        console.log("Voucher added successfully");
+        if (data.status === 200) {
+          fetchData();
+          setShowAdd(false);
+          setExDate("");
+          setDiscount("");
+          toast.success("Voucher added successfully");
+          console.log("Voucher added successfully");
+        } else {
+          toast.error(data.errors[0].message);
+        }
       })
       .catch((error) => {
         console.error("Error adding voucher:", error);
@@ -72,6 +83,7 @@ export default function ManageVoucher() {
             marginRight: "20px",
             marginTop: "20px",
             backgroundColor: "#00CCFF",
+            marginBottom: "5px",
           }}
           onClick={() => setShowAdd(true)}
         >
@@ -111,6 +123,7 @@ export default function ManageVoucher() {
               <th>Voucher ID</th>
               <th>Code</th>
               <th>Discount</th>
+              <th>Expiration_date</th>
             </tr>
           </thead>
         </table>
@@ -124,6 +137,7 @@ export default function ManageVoucher() {
                 <td>{voucher.voucher_id}</td>
                 <td>{voucher.code}</td>
                 <td>{voucher.discount}%</td>
+                <td>{convertSQLDate(voucher.expiration_date)}</td>
               </tr>
             ))}
           </tbody>

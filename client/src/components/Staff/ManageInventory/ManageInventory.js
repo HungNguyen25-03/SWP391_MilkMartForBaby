@@ -151,20 +151,21 @@ export default function ManageInventory() {
     setStock("");
     setImg("");
     setShowAdd(false);
-  }
+  };
   const handleCancelEditProduct = () => {
     setProName("");
     setPrice("");
     setStock("");
     setImg("");
-    setShowEditProduct(false)
-  }
+    setShowEditProduct(false);
+  };
 
   return (
     <div className="inventory">
       <ToastContainer />
       <div className="create-inventory-btn">
-        <button className="btn btn-primary"
+        <button
+          className="btn btn-primary"
           style={{
             border: "none",
             borderRadius: "20px",
@@ -185,7 +186,7 @@ export default function ManageInventory() {
               <input
                 type="text"
                 value={img}
-                style={{ width: "80%", marginBottom: '5px' }}
+                style={{ width: "80%", marginBottom: "5px" }}
                 onChange={(event) => setImg(event.target.value)}
               />
             </div>
@@ -210,7 +211,8 @@ export default function ManageInventory() {
             <button className="add-cancel" onClick={handleAddProduct}>
               Add
             </button>
-            <button className="add-cancel"
+            <button
+              className="add-cancel"
               // onClick={() => setShowAdd(false)}
               onClick={() => handleCancelAddProduct()}
             >
@@ -228,7 +230,7 @@ export default function ManageInventory() {
               <input
                 type="text"
                 value={img}
-                style={{ width: "80%", marginBottom: '5px' }}
+                style={{ width: "80%", marginBottom: "5px" }}
                 onChange={(event) => setImg(event.target.value)}
               />
             </div>
@@ -272,6 +274,8 @@ export default function ManageInventory() {
               <th>Product Name</th>
               <th>Price</th>
               <th>Stock</th>
+              <th>Brand</th>
+              <th>Country</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -284,14 +288,22 @@ export default function ManageInventory() {
             {inventory.map((invent, index) => (
               <tr key={index}>
                 <td style={{ padding: "10px" }}>{invent.product_id}</td>
-                <td style={{ textAlign: 'center' }}>
-                  <div style={{ width: '90px', height: '120px', marginLeft: '9%' }}>
-                    <img style={{ width: '100%', height: '100%' }} src={invent.image_url} alt={invent.image_url} />
+                <td style={{ textAlign: "center" }}>
+                  <div
+                    style={{ width: "90px", height: "120px", marginLeft: "9%" }}
+                  >
+                    <img
+                      style={{ width: "100%", height: "100%" }}
+                      src={invent.image_url}
+                      alt={invent.image_url}
+                    />
                   </div>
                 </td>
                 <td>{invent.product_name}</td>
                 <td>{formatVND(invent.price)}</td>
                 <td>{invent.stock}</td>
+                <td>{invent.brand_id}</td>
+                <td>{invent.country_id}</td>
                 <td>
                   <button
                     className="action-btn"
@@ -300,8 +312,9 @@ export default function ManageInventory() {
                     ▪▪▪
                   </button>
                   {actionVisible === index && (
-                    <div className="action-menu" style={{ marginTop: '10px' }}>
-                      <button className="icon_btn"
+                    <div className="action-menu" style={{ marginTop: "10px" }}>
+                      <button
+                        className="icon_btn"
                         style={{
                           border: "none",
                           backgroundColor: "none",
@@ -312,7 +325,8 @@ export default function ManageInventory() {
                         <BsJournalCheck color="green" />
                       </button>
 
-                      <button className="icon_btn"
+                      <button
+                        className="icon_btn"
                         style={{
                           border: "none",
                           backgroundColor: "none",
