@@ -29,7 +29,7 @@ async function createVoucher(discount, expiration_date) {
       .input("expiration_date", sql.DateTime, new Date(expiration_date))
       .query(`INSERT INTO Vouchers (code, discount, expiration_date) 
                 VALUES (@code, @discount, @expiration_date)`);
-    console.log(result);
+    // console.log(result);
     return { success: true, message: "Voucher created successfully" };
   } catch (err) {
     console.error("SQL error", err);
@@ -331,7 +331,7 @@ async function confirmOrder(order_id) {
     }
 
     const currentStatus = currentStatusResult.recordset[0].status;
-    console.log("Current status:", currentStatus);
+    // console.log("Current status:", currentStatus);
     if (currentStatus !== "Confirmed") {
       return {
         success: false,
@@ -548,7 +548,7 @@ async function createPost(
       .input("title", sql.NVarChar, title)
       .input("description", sql.NVarChar, description)
       .input("image_url", sql.NVarChar, image_url).query(`
-        INSERT INTO Posts (user_id, title, description, image_url)
+        INSERT INTO Posts (user_id, title, description, image_url) OUTPUT INSERTED.post_id
         VALUES (@user_id, @title, @description, @image_url)
       `);
 
@@ -564,14 +564,16 @@ async function createPost(
 }
 
 async function insertPostDetails(post_id, productItems) {
+  console.log("Product items:", productItems);
   try {
     const pool = await poolPromise;
 
     for (const item of productItems) {
+      console.log("Item:", item);
       await pool
         .request()
         .input("post_id", sql.Int, post_id)
-        .input("product_id", sql.Int, item.product_id)
+        .input("product_id", sql.Int, item)
         .query(
           `INSERT INTO Post_Details (post_id, product_id) VALUES (@post_id, @product_id)`
         );
@@ -635,6 +637,7 @@ async function deletePost(post_id) {
       return { success: false, message: "Failed to delete post" };
     }
   } catch (error) {
+    console.error("Error deleting post:", error);
     throw error;
   }
 }
