@@ -49,15 +49,10 @@ export default function ModalCreatePost() {
   const [title, setTitle] = useState("");
   const [image, setImage] = useState("");
   const [product, setProduct] = useState([]);
-  const [selectedOptions, setSelectedOptions] = useState([
-    {
-      value: 2,
-      label: "Vinamilk Yoko Gold 2 850g",
-    },
-  ]);
+  const [selectedOptions, setSelectedOptions] = useState([]);
   const nav = useNavigate();
 
-  console.log(selectedOptions.map((item) => item.value));
+  // console.log(selectedOptions.map((item) => item.value));
 
   useEffect(() => {
     fetchData();
@@ -99,6 +94,7 @@ export default function ModalCreatePost() {
           user_id: auth.user.user_id,
           title: title,
           image_url: image,
+          productItems: selectedOptions.map((item) => item.value),
         },
         {
           headers: {
