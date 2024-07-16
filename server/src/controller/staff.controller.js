@@ -17,6 +17,7 @@ const {
   deletePost,
   showAllReport,
   addProductDetails,
+  showProductDetails,
 } = require("../services/staff.services");
 
 const createVoucherController = async (req, res) => {
@@ -247,6 +248,22 @@ const addProductController = async (req, res) => {
   }
 };
 
+const showProductDetailsController = async (req, res) => {
+  const product_id = parseInt(req.params.id, 10);
+  try {
+    const result = await showProductDetails(product_id);
+    console.log(result);
+    if (result.success) {
+      return res.status(200).json(result.product);
+    } else {
+      return res.status(404).json({ message: result.message });
+    }
+  } catch (error) {
+    console.log("Fail to get product details", error);
+    res.status(500).json({ message: "Error getting product details" });
+  }
+};
+
 const updateProductController = async (req, res) => {
   const product_id = parseInt(req.params.id, 10);
   const {
@@ -254,7 +271,7 @@ const updateProductController = async (req, res) => {
     description,
     price,
     stock,
-    brand_id,
+    brand_name,
     country_id,
     age_range,
     image_url,
@@ -267,7 +284,7 @@ const updateProductController = async (req, res) => {
       description,
       price,
       stock,
-      brand_id,
+      brand_name,
       country_id,
       age_range,
       image_url
@@ -310,7 +327,7 @@ const addProductDetailsController = async (req, res) => {
     console.log("fail to add product details");
     throw error;
   }
-}
+};
 
 const createPostController = async (req, res) => {
   const { user_id, title, description, image_url } = req.body;
@@ -403,4 +420,5 @@ module.exports = {
   deletePostController,
   showAllReportController,
   addProductDetailsController,
+  showProductDetailsController,
 };

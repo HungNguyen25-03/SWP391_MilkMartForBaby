@@ -461,16 +461,33 @@ async function reportProduct(
 async function getPostById(post_id) {
   try {
     const pool = await poolPromise;
-    const result = await pool.request().input("post_id", sql.Int, post_id)
-      .query(`
-      SELECT p.*, u.username FROM Posts p JOIN Users u ON p.user_id = u.user_id WHERE post_id = @post_id
-    `);
 
-    if (result.recordset.length === 0) {
+    // Fetch post and user details
+    const postResult = await pool.request().input("post_id", sql.Int, post_id)
+      .query(`
+        SELECT p.*, u.username 
+        FROM Posts p 
+        JOIN Users u ON p.user_id = u.user_id 
+        WHERE post_id = @post_id
+      `);
+
+    if (postResult.recordset.length === 0) {
       return { success: false, message: "Post not found" };
     }
 
-    return { success: true, post: result.recordset[0] };
+    // Fetch product details related to the post
+    const productResult = await pool
+      .request()
+      .input("post_id", sql.Int, post_id).query(`
+      SELECT pd.product_id FROM Post_Details pd 
+      JOIN Posts p ON pd.post_id = p.post_id WHERE p.post_id = @post_id
+      `);
+
+    // Combine post and product details
+    const post = postResult.recordset[0];
+    post.products = productResult.recordset;
+
+    return { success: true, post: post };
   } catch (error) {
     console.error("Error getting post by ID:", error);
     throw error;
