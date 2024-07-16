@@ -66,13 +66,32 @@ async function getAllProduct() {
   try {
     const pool = await poolPromise;
     const result = await pool.request().query(`
-    SELECT * FROM Products `);
+    SELECT p.product_id, p.product_name, p.description, p.price, p.stock, b.brand_name, p.country_id, p.age_range, p.image_url 
+    FROM Products p JOIN Brands b ON p.brand_id = b.brand_id`);
     const product = result.recordset;
 
     if (product) {
       return { success: true, product };
     } else {
       return { success: false, message: "Fail to show all Products" };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function showProductDetails(product_id) {
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input("product_id", sql.Int, product_id)
+      .query(`SELECT * FROM Product_Details WHERE product_id = @product_id`);
+    const product = result.recordset;
+    if (product) {
+      return { success: true, product };
+    } else {
+      return { success: false, message: "Fail to show Product Details" };
     }
   } catch (error) {
     throw error;
@@ -390,7 +409,12 @@ async function addProduct(
   }
 }
 
-async function addProductDetails(product_id, production_date, expiration_date, quantity) {
+async function addProductDetails(
+  product_id,
+  production_date,
+  expiration_date,
+  quantity
+) {
   try {
     const pool = await poolPromise;
     const result = await pool
@@ -398,8 +422,7 @@ async function addProductDetails(product_id, production_date, expiration_date, q
       .input("product_id", sql.Int, product_id)
       .input("production_date", sql.DateTime, production_date)
       .input("expiration_date", sql.DateTime, expiration_date)
-      .input("quantity", sql.Int, quantity)
-      .query(`
+      .input("quantity", sql.Int, quantity).query(`
       INSERT INTO Product_Details (product_id, production_date, expiration_date, quantity)
       VALUES (@product_id, @production_date, @expiration_date, @quantity)
     `);
@@ -407,13 +430,14 @@ async function addProductDetails(product_id, production_date, expiration_date, q
       .request()
       .input("product_id", sql.Int, product_id)
       .input("stock", sql.Int, quantity)
-      .query(`UPDATE Products SET stock = stock + @stock WHERE product_id = @product_id`);
+      .query(
+        `UPDATE Products SET stock = stock + @stock WHERE product_id = @product_id`
+      );
     return { success: true, message: "Product details added successfully" };
   } catch (error) {
     console.error("Error adding product details:", error);
     throw error;
   }
-
 }
 
 async function updateProduct(
@@ -422,10 +446,10 @@ async function updateProduct(
   description,
   price,
   stock,
-  brand_id,
+  brand_name,
   country_id,
   age_range,
-  image_url,
+  image_url
 ) {
   try {
     const pool = await poolPromise;
@@ -453,11 +477,6 @@ async function updateProduct(
       updateFields.push("stock = @stock");
     }
 
-    if (brand_id) {
-      request.input("brand_id", brand_id);
-      updateFields.push("brand_id = @brand_id");
-    }
-
     if (country_id) {
       request.input("country_id", country_id);
       updateFields.push("country_id = @country_id");
@@ -471,6 +490,21 @@ async function updateProduct(
     if (image_url) {
       request.input("image_url", image_url);
       updateFields.push("image_url = @image_url");
+    }
+
+    let brandId;
+    if (brand_name) {
+      const brandRequest = pool.request().input("brand_name", brand_name);
+      const brandQuery = `SELECT brand_id FROM Brands WHERE brand_name = @brand_name`;
+      const brandResult = await brandRequest.query(brandQuery);
+
+      if (brandResult.recordset.length > 0) {
+        brandId = brandResult.recordset[0].brand_id;
+        request.input("brand_id", brandId);
+        updateFields.push("brand_id = @brand_id");
+      } else {
+        return { success: false, message: "Brand name not found" };
+      }
     }
 
     if (updateFields.length === 0) {
@@ -499,7 +533,13 @@ async function updateProduct(
   }
 }
 
-async function createPost(user_id, title, description, image_url) {
+async function createPost(
+  user_id,
+  title,
+  description,
+  image_url,
+  productItems
+) {
   try {
     const pool = await poolPromise;
     const result = await pool
@@ -508,13 +548,38 @@ async function createPost(user_id, title, description, image_url) {
       .input("title", sql.NVarChar, title)
       .input("description", sql.NVarChar, description)
       .input("image_url", sql.NVarChar, image_url).query(`
-      INSERT INTO Posts (user_id, title, description, image_url)
-      VALUES (@user_id, @title, @description, @image_url)
-    `);
+        INSERT INTO Posts (user_id, title, description, image_url)
+        VALUES (@user_id, @title, @description, @image_url)
+      `);
+
+    const postId = result.recordset[0].post_id;
+
+    await insertPostDetails(postId, productItems);
 
     return { success: true, message: "Post created successfully" };
   } catch (error) {
     console.error("Error creating post:", error);
+    throw error;
+  }
+}
+
+async function insertPostDetails(post_id, productItems) {
+  try {
+    const pool = await poolPromise;
+
+    for (const item of productItems) {
+      await pool
+        .request()
+        .input("post_id", sql.Int, post_id)
+        .input("product_id", sql.Int, item.product_id)
+        .query(
+          `INSERT INTO Post_Details (post_id, product_id) VALUES (@post_id, @product_id)`
+        );
+    }
+
+    return { success: true, message: "Product details inserted successfully" };
+  } catch (error) {
+    console.error("Error inserting product details:", error);
     throw error;
   }
 }
@@ -622,4 +687,5 @@ module.exports = {
   deletePost,
   showAllReport,
   addProductDetails,
+  showProductDetails,
 };
