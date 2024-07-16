@@ -390,6 +390,32 @@ async function addProduct(
   }
 }
 
+async function addProductDetails(product_id, production_date, expiration_date, quantity) {
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input("product_id", sql.Int, product_id)
+      .input("production_date", sql.DateTime, production_date)
+      .input("expiration_date", sql.DateTime, expiration_date)
+      .input("quantity", sql.Int, quantity)
+      .query(`
+      INSERT INTO Product_Details (product_id, production_date, expiration_date, quantity)
+      VALUES (@product_id, @production_date, @expiration_date, @quantity)
+    `);
+    await pool
+      .request()
+      .input("product_id", sql.Int, product_id)
+      .input("stock", sql.Int, quantity)
+      .query(`UPDATE Products SET stock = stock + @stock WHERE product_id = @product_id`);
+    return { success: true, message: "Product details added successfully" };
+  } catch (error) {
+    console.error("Error adding product details:", error);
+    throw error;
+  }
+
+}
+
 async function updateProduct(
   product_id,
   product_name,
@@ -400,8 +426,6 @@ async function updateProduct(
   country_id,
   age_range,
   image_url,
-  production_date,
-  expiration_date
 ) {
   try {
     const pool = await poolPromise;
@@ -597,4 +621,5 @@ module.exports = {
   updatePost,
   deletePost,
   showAllReport,
+  addProductDetails,
 };
