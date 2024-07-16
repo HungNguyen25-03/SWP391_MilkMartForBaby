@@ -227,6 +227,8 @@ const addProductMiddlewares = async (req, res, next) => {
       country_id,
       age_range,
       image_url,
+      expiration_date,
+      production_date
     } = req.body;
 
     if (!product_name) {
@@ -234,6 +236,24 @@ const addProductMiddlewares = async (req, res, next) => {
         name: "product_name",
         success: false,
         message: "Product name is required",
+        status: 400,
+      });
+    }
+
+    if (!production_date) {
+      errors.push({
+        name: "production_date",
+        success: false,
+        message: "Production date is required",
+        status: 400,
+      });
+    }
+
+    if (!expiration_date) {
+      errors.push({
+        name: "expiration_date",
+        success: false,
+        message: "Expiration date is required",
         status: 400,
       });
     }
@@ -288,6 +308,34 @@ const addProductMiddlewares = async (req, res, next) => {
       });
     }
 
+    const currentDate = new Date();
+    if (expiration_date && new Date(expiration_date) < currentDate) {
+      errors.push({
+        name: "expiration_date",
+        success: false,
+        message: "Expiration date cannot be in the past",
+        status: 400,
+      });
+    }
+
+    if (production_date && new Date(production_date) > currentDate) {
+      errors.push({
+        name: "production_date",
+        success: false,
+        message: "Production date cannot be in the future",
+        status: 400,
+      });
+    }
+
+    if (production_date && expiration_date && new Date(production_date) > new Date(expiration_date)) {
+      errors.push({
+        name: "date_mismatch",
+        success: false,
+        message: "Production date cannot be later than expiration date",
+        status: 400,
+      });
+    }
+
     if (errors.length > 0) {
       return res.status(400).json({ errors });
     }
@@ -298,6 +346,79 @@ const addProductMiddlewares = async (req, res, next) => {
     next(error);
   }
 };
+
+const addProductDetailsMiddlewares = async (req, res, next) => {
+  try {
+    const { product_id } = req.params;
+    const {production_date, expiration_date, quantity} = req.body;
+    const errors = [];
+    const pool = await poolPromise;
+    const currentDate = new Date();
+    if (!production_date) {
+      errors.push({
+        name: "production_date",
+        success: false,
+        message: "Production date is required",
+        status: 400,
+      });
+    }
+    if (!expiration_date) {
+      errors.push({
+        name: "expiration_date",
+        success: false,
+        message: "Expiration date is required",
+        status: 400,
+      });
+    }
+    if (!quantity) {
+      errors.push({
+        name: "quantity",
+        success: false,
+        message: "Quantity is required",
+        status: 400,
+      });
+    }
+    if (quantity < 0) {
+      errors.push({
+        name: "quantity",
+        success: false,
+        message: "Quantity must be more than 0",
+        status: 400,
+      });
+    }
+    if (expiration_date && new Date(expiration_date) < currentDate) {
+      errors.push({
+        name: "expiration_date",
+        success: false,
+        message: "Expiration date cannot be in the past",
+        status: 400,
+      });
+    }
+    if (production_date && new Date(production_date) > currentDate) {
+      errors.push({
+        name: "production_date",
+        success: false,
+        message: "Production date cannot be in the future",
+        status: 400,
+      });
+    }
+    if (production_date && expiration_date && new Date(production_date) > new Date(expiration_date)) {
+      errors.push({
+        name: "date_mismatch",
+        success: false,
+        message: "Production date cannot be later than expiration date",
+        status: 400,
+      });
+    }
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+}
+
 
 const updateProductMiddlewares = async (req, res, next) => {
   try {
@@ -486,4 +607,5 @@ module.exports = {
   updateProductMiddlewares,
   deleteProductMiddlewares,
   createPostMiddlewares,
+  addProductDetailsMiddlewares,
 };

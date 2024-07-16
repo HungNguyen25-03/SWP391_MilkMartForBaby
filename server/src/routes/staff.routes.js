@@ -18,6 +18,7 @@ const {
   updatePostController,
   deletePostController,
   showAllReportController,
+  addProductDetailsController,
 } = require("../controller/staff.controller");
 const {
   createVoucherMiddleware,
@@ -28,6 +29,7 @@ const {
   updateProductMiddlewares,
   deleteProductMiddlewares,
   createPostMiddlewares,
+  addProductDetailsMiddlewares,
 } = require("../middlewares/staff.middleware");
 const { authenticateToken } = require("../middlewares/authJwt.middlewares");
 
@@ -148,5 +150,7 @@ staffRouters.get(
   authenticateToken,
   showAllReportController
 );
+
+staffRouters.put("/add-product-details/:id", authenticateToken, addProductDetailsMiddlewares, addProductDetailsController);
 
 module.exports = staffRouters;

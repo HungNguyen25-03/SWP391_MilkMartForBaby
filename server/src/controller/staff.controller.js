@@ -16,6 +16,7 @@ const {
   updatePost,
   deletePost,
   showAllReport,
+  addProductDetails,
 } = require("../services/staff.services");
 
 const createVoucherController = async (req, res) => {
@@ -288,6 +289,29 @@ const updateProductController = async (req, res) => {
   }
 };
 
+const addProductDetailsController = async (req, res) => {
+  const product_id = parseInt(req.params.id, 10);
+  const { production_date, expiration_date, quantity } = req.body;
+  console.log(req.body);
+  try {
+    const result = await addProductDetails(
+      product_id,
+      production_date,
+      expiration_date,
+      quantity
+    );
+    if (result.success) {
+      return res.status(200).json({
+        message: result.message,
+        status: 200,
+      });
+    }
+  } catch (error) {
+    console.log("fail to add product details");
+    throw error;
+  }
+}
+
 const createPostController = async (req, res) => {
   const { user_id, title, description, image_url } = req.body;
   console.log(req.body);
@@ -378,4 +402,5 @@ module.exports = {
   updatePostController,
   deletePostController,
   showAllReportController,
+  addProductDetailsController,
 };
