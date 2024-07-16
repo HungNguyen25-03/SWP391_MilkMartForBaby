@@ -353,7 +353,9 @@ async function addProduct(
   brand_id,
   country_id,
   age_range,
-  image_url
+  image_url,
+  production_date,
+  expiration_date
 ) {
   try {
     const pool = await poolPromise;
@@ -367,9 +369,19 @@ async function addProduct(
       .input("country_id", sql.Char, country_id)
       .input("age_range", sql.VarChar, age_range)
       .input("image_url", sql.VarChar, image_url).query(`
-      INSERT INTO Products (product_name, description, price, stock, brand_id, country_id, age_range, image_url)
+      INSERT INTO Products (product_name, description, price, stock, brand_id, country_id, age_range, image_url) OUTPUT INSERTED.product_id
       VALUES (@product_name, @description, @price, @stock, @brand_id, @country_id, @age_range, @image_url)
     `);
+    const product_id = result.recordset[0].product_id;
+    await pool
+      .request()
+      .input("product_id", sql.Int, product_id)
+      .input("production_date", sql.DateTime, production_date)
+      .input("expiration_date", sql.DateTime, expiration_date)
+      .input("quantity", sql.Int, stock)
+      .query(
+        `INSERT INTO Product_Details (product_id, production_date, expiration_date, quantity) VALUES (@product_id, @production_date, @expiration_date, @quantity)`
+      );
 
     return { success: true, message: "Product successfully added" };
   } catch (error) {
@@ -387,7 +399,9 @@ async function updateProduct(
   brand_id,
   country_id,
   age_range,
-  image_url
+  image_url,
+  production_date,
+  expiration_date
 ) {
   try {
     const pool = await poolPromise;

@@ -218,6 +218,8 @@ const addProductController = async (req, res) => {
     country_id,
     age_range,
     image_url,
+    production_date,
+    expiration_date,
   } = req.body;
   try {
     const result = await addProduct(
@@ -228,7 +230,9 @@ const addProductController = async (req, res) => {
       brand_id,
       country_id,
       age_range,
-      image_url
+      image_url,
+      production_date,
+      expiration_date
     );
     if (result.success) {
       return res.status(200).json({
