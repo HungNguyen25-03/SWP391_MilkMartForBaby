@@ -56,6 +56,14 @@ CREATE TABLE Products (
 	image_url VARCHAR(512)
 );
 
+CREATE TABLE Product_Details (
+	product_detail_id INT IDENTITY(1,1) PRIMARY KEY,
+	product_id INT REFERENCES Products(product_id),
+	production_date DATETIME,
+	expiration_date DATETIME,
+	CONSTRAINT CK_Production_Expiration_Dates CHECK (production_date < expiration_date)
+);
+
 CREATE TABLE Reviews (
     review_id INT IDENTITY(1,1) PRIMARY KEY,
     user_id INT NOT NULL REFERENCES Users(user_id),
