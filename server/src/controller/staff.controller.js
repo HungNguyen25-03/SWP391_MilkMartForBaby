@@ -330,10 +330,16 @@ const addProductDetailsController = async (req, res) => {
 };
 
 const createPostController = async (req, res) => {
-  const { user_id, title, description, image_url } = req.body;
+  const { user_id, title, description, image_url, productItems } = req.body;
   console.log(req.body);
   try {
-    const result = await createPost(user_id, title, description, image_url);
+    const result = await createPost(
+      user_id,
+      title,
+      description,
+      image_url,
+      productItems
+    );
     console.log(result);
     if (result.success) {
       return res.status(200).json({
