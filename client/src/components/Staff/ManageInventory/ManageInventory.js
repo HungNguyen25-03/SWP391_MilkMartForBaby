@@ -6,6 +6,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { MainAPI } from "../../API";
 import { formatVND } from "../../../utils/Format";
+import DataTable from "react-data-table-component";
+import { useNavigate } from "react-router-dom";
 
 export default function ManageInventory() {
   const [inventory, setInventory] = useState([]);
@@ -17,9 +19,10 @@ export default function ManageInventory() {
   const [img, setImg] = useState("");
   const [editProductId, setEditProductId] = useState(null);
   const [showAdd, setShowAdd] = useState(false);
+  const nav = useNavigate();
 
   const fetchData = () => {
-    fetch(`${MainAPI}/staff/product`, {
+    fetch(${MainAPI}/staff/product, {
       method: "GET",
       headers: {
         "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
@@ -39,60 +42,61 @@ export default function ManageInventory() {
 
   console.log(inventory);
 
-  const handleActionClick = (index) => {
-    setActionVisible(actionVisible === index ? null : index);
-  };
+  // const handleActionClick = (index) => {
+  //   setActionVisible(actionVisible === index ? null : index);
+  // };
 
   const handleEditProductClick = (product) => {
-    setEditProductId(product.product_id);
-    console.log(product.product_id);
-    setProName(product.product_name);
-    setPrice(product.price);
-    setStock(product.stock);
-    setImg(product.image_url);
-    setShowEditProduct(true);
+    // setEditProductId(product.product_id);
+    // console.log(product.product_id);
+    // setProName(product.product_name);
+    // setPrice(product.price);
+    // setStock(product.stock);
+    // setImg(product.image_url);
+    // setShowEditProduct(true);
+    nav(/edit-product/${product.product_id});
   };
 
-  const handleUpdateProduct = () => {
-    if (!editProductId) return;
+  // const handleUpdateProduct = () => {
+  //   if (!editProductId) return;
 
-    console.log(editProductId);
+  //   console.log(editProductId);
 
-    fetch(`${MainAPI}/staff/update-product/${editProductId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
-      },
-      body: JSON.stringify({
-        product_name: proName,
-        image_url: img,
-        price: price,
-        stock: stock,
-      }),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to update product");
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data);
-        toast.success("Product updated successfully");
-        fetchData();
-        setShowEditProduct(false);
-        setProName("");
-        setPrice("");
-        setStock("");
-        setImg("");
-        setEditProductId(null);
-      })
-      .catch((error) => console.error("Error updating product:", error));
-  };
+  //   fetch(${MainAPI}/staff/update-product/${editProductId}, {
+  //     method: "PUT",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+  //     },
+  //     body: JSON.stringify({
+  //       product_name: proName,
+  //       image_url: img,
+  //       price: price,
+  //       stock: stock,
+  //     }),
+  //   })
+  //     .then((res) => {
+  //       if (!res.ok) throw new Error("Failed to update product");
+  //       return res.json();
+  //     })
+  //     .then((data) => {
+  //       console.log(data);
+  //       toast.success("Product updated successfully");
+  //       fetchData();
+  //       setShowEditProduct(false);
+  //       setProName("");
+  //       setPrice("");
+  //       setStock("");
+  //       setImg("");
+  //       setEditProductId(null);
+  //     })
+  //     .catch((error) => console.error("Error updating product:", error));
+  // };
 
   const handleDelete = async (productId) => {
-    console.log(`Delete product with ID: ${productId}`);
+    console.log(Delete product with ID: ${productId});
     try {
-      const data = await fetch(`${MainAPI}/staff/export/${productId}`, {
+      const data = await fetch(${MainAPI}/staff/export/${productId}, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -114,238 +118,145 @@ export default function ManageInventory() {
     }
   };
 
-  const handleAddProduct = () => {
-    fetch(`${MainAPI}/staff/add-product`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
-      },
-      body: JSON.stringify({
-        product_name: proName,
-        image_url: img,
-        price: price,
-        stock: stock,
-      }),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to add product");
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data);
-        fetchData();
-        setProName("");
-        setPrice("");
-        setStock("");
-        setImg("");
-        setShowAdd(false);
-        toast.success("Product added successfully");
-      })
-      .catch((error) => console.error("Error adding product:", error));
-  };
+  // const handleAddProduct = () => {
+  //   fetch(${MainAPI}/staff/add-product, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+  //     },
+  //     body: JSON.stringify({
+  //       product_name: proName,
+  //       image_url: img,
+  //       price: price,
+  //       stock: stock,
+  //     }),
+  //   })
+  //     .then((res) => {
+  //       if (!res.ok) throw new Error("Failed to add product");
+  //       return res.json();
+  //     })
+  //     .then((data) => {
+  //       console.log(data);
+  //       fetchData();
+  //       setProName("");
+  //       setPrice("");
+  //       setStock("");
+  //       setImg("");
+  //       setShowAdd(false);
+  //       toast.success("Product added successfully");
+  //     })
+  //     .catch((error) => console.error("Error adding product:", error));
+  // };
 
-  const handleCancelAddProduct = () => {
-    setProName("");
-    setPrice("");
-    setStock("");
-    setImg("");
-    setShowAdd(false);
-  };
-  const handleCancelEditProduct = () => {
-    setProName("");
-    setPrice("");
-    setStock("");
-    setImg("");
-    setShowEditProduct(false);
-  };
+  // const handleCancelAddProduct = () => {
+  //   setProName("");
+  //   setPrice("");
+  //   setStock("");
+  //   setImg("");
+  //   setShowAdd(false);
+  // }
+  // const handleCancelEditProduct = () => {
+  //   setProName("");
+  //   setPrice("");
+  //   setStock("");
+  //   setImg("");
+  //   setShowEditProduct(false)
+  // }
 
+  const column = [
+    {
+      name: "Product ID",
+      selector: (row) => row.product_id,
+      sortable: true,
+    },
+    {
+      name: "Brand Name",
+      selector: (row) => row.brand_name
+      ,
+      sortable: true,
+    },
+    {
+      name: "Image",
+      cell: row => <img src={row.image_url} alt="Product" style={{ width: '50px', height: '50px' }} />,
+    },
+    {
+      name: "Product Name",
+      selector: (row) => row.product_name,
+      sortable: true,
+    },
+    {
+      name: "Price",
+      selector: (row) => row.price,
+      sortable: true,
+    },
+    {
+      name: "Country ID",
+      selector: (row) => row.country_id,
+      sortable: true,
+    },
+    {
+      name: "Description",
+      selector: (row) => row.description,
+      sortable: true,
+    },
+    {
+      name: "Age Range",
+      selector: (row) => row.age_range,
+      sortable: true,
+    },
+    {
+      name: "Stock",
+      selector: (row) => row.stock,
+      sortable: true,
+    },
+    {
+      cell: (row) => (
+        <div className="action">
+          <button className="icon_btn"
+            style={{
+              border: "none",
+              backgroundColor: "none",
+              borderRadius: "20px",
+            }}
+            onClick={() => handleEditProductClick(row)}
+          >
+            <BsJournalCheck color="green" />
+          </button>
+
+          <button className="icon_btn"
+            style={{
+              border: "none",
+              backgroundColor: "none",
+              borderRadius: "20px",
+              marginLeft: "10px",
+              fontSize: "16px",
+            }}
+            onClick={() => handleDelete(row.product_id)}
+          >
+            <MdDeleteOutline color="red" />
+          </button>
+        </div >
+      ),
+    },
+  ];
+  console.log(inventory)
   return (
-    <div className="inventory">
+    <>
       <ToastContainer />
-      <div className="create-inventory-btn">
-        <button
-          className="btn btn-primary"
-          style={{
-            border: "none",
-            borderRadius: "20px",
-            marginRight: "20px",
-            marginTop: "20px",
-          }}
-          onClick={() => setShowAdd(true)}
-        >
-          Add New Product
-        </button>
-      </div>
-      {showAdd && (
-        <div className="add-voucher" style={{ marginLeft: "10px" }}>
-          <div className="add-voucvher-detail">
-            <h4>Add New Product</h4>
-            <div>
-              <label>Image URL:</label>
-              <input
-                type="text"
-                value={img}
-                style={{ width: "80%", marginBottom: "5px" }}
-                onChange={(event) => setImg(event.target.value)}
-              />
-            </div>
-            <label>Product Name:</label>
-            <input
-              type="text"
-              value={proName}
-              onChange={(event) => setProName(event.target.value)}
+      <>
+        <div className="manage-inventory-container">
+          <div className="table-post mt-3">
+            <DataTable
+              columns={column}
+              data={inventory}
+              pagination
+              paginationRowsPerPageOptions={[5]}
+              className="table-content"
             />
-            <label style={{ marginLeft: "10px" }}>Price:</label>
-            <input
-              type="number"
-              value={price}
-              onChange={(event) => setPrice(event.target.value)}
-            />
-            <label style={{ marginLeft: "10px" }}>Stock:</label>
-            <input
-              type="number"
-              value={stock}
-              onChange={(event) => setStock(event.target.value)}
-            />
-            <button className="add-cancel" onClick={handleAddProduct}>
-              Add
-            </button>
-            <button
-              className="add-cancel"
-              // onClick={() => setShowAdd(false)}
-              onClick={() => handleCancelAddProduct()}
-            >
-              Cancel
-            </button>
           </div>
         </div>
-      )}
-      {showEditProduct && (
-        <div className="edit-voucher" style={{ marginLeft: "10px" }}>
-          <div className="edit-voucvher-detail">
-            <h4>Edit Product</h4>
-            <div>
-              <label>Image URL:</label>
-              <input
-                type="text"
-                value={img}
-                style={{ width: "80%", marginBottom: "5px" }}
-                onChange={(event) => setImg(event.target.value)}
-              />
-            </div>
-            <label>Product Name:</label>
-            <input
-              type="text"
-              value={proName}
-              onChange={(event) => setProName(event.target.value)}
-            />
-            <label style={{ marginLeft: "10px" }}>Price:</label>
-            <input
-              type="number"
-              value={price}
-              onChange={(event) => setPrice(event.target.value)}
-            />
-            <label style={{ marginLeft: "10px" }}>Stock:</label>
-            <input
-              type="number"
-              value={stock}
-              onChange={(event) => setStock(event.target.value)}
-            />
-            <button className="add-cancel" onClick={handleUpdateProduct}>
-              Update
-            </button>
-            <button
-              className="add-cancel"
-              // onClick={() => setShowEditProduct(false)}
-              onClick={() => handleCancelEditProduct()}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
-      <div className="inventory-th">
-        <table className="table-inventory-th">
-          <thead>
-            <tr>
-              <th>Product ID</th>
-              <th>Image</th>
-              <th>Product Name</th>
-              <th>Price</th>
-              <th>Stock</th>
-              <th>Brand</th>
-              <th>Country</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-        </table>
-      </div>
-
-      <div className="inventory-tb">
-        <table className="table-inventory-tb">
-          <tbody>
-            {inventory.map((invent, index) => (
-              <tr key={index}>
-                <td style={{ padding: "10px" }}>{invent.product_id}</td>
-                <td style={{ textAlign: "center" }}>
-                  <div
-                    style={{ width: "90px", height: "120px", marginLeft: "9%" }}
-                  >
-                    <img
-                      style={{ width: "100%", height: "100%" }}
-                      src={invent.image_url}
-                      alt={invent.image_url}
-                    />
-                  </div>
-                </td>
-                <td>{invent.product_name}</td>
-                <td>{formatVND(invent.price)}</td>
-                <td>{invent.stock}</td>
-                <td>{invent.brand_id}</td>
-                <td>{invent.country_id}</td>
-                <td>
-                  <button
-                    className="action-btn"
-                    onClick={() => handleActionClick(index)}
-                  >
-                    ▪▪▪
-                  </button>
-                  {actionVisible === index && (
-                    <div className="action-menu" style={{ marginTop: "10px" }}>
-                      <button
-                        className="icon_btn"
-                        style={{
-                          border: "none",
-                          backgroundColor: "none",
-                          borderRadius: "20px",
-                        }}
-                        onClick={() => handleEditProductClick(invent)}
-                      >
-                        <BsJournalCheck color="green" />
-                      </button>
-
-                      <button
-                        className="icon_btn"
-                        style={{
-                          border: "none",
-                          backgroundColor: "none",
-                          borderRadius: "20px",
-                          marginLeft: "10px",
-                          fontSize: "16px",
-                        }}
-                        onClick={() => handleDelete(invent.product_id)}
-                      >
-                        <MdDeleteOutline color="red" />
-                      </button>
-                    </div>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+      </>
+    </>
   );
 }

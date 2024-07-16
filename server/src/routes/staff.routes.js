@@ -19,6 +19,7 @@ const {
   deletePostController,
   showAllReportController,
   addProductDetailsController,
+  showProductDetailsController,
 } = require("../controller/staff.controller");
 const {
   createVoucherMiddleware,
@@ -109,6 +110,12 @@ staffRouters.put(
   updateProductController
 );
 
+staffRouters.get(
+  "/show-product-details/:id",
+  authenticateToken,
+  showProductDetailsController
+);
+
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "./uploads");
@@ -151,6 +158,11 @@ staffRouters.get(
   showAllReportController
 );
 
-staffRouters.put("/add-product-details/:id", authenticateToken, addProductDetailsMiddlewares, addProductDetailsController);
+staffRouters.put(
+  "/add-product-details/:id",
+  authenticateToken,
+  addProductDetailsMiddlewares,
+  addProductDetailsController
+);
 
 module.exports = staffRouters;
