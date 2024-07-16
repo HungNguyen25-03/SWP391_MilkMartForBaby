@@ -8,9 +8,9 @@ import axios from 'axios';
 
 export default function NavBarStaff() {
 
-    useEffect(() => {
-        nav('/staff/comfirm_order');
-    }, []);
+    // useEffect(() => {
+    //     nav('/staff/comfirm_order');
+    // }, []);
 
     const token = JSON.parse(localStorage.getItem("accessToken"));
     const { auth, setAuth } = useContext(AuthContext);
