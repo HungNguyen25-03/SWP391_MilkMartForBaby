@@ -564,12 +564,12 @@ async function createPost(
 }
 
 async function insertPostDetails(post_id, productItems) {
-  console.log("Product items:", productItems);
+  // console.log("Product items:", productItems);
   try {
     const pool = await poolPromise;
 
     for (const item of productItems) {
-      console.log("Item:", item);
+      // console.log("Item:", item);
       await pool
         .request()
         .input("post_id", sql.Int, post_id)
@@ -624,9 +624,10 @@ async function updatePost(post_id, user_id, title, description, image_url) {
   }
 }
 
-async function deletePost(post_id) {
+async function deletePost(post_id, productItems) {
   try {
     const pool = await poolPromise;
+    await deletePostDetails(post_id, productItems);
     const result = await pool
       .request()
       .input("post_id", sql.Int, post_id)
@@ -639,6 +640,20 @@ async function deletePost(post_id) {
   } catch (error) {
     console.error("Error deleting post:", error);
     throw error;
+  }
+}
+
+async function deletePostDetails(post_id, productItems) {
+  const pool = await poolPromise;
+
+  for (const item of productItems) {
+    await pool
+      .request()
+      .input("post_id", sql.Int, post_id)
+      .input("product_id", sql.Int, item)
+      .query(
+        `DELETE FROM Post_Details WHERE post_id = @post_id AND product_id = @product_id`
+      );
   }
 }
 

@@ -479,14 +479,14 @@ async function getPostById(post_id) {
     const productResult = await pool
       .request()
       .input("post_id", sql.Int, post_id).query(`
-      SELECT pd.product_id FROM Post_Details pd 
-      JOIN Posts p ON pd.post_id = p.post_id WHERE p.post_id = @post_id
+      SELECT pd.product_id, p.product_name, p.price, p.image_url FROM Post_Details pd 
+      JOIN Posts ps ON pd.post_id = ps.post_id JOIN Products p 
+      ON pd.product_id = p.product_id WHERE ps.post_id = @post_id
       `);
 
     // Combine post and product details
     const post = postResult.recordset[0];
     post.products = productResult.recordset;
-
     return { success: true, post: post };
   } catch (error) {
     console.error("Error getting post by ID:", error);

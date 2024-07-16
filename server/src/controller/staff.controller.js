@@ -378,8 +378,9 @@ const updatePostController = async (req, res) => {
 
 const deletePostController = async (req, res) => {
   const post_id = parseInt(req.params.id, 10);
+  const { productItems } = req.body;
   try {
-    const result = await deletePost(post_id);
+    const result = await deletePost(post_id, productItems);
     console.log(result);
     if (result.success) {
       return res.status(200).json({
