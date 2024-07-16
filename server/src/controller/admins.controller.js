@@ -106,15 +106,16 @@ const getUserByIdController = async (req, res) => {
 const dashboardController = async (req, res) => {
   const { startDate, endDate } = req.query;
 
+  // Validate the date format dd-MM-yyyy
   if (
     !startDate ||
     !endDate ||
-    !/^\d{4}-\d{2}$/.test(startDate) ||
-    !/^\d{4}-\d{2}$/.test(endDate)
+    !/^\d{2}-\d{2}-\d{4}$/.test(startDate) ||
+    !/^\d{2}-\d{2}-\d{4}$/.test(endDate)
   ) {
     return res.status(400).send({
       error:
-        "Please provide both startDate and endDate query parameters in the format YYYY-MM.",
+        "Please provide both startDate and endDate query parameters in the format dd-MM-yyyy.",
     });
   }
 
