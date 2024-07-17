@@ -563,6 +563,69 @@ const deleteProductMiddlewares = async (req, res, next) => {
   }
 };
 
+const updatePostMiddlewares = async (req, res, next) => {
+  try {
+    const errors = [];
+    const pool = await poolPromise;
+    const post_id = req.params.id;
+    const { title, description, image_url, user_id } = req.body;
+    const httpRegex = /^(http|https):\/\//;
+
+    if (!title) {
+      errors.push({
+        name: "title",
+        success: false,
+        message: "Title is required",
+        status: 400,
+      });
+    }
+
+    if (image_url && !httpRegex.test(image_url)) {
+      errors.push({
+        name: "image_url",
+        success: false,
+        message: "Invalid image URL",
+        status: 400,
+      });
+    }
+
+    if (!description) {
+      errors.push({
+        name: "content",
+        success: false,
+        message: "Description is required",
+        status: 400,
+      });
+    }
+
+    if (!user_id) {
+      errors.push({
+        name: "user_id",
+        success: false,
+        message: "User ID is required",
+        status: 400,
+      });
+    }
+
+    if (image_url && !httpRegex.test(image_url)) {
+      errors.push({
+        name: "image_url",
+        success: false,
+        message: "Invalid image URL",
+        status: 400,
+      });
+    }
+
+    if (errors.length > 0) {
+      return next(errors);
+    }
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
 const createPostMiddlewares = async (req, res, next) => {
   try {
     const errors = [];
@@ -625,4 +688,5 @@ module.exports = {
   deleteProductMiddlewares,
   createPostMiddlewares,
   addProductDetailsMiddlewares,
+  updatePostMiddlewares,
 };
