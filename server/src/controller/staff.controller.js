@@ -18,6 +18,7 @@ const {
   showAllReport,
   addProductDetails,
   showProductDetails,
+  deleteExpiredProduct,
 } = require("../services/staff.services");
 
 const createVoucherController = async (req, res) => {
@@ -74,6 +75,20 @@ const getOrderController = async (req, res) => {
     }
   } catch (error) {
     console.log("Faill to get Order");
+  }
+};
+
+const deleteExpiredProductController = async (req, res) => {
+  try {
+    const result = await deleteExpiredProduct();
+    if (result.success) {
+      return res.status(200).json({
+        message: result.message,
+        status: 200,
+      });
+    }
+  } catch (error) {
+    console.log("fail to delete expired product");
   }
 };
 
@@ -270,7 +285,6 @@ const updateProductController = async (req, res) => {
     product_name,
     description,
     price,
-    stock,
     brand_name,
     country_id,
     age_range,
@@ -283,7 +297,6 @@ const updateProductController = async (req, res) => {
       product_name,
       description,
       price,
-      stock,
       brand_name,
       country_id,
       age_range,
@@ -428,4 +441,5 @@ module.exports = {
   showAllReportController,
   addProductDetailsController,
   showProductDetailsController,
+  deleteExpiredProductController,
 };
