@@ -10,12 +10,17 @@ import { DeleteIcon } from "../../../utils/Icon/DeleteIcon";
 import { MdModeEdit } from "react-icons/md";
 import "./ManagePost.scss";
 import { convertSQLDate } from "../../../utils/Format";
+import { Button, Modal } from "react-bootstrap";
 
 export default function ManagePosts() {
   // console.log(description);
   const { auth } = useAuth();
   const nav = useNavigate();
   const [records, setRecords] = useState([]);
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const fetchData = () => {
     axios
@@ -44,6 +49,7 @@ export default function ManagePosts() {
         console.log(res.data);
         toast.success(res.data.message);
         fetchData();
+        localStorage.removeItem("post_id");
       })
       .catch((err) => {
         console.log(err);
@@ -72,7 +78,9 @@ export default function ManagePosts() {
           <span
             className="action-btn"
             onClick={() => {
-              handleDelete(row.post_id);
+              // handleDelete(row.post_id);
+              handleShow();
+              localStorage.setItem("post_id", row.post_id);
             }}
           >
             <DeleteIcon color="red" />
@@ -103,6 +111,35 @@ export default function ManagePosts() {
             paginationRowsPerPageOptions={[5]}
             className="table-content"
           />
+        </div>
+
+        <div className="modal-content">
+          <Modal show={show} onHide={handleClose} animation={false}>
+            <Modal.Header closeButton>
+              <Modal.Title>Remove post</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Do you want to remove this post?</Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  handleClose();
+                  localStorage.removeItem("post_id");
+                }}
+              >
+                Close
+              </Button>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  handleClose();
+                  handleDelete(localStorage.getItem("post_id"));
+                }}
+              >
+                Confirm
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </div>
       </div>
     </>

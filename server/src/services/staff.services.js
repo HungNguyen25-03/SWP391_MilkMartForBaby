@@ -730,14 +730,8 @@ async function deletePost(post_id) {
   try {
     const pool = await poolPromise;
 
-    const productIdResult = await pool
-      .request()
-      .input("post_id", sql.Int, post_id)
-      .query(`SELECT product_id FROM Post_Details WHERE post_id = @post_id`);
-    const productItems = productIdResult.recordset.map(
-      (item) => item.product_id
-    );
-    await deletePostDetails(post_id, productItems);
+    await deletePostDetails(post_id);
+
     const result = await pool
       .request()
       .input("post_id", sql.Int, post_id)
@@ -755,18 +749,13 @@ async function deletePost(post_id) {
 }
 
 // Function to delete post details
-async function deletePostDetails(post_id, productItems) {
+async function deletePostDetails(post_id) {
   const pool = await poolPromise;
 
-  for (const item of productItems) {
-    await pool
-      .request()
-      .input("post_id", sql.Int, post_id)
-      .input("product_id", sql.Int, item)
-      .query(
-        `DELETE FROM Post_Details WHERE post_id = @post_id AND product_id = @product_id`
-      );
-  }
+  await pool
+    .request()
+    .input("post_id", sql.Int, post_id)
+    .query(`DELETE FROM Post_Details WHERE post_id = @post_id`);
 }
 
 async function showAllReport() {

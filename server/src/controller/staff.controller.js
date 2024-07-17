@@ -54,7 +54,7 @@ const getAllUserController = async (req, res) => {
 const getAllProductController = async (req, res) => {
   try {
     const result = await getAllProduct();
-    console.log(result);
+    // console.log(result);
     if (result.success) {
       res.json(result.product);
     } else {
@@ -365,7 +365,7 @@ const createPostController = async (req, res) => {
 const updatePostController = async (req, res) => {
   const post_id = parseInt(req.params.id, 10);
   const { user_id, title, description, image_url } = req.body;
-  console.log(req.body);
+  // console.log(req.body);
   try {
     const result = await updatePost(
       post_id,
