@@ -16,14 +16,16 @@ const DateRangeButton = ({ onDateChange }) => {
     <div className="date-range-container">
       <div className="date-range-button" onClick={toggleDatePicker}>
         <span>
-          {startDate.toLocaleDateString("en-US", {
+          {startDate.toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
             year: "numeric",
-            month: "short",
           })}{" "}
           -{" "}
-          {endDate.toLocaleDateString("en-US", {
+          {endDate.toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
             year: "numeric",
-            month: "short",
           })}
         </span>
         <span className="arrow">&#x25BC;</span>
@@ -41,8 +43,7 @@ const DateRangeButton = ({ onDateChange }) => {
               selectsStart
               startDate={startDate}
               endDate={endDate}
-              showMonthYearPicker
-              dateFormat="MM-yyyy"
+              dateFormat="dd-MM-yyyy"
             />
           </div>
           <div>
@@ -57,8 +58,7 @@ const DateRangeButton = ({ onDateChange }) => {
               startDate={startDate}
               endDate={endDate}
               minDate={startDate}
-              showMonthYearPicker
-              dateFormat="MM-yyyy"
+              dateFormat="dd-MM-yyyy"
             />
           </div>
         </div>

@@ -41,16 +41,16 @@ export const options = {
 export default function Chart({ startDate, endDate }) {
   const [dataChart, setDataChart] = useState({});
   const [topProducts, setTopProducts] = useState([]);
-  const [totalRevenuePerMonth, setTotalRevenuePerMonth] = useState([]);
+  const [totalRevenuePerPeriod, setTotalRevenuePerPeriod] = useState([]);
 
-  const barChartLabels = totalRevenuePerMonth.map(
-    (revenue) => revenue.yearMonth
+  const barChartLabels = totalRevenuePerPeriod.map(
+    (revenue) => revenue.periodMonth
   );
-  const barChartData = totalRevenuePerMonth.map(
+  const barChartData = totalRevenuePerPeriod.map(
     (revenue) => revenue.totalRevenue
   );
 
-  console.log(barChartData);
+  // console.log(barChartData);
   useEffect(() => {
     axios
       .get(`${MainAPI}/admin/dashboard`, {
@@ -66,7 +66,7 @@ export default function Chart({ startDate, endDate }) {
         // console.log(res.data);
         setDataChart(res.data);
         setTopProducts(res.data.topProducts);
-        setTotalRevenuePerMonth(res.data.totalRevenuePerMonth);
+        setTotalRevenuePerPeriod(res.data.totalRevenuePerPeriod);
       })
       .catch((err) => {
         console.log(err);
