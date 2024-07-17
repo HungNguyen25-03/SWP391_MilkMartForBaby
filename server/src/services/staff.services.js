@@ -253,6 +253,50 @@ async function exportProduct(product_id) {
   }
 }
 
+async function deleteExpiredProduct() {
+  try {
+    const pool = await poolPromise;
+    const currentDate = new Date();
+    const nextMonthDate = new Date();
+    nextMonthDate.setMonth(currentDate.getMonth() + 1);
+    // Fetch products to be deleted
+    const productsToDelete = await pool
+      .request()
+      .input("nextMonthDate", sql.DateTime, nextMonthDate).query(`
+        SELECT pd.product_id, pd.quantity FROM Product_Details pd
+        WHERE pd.expiration_date <= @nextMonthDate
+      `);
+
+    const products = productsToDelete.recordset;
+    // Delete products from Product_Details table
+    await pool.request().input("nextMonthDate", sql.DateTime, nextMonthDate)
+      .query(`
+        DELETE FROM Product_Details
+        WHERE expiration_date <= @nextMonthDate
+      `);
+
+    // Decrement the stock in Products table
+    for (const product of products) {
+      await pool
+        .request()
+        .input("product_id", sql.Int, product.product_id)
+        .input("quantity", sql.Int, product.quantity).query(`
+          UPDATE Products
+          SET stock = stock - @quantity
+          WHERE product_id = @product_id
+        `);
+    }
+
+    return {
+      success: true,
+      message: "Expired products deleted and stock updated successfully",
+    };
+  } catch (error) {
+    console.error("Error deleting expired products:", error);
+    throw error;
+  }
+}
+
 async function editProduct(product_id, changeQuantity) {
   try {
     const pool = await poolPromise;
@@ -445,7 +489,6 @@ async function updateProduct(
   product_name,
   description,
   price,
-  stock,
   brand_name,
   country_id,
   age_range,
@@ -470,11 +513,6 @@ async function updateProduct(
     if (price) {
       request.input("price", price);
       updateFields.push("price = @price");
-    }
-
-    if (stock) {
-      request.input("stock", stock);
-      updateFields.push("stock = @stock");
     }
 
     if (country_id) {
@@ -706,4 +744,5 @@ module.exports = {
   showAllReport,
   addProductDetails,
   showProductDetails,
+  deleteExpiredProduct,
 };

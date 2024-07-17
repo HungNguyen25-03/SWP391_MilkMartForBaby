@@ -20,6 +20,7 @@ const {
   showAllReportController,
   addProductDetailsController,
   showProductDetailsController,
+  deleteExpiredProductController,
 } = require("../controller/staff.controller");
 const {
   createVoucherMiddleware,
@@ -150,6 +151,12 @@ staffRouters.delete(
   "/delete-post/:id",
   authenticateToken,
   deletePostController
+);
+
+staffRouters.delete(
+  "/delete-expired-product",
+  authenticateToken,
+  deleteExpiredProductController
 );
 
 staffRouters.get(

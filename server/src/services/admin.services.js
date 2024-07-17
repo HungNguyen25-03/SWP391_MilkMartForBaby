@@ -245,7 +245,7 @@ async function dashboard(startDate, endDate) {
             dayStart < @endDateString
         )
         SELECT 
-          FORMAT(ds.dayStart, 'dd-MM-yyyy') AS dayMonth, 
+          FORMAT(ds.dayStart, 'dd-MM-yyyy') AS periodMonth, 
           ISNULL(SUM(o.total_amount), 0) AS totalRevenue
         FROM 
           DateSeries ds
@@ -271,7 +271,7 @@ async function dashboard(startDate, endDate) {
             monthStart < DATEFROMPARTS(YEAR(@endDateString), MONTH(@endDateString), 1)
         )
         SELECT 
-          FORMAT(ds.monthStart, 'MM-yyyy') AS yearMonth, 
+          FORMAT(ds.monthStart, 'MM-yyyy') AS periodMonth, 
           ISNULL(SUM(o.total_amount), 0) AS totalRevenue
         FROM 
           DateSeries ds
