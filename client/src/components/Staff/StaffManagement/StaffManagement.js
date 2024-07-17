@@ -20,7 +20,7 @@ export default function StaffManagement() {
                     <NavBarStaff />
                 </div>
                 <div className='col-md-1'></div>
-                <div className="col-md-9 col-sm-9">
+                <div className="col-md-9 col-sm-9 text-center align-item-center">
                     <Routes>
                         <Route path='/comfirm_order' element={<ConfirmOrder />} />
                         <Route path='/manage_inventory' element={<ManageInventory />} />

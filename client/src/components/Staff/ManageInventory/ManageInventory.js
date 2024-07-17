@@ -7,10 +7,16 @@ import "react-toastify/dist/ReactToastify.css";
 import { MainAPI } from "../../API";
 import { useNavigate } from "react-router-dom";
 import DataTable from "react-data-table-component";
+import { MdOutlineInventory } from "react-icons/md";
 
 export default function ManageInventory() {
   const [inventory, setInventory] = useState([]);
   const nav = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+  // const [selectedProduct, setSelectedProduct] = useState(null);
+  const [proDate, setProDate] = useState("");
+  const [expDate, setExpDate] = useState("");
+  const [quantity, setQuantity] = useState("");
 
   const fetchData = () => {
     fetch(`${MainAPI}/staff/product`, {
@@ -35,7 +41,18 @@ export default function ManageInventory() {
     nav(`/edit-product/${product.product_id}`);
   };
 
-  const handleDelete = async (productId) => {
+
+  const handleDelete = (id) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this item ?"
+    );
+
+    if (confirmed) {
+      handleConfirmDelete(id)
+    };
+  }
+
+  const handleConfirmDelete = async (productId) => {
     try {
       const data = await fetch(`${MainAPI}/staff/export/${productId}`, {
         method: "GET",
@@ -56,18 +73,27 @@ export default function ManageInventory() {
     }
   };
 
+  const handleEditDetail = (product) => {
+    setShowModal(true);
+    setProDate(product.production_date);
+    setExpDate(product.expiry_date);
+    setQuantity(product.stock);
+    console.log(product)
+  }
+
   const columns = [
     {
       name: "Product ID",
       selector: (row) => row.product_id,
       sortable: true,
       center: true,
+      wrap: true,
       style: {
         fontSize: '12px', textAlign: 'center'
       },
     },
     {
-      name: "Brand Name",
+      name: "Brand",
       selector: (row) => row.brand_name,
       sortable: true,
       center: true,
@@ -76,11 +102,11 @@ export default function ManageInventory() {
     },
     {
       name: "Image",
-      cell: (row) => <img src={row.image_url} alt="Product" style={{ width: '30px', height: '30px' }} />,
+      cell: (row) => <img src={row.image_url} alt="Product" style={{ width: '55px', height: '70px' }} />,
       center: true,
     },
     {
-      name: "Product Name",
+      name: "Product",
       selector: (row) => row.product_name,
       sortable: true,
       center: true,
@@ -114,6 +140,7 @@ export default function ManageInventory() {
       selector: (row) => row.age_range,
       sortable: true,
       center: true,
+      wrap: true,
       style: { fontSize: '12px', textAlign: 'center' },
     },
     {
@@ -130,13 +157,21 @@ export default function ManageInventory() {
             <BsJournalCheck color="green" />
           </button>
           <button className="icon_btn" onClick={() => handleDelete(row.product_id)}>
-            <MdDeleteOutline color="red" />
+            <MdDeleteOutline color="red" fontSize="16px" />
+          </button>
+          {/* <button className="icon_btn" onClick={() => { setShowModal(true); setSelectedProduct(row); }}> */}
+          <button className="icon_btn" onClick={() => handleEditDetail(row)}>
+            <MdOutlineInventory color="#0066cc" fontSize="16px" />
           </button>
         </div>
       ),
       center: true,
     },
   ];
+
+  console.log(showModal)
+
+  console.log(inventory)
 
   return (
     <>
@@ -151,11 +186,23 @@ export default function ManageInventory() {
           Add Product
         </button>
         <div className="table-post">
+          {
+            showModal && (
+              <>
+                <div>
+                  <input type="date" value={proDate} onChange={(e) => setProDate(e.target.value)} />
+                  <input type="date" value={expDate} onChange={(e) => setExpDate(e.target.value)} />
+                  <input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+                </div>
+              </>
+            )
+          }
           <DataTable
+            pagination
+            paginationPerPage={4}
+            paginationRowsPerPageOptions={[4, 6]}
             columns={columns}
             data={inventory}
-            pagination
-            paginationRowsPerPageOptions={[2]}
             className="table-content"
           />
         </div>

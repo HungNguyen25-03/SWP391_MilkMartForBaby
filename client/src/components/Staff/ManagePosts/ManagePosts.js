@@ -55,16 +55,19 @@ export default function ManagePosts() {
       name: "Post Id",
       selector: (row) => row.post_id,
       sortable: true,
+      center: true,
     },
     {
       name: "Post Title",
       selector: (row) => row.title,
       sortable: true,
+      center: true,
     },
     {
       name: "Post date",
       selector: (row) => convertSQLDate(row.post_date),
       sortable: true,
+      center: true,
     },
     {
       cell: (row) => (
@@ -82,6 +85,7 @@ export default function ManagePosts() {
           </Link>
         </div>
       ),
+      center: true,
     },
   ];
 
@@ -96,11 +100,11 @@ export default function ManagePosts() {
 
         <div className="table-post mt-3">
           <DataTable
+            pagination
+            paginationPerPage={5}
+            paginationRowsPerPageOptions={[5, 8]}
             columns={column}
             data={records}
-            selectableRows
-            pagination
-            paginationRowsPerPageOptions={[5]}
             className="table-content"
           />
         </div>
