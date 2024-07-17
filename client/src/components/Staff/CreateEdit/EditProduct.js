@@ -77,7 +77,7 @@ export default function EditProduct() {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
-                    "x-access-token": localStorage.getItem("accessToken"),
+                    "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
                 },
                 body: JSON.stringify({
                     brand_name: formik.values.brandName,

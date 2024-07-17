@@ -15,9 +15,7 @@ import * as Yup from 'yup';
 import { MainAPI } from '../../API';
 
 export default function EditProduct() {
-    const { id } = useParams();
     const nav = useNavigate();
-    const [edit, setEdit] = useState({})
 
     const formik = useFormik({
         initialValues: {
@@ -53,52 +51,16 @@ export default function EditProduct() {
         }),
     });
 
-    const fetchData = async () => {
-        try {
-            const response = await fetch(
-                `${MainAPI}/product/getProById/${id}`,
-                {
-                    method: "GET",
-                }
-            );
-            if (!response.ok) throw new Error("Failed to get data to edit");
-            const data = await response.json();
-            const product = data;
-            setEdit(product);
-            formik.setValues({
-                brandName: product.brand_name,
-                image: product.image_url,
-                productName: product.product_name,
-                price: product.price,
-                countryID: product.country_id,
-                description: product.description,
-                ageRange: product.age_range,
-                proDate: product.production_date,
-                expDate: product.expiration_date,
-                stock: product.stock
-            });
-
-        } catch (error) {
-            console.log("Error fetching product data:", error);
-        }
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    console.log(edit);
-
     const handleAddProduct = async () => {
         try {
             const response = await fetch(`${MainAPI}/staff/add-product`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "x-access-token": localStorage.getItem("accessToken"),
+                    "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
                 },
                 body: JSON.stringify({
-                    brand_name: formik.values.brandName,
+                    brand_id: formik.values.brandName,
                     image_url: formik.values.image,
                     product_name: formik.values.productName,
                     price: formik.values.price,
@@ -161,18 +123,19 @@ export default function EditProduct() {
                                     value={formik.values.brandName}
                                     onChange={formik.handleChange}
                                 >
-                                    <option value="Yoko Gold"> Yoko Gold</option>
-                                    <option value="Wakodo">  Wakodo</option>
-                                    <option value="Vinamilk">Vinamilk</option>
-                                    <option value="Vanma (Nutifood)">  Vanma (Nutifood)</option>
-                                    <option value="Similac">Similac</option>
-                                    <option value="Hikid">Hikid</option>
-                                    <option value="Friso Gold Pro"> Friso Gold Pro</option>
-                                    <option value="Fanma (Nutifood)">Fanma (Nutifood)</option>
-                                    <option value="Enfamil">Enfamil</option>
-                                    <option value="Bellamy">Bellamy</option>
-                                    <option value="Aptamil">Aptamil</option>
-                                    <option value="Abbot Grow"> Abbot Grow</option>
+                                    <option value="" disabled>-- Select Brand Name --</option>
+                                    <option value="1">Yoko Gold</option>
+                                    <option value="2">Wakodo</option>
+                                    <option value="3">Vinamilk</option>
+                                    <option value="4">Vanma (Nutifood)</option>
+                                    <option value="5">Similac</option>
+                                    <option value="6">Hikid</option>
+                                    <option value="6">Friso Gold Pro</option>
+                                    <option value="8">Fanma (Nutifood)</option>
+                                    <option value="9">Enfamil</option>
+                                    <option value="10">Bellamy</option>
+                                    <option value="11">Aptamil</option>
+                                    <option value="12">Abbot Grow</option>
                                 </select>
                                 {formik.touched.brandName && formik.errors.brandName && (
                                     <div className="invalid-feedback">
@@ -241,6 +204,7 @@ export default function EditProduct() {
                                     value={formik.values.countryID}
                                     onChange={formik.handleChange}
                                 >
+                                    <option value="" disabled>-- Select Country --</option>
                                     <option value="VNA">VietNam</option>
                                     <option value="NED">Netherlands</option>
                                     <option value="KOR">Korea</option>
@@ -270,6 +234,7 @@ export default function EditProduct() {
                                     value={formik.values.ageRange}
                                     onChange={formik.handleChange}
                                 >
+                                    <option value="" disabled>-- Select Age Range --</option>
                                     <option value="> 2 years old">&gt; 2 years old</option>
                                     <option value="0-1 year">0-1 year</option>
                                     <option value="1-2 years">1-2 years</option>
@@ -335,7 +300,7 @@ export default function EditProduct() {
 
                             <div className="mt-3">
                                 <button type="submit" className="btn btn-primary me-2">
-                                    Create Product
+                                    Add New Product
                                 </button>
                                 <button type="button" className="btn btn-secondary" onClick={() => handleCancel()}>
                                     Cancel
