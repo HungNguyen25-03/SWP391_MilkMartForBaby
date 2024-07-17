@@ -267,7 +267,7 @@ const showProductDetailsController = async (req, res) => {
   const product_id = parseInt(req.params.id, 10);
   try {
     const result = await showProductDetails(product_id);
-    console.log(result);
+    //console.log(result);
     if (result.success) {
       return res.status(200).json(result.product);
     } else {
@@ -290,7 +290,6 @@ const updateProductController = async (req, res) => {
     age_range,
     image_url,
   } = req.body;
-  console.log(req.body);
   try {
     const result = await updateProduct(
       product_id,
@@ -344,7 +343,6 @@ const addProductDetailsController = async (req, res) => {
 
 const createPostController = async (req, res) => {
   const { user_id, title, description, image_url, productItems } = req.body;
-  console.log(req.body);
   try {
     const result = await createPost(
       user_id,
@@ -353,7 +351,6 @@ const createPostController = async (req, res) => {
       image_url,
       productItems
     );
-    console.log(result);
     if (result.success) {
       return res.status(200).json({
         message: result.message,
@@ -389,22 +386,24 @@ const updatePostController = async (req, res) => {
   }
 };
 
-const deletePostController = async (req, res) => {
-  const post_id = parseInt(req.params.id, 10);
-  const { productItems } = req.body;
+async function deletePostController(req, res) {
   try {
-    const result = await deletePost(post_id, productItems);
-    console.log(result);
+    const post_id = parseInt(req.params.id, 10);
+
+    const result = await deletePost(post_id);
+
     if (result.success) {
-      return res.status(200).json({
-        message: result.message,
-        status: 200,
-      });
+      return res.status(200).json(result);
+    } else {
+      return res.status(400).json(result);
     }
   } catch (error) {
-    console.log("fail to delete a post");
+    console.error("Error in deletePostController:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
   }
-};
+}
 
 const showAllReportController = async (req, res) => {
   try {

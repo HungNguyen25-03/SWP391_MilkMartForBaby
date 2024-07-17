@@ -32,6 +32,7 @@ const {
   deleteProductMiddlewares,
   createPostMiddlewares,
   addProductDetailsMiddlewares,
+  updatePostMiddlewares,
 } = require("../middlewares/staff.middleware");
 const { authenticateToken } = require("../middlewares/authJwt.middlewares");
 
@@ -138,7 +139,12 @@ staffRouters.post(
   }
 );
 
-staffRouters.put("/update-post/:id", authenticateToken, updatePostController);
+staffRouters.put(
+  "/update-post/:id",
+  authenticateToken,
+  updatePostMiddlewares,
+  updatePostController
+);
 
 staffRouters.post(
   "/create-post",

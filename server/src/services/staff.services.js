@@ -624,7 +624,14 @@ async function insertPostDetails(post_id, productItems) {
   }
 }
 
-async function updatePost(post_id, user_id, title, description, image_url) {
+async function updatePost(
+  post_id,
+  user_id,
+  title,
+  description,
+  image_url,
+  productItems
+) {
   try {
     const pool = await poolPromise;
     const request = pool.request().input("post_id", post_id);
@@ -643,33 +650,99 @@ async function updatePost(post_id, user_id, title, description, image_url) {
       request.input("image_url", image_url);
       updatedFields.push("image_url = @image_url");
     }
-    if (updatedFields.length === 0) {
+    if (updatedFields.length === 0 && !productItems) {
       return { success: false, message: "No fields to update" };
     }
+
     const query = `
       UPDATE Posts
       SET ${updatedFields.join(", ")}
       WHERE post_id = @post_id
     `;
     const result = await request.query(query);
+
+    if (productItems) {
+      await updatePostDetails(post_id, productItems);
+    }
+
     if (result.rowsAffected && result.rowsAffected[0] > 0) {
       return { success: true, message: "Post updated successfully" };
     } else {
       return { success: false, message: "Failed to update post" };
     }
   } catch (error) {
+    console.error("Error updating post:", error);
     throw error;
   }
 }
 
-async function deletePost(post_id, productItems) {
+async function updatePostDetails(post_id, newProductItems) {
   try {
     const pool = await poolPromise;
+
+    // Fetch current product items
+    const currentProductItemsResult = await pool
+      .request()
+      .input("post_id", sql.Int, post_id)
+      .query(`SELECT product_id FROM Post_Details WHERE post_id = @post_id`);
+    const currentProductItems = currentProductItemsResult.recordset.map(
+      (item) => item.product_id
+    );
+
+    // Determine items to add and remove
+    const itemsToAdd = newProductItems.filter(
+      (item) => !currentProductItems.includes(item)
+    );
+    const itemsToRemove = currentProductItems.filter(
+      (item) => !newProductItems.includes(item)
+    );
+
+    // Remove old items
+    for (const item of itemsToRemove) {
+      await pool
+        .request()
+        .input("post_id", sql.Int, post_id)
+        .input("product_id", sql.Int, item)
+        .query(
+          `DELETE FROM Post_Details WHERE post_id = @post_id AND product_id = @product_id`
+        );
+    }
+
+    // Add new items
+    for (const item of itemsToAdd) {
+      await pool
+        .request()
+        .input("post_id", sql.Int, post_id)
+        .input("product_id", sql.Int, item)
+        .query(
+          `INSERT INTO Post_Details (post_id, product_id) VALUES (@post_id, @product_id)`
+        );
+    }
+
+    return { success: true, message: "Product details updated successfully" };
+  } catch (error) {
+    console.error("Error updating product details:", error);
+    throw error;
+  }
+}
+
+async function deletePost(post_id) {
+  try {
+    const pool = await poolPromise;
+
+    const productIdResult = await pool
+      .request()
+      .input("post_id", sql.Int, post_id)
+      .query(`SELECT product_id FROM Post_Details WHERE post_id = @post_id`);
+    const productItems = productIdResult.recordset.map(
+      (item) => item.product_id
+    );
     await deletePostDetails(post_id, productItems);
     const result = await pool
       .request()
       .input("post_id", sql.Int, post_id)
       .query(`DELETE FROM Posts WHERE post_id = @post_id`);
+
     if (result.rowsAffected[0] > 0) {
       return { success: true, message: "Post deleted successfully" };
     } else {
@@ -681,6 +754,7 @@ async function deletePost(post_id, productItems) {
   }
 }
 
+// Function to delete post details
 async function deletePostDetails(post_id, productItems) {
   const pool = await poolPromise;
 
