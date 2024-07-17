@@ -51,21 +51,28 @@ export default function EditPost() {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
   const [product, setProduct] = useState([]);
-  const [selectedOptions, setSelectedOptions] = useState([
-    {
-      value: 2,
-      label: "Vinamilk Yoko Gold 2 850g",
-    },
-  ]);
+  const [relatedProduct, setRelatedProduct] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState([]);
+
+  const data = relatedProduct.map((item) => {
+    return {
+      value: item.product_id,
+      label: item.product_name,
+    };
+  });
+
+  console.log(data);
 
   useEffect(() => {
     axios
       .get(`${MainAPI}/user/get-post/${id}`)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setTitle(res.data.title);
         setDescription(res.data.description);
         setImage(res.data.image_url);
+        setRelatedProduct(res.data.products);
+        setSelectedOptions(data);
       })
       .catch((err) => {
         console.log(err);
@@ -163,9 +170,10 @@ export default function EditPost() {
         </form>
         <div style={{ marginBottom: "30px" }}>
           <Select
+            defaultValue={[data[0], data[1], data[2]]}
             options={options}
             onChange={handleChange}
-            value={selectedOptions}
+            // value={selectedOptions}
             isMulti={true}
           />
         </div>

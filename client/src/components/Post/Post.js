@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./Post.scss";
 import HeaderPage from "../../utils/Header/Header";
 import FooterPage from "../../utils/Footer/FooterPage";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { MainAPI } from "../API";
+import { formatVND } from "../../utils/Format";
+import { CartContext } from "../Cart/CartContext";
+import { FaShoppingCart } from "react-icons/fa";
 
 const useFind = ({ list, id }) => {
   return list.find((item) => item.id === id);
@@ -13,26 +16,74 @@ const useFind = ({ list, id }) => {
 export default function Post() {
   const { id } = useParams();
   const [blog, setBlog] = useState({});
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const { handleAddToCart } = useContext(CartContext);
 
   useEffect(() => {
-    axios.get(`${MainAPI}/user/get-post/${id}`).then((res) => {
-      setBlog(res.data);
-
-    })
+    axios
+      .get(`${MainAPI}/user/get-post/${id}`)
+      .then((res) => {
+        setBlog(res.data);
+        setRelatedProducts(res.data.products);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
-  console.log(blog)
-
+  console.log(blog);
 
   return (
     <div style={{ "background-color": "#f5f7fd" }}>
       <HeaderPage />
       <div className="container">
         <div className="post-container">
-          <div
-            className="editor"
-            dangerouslySetInnerHTML={{ __html: blog.description }}
-          ></div>
+          <div className="row">
+            <div
+              className="editor col-md-9 editor-content"
+              dangerouslySetInnerHTML={{ __html: blog.description }}
+            ></div>
+            <div className="col-md-3">
+              {relatedProducts.map((product) => {
+                return (
+                  <div key={product.product_id} className="product-card">
+                    <Link
+                      className="product-detail-link"
+                      to={`/home/ProductDetail/${product.product_id}`}
+                    >
+                      <div className="home-product-detail-img-container">
+                        <img src={product.image_url} alt={product.title} />
+                      </div>
+                      <div className="mt-2">{product.product_name}</div>
+                      <div className="text-center">
+                        <span className="star">★</span>
+                        <span className="star">★</span>
+                        <span className="star">★</span>
+                        <span className="star">★</span>
+                        <span className="star">★</span>
+                        <span style={{ fontSize: "10px" }}>{product.sale}</span>
+                      </div>
+                    </Link>
+                    <div
+                      style={{
+                        display: "flex",
+                        marginTop: "10px",
+                        justifyContent: "space-around",
+                      }}
+                    >
+                      <div>{formatVND(product.price)}</div>
+                      <div
+                        className="icon_cart"
+                        onClick={() => handleAddToCart(product)}
+                      >
+                        <FaShoppingCart />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
       <FooterPage />
