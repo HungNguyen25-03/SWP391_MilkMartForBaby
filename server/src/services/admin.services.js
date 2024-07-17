@@ -135,18 +135,25 @@ async function dashboard(startDate, endDate) {
   try {
     const pool = await poolPromise;
 
-    // Extract year and month from startDate and endDate
-    const [startYear, startMonth] = startDate.split("-").map(Number);
-    const [endYear, endMonth] = endDate.split("-").map(Number);
+    // Convert input dates from dd-MM-yyyy to Date objects
+    const [startDay, startMonth, startYear] = startDate.split("-").map(Number);
+    const [endDay, endMonth, endYear] = endDate.split("-").map(Number);
+    const start = new Date(startYear, startMonth - 1, startDay);
+    const end = new Date(endYear, endMonth - 1, endDay);
+
+    // Calculate duration in days
+    const duration = (end - start) / (1000 * 60 * 60 * 24);
+    const calculatePerDay = duration < 31;
 
     // Calculate the start and end date strings in the required format
-    const startDateString = `${startYear}-${startMonth
-      .toString()
-      .padStart(2, "0")}-01`;
-    const endMonthLastDay = new Date(endYear, endMonth, 0).getDate(); // Get last day of the end month
-    const endDateString = `${endYear}-${endMonth
-      .toString()
-      .padStart(2, "0")}-${endMonthLastDay}`;
+    const startDateString = `${startYear}-${String(startMonth).padStart(
+      2,
+      "0"
+    )}-${String(startDay).padStart(2, "0")}`;
+    const endDateString = `${endYear}-${String(endMonth).padStart(
+      2,
+      "0"
+    )}-${String(endDay).padStart(2, "0")}`;
 
     // Query total orders within the specified month-year range
     const totalOrdersResult = await pool
@@ -218,11 +225,40 @@ async function dashboard(startDate, endDate) {
     const canceledOrdersPerMonth =
       canceledOrdersPerMonthResult.recordset[0].totalCancelledOrders;
 
-    // Query total revenue per month within the specified month-year range
-    const totalRevenuePerMonthResult = await pool
+    // Query total revenue per day or per month within the specified month-year range
+    const totalRevenuePerPeriodResult = await pool
       .request()
       .input("startDateString", sql.DateTime, startDateString)
-      .input("endDateString", sql.DateTime, endDateString).query(`
+      .input("endDateString", sql.DateTime, endDateString)
+      .query(
+        calculatePerDay
+          ? `
+        WITH DateSeries AS (
+          SELECT 
+            @startDateString AS dayStart
+          UNION ALL
+          SELECT 
+            DATEADD(DAY, 1, dayStart)
+          FROM 
+            DateSeries
+          WHERE 
+            dayStart < @endDateString
+        )
+        SELECT 
+          FORMAT(ds.dayStart, 'dd-MM-yyyy') AS periodMonth, 
+          ISNULL(SUM(o.total_amount), 0) AS totalRevenue
+        FROM 
+          DateSeries ds
+          LEFT JOIN Orders o ON CONVERT(date, o.order_date) = CONVERT(date, ds.dayStart)
+          AND o.order_date >= @startDateString AND o.order_date <= @endDateString
+          AND o.status IN ('Paid', 'Delivered', 'Completed', 'Confirmed')
+        GROUP BY 
+          FORMAT(ds.dayStart, 'dd-MM-yyyy')
+        ORDER BY 
+          FORMAT(ds.dayStart, 'dd-MM-yyyy')
+        OPTION (MAXRECURSION 0);
+      `
+          : `
         WITH DateSeries AS (
           SELECT 
             DATEFROMPARTS(YEAR(@startDateString), MONTH(@startDateString), 1) AS monthStart
@@ -235,7 +271,7 @@ async function dashboard(startDate, endDate) {
             monthStart < DATEFROMPARTS(YEAR(@endDateString), MONTH(@endDateString), 1)
         )
         SELECT 
-          FORMAT(ds.monthStart, 'MM-yyyy') AS yearMonth, 
+          FORMAT(ds.monthStart, 'MM-yyyy') AS periodMonth, 
           ISNULL(SUM(o.total_amount), 0) AS totalRevenue
         FROM 
           DateSeries ds
@@ -247,8 +283,9 @@ async function dashboard(startDate, endDate) {
         ORDER BY 
           FORMAT(ds.monthStart, 'MM-yyyy')
         OPTION (MAXRECURSION 0);
-      `);
-    const totalRevenuePerMonth = totalRevenuePerMonthResult.recordset;
+      `
+      );
+    const totalRevenuePerPeriod = totalRevenuePerPeriodResult.recordset;
 
     return {
       totalOrders,
@@ -256,7 +293,7 @@ async function dashboard(startDate, endDate) {
       topProducts,
       successfulOrdersPerMonth,
       canceledOrdersPerMonth,
-      totalRevenuePerMonth,
+      totalRevenuePerPeriod,
     };
   } catch (error) {
     console.error("Error getting dashboard data:", error);
@@ -266,7 +303,7 @@ async function dashboard(startDate, endDate) {
       topProducts: [],
       successfulOrdersPerMonth: [],
       canceledOrdersPerMonth: [],
-      totalRevenuePerMonth: [],
+      totalRevenuePerPeriod: [],
       error: error.message,
     };
   }

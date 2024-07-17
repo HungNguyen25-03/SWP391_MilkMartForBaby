@@ -18,6 +18,7 @@ const {
   showAllReport,
   addProductDetails,
   showProductDetails,
+  deleteExpiredProduct,
 } = require("../services/staff.services");
 
 const createVoucherController = async (req, res) => {
@@ -74,6 +75,20 @@ const getOrderController = async (req, res) => {
     }
   } catch (error) {
     console.log("Faill to get Order");
+  }
+};
+
+const deleteExpiredProductController = async (req, res) => {
+  try {
+    const result = await deleteExpiredProduct();
+    if (result.success) {
+      return res.status(200).json({
+        message: result.message,
+        status: 200,
+      });
+    }
+  } catch (error) {
+    console.log("fail to delete expired product");
   }
 };
 
@@ -270,7 +285,6 @@ const updateProductController = async (req, res) => {
     product_name,
     description,
     price,
-    stock,
     brand_name,
     country_id,
     age_range,
@@ -283,7 +297,6 @@ const updateProductController = async (req, res) => {
       product_name,
       description,
       price,
-      stock,
       brand_name,
       country_id,
       age_range,
@@ -330,10 +343,16 @@ const addProductDetailsController = async (req, res) => {
 };
 
 const createPostController = async (req, res) => {
-  const { user_id, title, description, image_url } = req.body;
+  const { user_id, title, description, image_url, productItems } = req.body;
   console.log(req.body);
   try {
-    const result = await createPost(user_id, title, description, image_url);
+    const result = await createPost(
+      user_id,
+      title,
+      description,
+      image_url,
+      productItems
+    );
     console.log(result);
     if (result.success) {
       return res.status(200).json({
@@ -372,8 +391,9 @@ const updatePostController = async (req, res) => {
 
 const deletePostController = async (req, res) => {
   const post_id = parseInt(req.params.id, 10);
+  const { productItems } = req.body;
   try {
-    const result = await deletePost(post_id);
+    const result = await deletePost(post_id, productItems);
     console.log(result);
     if (result.success) {
       return res.status(200).json({
@@ -421,4 +441,5 @@ module.exports = {
   showAllReportController,
   addProductDetailsController,
   showProductDetailsController,
+  deleteExpiredProductController,
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useAuth from "../../../../hooks/useAuth";
 import axios from "axios";
 import { MainAPI } from "../../../API";
@@ -7,6 +7,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import "./CreatePost.scss";
 import { Navigate, useNavigate } from "react-router-dom";
+import Select from "react-select";
 
 const ENDPOINT = "staff/uploads";
 
@@ -47,7 +48,42 @@ export default function ModalCreatePost() {
   const [description, setDescription] = useState("");
   const [title, setTitle] = useState("");
   const [image, setImage] = useState("");
+  const [product, setProduct] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState([]);
   const nav = useNavigate();
+
+  // console.log(selectedOptions.map((item) => item.value));
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const options = product.map((item) => {
+    return {
+      value: item.product_id,
+      label: item.product_name,
+    };
+  });
+
+  const handleChange = (selectedOption) => {
+    setSelectedOptions(selectedOption);
+  };
+
+  const fetchData = () => {
+    axios
+      .get(`${MainAPI}/staff/product`, {
+        headers: {
+          "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setProduct(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const handleCreatePost = () => {
     axios
@@ -58,6 +94,7 @@ export default function ModalCreatePost() {
           user_id: auth.user.user_id,
           title: title,
           image_url: image,
+          productItems: selectedOptions.map((item) => item.value),
         },
         {
           headers: {
@@ -104,6 +141,14 @@ export default function ModalCreatePost() {
             ></input>
           </div>
         </form>
+        <div style={{ marginBottom: "30px" }}>
+          <Select
+            options={options}
+            onChange={handleChange}
+            value={selectedOptions}
+            isMulti={true}
+          />
+        </div>
         <CKEditor
           config={{
             extraPlugins: [uploadPlugin],

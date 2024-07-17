@@ -45,13 +45,16 @@ const createVoucherMiddleware = async (req, res, next) => {
       .request()
       .input("discount", sql.Decimal(5, 2), discount)
       .input("expiration_date", sql.Date, expiration_date)
-      .query(`SELECT discount, expiration_date FROM Vouchers WHERE discount = @discount AND expiration_date = @expiration_date`);
+      .query(
+        `SELECT discount, expiration_date FROM Vouchers WHERE discount = @discount AND expiration_date = @expiration_date`
+      );
 
     if (checkExpDateAndDiscount.recordset.length > 0) {
       errors.push({
         name: "voucher",
         success: false,
-        message: "There is already a voucher with this discount and this expiration date",
+        message:
+          "There is already a voucher with this discount and this expiration date",
         status: 400,
       });
     }
@@ -243,7 +246,7 @@ const addProductMiddlewares = async (req, res, next) => {
       age_range,
       image_url,
       expiration_date,
-      production_date
+      production_date,
     } = req.body;
 
     if (!product_name) {
@@ -342,7 +345,11 @@ const addProductMiddlewares = async (req, res, next) => {
       });
     }
 
-    if (production_date && expiration_date && new Date(production_date) > new Date(expiration_date)) {
+    if (
+      production_date &&
+      expiration_date &&
+      new Date(production_date) > new Date(expiration_date)
+    ) {
       errors.push({
         name: "date_mismatch",
         success: false,
@@ -365,7 +372,7 @@ const addProductMiddlewares = async (req, res, next) => {
 const addProductDetailsMiddlewares = async (req, res, next) => {
   try {
     const { product_id } = req.params;
-    const {production_date, expiration_date, quantity} = req.body;
+    const { production_date, expiration_date, quantity } = req.body;
     const errors = [];
     const pool = await poolPromise;
     const currentDate = new Date();
@@ -417,7 +424,11 @@ const addProductDetailsMiddlewares = async (req, res, next) => {
         status: 400,
       });
     }
-    if (production_date && expiration_date && new Date(production_date) > new Date(expiration_date)) {
+    if (
+      production_date &&
+      expiration_date &&
+      new Date(production_date) > new Date(expiration_date)
+    ) {
       errors.push({
         name: "date_mismatch",
         success: false,
@@ -432,8 +443,7 @@ const addProductDetailsMiddlewares = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
-
+};
 
 const updateProductMiddlewares = async (req, res, next) => {
   try {
@@ -472,14 +482,6 @@ const updateProductMiddlewares = async (req, res, next) => {
         name: "price",
         success: false,
         message: "Price must be more than 100",
-        status: 400,
-      });
-    }
-
-    if (!stock) {
-      errors.push({
-        name: "stock",
-        message: "Stock is required",
         status: 400,
       });
     }

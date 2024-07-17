@@ -29,7 +29,7 @@ async function createVoucher(discount, expiration_date) {
       .input("expiration_date", sql.DateTime, new Date(expiration_date))
       .query(`INSERT INTO Vouchers (code, discount, expiration_date) 
                 VALUES (@code, @discount, @expiration_date)`);
-    console.log(result);
+    // console.log(result);
     return { success: true, message: "Voucher created successfully" };
   } catch (err) {
     console.error("SQL error", err);
@@ -253,6 +253,50 @@ async function exportProduct(product_id) {
   }
 }
 
+async function deleteExpiredProduct() {
+  try {
+    const pool = await poolPromise;
+    const currentDate = new Date();
+    const nextMonthDate = new Date();
+    nextMonthDate.setMonth(currentDate.getMonth() + 1);
+    // Fetch products to be deleted
+    const productsToDelete = await pool
+      .request()
+      .input("nextMonthDate", sql.DateTime, nextMonthDate).query(`
+        SELECT pd.product_id, pd.quantity FROM Product_Details pd
+        WHERE pd.expiration_date <= @nextMonthDate
+      `);
+
+    const products = productsToDelete.recordset;
+    // Delete products from Product_Details table
+    await pool.request().input("nextMonthDate", sql.DateTime, nextMonthDate)
+      .query(`
+        DELETE FROM Product_Details
+        WHERE expiration_date <= @nextMonthDate
+      `);
+
+    // Decrement the stock in Products table
+    for (const product of products) {
+      await pool
+        .request()
+        .input("product_id", sql.Int, product.product_id)
+        .input("quantity", sql.Int, product.quantity).query(`
+          UPDATE Products
+          SET stock = stock - @quantity
+          WHERE product_id = @product_id
+        `);
+    }
+
+    return {
+      success: true,
+      message: "Expired products deleted and stock updated successfully",
+    };
+  } catch (error) {
+    console.error("Error deleting expired products:", error);
+    throw error;
+  }
+}
+
 async function editProduct(product_id, changeQuantity) {
   try {
     const pool = await poolPromise;
@@ -331,7 +375,7 @@ async function confirmOrder(order_id) {
     }
 
     const currentStatus = currentStatusResult.recordset[0].status;
-    console.log("Current status:", currentStatus);
+    // console.log("Current status:", currentStatus);
     if (currentStatus !== "Confirmed") {
       return {
         success: false,
@@ -445,7 +489,6 @@ async function updateProduct(
   product_name,
   description,
   price,
-  stock,
   brand_name,
   country_id,
   age_range,
@@ -470,11 +513,6 @@ async function updateProduct(
     if (price) {
       request.input("price", price);
       updateFields.push("price = @price");
-    }
-
-    if (stock) {
-      request.input("stock", stock);
-      updateFields.push("stock = @stock");
     }
 
     if (country_id) {
@@ -548,7 +586,7 @@ async function createPost(
       .input("title", sql.NVarChar, title)
       .input("description", sql.NVarChar, description)
       .input("image_url", sql.NVarChar, image_url).query(`
-        INSERT INTO Posts (user_id, title, description, image_url)
+        INSERT INTO Posts (user_id, title, description, image_url) OUTPUT INSERTED.post_id
         VALUES (@user_id, @title, @description, @image_url)
       `);
 
@@ -564,14 +602,16 @@ async function createPost(
 }
 
 async function insertPostDetails(post_id, productItems) {
+  // console.log("Product items:", productItems);
   try {
     const pool = await poolPromise;
 
     for (const item of productItems) {
+      // console.log("Item:", item);
       await pool
         .request()
         .input("post_id", sql.Int, post_id)
-        .input("product_id", sql.Int, item.product_id)
+        .input("product_id", sql.Int, item)
         .query(
           `INSERT INTO Post_Details (post_id, product_id) VALUES (@post_id, @product_id)`
         );
@@ -622,9 +662,10 @@ async function updatePost(post_id, user_id, title, description, image_url) {
   }
 }
 
-async function deletePost(post_id) {
+async function deletePost(post_id, productItems) {
   try {
     const pool = await poolPromise;
+    await deletePostDetails(post_id, productItems);
     const result = await pool
       .request()
       .input("post_id", sql.Int, post_id)
@@ -635,7 +676,22 @@ async function deletePost(post_id) {
       return { success: false, message: "Failed to delete post" };
     }
   } catch (error) {
+    console.error("Error deleting post:", error);
     throw error;
+  }
+}
+
+async function deletePostDetails(post_id, productItems) {
+  const pool = await poolPromise;
+
+  for (const item of productItems) {
+    await pool
+      .request()
+      .input("post_id", sql.Int, post_id)
+      .input("product_id", sql.Int, item)
+      .query(
+        `DELETE FROM Post_Details WHERE post_id = @post_id AND product_id = @product_id`
+      );
   }
 }
 
@@ -688,4 +744,5 @@ module.exports = {
   showAllReport,
   addProductDetails,
   showProductDetails,
+  deleteExpiredProduct,
 };
