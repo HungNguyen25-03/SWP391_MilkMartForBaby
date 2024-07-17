@@ -21,6 +21,7 @@ const {
   addProductDetailsController,
   showProductDetailsController,
   deleteExpiredProductController,
+  getProductForPostController,
 } = require("../controller/staff.controller");
 const {
   createVoucherMiddleware,
@@ -138,6 +139,8 @@ staffRouters.post(
     res.json({ url: req.file.path });
   }
 );
+
+staffRouters.get("/get-product-for-post", getProductForPostController);
 
 staffRouters.put(
   "/update-post/:id",

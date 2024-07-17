@@ -689,6 +689,8 @@ async function updatePostDetails(post_id, newProductItems) {
       (item) => item.product_id
     );
 
+    // console.log("Current product items:", currentProductItems);
+
     // Determine items to add and remove
     const itemsToAdd = newProductItems.filter(
       (item) => !currentProductItems.includes(item)
@@ -787,6 +789,24 @@ async function showAllReport() {
   }
 }
 
+async function getProductForPost() {
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .query(`SELECT product_id as value, product_name as label FROM Products`);
+    const product = result.recordset;
+
+    if (product) {
+      return { success: true, product };
+    } else {
+      return { success: false, message: "Fail to get Product" };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   createVoucher,
   getAllUser,
@@ -808,4 +828,5 @@ module.exports = {
   addProductDetails,
   showProductDetails,
   deleteExpiredProduct,
+  getProductForPost,
 };

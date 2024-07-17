@@ -54,7 +54,7 @@ export default function EditPost() {
   const [relatedProduct, setRelatedProduct] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
 
-  const data = relatedProduct.map((item) => {
+  const data = product.map((item) => {
     return {
       value: item.product_id,
       label: item.product_name,
@@ -170,7 +170,7 @@ export default function EditPost() {
         </form>
         <div style={{ marginBottom: "30px" }}>
           <Select
-            defaultValue={[data[0], data[1], data[2]]}
+            defaultValue={[product[0], product[1], data[2]]}
             options={options}
             onChange={handleChange}
             // value={selectedOptions}

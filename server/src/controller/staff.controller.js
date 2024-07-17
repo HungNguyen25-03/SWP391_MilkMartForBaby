@@ -19,6 +19,7 @@ const {
   addProductDetails,
   showProductDetails,
   deleteExpiredProduct,
+  getProductForPost,
 } = require("../services/staff.services");
 
 const createVoucherController = async (req, res) => {
@@ -420,6 +421,20 @@ const showAllReportController = async (req, res) => {
   }
 };
 
+const getProductForPostController = async (req, res) => {
+  try {
+    const result = await getProductForPost();
+    if (result.success) {
+      res.json(result.product);
+    } else {
+      return res.status(404).json({ message: result.message });
+    }
+  } catch (error) {
+    console.log("Fail to get product for post", error);
+    res.status(500).json({ message: "Error getting product for post" });
+  }
+};
+
 module.exports = {
   createVoucherController,
   getAllUserController,
@@ -441,4 +456,5 @@ module.exports = {
   addProductDetailsController,
   showProductDetailsController,
   deleteExpiredProductController,
+  getProductForPostController,
 };
