@@ -12,9 +12,9 @@ export default function EditProduct() {
 
     const formik = useFormik({
         initialValues: {
-            brandID: "",
+            brandName: "",
             image: "",
-            prouductName: "",
+            productName: "",
             price: "",
             countryID: "",
             description: "",
@@ -24,19 +24,17 @@ export default function EditProduct() {
             handleUpdateProduct(values);
         },
         validationSchema: Yup.object({
-            proName: Yup.string()
+            productName: Yup.string()
                 .required("Required.")
                 .min(2, "Must be 2 characters or more"),
-            prodes: Yup.string()
+            description: Yup.string()
                 .required("Required.")
                 .min(2, "Must be 2 characters or more"),
             price: Yup.number().required("Required."),
-            stock: Yup.number().required("Required."),
-            brandname: Yup.string().required("Required."),
-            country: Yup.string()
-                .required("Required.")
-                .min(2, "Must be 2 characters or more"),
-            // img: Yup.string().required("Required.").matches(urlRegex, "Invalid URL"),
+            brandName: Yup.string().required("Required."),
+            countryID: Yup.string().required("Required."),
+            image: Yup.string().required("Required."),
+            ageRange: Yup.string().required("Required."),
         }),
     });
 
@@ -46,24 +44,22 @@ export default function EditProduct() {
                 `${MainAPI}/product/getProById/${id}`,
                 {
                     method: "GET",
-                    headers: {
-                        "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
-                    }
                 }
             );
             if (!response.ok) throw new Error("Failed to get data to edit");
             const data = await response.json();
-            const product = data.product;
+            const product = data;
             setEdit(product);
-            // formik.setValues({
-            //     brandID: product.brandID,
-            //     image: product.image_url,
-            //     prouductName: product.prouductName,
-            //     price: product.price,
-            //     countryID: product.countryID,
-            //     description: product.description,
-            //     ageRange: product.ageRange,
-            // });
+            formik.setValues({
+                brandName: product.brand_name,
+                image: product.image_url,
+                productName: product.product_name,
+                price: product.price,
+                countryID: product.country_id,
+                description: product.description,
+                ageRange: product.age_range,
+            });
+
         } catch (error) {
             console.log("Error fetching product data:", error);
         }
@@ -84,13 +80,13 @@ export default function EditProduct() {
                     "x-access-token": localStorage.getItem("accessToken"),
                 },
                 body: JSON.stringify({
-                    brandID: formik.values.brandID,
-                    image: formik.values.image,
-                    prouductName: formik.values.prouductName,
+                    brand_name: formik.values.brandName,
+                    image_url: formik.values.image,
+                    product_name: formik.values.productName,
                     price: formik.values.price,
-                    countryID: formik.values.countryID,
+                    country_id: formik.values.countryID,
                     description: formik.values.description,
-                    ageRange: formik.values.ageRange,
+                    age_range: formik.values.ageRange,
                 }),
             });
             if (!response.ok) throw new Error("Failed to update product");
@@ -136,48 +132,47 @@ export default function EditProduct() {
                             </div>
 
                             <div className="mb-3">
-                                <label className="form-label">Brand ID</label>
-                                {/* <input
-                                    type="text"
-                                    className={`form-control ${formik.touched.productID && formik.errors.productID ? 'is-invalid' : ''}`}
-                                    id="proName"
-                                    name="proName"
-                                    value={formik.values.productID}
-                                    onChange={formik.handleChange}
-                                /> */}
+                                <label className="form-label">Brand Name</label>
                                 <select
-                                    className={`form-control ${formik.touched.ageRange && formik.errors.ageRange ? 'is-invalid' : ''}`}
-                                    id="range"
-                                    name="range"
-                                    value={formik.values.ageRange}
+                                    className={`form-control ${formik.touched.brandName && formik.errors.brandName ? 'is-invalid' : ''}`}
+                                    id="brandName"
+                                    name="brandName"
+                                    value={formik.values.brandName}
                                     onChange={formik.handleChange}
                                 >
-                                    <option value="> 2 years old">&gt; 2 years old</option>
-                                    <option value="0-1 year">0-1 year</option>
-                                    <option value="1-2 years">1-2 years</option>
-                                    <option value="Adult">Adult</option>
-                                    <option value="Maternal">Maternal</option>
+                                    <option value="Yoko Gold"> Yoko Gold</option>
+                                    <option value="Wakodo">  Wakodo</option>
+                                    <option value="Vinamilk">Vinamilk</option>
+                                    <option value="Vanma (Nutifood)">  Vanma (Nutifood)</option>
+                                    <option value="Similac">Similac</option>
+                                    <option value="Hikid">Hikid</option>
+                                    <option value="Friso Gold Pro"> Friso Gold Pro</option>
+                                    <option value="Fanma (Nutifood)">Fanma (Nutifood)</option>
+                                    <option value="Enfamil">Enfamil</option>
+                                    <option value="Bellamy">Bellamy</option>
+                                    <option value="Aptamil">Aptamil</option>
+                                    <option value="Abbot Grow"> Abbot Grow</option>
                                 </select>
-                                {formik.touched.proName && formik.errors.proName && (
+                                {formik.touched.brandName && formik.errors.brandName && (
                                     <div className="invalid-feedback">
-                                        {formik.errors.proName}
+                                        {formik.errors.brandName}
                                     </div>
                                 )}
                             </div>
 
                             <div className="mb-3">
-                                <label htmlFor="prodes" className="form-label">Product Name</label>
+                                <label htmlFor="productName" className="form-label">Product Name</label>
                                 <input
                                     type="text"
-                                    className={`form-control ${formik.touched.prouductName && formik.errors.prouductName ? 'is-invalid' : ''}`}
-                                    id="prouductName"
-                                    name="prouductName"
-                                    value={formik.values.prouductName}
+                                    className={`form-control ${formik.touched.productName && formik.errors.productName ? 'is-invalid' : ''}`}
+                                    id="productName"
+                                    name="productName"
+                                    value={formik.values.productName}
                                     onChange={formik.handleChange}
                                 />
-                                {formik.touched.prouductName && formik.errors.prouductName && (
+                                {formik.touched.productName && formik.errors.productName && (
                                     <div className="invalid-feedback">
-                                        {formik.errors.prouductName}
+                                        {formik.errors.productName}
                                     </div>
                                 )}
                             </div>
@@ -200,7 +195,7 @@ export default function EditProduct() {
                             </div>
 
                             <div className="mb-3">
-                                <label htmlFor="country" className="form-label">Country Name</label>
+                                <label htmlFor="countryID" className="form-label">Country Name</label>
                                 <select
                                     className={`form-control ${formik.touched.countryID && formik.errors.countryID ? 'is-invalid' : ''}`}
                                     id="countryID"
@@ -229,11 +224,11 @@ export default function EditProduct() {
                             </div>
 
                             <div className="mb-3">
-                                <label htmlFor="range" className="form-label">Age Range</label>
+                                <label htmlFor="ageRange" className="form-label">Age Range</label>
                                 <select
                                     className={`form-control ${formik.touched.ageRange && formik.errors.ageRange ? 'is-invalid' : ''}`}
-                                    id="range"
-                                    name="range"
+                                    id="ageRange"
+                                    name="ageRange"
                                     value={formik.values.ageRange}
                                     onChange={formik.handleChange}
                                 >
@@ -252,8 +247,7 @@ export default function EditProduct() {
 
                             <div className="mb-3">
                                 <label htmlFor="prodes" className="form-label">Description</label>
-                                <input
-                                    type="text"
+                                <textarea
                                     className={`form-control ${formik.touched.description && formik.errors.description ? 'is-invalid' : ''}`}
                                     id="description"
                                     name="description"

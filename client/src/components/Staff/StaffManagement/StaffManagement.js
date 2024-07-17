@@ -19,7 +19,8 @@ export default function StaffManagement() {
                 <div className="col-md-2 col-sm-3">
                     <NavBarStaff />
                 </div>
-                <div className="col-md-10 col-sm-9">
+                <div className='col-md-1'></div>
+                <div className="col-md-9 col-sm-9">
                     <Routes>
                         <Route path='/comfirm_order' element={<ConfirmOrder />} />
                         <Route path='/manage_inventory' element={<ManageInventory />} />

@@ -1,41 +1,38 @@
-.manage-inventory-container{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: 10%;
-
-
-  .create-post-btn{
-      margin-bottom: 20px;
-      padding: 10px 15px;
-      border-radius: 15px;
-      text-decoration: none;
-      background-color: #1481E1;
-      color: #fff;
+.manage-inventory-container {
+  .btn {
+    border-radius: 20px;
+    margin-bottom: 1rem;
+    font-size: 14px; 
+    padding: 0.5rem 1rem; 
   }
 
-  .table-post{
-      width: 90%;
-      margin: 0 auto;
+  .table-post {
+    margin-top: 1rem;
   }
 
-  .action {
-      .action-btn {
-        padding: 10px 15px;
+  .table-content {
+    font-size: 14px; 
+
+    .rdt_TableHeadRow {
+      background-color: #f8f9fa;
+    }
+
+    .rdt_TableCell {
+      white-space: normal;
+      font-size: 14px; 
+    }
+
+    .action {
+      display: flex;
+
+      .icon_btn {
         border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 1rem;
-      }
-      button {
-        margin: 0 5px;
-        padding: 5px 10px;
-        border: none;
-        background-color: none;
-        border-radius: 10px;
+        background: none;
+        border-radius: 20px;
+        font-size: 14px; 
+        margin-right: 10px;
+        padding: 5px; 
       }
     }
+  }
 }
-
-
