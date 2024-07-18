@@ -291,6 +291,7 @@ const updateProductController = async (req, res) => {
     age_range,
     image_url,
   } = req.body;
+  console.log(product_id);
   try {
     const result = await updateProduct(
       product_id,
@@ -302,20 +303,24 @@ const updateProductController = async (req, res) => {
       age_range,
       image_url
     );
+
     if (result.success) {
       return res.status(200).json({
         message: result.message,
         status: 200,
       });
     } else {
-      return res.status(401).json({
+      return res.status(400).json({
         message: result.message,
-        status: 401,
+        status: 400,
       });
     }
   } catch (error) {
-    console.log("fail to update a product");
-    throw error;
+    console.error("Failed to update the product:", error);
+    return res.status(500).json({
+      message: "An error occurred while updating the product.",
+      status: 500,
+    });
   }
 };
 
@@ -344,6 +349,7 @@ const addProductDetailsController = async (req, res) => {
 
 const createPostController = async (req, res) => {
   const { user_id, title, description, image_url, productItems } = req.body;
+  console.log(req.body);
   try {
     const result = await createPost(
       user_id,
@@ -365,17 +371,17 @@ const createPostController = async (req, res) => {
 
 const updatePostController = async (req, res) => {
   const post_id = parseInt(req.params.id, 10);
-  const { user_id, title, description, image_url } = req.body;
-  // console.log(req.body);
+  const { user_id, title, description, image_url, productItems } = req.body;
+  console.log(req.body);
   try {
     const result = await updatePost(
       post_id,
       user_id,
       title,
       description,
-      image_url
+      image_url,
+      productItems
     );
-    console.log(result);
     if (result.success) {
       return res.status(200).json({
         message: result.message,
