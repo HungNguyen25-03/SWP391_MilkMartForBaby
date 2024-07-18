@@ -66,12 +66,11 @@ async function getAllProduct() {
   try {
     const pool = await poolPromise;
     const result = await pool.request().query(`
-    SELECT p.product_id, p.product_name, p.description, p.price, p.stock, b.brand_name, p.country_id, p.age_range,pd.production_date,pd.expiration_date,p.image_url 
+    SELECT p.product_id, p.product_name, p.description, p.price, p.stock, b.brand_name, p.country_id, p.age_range,p.image_url 
     FROM Products p
-    INNER JOIN Brands b 
+     JOIN Brands b 
      ON p.brand_id = b.brand_id
-     INNER JOIN Product_Details pd
-     on p.product_id=pd.product_id;
+     
      `);
     const product = result.recordset;
 
@@ -85,13 +84,20 @@ async function getAllProduct() {
   }
 }
 
+
+
+
 async function showProductDetails(product_id) {
   try {
     const pool = await poolPromise;
     const result = await pool
       .request()
       .input("product_id", sql.Int, product_id)
-      .query(`SELECT * FROM Product_Details WHERE product_id = @product_id`);
+      .query(`SELECT 
+      production_date,
+      expiration_date,
+      quantity
+      FROM Product_Details WHERE product_id = @product_id`);
     const product = result.recordset;
     if (product) {
       return { success: true, product };
@@ -667,8 +673,7 @@ async function updatePost(
     const result = await request.query(query);
 
     if (productItems) {
-      await deletePostDetails(post_id);
-      await insertPostDetails(post_id, productItems);
+      await updatePostDetails(post_id, productItems);
     }
 
     if (result.rowsAffected && result.rowsAffected[0] > 0) {
@@ -678,6 +683,58 @@ async function updatePost(
     }
   } catch (error) {
     console.error("Error updating post:", error);
+    throw error;
+  }
+}
+
+async function updatePostDetails(post_id, newProductItems) {
+  try {
+    const pool = await poolPromise;
+
+    // Fetch current product items
+    const currentProductItemsResult = await pool
+      .request()
+      .input("post_id", sql.Int, post_id)
+      .query(`SELECT product_id FROM Post_Details WHERE post_id = @post_id`);
+    const currentProductItems = currentProductItemsResult.recordset.map(
+      (item) => item.product_id
+    );
+
+    // console.log("Current product items:", currentProductItems);
+
+    // Determine items to add and remove
+    const itemsToAdd = newProductItems.filter(
+      (item) => !currentProductItems.includes(item)
+    );
+    const itemsToRemove = currentProductItems.filter(
+      (item) => !newProductItems.includes(item)
+    );
+
+    // Remove old items
+    for (const item of itemsToRemove) {
+      await pool
+        .request()
+        .input("post_id", sql.Int, post_id)
+        .input("product_id", sql.Int, item)
+        .query(
+          `DELETE FROM Post_Details WHERE post_id = @post_id AND product_id = @product_id`
+        );
+    }
+
+    // Add new items
+    for (const item of itemsToAdd) {
+      await pool
+        .request()
+        .input("post_id", sql.Int, post_id)
+        .input("product_id", sql.Int, item)
+        .query(
+          `INSERT INTO Post_Details (post_id, product_id) VALUES (@post_id, @product_id)`
+        );
+    }
+
+    return { success: true, message: "Product details updated successfully" };
+  } catch (error) {
+    console.error("Error updating product details:", error);
     throw error;
   }
 }
@@ -783,4 +840,5 @@ module.exports = {
   showProductDetails,
   deleteExpiredProduct,
   getProductForPost,
+
 };

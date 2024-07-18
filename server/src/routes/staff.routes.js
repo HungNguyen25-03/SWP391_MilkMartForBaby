@@ -22,6 +22,7 @@ const {
   showProductDetailsController,
   deleteExpiredProductController,
   getProductForPostController,
+
 } = require("../controller/staff.controller");
 const {
   createVoucherMiddleware,
@@ -52,8 +53,11 @@ staffRouters.post(
 //Get User Information by staff
 staffRouters.get("/user", authenticateToken, getAllUserController);
 
-// Get Product Information by Staff
+// Get Product Information Details by Staff
 staffRouters.get("/product", authenticateToken, getAllProductController);
+
+
+
 
 //Get Order information by staff
 staffRouters.get("/order", authenticateToken, getOrderController);
