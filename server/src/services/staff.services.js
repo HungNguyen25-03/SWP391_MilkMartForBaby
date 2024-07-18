@@ -66,12 +66,11 @@ async function getAllProduct() {
   try {
     const pool = await poolPromise;
     const result = await pool.request().query(`
-    SELECT p.product_id, p.product_name, p.description, p.price, p.stock, b.brand_name, p.country_id, p.age_range,pd.production_date,pd.expiration_date,p.image_url 
+    SELECT p.product_id, p.product_name, p.description, p.price, p.stock, b.brand_name, p.country_id, p.age_range,p.image_url 
     FROM Products p
-    INNER JOIN Brands b 
+     JOIN Brands b 
      ON p.brand_id = b.brand_id
-     INNER JOIN Product_Details pd
-     on p.product_id=pd.product_id;
+     
      `);
     const product = result.recordset;
 
@@ -79,6 +78,30 @@ async function getAllProduct() {
       return { success: true, product };
     } else {
       return { success: false, message: "Fail to show all Products" };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+async function getAllProductDetail() {
+  try {
+    const pool = await poolPromise;
+    const result = await pool.request().query(`
+    SELECT p.product_id, p.product_name, p.description, p.price, p.stock, b.brand_name, p.country_id, p.age_range,pd.production_date,pd.expiration_date,p.image_url 
+    FROM Products p
+     JOIN Brands b 
+     ON p.brand_id = b.brand_id
+     JOIN Product_Details pd
+     on p.product_id=pd.product_id;
+     `);
+    const product = result.recordset;
+
+    if (product) {
+      return { success: true, product };
+    } else {
+      return { success: false, message: "Fail to show all Products Details" };
     }
   } catch (error) {
     throw error;
@@ -834,4 +857,5 @@ module.exports = {
   showProductDetails,
   deleteExpiredProduct,
   getProductForPost,
+  getAllProductDetail
 };
