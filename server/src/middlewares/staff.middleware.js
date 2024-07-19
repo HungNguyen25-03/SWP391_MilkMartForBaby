@@ -376,6 +376,7 @@ const addProductDetailsMiddlewares = async (req, res, next) => {
     const errors = [];
     const pool = await poolPromise;
     const currentDate = new Date();
+
     if (!production_date) {
       errors.push({
         name: "production_date",
@@ -384,6 +385,7 @@ const addProductDetailsMiddlewares = async (req, res, next) => {
         status: 400,
       });
     }
+
     if (!expiration_date) {
       errors.push({
         name: "expiration_date",
@@ -392,6 +394,7 @@ const addProductDetailsMiddlewares = async (req, res, next) => {
         status: 400,
       });
     }
+
     if (!quantity) {
       errors.push({
         name: "quantity",
@@ -400,6 +403,7 @@ const addProductDetailsMiddlewares = async (req, res, next) => {
         status: 400,
       });
     }
+
     if (quantity < 0) {
       errors.push({
         name: "quantity",
@@ -408,14 +412,32 @@ const addProductDetailsMiddlewares = async (req, res, next) => {
         status: 400,
       });
     }
-    if (expiration_date && new Date(expiration_date) < currentDate) {
-      errors.push({
-        name: "expiration_date",
-        success: false,
-        message: "Expiration date cannot be in the past",
-        status: 400,
-      });
+
+    if (expiration_date) {
+      const expirationDateObj = new Date(expiration_date);
+
+      if (expirationDateObj < currentDate) {
+        errors.push({
+          name: "expiration_date",
+          success: false,
+          message: "Expiration date cannot be in the past",
+          status: 400,
+        });
+      }
+
+      if (
+        expirationDateObj.getFullYear() === currentDate.getFullYear() &&
+        expirationDateObj.getMonth() === currentDate.getMonth()
+      ) {
+        errors.push({
+          name: "expiration_date",
+          success: false,
+          message: "Expiration date cannot be within the current month",
+          status: 400,
+        });
+      }
     }
+
     if (production_date && new Date(production_date) > currentDate) {
       errors.push({
         name: "production_date",
@@ -424,6 +446,7 @@ const addProductDetailsMiddlewares = async (req, res, next) => {
         status: 400,
       });
     }
+
     if (
       production_date &&
       expiration_date &&
@@ -436,9 +459,11 @@ const addProductDetailsMiddlewares = async (req, res, next) => {
         status: 400,
       });
     }
+
     if (errors.length > 0) {
       return res.status(400).json({ errors });
     }
+
     next();
   } catch (error) {
     next(error);

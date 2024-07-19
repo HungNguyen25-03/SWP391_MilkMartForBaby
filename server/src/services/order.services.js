@@ -1,5 +1,5 @@
 const { poolPromise, sql } = require("./database.services");
-
+const { validateProduct } = require("./users.services");
 async function getAllOrder() {
   try {
     const pool = await poolPromise;
@@ -251,7 +251,7 @@ async function getOrderByUserIdConfirmStatus(user_id) {
   }
 }
 
-async function getOrderByUserIdPaidStatus(user_id) {
+const getOrderByUserIdPaidStatus = async (user_id) => {
   try {
     const pool = await poolPromise;
     const request = pool.request();
@@ -288,14 +288,32 @@ async function getOrderByUserIdPaidStatus(user_id) {
       const productResult = await productRequest.query(productQuery);
       const products = productResult.recordset;
 
-      orderWithProducts.push({ ...order, products });
+      const productValidations = await Promise.all(
+        products.map(async (product) => {
+          const validationResponse = await validateProduct(
+            product.product_id,
+            product.quantity
+          );
+          return { ...product, ...validationResponse };
+        })
+      );
+
+      const hasOutOfStock = productValidations.some(
+        (product) => !product.isValid
+      );
+
+      orderWithProducts.push({
+        ...order,
+        products: productValidations,
+        hasOutOfStock,
+      });
     }
 
     return { success: true, orders: orderWithProducts };
   } catch (error) {
     throw error;
   }
-}
+};
 
 async function getOrderByUserIdDeliveredStatus(user_id) {
   try {

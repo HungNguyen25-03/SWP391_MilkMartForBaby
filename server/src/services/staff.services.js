@@ -84,15 +84,10 @@ async function getAllProduct() {
   }
 }
 
-
-
-
 async function showProductDetails(product_id) {
   try {
     const pool = await poolPromise;
-    const result = await pool
-      .request()
-      .input("product_id", sql.Int, product_id)
+    const result = await pool.request().input("product_id", sql.Int, product_id)
       .query(`SELECT 
       production_date,
       expiration_date,
@@ -840,5 +835,4 @@ module.exports = {
   showProductDetails,
   deleteExpiredProduct,
   getProductForPost,
-
 };

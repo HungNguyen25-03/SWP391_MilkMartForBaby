@@ -162,6 +162,7 @@ const readyToCheckoutController = async (req, res) => {
       res.status(200).json({
         message: order.message,
         order_id: order.order_id,
+        hasPreorder: order.hasPreorder,
         orderInfo: order.orderInfo,
         status: 200,
       });
