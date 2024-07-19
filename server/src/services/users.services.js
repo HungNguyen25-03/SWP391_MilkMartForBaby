@@ -275,7 +275,7 @@ async function readyToCheckout(user_id, total_amount, orderItems) {
       );
       if (!validationResponse.isValid) {
         errorMessages.push(
-          `Product ${validationResponse.productName} does not have sufficient stock or is expired.`
+          `Product ${validationResponse.productName} is expired.`
         );
       } else if (validationResponse.isPreorder) {
         hasPreorder = true;

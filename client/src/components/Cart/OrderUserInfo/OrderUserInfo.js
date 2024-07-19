@@ -96,6 +96,8 @@ export default function OrderUserInfo() {
         },
       })
       .then((res) => {
+        console.log(res.data);
+        localStorage.setItem("preOrder", res.data.hasPreorder);
         localStorage.setItem(
           "total_amount",
           res.data.orderInfo[0].total_amount

@@ -6,6 +6,7 @@ import { MainAPI } from "../../API";
 import { useNavigate } from "react-router-dom";
 import { formatVND } from "../../../utils/Format";
 import { CartContext } from "../../Cart/CartContext";
+import { Button, Modal } from "react-bootstrap";
 
 const CartSummary = () => {
   const { orderInfomation } = useOrder();
@@ -13,7 +14,18 @@ const CartSummary = () => {
   const [temporary, setTemporary] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [total, setTotal] = useState(0);
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   const total_amount = localStorage.getItem("total_amount");
+  const hasPreorder = localStorage.getItem("preOrder");
+
+  let isPreOrder = hasPreorder === "true";
+
+  console.log(isPreOrder);
+
   const handleCalculate = () => {
     const temporaryTemp = cartList.reduce((total, item) => {
       return total + item.price * item.quantity;
@@ -74,10 +86,42 @@ const CartSummary = () => {
       <button
         className="btn"
         style={{ background: "#FF199B", margin: 0, color: "white" }}
-        onClick={handleOrder}
+        onClick={isPreOrder ? handleShow : handleOrder}
       >
         Đặt Hàng
       </button>
+
+      <div className="modal-content">
+        <Modal show={show} onHide={handleClose} animation={false}>
+          <Modal.Header closeButton>
+            <Modal.Title>Confirm</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Đơn hàng của bạn có sản phẩm không đủ số lượng? Bạn có muốn đặt
+            trước không?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                handleClose();
+                localStorage.removeItem("post_id");
+              }}
+            >
+              Close
+            </Button>
+            <Button
+              variant="primary"
+              onClick={() => {
+                handleClose();
+                handleOrder();
+              }}
+            >
+              Confirm
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
     </div>
   );
 };

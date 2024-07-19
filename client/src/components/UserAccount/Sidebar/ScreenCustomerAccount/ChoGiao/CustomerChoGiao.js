@@ -11,7 +11,6 @@ export default function CustomerChoGiao({ title }) {
   const nav = useNavigate();
   const { auth } = useAuth();
   const [loading, setLoading] = useState(true);
-  const [preOrder, setPreOrder] = useState(false);
 
   useEffect(() => {
     axios
@@ -76,9 +75,6 @@ export default function CustomerChoGiao({ title }) {
                     </button>
                   </div>
                   {order.products.map((product, index) => {
-                    if (product.stock <= 0) {
-                      setPreOrder(true);
-                    }
                     return (
                       <>
                         <div className="tab-content">
@@ -146,21 +142,6 @@ export default function CustomerChoGiao({ title }) {
                         </span>
                       </span>
                     </span>
-
-                    {preOrder ? (
-                      <>
-                        <span className="d-flex justify-content-end mt-3">
-                          <button
-                            className="btn btn-warning m-0"
-                            onClick={() => {}}
-                          >
-                            Thanh toán
-                          </button>
-                        </span>
-                      </>
-                    ) : (
-                      <></>
-                    )}
                   </div>
                 </div>
               );

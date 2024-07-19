@@ -12,6 +12,7 @@ export default function CustomerThanhToan({ title }) {
   const nav = useNavigate();
   const { auth } = useAuth();
   const [loading, setLoading] = useState(true);
+  const [preOrder, setPreOrder] = useState(false);
 
   useEffect(() => {
     axios
@@ -141,7 +142,18 @@ export default function CustomerThanhToan({ title }) {
                         </span>
                       </span>
 
-                      <span className="d-flex justify-content-end mt-3"></span>
+                      {order.hasOutOfStock ? (
+                        <>
+                          <span className="d-flex justify-content-end mt-3">
+                            <span className="fw-semibold text-primary-emphasis fst-italic">
+                              Đơn này của bạn đã được đặt trước (Thời gian chờ
+                              xác nhận sẽ lâu hơn)
+                            </span>
+                          </span>
+                        </>
+                      ) : (
+                        <></>
+                      )}
                     </div>
                   </div>
                 </>

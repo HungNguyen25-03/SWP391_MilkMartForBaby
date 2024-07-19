@@ -86,21 +86,21 @@ export default function CustomerDangGiao({ title }) {
             deliveredOrderList.map((order, index) => {
               return (
                 <>
-                  <div style={{ textAlign: "right" }}>
-                    <button
-                      className="btn btn-primary m-0"
-                      style={{
-                        border: "none",
-                        borderRadius: "10px",
-                        color: "white",
-                        padding: "10px",
-                      }}
-                      onClick={() => handTrackOrder(order.order_id)}
-                    >
-                      Order Progress
-                    </button>
-                  </div>
                   <div className="order">
+                    <div style={{ textAlign: "right" }}>
+                      <button
+                        className="btn btn-primary m-0"
+                        style={{
+                          border: "none",
+                          borderRadius: "10px",
+                          color: "white",
+                          padding: "10px",
+                        }}
+                        onClick={() => handTrackOrder(order.order_id)}
+                      >
+                        Order Progress
+                      </button>
+                    </div>
                     {order.products.map((product, index) => {
                       return (
                         <>
