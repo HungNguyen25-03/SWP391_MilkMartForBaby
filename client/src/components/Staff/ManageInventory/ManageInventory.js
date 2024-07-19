@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from "react";
 import "./Inventory.scss";
 import { BsJournalCheck } from "react-icons/bs";
-import { MdDeleteOutline } from "react-icons/md";
+import { MdDeleteOutline, MdOutlineInventory } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { MainAPI } from "../../API";
 import { useNavigate } from "react-router-dom";
 import DataTable from "react-data-table-component";
-import { MdOutlineInventory } from "react-icons/md";
+import Modal from "react-modal";
+import { convertSQLDate } from "../../../utils/Format";
+
+Modal.setAppElement("#root");
 
 export default function ManageInventory() {
   const [inventory, setInventory] = useState([]);
+  const [proDetails, setProDetails] = useState([]);
   const nav = useNavigate();
   const [showModal, setShowModal] = useState(false);
-  // const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [visible, setVisible] = useState(null);
   const [proDate, setProDate] = useState("");
-  const [expDate, setExpDate] = useState("");
+  const [exDate, setExDate] = useState("");
   const [quantity, setQuantity] = useState("");
+  const [proID, setProID] = useState("");
+  const [show, setShow] = useState(false);
 
   const fetchData = () => {
     fetch(`${MainAPI}/staff/product`, {
@@ -26,11 +33,26 @@ export default function ManageInventory() {
       },
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch data get product");
+        if (!res.ok) throw new Error("Failed to fetch data");
         return res.json();
       })
       .then((data) => setInventory(data))
-      .catch((error) => console.error("Error fetching data product:", error));
+      .catch((error) => console.error("Error fetching data:", error));
+  };
+
+  const fetchDataDetail = (id) => {
+    fetch(`${MainAPI}/staff/show-product-details/${id}`, {
+      method: "GET",
+      headers: {
+        "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+      },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch product details");
+        return res.json();
+      })
+      .then((data) => setProDetails(data))
+      .catch((error) => console.error("Error fetching product details:", error));
   };
 
   useEffect(() => {
@@ -41,45 +63,86 @@ export default function ManageInventory() {
     nav(`/edit-product/${product.product_id}`);
   };
 
-
-  const handleDelete = (id) => {
+  const handleDelete = () => {
     const confirmed = window.confirm(
-      "Are you sure you want to delete this item ?"
+      "Are you sure you want to delete all expired product?"
     );
 
     if (confirmed) {
-      handleConfirmDelete(id)
-    };
-  }
+      handleConfirmDelete();
+    }
+  };
 
-  const handleConfirmDelete = async (productId) => {
+  const handleConfirmDelete = async () => {
     try {
-      const data = await fetch(`${MainAPI}/staff/export/${productId}`, {
-        method: "GET",
+      const response = await fetch(`${MainAPI}/staff/delete-expired-product`, {
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json",
           "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
         },
-      }).then((response) => response.json());
+      });
+
+      const data = await response.json();
 
       if (data.status === 200) {
-        toast.success("Product deleted successfully");
+        toast.success("Delete all expired product successfully");
         fetchData();
       } else {
         toast.error(data.errors[0].message);
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
   const handleEditDetail = (product) => {
+    setSelectedProduct(product);
     setShowModal(true);
-    setProDate(product.production_date);
-    setExpDate(product.expiry_date);
-    setQuantity(product.stock);
-    console.log(product)
-  }
+    setProID(product.product_id);
+    fetchDataDetail(product.product_id);
+  };
+
+  const handleAdd = (id) => {
+    console.log(id)
+    fetch(`${MainAPI}/staff/add-product-details/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+      },
+      body: JSON.stringify({
+        product_id: id,
+        production_date: proDate,
+        expiration_date: exDate,
+        quantity: quantity,
+      }),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          return res.json();
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        if (data.status === 200) {
+          setProID("");
+          setExDate("");
+          setProDate("");
+          setQuantity("");
+          setShow(false);
+          fetchDataDetail(proID);
+          toast.success("Quantity added successfully");
+          console.log("Quantity added successfully");
+        } else {
+          toast.error(data.errors[0].message);
+        }
+      })
+      .catch((error) => {
+        console.error("Error adding Quantity:", error);
+      });
+  };
 
   const columns = [
     {
@@ -89,7 +152,8 @@ export default function ManageInventory() {
       center: true,
       wrap: true,
       style: {
-        fontSize: '12px', textAlign: 'center'
+        fontSize: "12px",
+        textAlign: "center",
       },
     },
     {
@@ -98,11 +162,17 @@ export default function ManageInventory() {
       sortable: true,
       center: true,
       wrap: true,
-      style: { fontSize: '12px', textAlign: 'center' },
+      style: { fontSize: "12px", textAlign: "center" },
     },
     {
       name: "Image",
-      cell: (row) => <img src={row.image_url} alt="Product" style={{ width: '55px', height: '70px' }} />,
+      cell: (row) => (
+        <img
+          src={row.image_url}
+          alt="Product"
+          style={{ width: "55px", height: "70px" }}
+        />
+      ),
       center: true,
     },
     {
@@ -111,21 +181,21 @@ export default function ManageInventory() {
       sortable: true,
       center: true,
       wrap: true,
-      style: { fontSize: '12px', textAlign: 'center' },
+      style: { fontSize: "12px", textAlign: "center" },
     },
     {
       name: "Price",
       selector: (row) => row.price,
       sortable: true,
       center: true,
-      style: { fontSize: '12px', textAlign: 'center' },
+      style: { fontSize: "12px", textAlign: "center" },
     },
     {
       name: "Country ID",
       selector: (row) => row.country_id,
       sortable: true,
       center: true,
-      style: { fontSize: '12px', textAlign: 'center' },
+      style: { fontSize: "12px", textAlign: "center" },
     },
     {
       name: "Description",
@@ -133,7 +203,7 @@ export default function ManageInventory() {
       sortable: true,
       center: true,
       wrap: true,
-      style: { fontSize: '12px', textAlign: 'center' },
+      style: { fontSize: "12px", textAlign: "center" },
     },
     {
       name: "Age Range",
@@ -141,14 +211,14 @@ export default function ManageInventory() {
       sortable: true,
       center: true,
       wrap: true,
-      style: { fontSize: '12px', textAlign: 'center' },
+      style: { fontSize: "12px", textAlign: "center" },
     },
     {
       name: "Stock",
       selector: (row) => row.stock,
       sortable: true,
       center: true,
-      style: { fontSize: '12px', textAlign: 'center' },
+      style: { fontSize: "12px", textAlign: "center" },
     },
     {
       cell: (row) => (
@@ -156,10 +226,6 @@ export default function ManageInventory() {
           <button className="icon_btn" onClick={() => handleEditProductClick(row)}>
             <BsJournalCheck color="green" />
           </button>
-          <button className="icon_btn" onClick={() => handleDelete(row.product_id)}>
-            <MdDeleteOutline color="red" fontSize="16px" />
-          </button>
-          {/* <button className="icon_btn" onClick={() => { setShowModal(true); setSelectedProduct(row); }}> */}
           <button className="icon_btn" onClick={() => handleEditDetail(row)}>
             <MdOutlineInventory color="#0066cc" fontSize="16px" />
           </button>
@@ -169,9 +235,31 @@ export default function ManageInventory() {
     },
   ];
 
-  console.log(showModal)
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedProduct(null);
+  };
 
-  console.log(inventory)
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      width: '650px',
+      height: '400px',
+    },
+  };
+
+  const handleCancel = () => {
+    setProID("");
+    setExDate("");
+    setProDate("");
+    setQuantity("");
+    setShow(false);
+  }
 
   return (
     <>
@@ -185,18 +273,15 @@ export default function ManageInventory() {
         >
           Add Product
         </button>
+
+        <button
+          className="btn btn-danger" style={{ marginLeft: "20px" }}
+          onClick={() => handleDelete()}
+        >
+          Delete Expired Product
+        </button>
+
         <div className="table-post">
-          {
-            showModal && (
-              <>
-                <div>
-                  <input type="date" value={proDate} onChange={(e) => setProDate(e.target.value)} />
-                  <input type="date" value={expDate} onChange={(e) => setExpDate(e.target.value)} />
-                  <input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
-                </div>
-              </>
-            )
-          }
           <DataTable
             pagination
             paginationPerPage={4}
@@ -207,6 +292,89 @@ export default function ManageInventory() {
           />
         </div>
       </div>
+      {showModal && selectedProduct && (
+        <Modal
+          isOpen={showModal}
+          onRequestClose={closeModal}
+          contentLabel="Edit Product"
+          style={customStyles}
+        >
+          <h2>Product Detail</h2>
+
+          <button className="btn btn-primary" onClick={() => setShow(true)}>
+            Add Quantity
+          </button>
+
+          {
+            show && (
+              <div >
+                <h4>Add quantity product</h4>
+                <div style={{ marginBottom: '10px' }}>
+                  <label>Quantity:</label>
+                  <input
+                    type="number"
+                    value={quantity}
+                    onChange={(event) => setQuantity(event.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <label>Production Date:</label>
+                  <input
+                    type="date"
+                    value={proDate}
+                    onChange={(event) => setProDate(event.target.value)}
+                  />
+                  <label>Expiration Date:</label>
+                  <input
+                    type="date"
+                    value={exDate}
+                    onChange={(event) => setExDate(event.target.value)}
+                  />
+                </div>
+
+                <button className="btn btn-primary" style={{ marginTop: "10px" }} onClick={() => handleAdd(proID)}>
+                  Create
+                </button>
+                <button className="btn btn-danger" style={{ marginTop: "10px", marginLeft: '20px' }} onClick={() => handleCancel()}>
+                  Cancel
+                </button>
+              </div>
+            )
+          }
+
+
+          <div>
+            <table className="table-prodetail-th">
+              <thead>
+                <tr>
+                  <th>Production Date</th>
+                  <th>Expiry Date</th>
+                  <th>Quantity</th>
+                </tr>
+              </thead>
+            </table>
+
+            <div className="prodetail-tb">
+              <table className="table-prodetail-tb">
+                <tbody>
+                  {proDetails.map((product, index) => (
+                    <tr key={index}>
+                      <td>{convertSQLDate(product.production_date)}</td>
+                      <td>{convertSQLDate(product.expiration_date)}</td>
+                      <td>{product.quantity}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <button style={{ marginTop: '20px' }} onClick={closeModal} className="btn btn-secondary">
+            Close
+          </button>
+        </Modal >
+      )
+      }
     </>
   );
 }
