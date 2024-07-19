@@ -264,6 +264,31 @@ async function readyToCheckout(user_id, total_amount, orderItems) {
         message: "Order cannot be processed without items",
       };
     }
+
+    const errorMessages = [];
+    let hasPreorder = false;
+
+    for (const item of orderItems) {
+      const validationResponse = await validateProduct(
+        item.product_id,
+        item.quantity
+      );
+      if (!validationResponse.isValid) {
+        errorMessages.push(
+          `Product ${validationResponse.productName} does not have sufficient stock or is expired.`
+        );
+      } else if (validationResponse.isPreorder) {
+        hasPreorder = true;
+      }
+    }
+
+    if (errorMessages.length > 0) {
+      return {
+        success: false,
+        message: errorMessages.join(" "),
+      };
+    }
+
     const pool = await poolPromise;
     const result = await pool
       .request()
@@ -275,9 +300,9 @@ async function readyToCheckout(user_id, total_amount, orderItems) {
         `INSERT INTO Orders (user_id, order_date, status, total_amount) OUTPUT INSERTED.order_id 
         VALUES (@user_id, @order_date, @status, @total_amount)`
       );
+
     const order_id = result.recordset[0].order_id;
 
-    // insert order_items
     await insertOrderItems(order_id, orderItems);
 
     const orderInfo = await getOrderInfo(order_id);
@@ -285,12 +310,36 @@ async function readyToCheckout(user_id, total_amount, orderItems) {
     return {
       success: true,
       order_id: order_id,
+      hasPreorder: hasPreorder,
       message: "Ready to checkout successfully",
       orderInfo: orderInfo,
     };
   } catch (error) {
     throw error;
   }
+}
+
+async function validateProduct(product_id, quantity) {
+  const pool = await poolPromise;
+  const result = await pool
+    .request()
+    .input("product_id", sql.Int, product_id)
+    .query(
+      `SELECT product_name, stock, 
+              (SELECT COUNT(*) FROM Product_Details 
+               WHERE product_id = @product_id AND GETDATE() < DATEADD(MONTH, -1, expiration_date)) AS validProducts
+       FROM Products 
+       WHERE product_id = @product_id`
+    );
+
+  const product = result.recordset[0];
+  const isValid = product.stock >= quantity && product.validProducts > 0;
+  const isPreorder = product.stock < quantity && product.validProducts > 0;
+  return {
+    isValid: isValid || isPreorder,
+    isPreorder: isPreorder,
+    productName: product.product_name,
+  };
 }
 
 async function insertOrderItems(order_id, orderItems) {
@@ -571,4 +620,5 @@ module.exports = {
   showLoyaltyPoints,
   showTop4Post,
   useLoyaltyPoints,
+  validateProduct,
 };
