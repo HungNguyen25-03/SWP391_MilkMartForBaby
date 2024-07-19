@@ -24,8 +24,39 @@ import BrandPage from "./components/HomePage/Content/Brand/BrandPage.js";
 import CreateUser from "./components/Admin/Create/CreateUser.js";
 import EditProduct from "./components/Staff/CreateEdit/EditProduct.js";
 import CreateProduct from "./components/Staff/CreateEdit/CreateProduct.js";
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+    // Function to handle the beforeunload event
+    const handleBeforeUnload = (event) => {
+      if (document.visibilityState === "hidden") {
+        // Clear localStorage if the page is hidden (indicating close)
+        localStorage.clear();
+      }
+    };
+
+    // Function to handle the visibilitychange event
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        // Set a flag in sessionStorage to indicate the page is hidden
+        sessionStorage.setItem("isPageHidden", "true");
+      } else {
+        // Remove the flag if the page is visible
+        sessionStorage.removeItem("isPageHidden");
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    // Cleanup the event listeners on component unmount
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
   return (
     <>
       <BrowserRouter>

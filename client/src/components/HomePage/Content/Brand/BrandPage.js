@@ -5,6 +5,7 @@ import axios from "axios";
 import { MainAPI } from "../../../API";
 import HeaderPage from "../../../../utils/Header/Header";
 import FooterPage from "../../../../utils/Footer/FooterPage";
+import { Spinner } from "react-bootstrap";
 
 export default function BrandPage() {
   const { brand_name } = useParams();
@@ -12,7 +13,7 @@ export default function BrandPage() {
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
   const [isBrandPage, setIsBrandPage] = useState(false);
-  console.log(brand_name);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
@@ -26,6 +27,7 @@ export default function BrandPage() {
           ...res.data.outOfStockProducts,
         ]);
         setTotalPage(res.data.totalPages);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -45,14 +47,24 @@ export default function BrandPage() {
           justifyContent: "center",
         }}
       >
-        <ProductListShow
-          productList={allProductList}
-          changePage={(page) => {
-            setPage(page);
-          }}
-          totalPage={totalPage}
-          isBrandPage={isBrandPage}
-        />
+        {loading ? (
+          <>
+            <div className="text-center">
+              <Spinner animation="border" role="status" />
+            </div>
+          </>
+        ) : (
+          <>
+            <ProductListShow
+              productList={allProductList}
+              changePage={(page) => {
+                setPage(page);
+              }}
+              totalPage={totalPage}
+              isBrandPage={isBrandPage}
+            />
+          </>
+        )}
       </div>
       <FooterPage />
     </>

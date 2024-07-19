@@ -68,7 +68,7 @@ export default function Edit() {
   };
 
   return (
-    <div className="edit-container">
+    <div className="edit-container d-flex">
       <ToastContainer />
       <NavBar />
       <div className="content">

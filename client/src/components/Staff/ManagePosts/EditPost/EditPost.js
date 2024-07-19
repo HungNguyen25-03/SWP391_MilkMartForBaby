@@ -51,63 +51,46 @@ export default function EditPost() {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
   const [product, setProduct] = useState([]);
-  const [relatedProduct, setRelatedProduct] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
-
-  const data = product.map((item) => {
-    return {
-      value: item.product_id,
-      label: item.product_name,
-    };
-  });
-
-  console.log(data);
 
   useEffect(() => {
     axios
       .get(`${MainAPI}/user/get-post/${id}`)
       .then((res) => {
-        // console.log(res.data);
+        console.log(res.data);
         setTitle(res.data.title);
         setDescription(res.data.description);
         setImage(res.data.image_url);
-        setRelatedProduct(res.data.products);
-        setSelectedOptions(data);
+        setSelectedOptions(
+          res.data.products.map((product) => {
+            return { value: product.product_id, label: product.product_name };
+          })
+        );
+        fetchData(); // pass the test array to fetchData
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const options = product.map((item) => {
-    return {
-      value: item.product_id,
-      label: item.product_name,
-    };
-  });
-
-  const handleChange = (selectedOption) => {
-    setSelectedOptions(selectedOption);
-  };
-
   const fetchData = () => {
     axios
-      .get(`${MainAPI}/staff/product`, {
+      .get(`${MainAPI}/staff/get-product-for-post`, {
         headers: {
           "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
         },
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setProduct(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const handleChange = (selectedOption) => {
+    setSelectedOptions(selectedOption);
   };
 
   const handleEditPost = () => {
@@ -119,6 +102,9 @@ export default function EditPost() {
           description: description,
           image_url: image,
           user_id: auth.user.user_id,
+          productItems: selectedOptions.map((product) => {
+            return product.value;
+          }),
         },
         {
           headers: {
@@ -137,6 +123,11 @@ export default function EditPost() {
         console.log(err);
       });
   };
+
+  console.log(selectedOptions);
+  // console.log(title);
+  // console.log(description);
+  // console.log(image);
 
   return (
     <div className="create-post-container">
@@ -170,11 +161,13 @@ export default function EditPost() {
         </form>
         <div style={{ marginBottom: "30px" }}>
           <Select
-            defaultValue={[product[0], product[1], data[2]]}
-            options={options}
+            defaultValue={selectedOptions}
+            options={product}
             onChange={handleChange}
-            // value={selectedOptions}
+            value={selectedOptions}
             isMulti={true}
+            className="basic-multi-select"
+            classNamePrefix="select"
           />
         </div>
         <CKEditor
