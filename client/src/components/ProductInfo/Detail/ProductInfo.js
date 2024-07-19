@@ -11,9 +11,9 @@ import { MainAPI } from "../../API";
 
 export default function ProductInfo({ product }) {
   const { handleAddToCart } = useContext(CartContext);
-  const { id } = useParams()
+  const { id } = useParams();
 
-  console.log(id)
+  console.log(id);
 
   return (
     <>
@@ -25,10 +25,27 @@ export default function ProductInfo({ product }) {
           </Link>
         </div>
         <div className="container">
-          <div className="row">
+          <div className="row product-content">
             <div className="col-md-6 info">
               <div className="ptc">
                 <img src={product.image_url} />
+                <div className="other_detail">
+                  Share:&nbsp;
+                  <a
+                    style={{ width: "10%" }}
+                    href="https://www.facebook.com/"
+                    target="_blank"
+                  >
+                    <FaFacebookSquare />
+                  </a>
+                  &nbsp;&nbsp;
+                  <a href="https://www.instagram.com/" target="_blank">
+                    <FaInstagramSquare />
+                  </a>
+                  &nbsp;&nbsp;<span>||</span>&nbsp;&nbsp;
+                  <FaHeart color="red" /> &nbsp;&nbsp;Liked! &nbsp;{" "}
+                  <span>(100)</span>
+                </div>
               </div>
             </div>
 
@@ -46,19 +63,23 @@ export default function ProductInfo({ product }) {
               </div>
 
               <div className="feed_rate">
-                Rating: &nbsp;&nbsp;<span style={{ color: 'red' }}>{product.age_range}</span>
+                Rating: &nbsp;&nbsp;
+                <span style={{ color: "red" }}>{product.age_range}</span>
               </div>
 
               <div className="feed_rate">
                 Description: &nbsp;&nbsp;{product.description}
               </div>
 
-              <div className="price">
-                Price:&nbsp;&nbsp;&nbsp;
+              <div className="feed_rate">
+                Stock: &nbsp;&nbsp;{product.stock}
+              </div>
+
+              <div className="price fs-2 fw-bold ">
                 <span style={{ color: "red" }}>{formatVND(product.price)}</span>
               </div>
 
-              <div className="add_buy">
+              <div className="add_buy ">
                 <span>
                   <button
                     className="btn_add"
@@ -70,28 +91,9 @@ export default function ProductInfo({ product }) {
                   </button>
                 </span>
               </div>
-
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="other_detail">
-        Share:&nbsp;
-        <a
-          style={{ width: "10%" }}
-          href="https://www.facebook.com/"
-          target="_blank"
-        >
-          <FaFacebookSquare />
-        </a>
-        &nbsp;&nbsp;
-        <a href="https://www.instagram.com/" target="_blank">
-          <FaInstagramSquare />
-        </a>
-        &nbsp;&nbsp;<span>||</span>&nbsp;&nbsp;
-        <FaHeart color="red" /> &nbsp;&nbsp;Liked! &nbsp;{" "}
-        <span>(100)</span>
       </div>
     </>
   );

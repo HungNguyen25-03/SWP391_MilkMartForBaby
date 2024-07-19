@@ -114,13 +114,13 @@ export default function Chart({ startDate, endDate }) {
   return (
     <>
       <div className="row-chart">
-        <div className="chart-col-vertical col-8">
+        <div className="chart-col-vertical col-md-8">
           <p className="fw-bold m-0">Tổng doanh thu</p>
           <div className="chart">
             <Bar options={options} data={dataBarChart} />
           </div>
         </div>
-        <div className="chart-col-pie col-4">
+        <div className="chart-col-pie col-md-4">
           <p className="fw-bold m-0">Top sản phẩm đã bán</p>
           <div className="chart">
             <Pie data={dataPieChart} />

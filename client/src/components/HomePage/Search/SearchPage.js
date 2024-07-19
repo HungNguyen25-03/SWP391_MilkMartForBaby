@@ -5,6 +5,7 @@ import axios from "axios";
 import { MainAPI } from "../../API";
 import { useLocation } from "react-router-dom";
 import ProductListShow from "../ProductListShow";
+import { Spinner } from "react-bootstrap";
 
 export default function SearchPage() {
   const location = useLocation();
@@ -12,6 +13,7 @@ export default function SearchPage() {
   const searchTerm = new URLSearchParams(location.search).get("search_query");
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
@@ -23,6 +25,7 @@ export default function SearchPage() {
           ...res.data.outOfStockProducts,
         ]);
         setTotalPage(res.data.totalPages);
+        setLoading(false);
         // nav("/search", { searchResult: res.data });
       })
       .catch((err) => {
@@ -36,28 +39,38 @@ export default function SearchPage() {
     <div>
       <HeaderPage />
       <div className="container">
-        {searchResult.length === 0 ? (
+        {loading ? (
           <>
-            <div className="emptyinfo" style={{ marginTop: "80px" }}>
-              <img
-                style={{ width: "30%", margin: "50px 0 auto" }}
-                src="https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2Fsearch-empty.png?alt=media&token=478bd46a-1d79-47f3-bcab-898248bc04d5"
-              />
-              <p>Chưa tìm thấy kết quả phù hợp</p>
+            <div className="text-center" style={{ marginTop: "120px" }}>
+              <Spinner animation="border" role="status" />
             </div>
           </>
         ) : (
           <>
-            {" "}
-            <div style={{ marginTop: "80px" }}>
-              <ProductListShow
-                productList={searchResult}
-                changePage={(page) => {
-                  setPage(page);
-                }}
-                totalPage={totalPage}
-              />
-            </div>
+            {searchResult.length === 0 ? (
+              <>
+                <div className="emptyinfo" style={{ marginTop: "80px" }}>
+                  <img
+                    style={{ width: "30%", margin: "50px 0 auto" }}
+                    src="https://firebasestorage.googleapis.com/v0/b/swp391-milkmartsystem.appspot.com/o/images%2Fsearch-empty.png?alt=media&token=478bd46a-1d79-47f3-bcab-898248bc04d5"
+                  />
+                  <p>Chưa tìm thấy kết quả phù hợp</p>
+                </div>
+              </>
+            ) : (
+              <>
+                {" "}
+                <div style={{ marginTop: "80px" }}>
+                  <ProductListShow
+                    productList={searchResult}
+                    changePage={(page) => {
+                      setPage(page);
+                    }}
+                    totalPage={totalPage}
+                  />
+                </div>
+              </>
+            )}
           </>
         )}
       </div>
