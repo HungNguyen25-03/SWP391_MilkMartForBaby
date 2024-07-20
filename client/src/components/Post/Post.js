@@ -18,6 +18,7 @@ export default function Post() {
   const [blog, setBlog] = useState({});
   const [relatedProducts, setRelatedProducts] = useState([]);
   const { handleAddToCart } = useContext(CartContext);
+  const quantity = 1;
 
   useEffect(() => {
     axios
@@ -74,7 +75,7 @@ export default function Post() {
                       <div>{formatVND(product.price)}</div>
                       <div
                         className="icon_cart"
-                        onClick={() => handleAddToCart(product)}
+                        onClick={() => handleAddToCart({ ...product, quantity })}
                       >
                         <FaShoppingCart />
                       </div>

@@ -11,7 +11,7 @@ import Review from "./Reviews/Review";
 export default function ProductDetail() {
   const { id } = useParams();
 
-  const [product, setProduct] = useState();
+  const [product, setProduct] = useState({});
 
   useEffect(() => {
     axios

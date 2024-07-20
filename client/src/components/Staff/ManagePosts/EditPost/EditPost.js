@@ -134,11 +134,11 @@ export default function EditPost() {
       <ToastContainer />
       <div className="create-post-content">
         <h2 className="mb-3 mt-3">Edit Post</h2>
-        <form class="row g-3">
-          <div class="mb-3">
+        <form className="row g-3">
+          <div className="mb-3">
             <input
               type="email"
-              class="form-control"
+              className="form-control"
               placeholder="Post title"
               name="title"
               value={title}
@@ -147,9 +147,9 @@ export default function EditPost() {
               }}
             />
           </div>
-          <div class="mb-3">
+          <div className="mb-3">
             <input
-              class="form-control"
+              className="form-control"
               placeholder="Thumbnail Image URL"
               name="image_url"
               value={image}

@@ -87,7 +87,6 @@ export default function OrderUserInfo() {
     });
   }, [cartList, orderInfomation.discount, checked]);
 
-  console.log(orderItem);
   const handleClick = () => {
     axios
       .post(`${MainAPI}/user/ready-to-checkout`, orderItem, {
@@ -160,7 +159,6 @@ export default function OrderUserInfo() {
 
     return { temporaryTemp, discountTemp, totalTemp };
   };
-  console.log(orderItem);
 
   return (
     <div className="fixed-cart">
@@ -202,7 +200,7 @@ export default function OrderUserInfo() {
                 closeModal={() => {
                   setShow(false);
                 }}
-                onSubmit={() => {}}
+                onSubmit={() => { }}
                 errors={[]}
               />
             )}
