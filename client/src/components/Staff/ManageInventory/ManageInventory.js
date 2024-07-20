@@ -63,13 +63,46 @@ export default function ManageInventory() {
     nav(`/edit-product/${product.product_id}`);
   };
 
-  const handleDelete = () => {
+  const handleDeleteExpProduct = () => {
     const confirmed = window.confirm(
       "Are you sure you want to delete all expired product?"
     );
 
     if (confirmed) {
       handleConfirmDelete();
+    }
+  };
+
+  const handleDeleteEachProduct = (id) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete product?"
+    );
+
+    if (confirmed) {
+      handleDeleteProduct(id);
+    }
+  };
+
+  const handleDeleteProduct = async (id) => {
+    try {
+      const response = await fetch(`${MainAPI}/staff/export/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.status === 200) {
+        toast.success("Delete product successfully");
+        fetchData();
+      } else {
+        toast.error(data.errors[0].message);
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -229,6 +262,9 @@ export default function ManageInventory() {
           <button className="icon_btn" onClick={() => handleEditDetail(row)}>
             <MdOutlineInventory color="#0066cc" fontSize="16px" />
           </button>
+          <button className="icon_btn" onClick={() => handleDeleteEachProduct(row.product_id)}>
+            <MdDeleteOutline color="red" fontSize="17px" />
+          </button>
         </div>
       ),
       center: true,
@@ -276,7 +312,7 @@ export default function ManageInventory() {
 
         <button
           className="btn btn-danger" style={{ marginLeft: "20px" }}
-          onClick={() => handleDelete()}
+          onClick={() => handleDeleteExpProduct()}
         >
           Delete Expired Product
         </button>
