@@ -9,8 +9,9 @@ export default function OrderDetail() {
     handleDeleteCart,
     decrementQuantity,
     incrementQuantity,
-    localCartList,
   } = useContext(CartContext);
+
+  console.log(cartList)
 
   return (
     <>
@@ -35,7 +36,7 @@ export default function OrderDetail() {
               <div className="item-cart-total">Thành tiền</div>
             </div>
             {cartList.map((product) => (
-              <div key={product.id} className="cart-product-line">
+              <div key={product.product_id} className="cart-product-line">
                 <div className="block-cart-first">
                   <div className="product-img">
                     <img src={product.image_url} alt={product.name} />

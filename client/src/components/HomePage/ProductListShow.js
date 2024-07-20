@@ -15,7 +15,6 @@ export default function ProductListShow({
   productList,
   changePage,
   totalPage,
-  isBrandPage,
 }) {
   const { handleAddToCart } = useContext(CartContext);
   const [ageFilters, setAgeFilters] = useState([]);
@@ -28,6 +27,7 @@ export default function ProductListShow({
   const itemsPerPage = 12;
   const { brand_name } = useParams();
   const [loading, setLoading] = useState(true);
+  const quantity = 1;
 
   useEffect(() => {
     axios
@@ -89,8 +89,6 @@ export default function ProductListShow({
     }
   }, [totalPage, filterPage, ageFilters, countryFilters, currentPage]);
 
-  console.log(totalPageAll);
-
   const totalPages = totalPageAll;
 
   const handlePageChange = (pageNumber) => {
@@ -118,9 +116,8 @@ export default function ProductListShow({
                         setCountryFilters
                       );
                     }}
-                    className={`btn ${
-                      countryFilters?.includes(cate.country) ? "active" : ""
-                    }`}
+                    className={`btn ${countryFilters?.includes(cate.country) ? "active" : ""
+                      }`}
                     key={`filters-${index}`}
                   >
                     {cate.title}
@@ -142,9 +139,8 @@ export default function ProductListShow({
                         setAgeFilters
                       );
                     }}
-                    className={`btn ${
-                      ageFilters?.includes(age.title) ? "active" : ""
-                    }`}
+                    className={`btn ${ageFilters?.includes(age.title) ? "active" : ""
+                      }`}
                     key={`filters-${index}`}
                   >
                     {age.title}
@@ -199,7 +195,7 @@ export default function ProductListShow({
                         <div>{formatVND(product.price)}</div>
                         <div
                           className="icon_cart"
-                          onClick={() => handleAddToCart(product)}
+                          onClick={() => handleAddToCart({ ...product, quantity })}
                         >
                           <FaShoppingCart />
                         </div>
@@ -249,7 +245,7 @@ export default function ProductListShow({
                         <div>{formatVND(product.price)}</div>
                         <div
                           className="icon_cart"
-                          onClick={() => handleAddToCart(product)}
+                          onClick={() => handleAddToCart({ ...product, quantity })}
                         >
                           <FaShoppingCart />
                         </div>
@@ -266,9 +262,8 @@ export default function ProductListShow({
             <button
               key={index}
               onClick={() => handlePageChange(index + 1)}
-              className={`pagination-button ${
-                index + 1 === currentPage ? "active" : ""
-              }`}
+              className={`pagination-button ${index + 1 === currentPage ? "active" : ""
+                }`}
             >
               {index + 1}
             </button>

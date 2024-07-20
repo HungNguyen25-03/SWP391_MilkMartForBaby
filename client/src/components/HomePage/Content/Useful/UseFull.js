@@ -14,7 +14,6 @@ export default function UseFull() {
     axios
       .get(`${MainAPI}/user/show-top-4-post`)
       .then((res) => {
-        console.log(res.data);
         setBlogs(res.data);
       })
       .catch((err) => {

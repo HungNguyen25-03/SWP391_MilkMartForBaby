@@ -90,9 +90,9 @@ export default function HeaderPage() {
               <>
                 <Link to="/cart" className="acc">
                   <div className="acc_icon">
-                    <button type="button" class="btn position-relative">
+                    <button type="button" className="btn position-relative">
                       <FaShoppingCart />
-                      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                      <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                         {cartList.length <= 10 ? cartList.length : 10 + "+"}
                       </span>
                     </button>

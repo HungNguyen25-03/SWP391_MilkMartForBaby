@@ -1,29 +1,33 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import "./Productinfo.scss";
 import { FaFacebookSquare } from "react-icons/fa";
 import { FaInstagramSquare } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
-import { Link, useParams } from "react-router-dom";
-import { FaHome } from "react-icons/fa";
+import { useParams } from "react-router-dom";
 import { CartContext } from "../../Cart/CartContext";
 import { formatVND } from "../../../utils/Format";
-import { MainAPI } from "../../API";
 
 export default function ProductInfo({ product }) {
   const { handleAddToCart } = useContext(CartContext);
   const { id } = useParams();
+  const [quantity, setQuantity] = useState(1);
 
   console.log(id);
 
+  const handleIncrease = () => {
+    setQuantity((prevQuantity) => prevQuantity + 1);
+  };
+
+  const handleDecrease = () => {
+    setQuantity((prevQuantity) =>
+      prevQuantity > 1 ? prevQuantity - 1 : 1
+    );
+  };
+
+  console.log(quantity)
   return (
     <>
       <div key={product.product_id} className="productInfo_container">
-        <div className="back_home">
-          <Link to={"/home"}>
-            <FaHome />
-            &nbsp;Back To Home
-          </Link>
-        </div>
         <div className="container">
           <div className="row product-content">
             <div className="col-md-6 info">
@@ -79,12 +83,21 @@ export default function ProductInfo({ product }) {
                 <span style={{ color: "red" }}>{formatVND(product.price)}</span>
               </div>
 
+              <div className="quantity">
+                Quantity:&nbsp;&nbsp;
+                <button className="btn_quantity"
+                  onClick={handleDecrease}>-</button>&nbsp;&nbsp;&nbsp;
+                {quantity}&nbsp;&nbsp;&nbsp;
+                <button className="btn_quantity"
+                  onClick={handleIncrease}>+</button>
+              </div>
+
               <div className="add_buy ">
                 <span>
                   <button
                     className="btn_add"
                     onClick={() => {
-                      handleAddToCart(product);
+                      handleAddToCart({ ...product, quantity });
                     }}
                   >
                     Add To Cart
