@@ -184,9 +184,10 @@ async function getAllVoucher() {
 
    Select 
 
-   Vouchers.voucher_id,
-   Vouchers.code,
-   Vouchers.discount
+  Vouchers.voucher_id,
+  Vouchers.code,
+  Vouchers.discount,
+  Vouchers.expiration_date
 
    from Vouchers
 
