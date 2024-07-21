@@ -65,17 +65,17 @@ export default function Voucher() {
   };
 
   return (
-    <div className="voucher-container p-3">
+    <div className="voucher-container p-4">
       {/* <ToastContainer autoClose={2000} /> */}
-      <h2 className="voucher-title mb-2">Nhận voucher</h2>
+      <h2 className="voucher-title mb-4">Nhận voucher</h2>
       {loading ? (
         <p>Loading vouchers...</p>
       ) : (
         <Slide
+          transitionDuration={200}
           slidesToScroll={1}
           slidesToShow={3}
           autoplay={false}
-          indicators={true}
           responsive={[
             {
               breakpoint: 800,
@@ -113,6 +113,7 @@ export default function Voucher() {
                   ) : (
                     <button
                       className="btn btn-danger fw-bold px-4"
+                      style={{ marginLeft: "30px" }}
                       value={voucher.voucher_id}
                       onClick={handleClick}
                     >
