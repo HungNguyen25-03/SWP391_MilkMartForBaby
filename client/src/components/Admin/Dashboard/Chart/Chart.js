@@ -80,7 +80,7 @@ export default function Chart({ startDate, endDate }) {
       {
         label: "Doanh thu theo tháng",
         data: barChartLabels.map((__, index) => barChartData[index]),
-        backgroundColor: "red",
+        backgroundColor: "rgba(54, 162, 235, 0.2)",
       },
     ],
   };

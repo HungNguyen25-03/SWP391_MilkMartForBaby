@@ -31,7 +31,7 @@ export default function Blog() {
 
       {loading ? (
         <>
-          <div className="text-center">
+          <div className="text-center" style={{ marginTop: "90px" }}>
             <Spinner animation="border" role="status" />
           </div>
         </>

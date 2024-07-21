@@ -9,9 +9,9 @@
     align-items: center;
 
     .first-part {
-      padding: 10px;
+      padding: 20px;
       height: 100px;
-      // border-radius: 10px;
+      border-radius: 15px 0 0 15px;
       color: #ff0064;
       background-color: #fdebf2;
 
@@ -24,8 +24,9 @@
       padding: 10px;
       font-size: 10px;
       height: 100px;
+      width: 250px;
       text-align: start;
-      // border-radius: 10px;
+      border-radius: 0 15px 15px 0;
       color: #ae0258;
       background-color: #fdebf2;
 
