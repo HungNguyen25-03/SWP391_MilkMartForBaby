@@ -299,7 +299,7 @@ const getOrderByUserIdPaidStatus = async (user_id) => {
       );
 
       const hasOutOfStock = productValidations.some(
-        (product) => !product.isValid
+        (product) => product.isPreorder
       );
 
       orderWithProducts.push({
