@@ -386,8 +386,9 @@ async function reviewsByProductId(
 
       .input("rating", sql.Int, rating)
       .input("comment", sql.NVarChar, comment)
+      .input("review_date", sql.DateTime, new Date())
       .query(
-        `INSERT INTO Reviews (user_id, product_id, order_id ,rating, comment) VALUES (@user_id, @product_id, @order_id, @rating, @comment)`
+        `INSERT INTO Reviews (user_id, product_id, order_id ,rating, comment, review_date) VALUES (@user_id, @product_id, @order_id, @rating, @comment, @review_date)`
       );
     return { success: true, message: "Review added successfully" };
   } catch (error) {
@@ -600,6 +601,38 @@ async function showTop4Post() {
   }
 }
 
+async function addPhoneAddress(user_id, phone, address) {
+  try {
+    const pool = await poolPromise;
+    await pool
+      .request()
+      .input("customer_id", sql.Int, user_id)
+      .input("phone", sql.VarChar, phone)
+      .input("address", sql.NVarChar, address)
+      .query(
+        `UPDATE Customer SET phone = @phone, address = @address WHERE customer_id = @customer_id`
+      );
+    return { success: true, message: "Phone and address added successfully" };
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function showPhoneAddress(user_id) {
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input("user_id", sql.Int, user_id)
+      .query(
+        `SELECT u.username, phone, address FROM Customer c JOIN Users u ON c.customer_id = u.user_id WHERE user_id = @user_id`
+      );
+    return { success: true, phoneAddress: result.recordset[0] };
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   loginUser,
   registerUser,
@@ -621,4 +654,6 @@ module.exports = {
   showTop4Post,
   useLoyaltyPoints,
   validateProduct,
+  addPhoneAddress,
+  showPhoneAddress,
 };

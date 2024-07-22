@@ -386,6 +386,45 @@ const claimVoucherMiddleware = async (req, res, next) => {
   }
 };
 
+const addPhoneAddressMiddleware = async (req, res, next) => {
+  try {
+    const errors = [];
+    const pool = await poolPromise;
+    const { phone, address } = req.body;
+    const phoneRegex = /^[0-9]{10}$/;
+    if (phone && !phoneRegex.test(phone)) {
+      errors.push({
+        name: "phone",
+        success: false,
+        message: "Invalid phone number",
+        status: 400,
+      });
+    }
+    if (!address) {
+      errors.push({
+        name: "address",
+        success: false,
+        message: "Address is required",
+        status: 400,
+      });
+    }
+    if (!phone) {
+      errors.push({
+        name: "phone",
+        success: false,
+        message: "Phone number is required",
+        status: 400,
+      });
+    }
+    if (errors.length > 0) {
+      return next(errors);
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
 const reviewsByProductIdMiddlewares = async (req, res, next) => {
   try {
     const errors = [];
@@ -484,4 +523,5 @@ module.exports = {
   resetPasswordMiddleware,
   requestPasswordResetMiddleware,
   useLoyaltyPointsMiddlewares,
+  addPhoneAddressMiddleware,
 };
