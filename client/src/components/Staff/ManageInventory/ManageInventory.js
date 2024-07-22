@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import Modal from "react-modal";
 import { convertSQLDate } from "../../../utils/Format";
+import { Spinner } from "react-bootstrap";
 
 Modal.setAppElement("#root");
 
@@ -24,6 +25,7 @@ export default function ManageInventory() {
   const [quantity, setQuantity] = useState("");
   const [proID, setProID] = useState("");
   const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const fetchData = () => {
     fetch(`${MainAPI}/staff/product`, {
@@ -36,8 +38,14 @@ export default function ManageInventory() {
         if (!res.ok) throw new Error("Failed to fetch data");
         return res.json();
       })
-      .then((data) => setInventory(data))
-      .catch((error) => console.error("Error fetching data:", error));
+      .then((data) => {
+        setInventory(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      });
   };
 
   const fetchDataDetail = (id) => {
@@ -298,119 +306,133 @@ export default function ManageInventory() {
   }
 
   return (
-    <>
-      <ToastContainer />
-      <div className="manage-inventory-container">
-        <button
-          className="btn btn-primary"
-          onClick={() => {
-            nav("/create-product");
-          }}
-        >
-          Add Product
-        </button>
-
-        <button
-          className="btn btn-danger" style={{ marginLeft: "20px" }}
-          onClick={() => handleDeleteExpProduct()}
-        >
-          Delete Expired Product
-        </button>
-
-        <div className="table-post">
-          <DataTable
-            pagination
-            paginationPerPage={4}
-            paginationRowsPerPageOptions={[4, 6]}
-            columns={columns}
-            data={inventory}
-            className="table-content"
-          />
-        </div>
-      </div>
-      {showModal && selectedProduct && (
-        <Modal
-          isOpen={showModal}
-          onRequestClose={closeModal}
-          contentLabel="Edit Product"
-          style={customStyles}
-        >
-          <h2>Product Detail</h2>
-
-          <button className="btn btn-primary" onClick={() => setShow(true)}>
-            Add Quantity
-          </button>
-
-          {
-            show && (
-              <div >
-                <h4>Add quantity product</h4>
-                <div style={{ marginBottom: '10px' }}>
-                  <label>Quantity:</label>
-                  <input
-                    type="number"
-                    value={quantity}
-                    onChange={(event) => setQuantity(event.target.value)}
-                  />
-                </div>
-
-                <div>
-                  <label>Production Date:</label>
-                  <input
-                    type="date"
-                    value={proDate}
-                    onChange={(event) => setProDate(event.target.value)}
-                  />
-                  <label>Expiration Date:</label>
-                  <input
-                    type="date"
-                    value={exDate}
-                    onChange={(event) => setExDate(event.target.value)}
-                  />
-                </div>
-
-                <button className="btn btn-primary" style={{ marginTop: "10px" }} onClick={() => handleAdd(proID)}>
-                  Create
+    <div className="manage-inventory-container">
+      {
+        loading ? (
+          <>
+            <div className="spinner-container ">
+              <Spinner animation="border" role="status" />
+            </div>
+          </>
+        ) : (
+          <>
+            <ToastContainer />
+            <div >
+              <div style={{ textAlign: 'center' }}>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => {
+                    nav("/create-product");
+                  }}
+                >
+                  Add Product
                 </button>
-                <button className="btn btn-danger" style={{ marginTop: "10px", marginLeft: '20px' }} onClick={() => handleCancel()}>
-                  Cancel
+
+                <button
+                  className="btn btn-danger" style={{ marginLeft: "20px" }}
+                  onClick={() => handleDeleteExpProduct()}
+                >
+                  Delete Expired Product
                 </button>
               </div>
-            )
-          }
 
-
-          <div>
-            <table className="table-prodetail-th">
-              <thead>
-                <tr>
-                  <th>Production Date</th>
-                  <th>Expiry Date</th>
-                  <th>Quantity</th>
-                </tr>
-              </thead>
-            </table>
-
-            <div className="prodetail-tb">
-              <table className="table-prodetail-tb">
-                <tbody>
-                  {proDetails.map((product, index) => (
-                    <tr key={index}>
-                      <td>{convertSQLDate(product.production_date)}</td>
-                      <td>{convertSQLDate(product.expiration_date)}</td>
-                      <td>{product.quantity}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <div className="table-post">
+                <DataTable
+                  pagination
+                  paginationPerPage={4}
+                  paginationRowsPerPageOptions={[4, 6]}
+                  columns={columns}
+                  data={inventory}
+                  className="table-content"
+                />
+              </div>
             </div>
-          </div>
-          <button style={{ marginTop: '20px' }} onClick={closeModal} className="btn btn-secondary">
-            Close
-          </button>
-        </Modal >
-      )
+            {showModal && selectedProduct && (
+              <Modal
+                isOpen={showModal}
+                onRequestClose={closeModal}
+                contentLabel="Edit Product"
+                style={customStyles}
+              >
+                <h2>Product Detail</h2>
+
+                <button className="btn btn-primary" onClick={() => setShow(true)}>
+                  Add Quantity
+                </button>
+
+                {
+                  show && (
+                    <div >
+                      <h4>Add quantity product</h4>
+                      <div style={{ marginBottom: '10px' }}>
+                        <label>Quantity:</label>
+                        <input
+                          type="number"
+                          value={quantity}
+                          onChange={(event) => setQuantity(event.target.value)}
+                        />
+                      </div>
+
+                      <div>
+                        <label>Production Date:</label>
+                        <input
+                          type="date"
+                          value={proDate}
+                          onChange={(event) => setProDate(event.target.value)}
+                        />
+                        <label>Expiration Date:</label>
+                        <input
+                          type="date"
+                          value={exDate}
+                          onChange={(event) => setExDate(event.target.value)}
+                        />
+                      </div>
+
+                      <button className="btn btn-primary" style={{ marginTop: "10px" }} onClick={() => handleAdd(proID)}>
+                        Create
+                      </button>
+                      <button className="btn btn-danger" style={{ marginTop: "10px", marginLeft: '20px' }} onClick={() => handleCancel()}>
+                        Cancel
+                      </button>
+                    </div>
+                  )
+                }
+
+
+                <div>
+                  <table className="table-prodetail-th">
+                    <thead>
+                      <tr>
+                        <th>Production Date</th>
+                        <th>Expiry Date</th>
+                        <th>Quantity</th>
+                      </tr>
+                    </thead>
+                  </table>
+
+                  <div className="prodetail-tb">
+                    <table className="table-prodetail-tb">
+                      <tbody>
+                        {proDetails.map((product, index) => (
+                          <tr key={index}>
+                            <td>{convertSQLDate(product.production_date)}</td>
+                            <td>{convertSQLDate(product.expiration_date)}</td>
+                            <td>{product.quantity}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <button style={{ marginTop: '20px' }} onClick={closeModal} className="btn btn-secondary">
+                  Close
+                </button>
+              </Modal >
+            )
+            }
+          </>
+        )
       }
-    </>
+    </div>
   );
 }

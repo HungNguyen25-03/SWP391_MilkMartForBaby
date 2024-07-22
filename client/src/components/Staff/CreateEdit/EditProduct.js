@@ -203,17 +203,15 @@ export default function EditProduct() {
                                     value={formik.values.countryID}
                                     onChange={formik.handleChange}
                                 >
-                                    <option value="VNA">VietNam</option>
-                                    <option value="NED">Netherlands</option>
-                                    <option value="KOR">Korea</option>
-                                    <option value="SWE">Swedden</option>
-                                    <option value="JPN">Janpan</option>
-                                    <option value="THL">Thailand</option>
-                                    <option value="AUS">Austria</option>
-                                    <option value="USA">America</option>
-                                    <option value="GER">Germany</option>
-                                    <option value="CAN">Canada</option>
-                                    <option value="FRA">France</option>
+                                    <option value="VNA">Việt Nam</option>
+                                    <option value="NED">Hà Lan</option>
+                                    <option value="KOR">Hàn Quốc</option>
+                                    <option value="SWE">Thụy Điển</option>
+                                    <option value="JPN">Nhật Bản</option>
+                                    <option value="THL">Thái Lan</option>
+                                    <option value="USA">Mỹ</option>
+                                    <option value="GER">Đức</option>
+                                    <option value="FRA">Pháp</option>
                                     <option value="IRE">Ireland</option>
                                 </select>
                                 {formik.touched.countryID && formik.errors.countryID && (

@@ -1,6 +1,14 @@
 .manage-inventory-container {
   margin: 2.5% auto 0;
   width: 95%;
+
+  .spinner-container {
+    margin-top: 20%;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+  }
+
   .btn {
     border-radius: 20px;
     margin-bottom: 1rem;
