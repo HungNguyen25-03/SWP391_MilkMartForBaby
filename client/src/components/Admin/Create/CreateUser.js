@@ -52,7 +52,9 @@ export default function CreateUser() {
           <div className="w-50 border bg-secondary text-white p-5">
             <form onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="name">Tên đăng nhập: </label>
+                <label htmlFor="name" className="mb-2">
+                  Tên đăng nhập:{" "}
+                </label>
                 <input
                   type="text"
                   name="name"
@@ -74,7 +76,9 @@ export default function CreateUser() {
               )}
 
               <div>
-                <label htmlFor="email">Email: </label>
+                <label htmlFor="email" className="my-2">
+                  Email:{" "}
+                </label>
                 <input
                   type="text"
                   name="email"
@@ -96,7 +100,9 @@ export default function CreateUser() {
               )}
 
               <div>
-                <label htmlFor="email">Mật khẩu: </label>
+                <label htmlFor="email" className="my-2">
+                  Mật khẩu:{" "}
+                </label>
                 <input
                   type="text"
                   name="password"
@@ -118,7 +124,7 @@ export default function CreateUser() {
               )}
 
               <div>
-                <label>Role:</label>
+                <label className="my-2">Role:</label>
                 <select
                   className="form-select"
                   value={user.role_id}
@@ -135,6 +141,14 @@ export default function CreateUser() {
                 </select>
               </div>
               <br />
+              <button
+                className="btn btn-light me-3"
+                onClick={() => {
+                  nav("/admin/user");
+                }}
+              >
+                Hủy
+              </button>
               <button className="btn btn-info">Tạo</button>
             </form>
           </div>
