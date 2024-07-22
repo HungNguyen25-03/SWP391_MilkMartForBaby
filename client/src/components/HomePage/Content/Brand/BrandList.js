@@ -34,7 +34,7 @@ export const listBrand = [
     id: 7,
     title: "growGold",
     img: "assest/images/banner/growGold.png",
-    atl: "growGold",
+    atl: "Abbot Grow",
   },
   {
     id: 8,

@@ -50,7 +50,7 @@ async function getAllUser() {
       Users.username,
       Users.role_id
       
-      FROM Users WHERE status = 1`);
+      FROM Users WHERE status = 1 AND role_id = 'customer'`);
     const user = result.recordset;
     if (user) {
       return { success: true, user };

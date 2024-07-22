@@ -20,10 +20,15 @@ export default function SearchPage() {
       .get(`${MainAPI}/product/search?searchTerm=${searchTerm}&page=${page}`)
       .then((res) => {
         console.log(res.data);
-        setSearchResult([
-          ...res.data.inStockProducts,
-          ...res.data.outOfStockProducts,
-        ]);
+        if (res.data.inStockProducts && res.data.outOfStockProducts) {
+          setSearchResult([
+            ...res.data.inStockProducts,
+            ...res.data.outOfStockProducts,
+          ]);
+        } else {
+          setSearchResult(res.data);
+        }
+
         setTotalPage(res.data.totalPages);
         setLoading(false);
         // nav("/search", { searchResult: res.data });
@@ -33,7 +38,7 @@ export default function SearchPage() {
       });
   }, [searchTerm, page]);
 
-  console.log(searchResult);
+  // console.log(searchResult);
 
   return (
     <div>

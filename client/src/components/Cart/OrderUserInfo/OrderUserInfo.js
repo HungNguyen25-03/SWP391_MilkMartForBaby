@@ -25,6 +25,10 @@ export default function OrderUserInfo() {
   const [discount, setDiscount] = useState(0);
   const [total, setTotal] = useState(0);
   const [point, setPoint] = useState(0);
+  const [userInformation, setUserInformation] = useState({});
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [error, setError] = useState("");
 
   /* USECONTEXT */
   const { orderInfomation, setOrderInfomation } = useOrder();
@@ -39,6 +43,16 @@ export default function OrderUserInfo() {
     setChecked(!checked);
   };
 
+  const validatePhone = (newPhone) => {
+    const phoneRegex = /^0\d{9}$/;
+    if (!phoneRegex.test(newPhone)) {
+      setError("Số điện thoại phải có đúng 10 chữ số và bắt đầu bằng số 0");
+      toast.error("Số điện thoại phải có đúng 10 chữ số và bắt đầu bằng số 0");
+    } else {
+      setError("");
+    }
+  };
+
   /* USEEFFECT GET VOUCHER BY USER ID */
   useEffect(() => {
     axios
@@ -48,7 +62,7 @@ export default function OrderUserInfo() {
         },
       })
       .then((res) => {
-        console.log(res.data.vouchers.vouchers);
+        // console.log(res.data.vouchers.vouchers);
         setListOfVoucherById(res.data.vouchers.vouchers);
       })
       .catch((err) => {
@@ -64,7 +78,7 @@ export default function OrderUserInfo() {
         },
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setPoint(res.data);
       })
       .catch((err) => {
@@ -88,6 +102,10 @@ export default function OrderUserInfo() {
   }, [cartList, orderInfomation.discount, checked]);
 
   const handleClick = () => {
+    if (!userInformation.phone || !userInformation.address) {
+      toast.error("Vui lòng cập nhật thông tin giao hàng");
+      return;
+    }
     axios
       .post(`${MainAPI}/user/ready-to-checkout`, orderItem, {
         headers: {
@@ -134,6 +152,52 @@ export default function OrderUserInfo() {
     }
   };
 
+  //GET USERINFORMATION
+  useEffect(() => {
+    const getUserInformation = async () => {
+      await axios
+        .get(`${MainAPI}/user/show-all-phone-address/${auth.user.user_id}`, {
+          headers: {
+            "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          setUserInformation(res.data);
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
+    };
+    getUserInformation();
+  }, []);
+
+  const handleUpdateUserInfo = () => {
+    validatePhone(phone);
+    axios
+      .post(
+        `${MainAPI}/user/add-phone-address`,
+        { phone: phone, address: address, user_id: auth.user.user_id },
+        {
+          headers: {
+            "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        setUserInformation({
+          ...userInformation,
+          phone: phone,
+          address: address,
+        });
+        toast.success(res.data.message);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
   const handleCalculate = () => {
     const temporaryTemp = cartList.reduce((total, item) => {
       return total + item.price * item.quantity;
@@ -163,17 +227,60 @@ export default function OrderUserInfo() {
   return (
     <div className="fixed-cart">
       <div className="box-block">
-        <span className="box-block-title">Địa chỉ nhận hàng</span>
+        <div className="d-flex justify-content-between">
+          <span className="box-block-title">Địa chỉ nhận hàng</span>
+          {userInformation.phone && userInformation.address ? (
+            <></>
+          ) : (
+            <>
+              <div
+                style={{ display: "inline-block", cursor: "pointer" }}
+                onClick={handleUpdateUserInfo}
+              >
+                Cập nhật
+              </div>
+            </>
+          )}
+        </div>
         <div className="user-address">
           <div className="show-phone-address">
-            <span>Võ Minh Trí</span>
-            <span>092843746</span>
+            <span>{userInformation.username}</span>
+            {userInformation.phone ? (
+              <>
+                <span>{userInformation.phone}</span>
+              </>
+            ) : (
+              <>
+                <input
+                  name="phone"
+                  placeholder="Nhập số điện thoại"
+                  type="number"
+                  value={phone}
+                  onChange={(event) => {
+                    setPhone(event.target.value);
+                  }}
+                />
+              </>
+            )}
           </div>
           <div className="show-address">
-            <span>
-              Tòa S1.02 Vinhomes Grand Park, Nguyễn Xiển, Long Bình, Thủ Đức,
-              Thành phố Hồ Chí Minh, Việt Nam
-            </span>
+            {userInformation.address ? (
+              <>
+                <span>{userInformation.address}</span>
+              </>
+            ) : (
+              <>
+                <input
+                  name="address"
+                  placeholder="Nhập địa chỉ giao hàng"
+                  value={address}
+                  onChange={(event) => {
+                    setAddress(event.target.value);
+                  }}
+                  style={{ width: "100%", marginTop: "10px" }}
+                />
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -200,7 +307,7 @@ export default function OrderUserInfo() {
                 closeModal={() => {
                   setShow(false);
                 }}
-                onSubmit={() => { }}
+                onSubmit={() => {}}
                 errors={[]}
               />
             )}
