@@ -51,7 +51,7 @@ async function getAllUser() {
     const pool = await poolPromise;
     const result = await pool
       .request()
-      .query(`SELECT * FROM Users WHERE status = 1`);
+      .query(`SELECT * FROM Users WHERE status = 1 AND role_id != 'admin'`);
     const user = result.recordset;
     if (user) {
       return { success: true, user };
