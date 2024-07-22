@@ -147,12 +147,14 @@ export default function ConfirmOrder() {
                     <button
                       className="action-btn-confirm"
                       onClick={() => handleSetConfirm(confirm)}
+                      title="Xác nhận"
                     >
                       <IoMdCheckbox color="green" size="25px" />
                     </button>
                     <button
                       className="action-btn-cancel"
                       onClick={() => handleSetCancel(confirm)}
+                      title="Hủy"
                     >
                       <FaWindowClose color="red" size="22px" />
                     </button>

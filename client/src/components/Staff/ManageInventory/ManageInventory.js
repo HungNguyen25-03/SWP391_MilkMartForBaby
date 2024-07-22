@@ -256,13 +256,13 @@ export default function ManageInventory() {
     {
       cell: (row) => (
         <div className="action">
-          <button className="icon_btn" onClick={() => handleEditProductClick(row)}>
+          <button title="Chỉnh sửa sản phẩm" className="icon_btn" onClick={() => handleEditProductClick(row)}>
             <BsJournalCheck color="green" />
           </button>
-          <button className="icon_btn" onClick={() => handleEditDetail(row)}>
+          <button title="Xem chi tiết sản phẩm" className="icon_btn" onClick={() => handleEditDetail(row)}>
             <MdOutlineInventory color="#0066cc" fontSize="16px" />
           </button>
-          <button className="icon_btn" onClick={() => handleDeleteEachProduct(row.product_id)}>
+          <button title="Xóa sản phẩm" className="icon_btn" onClick={() => handleDeleteEachProduct(row.product_id)}>
             <MdDeleteOutline color="red" fontSize="17px" />
           </button>
         </div>
