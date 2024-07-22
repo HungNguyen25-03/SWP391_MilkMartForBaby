@@ -106,4 +106,18 @@ userRoutes.put(
   userMiddleware.useLoyaltyPointsMiddlewares,
   userController.useLoyaltyPointsController
 );
+
+userRoutes.post(
+  "/add-phone-address",
+  authJwt.authenticateToken,
+  userMiddleware.addPhoneAddressMiddleware,
+  userController.addPhoneAddressController
+);
+
+userRoutes.get(
+  "/show-all-phone-address/:id",
+  authJwt.authenticateToken,
+  userController.showPhoneAddressController
+);
+
 module.exports = userRoutes;

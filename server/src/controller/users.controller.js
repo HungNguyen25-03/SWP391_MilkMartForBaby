@@ -18,6 +18,8 @@ const {
   showLoyaltyPoints,
   showTop4Post,
   useLoyaltyPoints,
+  addPhoneAddress,
+  showPhoneAddress,
 } = require("../services/users.services");
 
 const authJwt = require("../middlewares/authJwt.middlewares");
@@ -354,6 +356,38 @@ const useLoyaltyPointsController = async (req, res) => {
   }
 };
 
+const addPhoneAddressController = async (req, res) => {
+  const { user_id, phone, address } = req.body;
+
+  try {
+    const result = await addPhoneAddress(user_id, phone, address);
+    if (result.success) {
+      res.status(200).json({ message: result.message });
+    } else {
+      res.status(409).json({ message: result.message });
+    }
+  } catch (error) {
+    console.error("Error in addPhoneAddressController:", error);
+    res.status(500).send("Error adding phone and address");
+  }
+};
+
+const showPhoneAddressController = async (req, res) => {
+  const user_id = req.params.id;
+
+  try {
+    const result = await showPhoneAddress(user_id);
+    if (result.success) {
+      res.status(200).json(result.phoneAddress);
+    } else {
+      res.status(404).json({ message: result.message });
+    }
+  } catch (error) {
+    console.error("Error in showPhoneAddressController:", error);
+    res.status(500).send("Error showing phone and address");
+  }
+};
+
 module.exports = {
   registerUserController,
   loginUserController,
@@ -375,4 +409,6 @@ module.exports = {
   showLoyaltyPointsController,
   showTop4PostController,
   useLoyaltyPointsController,
+  addPhoneAddressController,
+  showPhoneAddressController,
 };

@@ -72,7 +72,8 @@ const paymentController = async (req, res) => {
       description: `MilkMartSystem - Payment for the order #${transID}`,
       bank_code: "",
       callback_url:
-        "https://swp391-milkmartforbaby-be.onrender.com/payment/callback",
+        //"https://swp391-milkmartforbaby-be.onrender.com/payment/callback",
+        "https://86c5-113-172-57-171.ngrok-free.app/payment/callback",
     };
 
     const data = `${config.app_id}|${order.app_trans_id}|${order.app_user}|${order.amount}|${order.app_time}|${order.embed_data}|${order.item}`;
@@ -104,20 +105,15 @@ const callbackURLController = async (req, res) => {
   try {
     let dataStr = req.body.data;
     let reqMac = req.body.mac;
-    //console.log("Request data:", dataStr);
     console.log("Request MAC:", reqMac);
 
     let mac = CryptoJS.HmacSHA256(dataStr, config.key2).toString();
     console.log("Generated MAC:", mac);
 
-    // Check if the callback is valid (from ZaloPay server)
     if (reqMac !== mac) {
-      // Invalid callback
       result.return_code = -1;
       result.return_message = "mac not equal";
     } else {
-      // Payment successful
-      // Merchant updates the order status
       let dataJson = JSON.parse(dataStr);
       console.log("Data JSON:", dataJson);
       let app_trans_parts = dataJson.app_trans_id.split("_");
@@ -126,29 +122,79 @@ const callbackURLController = async (req, res) => {
         .request()
         .input("order_id", sql.Int, order_id)
         .query(`UPDATE Orders SET status = 'paid' WHERE order_id = @order_id`);
+
       const orderItems = JSON.parse(dataJson.item);
-      // console.log("items", orderItems);
+      console.log("items", orderItems);
+
       for (const i of orderItems) {
-        // console.log("Item:", i.item_id, i.item_quantity, i.item_stock);
+        console.log("Item:", i.item_id, i.item_quantity, i.item_stock);
+
+        // Get the product details ordered by expiration date
+        const productDetailsRes = await pool
+          .request()
+          .input("product_id", sql.Int, i.item_id)
+          .query(
+            `SELECT product_detail_id, quantity, expiration_date 
+             FROM Product_Details 
+             WHERE product_id = @product_id AND GETDATE() < expiration_date 
+             ORDER BY expiration_date ASC`
+          );
+
+        const productDetails = productDetailsRes.recordset;
+        let remainingQuantity = i.item_quantity;
+        let totalAvailableQuantity = 0;
+
+        // Calculate the total available quantity
+        for (const detail of productDetails) {
+          totalAvailableQuantity += detail.quantity;
+        }
+
+        // Validate if the total available quantity can satisfy the order quantity
+        if (totalAvailableQuantity < i.item_quantity) {
+          throw new Error(`Not enough quantity for product ${i.item_id}`);
+        }
+
+        // Update the Product_Details table
+        for (const detail of productDetails) {
+          if (remainingQuantity <= 0) break;
+
+          const updateQuantity = Math.min(detail.quantity, remainingQuantity);
+
+          await pool
+            .request()
+            .input("product_detail_id", sql.Int, detail.product_detail_id)
+            .input("quantity", sql.Int, updateQuantity)
+            .query(
+              `UPDATE Product_Details 
+               SET quantity = quantity - @quantity 
+               WHERE product_detail_id = @product_detail_id`
+            );
+
+          remainingQuantity -= updateQuantity;
+        }
+
+        // Update the Products table
         await pool
           .request()
           .input("product_id", sql.Int, i.item_id)
           .input("quantity", sql.Int, i.item_quantity)
           .input("stock", sql.Int, i.item_stock)
           .query(
-            `UPDATE Products SET stock = @stock - @quantity WHERE product_id = @product_id`
+            `UPDATE Products 
+             SET stock = @stock - @quantity 
+             WHERE product_id = @product_id`
           );
       }
+
       result.return_code = 1;
       result.return_message = "success";
     }
   } catch (ex) {
     console.log("Exception in callback:", ex);
-    result.return_code = 0; // ZaloPay server will callback again (max 3 times)
+    result.return_code = 0;
     result.return_message = ex.message;
   }
 
-  // Notify the result to ZaloPay server
   res.json(result);
 };
 

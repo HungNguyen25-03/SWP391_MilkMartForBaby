@@ -592,9 +592,10 @@ async function createPost(
       .input("user_id", sql.Int, user_id)
       .input("title", sql.NVarChar, title)
       .input("description", sql.NVarChar, description)
+      .input("post_date", sql.DateTime, new Date())
       .input("image_url", sql.NVarChar, image_url).query(`
-        INSERT INTO Posts (user_id, title, description, image_url) OUTPUT INSERTED.post_id
-        VALUES (@user_id, @title, @description, @image_url)
+        INSERT INTO Posts (user_id, title, description, post_date, image_url) OUTPUT INSERTED.post_id
+        VALUES (@user_id, @title, @description, @post_date, @image_url)
       `);
 
     const postId = result.recordset[0].post_id;
