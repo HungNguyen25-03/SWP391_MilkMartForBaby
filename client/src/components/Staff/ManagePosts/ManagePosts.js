@@ -11,6 +11,7 @@ import { MdModeEdit } from "react-icons/md";
 import "./ManagePost.scss";
 import { convertSQLDate } from "../../../utils/Format";
 import { Button, Modal } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 
 export default function ManagePosts() {
   // console.log(description);
@@ -18,6 +19,7 @@ export default function ManagePosts() {
   const nav = useNavigate();
   const [records, setRecords] = useState([]);
   const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -28,9 +30,11 @@ export default function ManagePosts() {
       .then((res) => {
         console.log(res.data);
         setRecords(res.data);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
+        setLoading(false);
       });
   };
 
@@ -99,53 +103,63 @@ export default function ManagePosts() {
 
   return (
     <>
-      <div className="manage-post-container">
-        <ToastContainer autoClose={2000} />
+      {
+        loading ? (
+          <>
+            <div className=" spinner-post">
+              <Spinner animation="border" role="status" />
+            </div>
+          </>
+        ) : (
+          <div className="manage-post-container">
+            <ToastContainer autoClose={2000} />
 
-        <Link to={"/staff/create-post"} className="create-post-btn">
-          Thêm bài
-        </Link>
+            <Link to={"/staff/create-post"} className="create-post-btn">
+              Thêm bài
+            </Link>
 
-        <div className="table-post mt-3">
-          <DataTable
-            pagination
-            paginationPerPage={5}
-            paginationRowsPerPageOptions={[5, 8]}
-            columns={column}
-            data={records}
-            className="table-content"
-          />
-        </div>
+            <div className="table-post mt-3">
+              <DataTable
+                pagination
+                paginationPerPage={5}
+                paginationRowsPerPageOptions={[5, 8]}
+                columns={column}
+                data={records}
+                className="table-content"
+              />
+            </div>
 
-        <div className="modal-content">
-          <Modal show={show} onHide={handleClose} animation={false}>
-            <Modal.Header closeButton>
-              <Modal.Title>Remove post</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>Do you want to remove this post?</Modal.Body>
-            <Modal.Footer>
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  handleClose();
-                  localStorage.removeItem("post_id");
-                }}
-              >
-                Close
-              </Button>
-              <Button
-                variant="primary"
-                onClick={() => {
-                  handleClose();
-                  handleDelete(localStorage.getItem("post_id"));
-                }}
-              >
-                Confirm
-              </Button>
-            </Modal.Footer>
-          </Modal>
-        </div>
-      </div>
+            <div className="modal-content">
+              <Modal show={show} onHide={handleClose} animation={false}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Remove post</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Do you want to remove this post?</Modal.Body>
+                <Modal.Footer>
+                  <Button
+                    variant="secondary"
+                    onClick={() => {
+                      handleClose();
+                      localStorage.removeItem("post_id");
+                    }}
+                  >
+                    Close
+                  </Button>
+                  <Button
+                    variant="primary"
+                    onClick={() => {
+                      handleClose();
+                      handleDelete(localStorage.getItem("post_id"));
+                    }}
+                  >
+                    Confirm
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+            </div>
+          </div>
+        )
+      }
     </>
   );
 }

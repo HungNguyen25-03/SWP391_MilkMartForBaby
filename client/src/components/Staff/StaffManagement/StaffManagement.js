@@ -1,7 +1,6 @@
 import React from "react";
 import NavBarStaff from "../NavBar/NavBarStaff";
 import { Route, Routes } from "react-router-dom";
-import GetManageUser from "../ManageUser/GetManageUser";
 import ConfirmOrder from "../ConfirmOrder/ConfirmOrder";
 import ManageVoucher from "../CreateVoucher/ManageVoucher";
 import ManageInventory from "../ManageInventory/ManageInventory";
@@ -10,6 +9,7 @@ import ManagePosts from "../ManagePosts/ManagePosts";
 import ModalCreatePost from "../ManagePosts/ModalCreatePost/ModalCreatePost";
 import EditPost from "../ManagePosts/EditPost/EditPost";
 import Report from "../Report/Report";
+import ManageUser from "../ManageUser/ManageUser";
 
 export default function StaffManagement() {
   return (
@@ -23,7 +23,7 @@ export default function StaffManagement() {
           <Routes>
             <Route path="/comfirm_order" element={<ConfirmOrder />} />
             <Route path="/manage_inventory" element={<ManageInventory />} />
-            <Route path="/manage_users" element={<GetManageUser />} />
+            <Route path="/manage_users" element={<ManageUser />} />
             <Route path="/create_voucher_codes" element={<ManageVoucher />} />
             <Route path="/track_orders" element={<TrackOrder />} />
             <Route path="/manage_posts" element={<ManagePosts />} />

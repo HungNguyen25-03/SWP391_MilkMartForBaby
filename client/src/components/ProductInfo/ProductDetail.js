@@ -26,7 +26,7 @@ export default function ProductDetail() {
   return (
     <div>
       <HeaderPage />
-      {product && <ProductInfo product={product} />}
+      {/* {product && <ProductInfo product={product} />} */}
       {product && <InfoDetail product={product} />}
       <Review />
       <FooterPage />

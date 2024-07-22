@@ -6,8 +6,11 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { MainAPI } from "../../API";
 import { convertSQLDate, formatVND } from "../../../utils/Format";
+import { Spinner } from "react-bootstrap";
 
 export default function ConfirmOrder() {
+  const [loading, setLoading] = useState(true);
+
   const getStatusClass = (status) => {
     if (!status) return "";
     switch (status.toLowerCase()) {
@@ -36,6 +39,7 @@ export default function ConfirmOrder() {
   const [dataConfirm, setDataConfirm] = useState([]);
 
   const fetchData = () => {
+    setLoading(true);
     fetch(`${MainAPI}/staff/order`, {
       method: "GET",
       headers: {
@@ -46,8 +50,14 @@ export default function ConfirmOrder() {
         if (!response.ok) throw new Error("Failed to fetch data get order");
         return response.json();
       })
-      .then((data) => setDataConfirm(data))
-      .catch((error) => console.error("Error fetching data order:", error));
+      .then((data) => {
+        setDataConfirm(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching data order:", error);
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -112,61 +122,76 @@ export default function ConfirmOrder() {
   };
 
   return (
-    <div className="confirm">
-      <ToastContainer />
-      <div className="confirm-th">
-        <table className="table-confirm-th">
-          <thead>
-            <tr>
-              <th>Order ID</th>
-              <th>Date</th>
-              <th>Customer Name</th>
-              <th>Status</th>
-              <th>Amount</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-        </table>
-      </div>
+    < div className="confirm">
+      {
+        loading ? (
+          <>
+            <div className=" spinner-container">
+              <Spinner animation="border" role="status" />
+            </div>
+          </>
+        ) : (
+          <div >
+            <ToastContainer />
 
-      <div className="confirm-tb">
-        <table className="table-confirm-tb">
-          <tbody>
-            {dataConfirm.map((confirm) => (
-              <tr key={confirm.order_id}>
-                <td>{confirm.order_id}</td>
-                <td>{convertSQLDate(confirm.order_date)}</td>
-                <td>{confirm.username}</td>
-                <td className={getStatusClass(confirm.status)}>
-                  <span className="status-dot"></span>
-                  {confirm.status}
-                </td>
-                <td>{formatVND(confirm.total_amount)}</td>
-                {checkStatusIsPending(confirm.status) ? (
-                  <td>
-                    <button
-                      className="action-btn-confirm"
-                      onClick={() => handleSetConfirm(confirm)}
-                      title="Xác nhận"
-                    >
-                      <IoMdCheckbox color="green" size="25px" />
-                    </button>
-                    <button
-                      className="action-btn-cancel"
-                      onClick={() => handleSetCancel(confirm)}
-                      title="Hủy"
-                    >
-                      <FaWindowClose color="red" size="22px" />
-                    </button>
-                  </td>
-                ) : (
-                  <td></td>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            <div className="confirm-th">
+              <table className="table-confirm-th">
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Date</th>
+                    <th>Customer Name</th>
+                    <th>Status</th>
+                    <th>Amount</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+
+            <div className="confirm-tb">
+
+              <table className="table-confirm-tb">
+                <tbody>
+                  {dataConfirm.map((confirm) => (
+                    <tr key={confirm.order_id}>
+                      <td>{confirm.order_id}</td>
+                      <td>{convertSQLDate(confirm.order_date)}</td>
+                      <td>{confirm.username}</td>
+                      <td className={getStatusClass(confirm.status)}>
+                        <span className="status-dot"></span>
+                        {confirm.status}
+                      </td>
+                      <td>{formatVND(confirm.total_amount)}</td>
+                      {checkStatusIsPending(confirm.status) ? (
+                        <td>
+                          <button
+                            className="action-btn-confirm"
+                            onClick={() => handleSetConfirm(confirm)}
+                            title="Xác nhận"
+                          >
+                            <IoMdCheckbox color="green" size="25px" />
+                          </button>
+                          <button
+                            className="action-btn-cancel"
+                            onClick={() => handleSetCancel(confirm)}
+                            title="Hủy"
+                          >
+                            <FaWindowClose color="red" size="22px" />
+                          </button>
+                        </td>
+                      ) : (
+                        <td></td>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+        )
+      }
     </div>
   );
 }
