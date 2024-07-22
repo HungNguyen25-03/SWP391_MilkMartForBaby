@@ -17,77 +17,77 @@
     padding: 6px;
     margin-left: 3% ;
     table-layout: fixed;
-}
+  }
 
-th {
-  padding: 20px;
-  text-align: center;
-}
+  th {
+    padding: 20px;
+    text-align: center;
+  }
 
 
-.prodetail-tb {
-  overflow: auto;
+  .prodetail-tb {
+    overflow: auto;
 
-  .table-prodetail-tb {
-      width: 100%;
-      padding: 6px;
-      font-size: 15px;
-      table-layout: fixed; 
-      tr:nth-child(even) {
-          background-color: #dcdee3;
-      }
+    .table-prodetail-tb {
+        width: 100%;
+        padding: 6px;
+        font-size: 15px;
+        table-layout: fixed; 
+        tr:nth-child(even) {
+            background-color: #dcdee3;
+        }
 
-      td {
-          padding: 20px;
-          text-align: center;
-      }
+        td {
+            padding: 20px;
+            text-align: center;
+        }
 
-      .icon_action {
-        border: none;
-        background: none;
-        border-radius: 20px;
-        font-size: 14px; 
-        margin-right: 10px;
-        padding: 5px; 
-        transition: transform 0.3s, box-shadow 0.3s;
+        .icon_action {
+          border: none;
+          background: none;
+          border-radius: 20px;
+          font-size: 14px; 
+          margin-right: 10px;
+          padding: 5px; 
+          transition: transform 0.3s, box-shadow 0.3s;
 
-        &:hover {
-          transform: scale(2);
+          &:hover {
+            transform: scale(2);
+          }
         }
       }
   }
-}
 
-  .table-content {
-    font-size: 14px; 
-
-    .rdt_TableHeadRow {
-      background-color: #f8f9fa;
-    }
-
-    .rdt_TableCell {
-      white-space: normal;
+    .table-content {
       font-size: 14px; 
-    }
 
-    .action {
-      display: flex;
+      .rdt_TableHeadRow {
+        background-color: #f8f9fa;
+      }
 
-      .icon_btn {
-        border: none;
-        background: none;
-        border-radius: 20px;
+      .rdt_TableCell {
+        white-space: normal;
         font-size: 14px; 
-        margin-right: 10px;
-        padding: 5px; 
-        transition: transform 0.3s, box-shadow 0.3s;
+      }
 
-        &:hover {
-          transform: scale(2);
+      .action {
+        display: flex;
+
+        .icon_btn {
+          border: none;
+          background: none;
+          border-radius: 20px;
+          font-size: 14px; 
+          margin-right: 10px;
+          padding: 5px; 
+          transition: transform 0.3s, box-shadow 0.3s;
+
+          &:hover {
+            transform: scale(2);
+          }
         }
       }
     }
-  }
 }
 
 
