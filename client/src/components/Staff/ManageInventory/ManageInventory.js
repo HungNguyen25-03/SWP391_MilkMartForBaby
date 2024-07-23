@@ -168,7 +168,6 @@ export default function ManageInventory() {
       .then((data) => {
         console.log(data);
         if (data.status === 200) {
-          setProID("");
           setExDate("");
           setProDate("");
           setQuantity("");
@@ -292,8 +291,9 @@ export default function ManageInventory() {
       bottom: 'auto',
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
-      width: '650px',
-      height: '400px',
+      width: '700px',
+      height: '420px',
+      borderRadius: '20px',
     },
   };
 
@@ -355,10 +355,15 @@ export default function ManageInventory() {
                 style={customStyles}
               >
                 <h2>Product Detail</h2>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <button className="btn btn-primary" onClick={() => setShow(true)}>
+                    Add Quantity
+                  </button>
 
-                <button className="btn btn-primary" onClick={() => setShow(true)}>
-                  Add Quantity
-                </button>
+                  <button onClick={closeModal} className="btn btn-secondary">
+                    Close
+                  </button>
+                </div>
 
                 {
                   show && (
@@ -398,41 +403,102 @@ export default function ManageInventory() {
                   )
                 }
 
-
                 <div>
-                  <table className="table-prodetail-th">
+                  <table
+                    className="table-prodetail"
+                    style={{
+                      width: "100%",
+                      marginTop: "10px",
+                      borderCollapse: "collapse",
+                    }}
+                  >
                     <thead>
-                      <tr>
-                        <th>Production Date</th>
-                        <th>Expiry Date</th>
-                        <th>Quantity</th>
-                      </tr>
+                      <tr style={{ borderBottom: "1px solid black" }}>
+                        <th
+                          style={{
+                            padding: "5px",
+                            textAlign: "center",
+
+                          }}
+                        >
+                          Production Date
+                        </th>
+                        <th
+                          style={{
+                            padding: "20px 25px",
+                            textAlign: "center",
+
+                          }}
+                        >
+                          Expiry Date
+                        </th>
+                        <th
+                          style={{
+                            padding: "20px",
+                            textAlign: "center",
+
+                          }}
+                        >
+                          Quantity
+                        </th>
+                      </tr >
                     </thead>
                   </table>
+                  <div
+                    style={{
+                      maxHeight: "200px", // Adjust this value to your needs
+                      overflow: "auto",
 
-                  <div className="prodetail-tb">
-                    <table className="table-prodetail-tb">
+                    }}
+                  >
+                    <table
+                      className="table-prodetail"
+                      style={{ borderCollapse: "collapse", width: "100%", border: "none" }}
+                    >
                       <tbody>
                         {proDetails.map((product, index) => (
-                          <tr key={index}>
-                            <td>{convertSQLDate(product.production_date)}</td>
-                            <td>{convertSQLDate(product.expiration_date)}</td>
-                            <td>{product.quantity}</td>
+                          <tr key={index} className="table-row" style={{ borderBottom: "1px solid grey" }}>
+                            <td
+                              style={{
+                                padding: "15px",
+                                textAlign: "center",
+
+                              }}
+                            >
+                              {convertSQLDate(product.production_date)}
+                            </td>
+                            <td
+                              style={{
+                                padding: "15px",
+                                textAlign: "center",
+
+                              }}
+                            >
+                              {convertSQLDate(product.expiration_date)}
+                            </td>
+                            <td
+                              style={{
+                                padding: "15px",
+                                textAlign: "center",
+
+                              }}
+                            >
+                              {product.quantity}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
                   </div>
                 </div>
-                <button style={{ marginTop: '20px' }} onClick={closeModal} className="btn btn-secondary">
-                  Close
-                </button>
+
+
               </Modal >
             )
             }
           </>
         )
       }
-    </div>
+    </div >
   );
 }
