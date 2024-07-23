@@ -151,7 +151,10 @@ export default function EditProduct() {
                                     <option value="Enfamil">Enfamil</option>
                                     <option value="Bellamy">Bellamy</option>
                                     <option value="Aptamil">Aptamil</option>
-                                    <option value="Abbot Grow"> Abbot Grow</option>
+                                    <option value="Abbot Grow">Abbot Grow</option>
+                                    <option value="a2 Milk">a2 Milk</option>
+                                    <option value="Ensure">Ensure</option>
+
                                 </select>
                                 {formik.touched.brandName && formik.errors.brandName && (
                                     <div className="invalid-feedback">
