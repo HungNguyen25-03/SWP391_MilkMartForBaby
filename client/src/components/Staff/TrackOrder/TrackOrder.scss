@@ -1,15 +1,17 @@
+.spinner-track {
+    margin-top: 30%;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+  }
+
 .track {
     width: 80%;
     margin: 100px auto 0; 
     box-shadow: 1px 1px 10px 5px rgba(180, 177, 177, 0.989); 
     background-color: #fff; 
 
-    .spinner-container {
-        margin-top: 30%;
-        text-align: center;
-        justify-content: center;
-        align-items: center;
-      }
+    
 
     .track-th {
         height: 40px;

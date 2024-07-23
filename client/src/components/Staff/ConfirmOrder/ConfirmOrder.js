@@ -122,16 +122,14 @@ export default function ConfirmOrder() {
   };
 
   return (
-    < div className="confirm">
+    < div >
       {
         loading ? (
-          <>
-            <div className=" spinner-container">
-              <Spinner animation="border" role="status" />
-            </div>
-          </>
+          <div className=" spinner-order">
+            <Spinner animation="border" role="status" />
+          </div>
         ) : (
-          <div >
+          <div className="confirm">
             <ToastContainer />
 
             <div className="confirm-th">
