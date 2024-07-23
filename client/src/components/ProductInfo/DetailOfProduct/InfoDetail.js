@@ -2,6 +2,7 @@ import React from "react";
 import "./InfoDetail.scss";
 
 export default function InfoDetail({ product }) {
+  console.log(product);
   return (
     <>
       <h3 style={{ margin: "2.5% 15%" }}>Detail Of Product:</h3>
@@ -17,11 +18,11 @@ export default function InfoDetail({ product }) {
                   </tr>
                   <tr>
                     <td className="th">Ogrigin</td>
-                    <td>America</td>
+                    <td>{product.country_name}</td>
                   </tr>
                   <tr>
                     <td className="th">Country</td>
-                    <td>Ireland</td>
+                    <td>{product.country_name}</td>
                   </tr>
                   <tr>
                     <td className="th">Weight</td>
@@ -30,7 +31,7 @@ export default function InfoDetail({ product }) {
                   <tr>
                     <td className="th">Producer</td>
                     <td>
-                      {product.brand_name} Ireland, Cootehill, Co. Cavan,
+                      {product.brand_name} {product.country_name}, Cootehill, Co. Cavan,
                       Ireland
                     </td>
                   </tr>

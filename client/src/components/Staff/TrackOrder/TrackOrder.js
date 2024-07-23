@@ -55,17 +55,17 @@ export default function TrackOrder() {
   };
 
   return (
-    <div className="track">
+    <div>
       {
         loading ? (
           <>
-            <div className=" spinner-user">
+            <div className=" spinner-track">
               <Spinner animation="border" role="status" />
             </div>
           </>
         ) : (
           <>
-            <div>
+            <div className="track">
               <div className="track-th">
                 <table className="table-track-th">
                   <thead>

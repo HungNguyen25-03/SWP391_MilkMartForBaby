@@ -8,6 +8,8 @@ import useAuth from "../../../../hooks/useAuth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { Spinner } from "react-bootstrap";
+
 
 export default function Voucher() {
   const [voucherList, setVoucherList] = useState([]);
@@ -66,10 +68,11 @@ export default function Voucher() {
 
   return (
     <div className="voucher-container p-4">
-      {/* <ToastContainer autoClose={2000} /> */}
       <h2 className="voucher-title mb-4">Nhận voucher</h2>
       {loading ? (
-        <p>Loading vouchers...</p>
+        <div className="text-center">
+          <Spinner animation="border" role="status" />
+        </div>
       ) : (
         <Slide
           transitionDuration={200}

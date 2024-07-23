@@ -336,7 +336,7 @@ export default function ManageInventory() {
                 </button>
               </div>
 
-              <div className="table-post">
+              <div className="table-inven">
                 <DataTable
                   pagination
                   paginationPerPage={4}
