@@ -10,7 +10,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "react-bootstrap";
 
-
 export default function Voucher() {
   const [voucherList, setVoucherList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -54,15 +53,21 @@ export default function Voucher() {
             get: true,
             voucher_id: e.target.value,
           });
-          toast.success(res.data.message);
+          toast.success(res.data.message, {
+            position: "bottom-right",
+          });
         })
         .catch((err) => {
           console.log(err);
-          toast.error(err.response.data.errors[0].message);
+          toast.error(err.response.data.errors[0].message, {
+            position: "bottom-right",
+          });
         });
     } catch (err) {
       console.log(err);
-      toast.error("Đăng nhập để nhận voucher");
+      toast.error("Đăng nhập để nhận voucher", {
+        position: "bottom-right",
+      });
     }
   };
 

@@ -13,10 +13,10 @@ export default function ChoThanhToan({ title }) {
   const nav = useNavigate();
   const [loading, setLoading] = useState(true);
 
-  const token = JSON.parse(localStorage.getItem("accessToken"));
-  console.log(token);
+  // const token = JSON.parse(localStorage.getItem("accessToken"));
+  // console.log(token);
 
-  useEffect(() => {
+  const fetchData = () => {
     axios
       .post(`${MainAPI}/order/get-order-by-user-id-pending-status`, {
         user_id: auth.user.user_id,
@@ -29,7 +29,32 @@ export default function ChoThanhToan({ title }) {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
+
+  const handleSetCancel = (order_id) => {
+    axios
+      .put(
+        `${MainAPI}/user/cancel-order/${order_id}`,
+        {},
+        {
+          headers: {
+            "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        toast.success(res.data.message);
+        fetchData();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const handleOrder = (order_id) => {
     axios
@@ -169,6 +194,14 @@ export default function ChoThanhToan({ title }) {
                       </span>
 
                       <span className="d-flex justify-content-end mt-3">
+                        <button
+                          className="btn btn-danger me-2"
+                          onClick={() => {
+                            handleSetCancel(dagiao.order_id);
+                          }}
+                        >
+                          Hủy
+                        </button>
                         <button
                           className="btn btn-warning m-0"
                           onClick={() => {
