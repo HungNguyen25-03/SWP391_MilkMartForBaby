@@ -345,6 +345,22 @@ const addProductMiddlewares = async (req, res, next) => {
       });
     }
 
+    if (expiration_date) {
+      const expirationDateObj = new Date(expiration_date);
+
+      if (
+        expirationDateObj.getFullYear() === currentDate.getFullYear() &&
+        expirationDateObj.getMonth() === currentDate.getMonth()
+      ) {
+        errors.push({
+          name: "expiration_date",
+          success: false,
+          message: "Expiration date cannot be within the current month",
+          status: 400,
+        });
+      }
+    }
+
     if (
       production_date &&
       expiration_date &&
@@ -485,22 +501,6 @@ const updateProductMiddlewares = async (req, res, next) => {
       age_range,
       image_url,
     } = req.body;
-
-    if (!product_name) {
-      errors.push({
-        name: "product_name",
-        message: "Product name is required",
-        status: 400,
-      });
-    }
-
-    if (!price) {
-      errors.push({
-        name: "price",
-        message: "Price is required",
-        status: 400,
-      });
-    }
 
     if (price < 100) {
       errors.push({
