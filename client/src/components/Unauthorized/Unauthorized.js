@@ -20,7 +20,7 @@ export default function Unauthorized() {
           <p className="lead mb-5">
             You do not have permission to view this page.
           </p>
-          <button variant="primary" onClick={goBack}>
+          <button variant="primary" onClick={goBack} className="unauthorize-button">
             Go back
           </button>
         </div>

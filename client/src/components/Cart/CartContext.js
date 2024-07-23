@@ -20,9 +20,13 @@ function CartProvider({ children }) {
       } else {
         setCartList([...cartList, product]);
       }
-      toast.success("Thêm sản phẩm thành công");
+      toast.success("Thêm sản phẩm thành công", {
+        position: "bottom-right",
+      });
     } else {
-      toast.error("Hãy đăng nhập để thêm sản phẩm vào giỏ hàng");
+      toast.error("Hãy đăng nhập để thêm sản phẩm vào giỏ hàng", {
+        position: "bottom-right",
+      });
     }
   };
 

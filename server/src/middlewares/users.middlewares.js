@@ -389,7 +389,7 @@ const claimVoucherMiddleware = async (req, res, next) => {
 const cancelOrderMiddleware = async (req, res, next) => {
   try {
     const errors = [];
-    const { order_id } = req.body;
+    const order_id = req.params.id;
 
     if (!order_id) {
       errors.push({
