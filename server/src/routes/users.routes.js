@@ -120,4 +120,11 @@ userRoutes.get(
   userController.showPhoneAddressController
 );
 
+userRoutes.put(
+  "/cancel-order/:id",
+  authJwt.authenticateToken,
+  userMiddleware.cancelOrderMiddleware,
+  userController.cancelOrderController
+);
+
 module.exports = userRoutes;

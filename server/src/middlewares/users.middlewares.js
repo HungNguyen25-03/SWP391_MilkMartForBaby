@@ -386,6 +386,50 @@ const claimVoucherMiddleware = async (req, res, next) => {
   }
 };
 
+const cancelOrderMiddleware = async (req, res, next) => {
+  try {
+    const errors = [];
+    const { order_id } = req.body;
+
+    if (!order_id) {
+      errors.push({
+        name: "order_id",
+        success: false,
+        message: "Order ID is required",
+        status: 400,
+      });
+    }
+
+    const pool = await poolPromise;
+    const statusCheckResult = await pool
+      .request()
+      .input("order_id", sql.Int, order_id).query(`
+        SELECT status FROM Orders WHERE order_id = @order_id;
+      `);
+
+    if (
+      statusCheckResult.recordset.length > 0 &&
+      statusCheckResult.recordset[0].status === "Cancelled"
+    ) {
+      errors.push({
+        name: "order_id",
+        success: false,
+        message: "Order is already cancelled",
+        status: 400,
+      });
+    }
+
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
+    }
+
+    next();
+  } catch (error) {
+    console.error("Error in cancelOrderMiddleware:", error);
+    next(error);
+  }
+};
+
 const addPhoneAddressMiddleware = async (req, res, next) => {
   try {
     const errors = [];
@@ -524,4 +568,5 @@ module.exports = {
   requestPasswordResetMiddleware,
   useLoyaltyPointsMiddlewares,
   addPhoneAddressMiddleware,
+  cancelOrderMiddleware,
 };
