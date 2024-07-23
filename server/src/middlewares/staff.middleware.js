@@ -211,7 +211,7 @@ const cancelOrderMiddleware = async (req, res, next) => {
 
     if (
       statusCheckResult.recordset.length > 0 &&
-      statusCheckResult.recordset[0].status === "cancel"
+      statusCheckResult.recordset[0].status === "Cancelled"
     ) {
       errors.push({
         name: "order_id",

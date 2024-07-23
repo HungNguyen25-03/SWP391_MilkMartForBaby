@@ -19,6 +19,7 @@ const {
   showTop4Post,
   useLoyaltyPoints,
   addPhoneAddress,
+  cancelOrder,
   showPhoneAddress,
 } = require("../services/users.services");
 
@@ -61,6 +62,20 @@ const loginUserController = async (req, res) => {
   } catch (error) {
     console.error("Error in loginUserController:", error);
     res.status(500).send("Error logging in user");
+  }
+};
+
+const cancelOrderController = async (req, res) => {
+  const order_id = req.params.id;
+  try {
+    const order = await cancelOrder(order_id);
+    if (order.success) {
+      res.status(200).json({ message: order.message, status: 200 });
+    } else {
+      res.status(409).json({ message: order.message, status: 409 });
+    }
+  } catch (error) {
+    res.status(500).send("Error cancelling order");
   }
 };
 
@@ -411,4 +426,5 @@ module.exports = {
   useLoyaltyPointsController,
   addPhoneAddressController,
   showPhoneAddressController,
+  cancelOrderController,
 };

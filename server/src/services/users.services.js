@@ -463,6 +463,26 @@ async function completeOrder(order_id) {
   }
 }
 
+async function cancelOrder(order_id) {
+  try {
+    const pool = await poolPromise;
+
+    const result = await pool
+      .request()
+      .input("order_id", sql.Int, order_id)
+      .query(
+        `UPDATE Orders SET status = 'Cancelled' WHERE order_id = @order_id;`
+      );
+    if (result.rowsAffected[0] > 0) {
+      return { success: true, message: "Order cancel successfully" };
+    } else {
+      return { success: false, message: "Failed to cancel order" };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function reportProduct(
   user_id,
   product_id,
@@ -656,4 +676,5 @@ module.exports = {
   validateProduct,
   addPhoneAddress,
   showPhoneAddress,
+  cancelOrder,
 };
