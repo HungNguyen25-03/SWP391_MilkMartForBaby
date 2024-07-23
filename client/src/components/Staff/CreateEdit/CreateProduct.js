@@ -1,13 +1,4 @@
-// import React from 'react'
-
-// export default function CreateProduct() {
-//     return (
-//         <div>CreateProduct</div>
-//     )
-// }
-
-
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import { useFormik } from 'formik';
@@ -72,13 +63,15 @@ export default function EditProduct() {
                     stock: formik.values.stock,
                 }),
             });
-            if (!response.ok) throw new Error("Failed to add product");
             const data = await response.json();
-            console.log(data);
-            toast.success("Product add successfully");
-            setTimeout(() => {
-                nav("/staff/manage_inventory");
-            }, 2000);
+            if (data.status === 200) {
+                toast.success("Product add successfully");
+                setTimeout(() => {
+                    nav("/staff/manage_inventory");
+                }, 2000)
+            } else {
+                toast.error(data.errors[0].message);
+            }
         } catch (error) {
             console.error("Error add product:", error);
         }
@@ -136,6 +129,8 @@ export default function EditProduct() {
                                     <option value="10">Bellamy</option>
                                     <option value="11">Aptamil</option>
                                     <option value="12">Abbot Grow</option>
+                                    <option value="13">a2 Milk</option>
+                                    <option value="14">Ensure</option>
                                 </select>
                                 {formik.touched.brandName && formik.errors.brandName && (
                                     <div className="invalid-feedback">
