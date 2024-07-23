@@ -16,53 +16,8 @@
     padding: 0.5rem 1rem;
   }
 
-  .table-post {
+  .table-inven {
     margin-top: 1rem;
-  }
-
-  .table-prodetail-th {
-    width: 100%;
-    padding: 6px;
-    margin-left: 3%;
-    table-layout: fixed;
-  }
-
-  th {
-    padding: 20px;
-    text-align: center;
-  }
-
-  .prodetail-tb {
-    overflow: auto;
-
-    .table-prodetail-tb {
-      width: 100%;
-      padding: 6px;
-      font-size: 15px;
-      table-layout: fixed;
-      tr:nth-child(even) {
-        background-color: #dcdee3;
-      }
-
-      td {
-        padding: 20px;
-        text-align: center;
-      }
-
-      .icon_action {
-        border: none;
-        background: none;
-        border-radius: 20px;
-        font-size: 14px;
-        margin-right: 10px;
-        padding: 5px;
-        transition: transform 0.3s, box-shadow 0.3s;
-
-        &:hover {
-          transform: scale(2);
-        }
-      }
-    }
   }
 
   .table-content {
