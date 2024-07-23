@@ -21,7 +21,7 @@ async function authenticateToken(req, res, next) {
 }
 
 async function generateToken(user_id) {
-  const accessToken = jwt.sign({ user_id }, secretKey, { expiresIn: "1h" });
+  const accessToken = jwt.sign({ user_id }, secretKey, { expiresIn: "23h" });
   const refreshToken = jwt.sign({ user_id }, refreshSecretKey, {
     expiresIn: "7d",
   });
