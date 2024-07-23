@@ -8,13 +8,13 @@ async function getAllProduct(page = 1, pageSize = 12) {
     // Query to get the total count of products
     const countResult = await pool
       .request()
-      .query("SELECT COUNT(*) as total FROM Products");
+      .query("SELECT COUNT(*) as total FROM Products WHERE status = 1");
     const totalProducts = countResult.recordset[0].total;
     const totalPages = Math.ceil(totalProducts / pageSize);
 
     // Query to get the paginated products
     const result = await pool.request().query(`
-      SELECT * FROM Products
+      SELECT * FROM Products WHERE status = 1
       ORDER BY product_id
       OFFSET ${offset} ROWS
       FETCH NEXT ${pageSize} ROWS ONLY
@@ -46,7 +46,9 @@ async function getAllProduct(page = 1, pageSize = 12) {
 async function getAllProductWihoutPagination() {
   try {
     const pool = await poolPromise;
-    const result = await pool.request().query(`SELECT * FROM Products`);
+    const result = await pool
+      .request()
+      .query(`SELECT * FROM Products WHERE status = 1`);
     const products = result.recordset;
 
     if (products) {
@@ -74,7 +76,7 @@ async function getProductById(product_id) {
        JOIN Brands b
         ON p.brand_id = b.brand_id
          JOIN Originated_Country oc 
-         ON p.country_id = oc.country_id WHERE product_id='${product_id}'`
+         ON p.country_id = oc.country_id WHERE product_id='${product_id}' AND status = 1`
     );
     const product = result.recordset;
     if (product) {
@@ -100,7 +102,7 @@ async function searchProductByName(searchTerm, page = 1, pageSize = 12) {
       .request()
       .input("searchTerm", sql.NVarChar, modifiedSearchTerm)
       .query(
-        "SELECT COUNT(*) as total FROM Products WHERE product_name LIKE @searchTerm"
+        "SELECT COUNT(*) as total FROM Products WHERE product_name LIKE @searchTerm AND status = 1"
       );
     const totalProducts = countResult.recordset[0].total;
     const totalPages = Math.ceil(totalProducts / pageSize);
@@ -110,7 +112,7 @@ async function searchProductByName(searchTerm, page = 1, pageSize = 12) {
       .request()
       .input("searchTerm", sql.NVarChar, modifiedSearchTerm).query(`
         SELECT * FROM Products
-        WHERE product_name LIKE @searchTerm
+        WHERE product_name LIKE @searchTerm AND status = 1
         ORDER BY product_id
         OFFSET ${offset} ROWS
         FETCH NEXT ${pageSize} ROWS ONLY
@@ -151,7 +153,7 @@ async function filterProduct(
     const request = pool.request();
     const offset = (page - 1) * pageSize;
 
-    let filters = [];
+    let filters = ["p.status = 1"];
 
     if (ageRange.length > 0) {
       request.input("ageRange", sql.NVarChar, ageRange.join(","));
@@ -177,7 +179,7 @@ async function filterProduct(
     // Query to get the total count of products matching the filters
     let countQuery = `
       SELECT COUNT(*) as total
-      FROM Products p
+      FROM Products p 
       LEFT JOIN Brands b ON p.brand_id = b.brand_id
       LEFT JOIN Originated_Country oc ON p.country_id = oc.country_id
     `;
@@ -294,7 +296,7 @@ async function getAllProductWithBrand(page = 1, pageSize = 12, brand_name) {
       .input("brand_name", sql.NVarChar, brand_name)
       .query(
         `SELECT COUNT(*) as total FROM Products p 
-        JOIN Brands b ON p.brand_id = b.brand_id WHERE b.brand_name = @brand_name`
+        JOIN Brands b ON p.brand_id = b.brand_id WHERE b.brand_name = @brand_name AND status = 1`
       );
     const totalProducts = countResult.recordset[0].total;
     const totalPages = Math.ceil(totalProducts / pageSize);
@@ -306,7 +308,7 @@ async function getAllProductWithBrand(page = 1, pageSize = 12, brand_name) {
         SELECT p.*, b.brand_name 
         FROM Products p
         JOIN Brands b ON p.brand_id = b.brand_id
-        WHERE b.brand_name = @brand_name
+        WHERE b.brand_name = @brand_name AND status = 1
         ORDER BY p.product_id
         OFFSET @offset ROWS 
         FETCH NEXT @pageSize ROWS ONLY
