@@ -505,49 +505,51 @@ async function updateProduct(
 ) {
   try {
     const pool = await poolPromise;
-    const request = pool.request().input("product_id", product_id);
+    const request = pool.request().input("product_id", sql.Int, product_id);
 
     let updateFields = [];
 
     if (product_name) {
-      request.input("product_name", product_name);
+      request.input("product_name", sql.NVarChar, product_name);
       updateFields.push("product_name = @product_name");
     }
 
     if (description) {
-      request.input("description", description);
+      request.input("description", sql.NVarChar, description);
       updateFields.push("description = @description");
     }
 
     if (price) {
-      request.input("price", price);
+      request.input("price", sql.Decimal, price);
       updateFields.push("price = @price");
     }
 
     if (country_id) {
-      request.input("country_id", country_id);
+      request.input("country_id", sql.Int, country_id);
       updateFields.push("country_id = @country_id");
     }
 
     if (age_range) {
-      request.input("age_range", age_range);
+      request.input("age_range", sql.NVarChar, age_range);
       updateFields.push("age_range = @age_range");
     }
 
     if (image_url) {
-      request.input("image_url", image_url);
+      request.input("image_url", sql.NVarChar, image_url);
       updateFields.push("image_url = @image_url");
     }
 
     let brandId;
     if (brand_name) {
-      const brandRequest = pool.request().input("brand_name", brand_name);
+      const brandRequest = pool
+        .request()
+        .input("brand_name", sql.NVarChar, brand_name);
       const brandQuery = `SELECT brand_id FROM Brands WHERE brand_name = @brand_name`;
       const brandResult = await brandRequest.query(brandQuery);
 
       if (brandResult.recordset.length > 0) {
         brandId = brandResult.recordset[0].brand_id;
-        request.input("brand_id", brandId);
+        request.input("brand_id", sql.Int, brandId);
         updateFields.push("brand_id = @brand_id");
       } else {
         return { success: false, message: "Brand name not found" };

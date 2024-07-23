@@ -20,7 +20,6 @@ const {
   showProductDetails,
   deleteExpiredProduct,
   getProductForPost,
-
 } = require("../services/staff.services");
 
 const createVoucherController = async (req, res) => {
@@ -66,8 +65,6 @@ const getAllProductController = async (req, res) => {
     console.log("Faill to get Product");
   }
 };
-
-
 
 const getOrderController = async (req, res) => {
   try {
@@ -466,5 +463,4 @@ module.exports = {
   showProductDetailsController,
   deleteExpiredProductController,
   getProductForPostController,
-
 };
