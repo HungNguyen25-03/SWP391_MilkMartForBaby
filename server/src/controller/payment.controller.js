@@ -128,7 +128,6 @@ const callbackURLController = async (req, res) => {
       for (const i of orderItems) {
         console.log("Item:", i.item_id, i.item_quantity, i.item_stock);
 
-        // Get the product details ordered by expiration date
         const productDetailsRes = await pool
           .request()
           .input("product_id", sql.Int, i.item_id)
@@ -141,19 +140,7 @@ const callbackURLController = async (req, res) => {
 
         const productDetails = productDetailsRes.recordset;
         let remainingQuantity = i.item_quantity;
-        let totalAvailableQuantity = 0;
 
-        // Calculate the total available quantity
-        for (const detail of productDetails) {
-          totalAvailableQuantity += detail.quantity;
-        }
-
-        // Validate if the total available quantity can satisfy the order quantity
-        if (totalAvailableQuantity < i.item_quantity) {
-          throw new Error(`Not enough quantity for product ${i.item_id}`);
-        }
-
-        // Update the Product_Details table
         for (const detail of productDetails) {
           if (remainingQuantity <= 0) break;
 
@@ -172,15 +159,25 @@ const callbackURLController = async (req, res) => {
           remainingQuantity -= updateQuantity;
         }
 
-        // Update the Products table
+        if (remainingQuantity > 0) {
+          await pool
+            .request()
+            .input("product_id", sql.Int, i.item_id)
+            .input("quantity", sql.Int, remainingQuantity)
+            .query(
+              `UPDATE Product_Details 
+               SET quantity = quantity - @quantity 
+               WHERE product_id = @product_id`
+            );
+        }
+
         await pool
           .request()
           .input("product_id", sql.Int, i.item_id)
           .input("quantity", sql.Int, i.item_quantity)
-          .input("stock", sql.Int, i.item_stock)
           .query(
             `UPDATE Products 
-             SET stock = @stock - @quantity 
+             SET stock = stock - @quantity 
              WHERE product_id = @product_id`
           );
       }
