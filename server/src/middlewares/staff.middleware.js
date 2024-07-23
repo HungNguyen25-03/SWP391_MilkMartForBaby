@@ -490,7 +490,7 @@ const updateProductMiddlewares = async (req, res, next) => {
   try {
     const errors = [];
     const pool = await poolPromise;
-    const product_id = req.params.id;
+    const product_id = parseInt(req.params.id, 10);
     const {
       product_name,
       description,
@@ -501,6 +501,24 @@ const updateProductMiddlewares = async (req, res, next) => {
       age_range,
       image_url,
     } = req.body;
+
+    if (!product_name) {
+      errors.push({
+        name: "product_name",
+        success: false,
+        message: "Product name is required",
+        status: 400,
+      });
+    }
+
+    if (!price) {
+      errors.push({
+        name: "price",
+        success: false,
+        message: "Price is required",
+        status: 400,
+      });
+    }
 
     if (price < 100) {
       errors.push({
@@ -527,25 +545,29 @@ const updateProductMiddlewares = async (req, res, next) => {
         .input("product_name", sql.NVarChar, product_name)
         .input("product_id", sql.Int, product_id).query(`
       SELECT * FROM Products WHERE product_name = @product_name AND product_id != @product_id AND status = 1`);
-    }
-    console.log(productCheckquery.recordset);
-    if (productCheckquery.recordset.length > 0) {
-      const existingProductName = productCheckquery.recordset[0].product_name;
-      if (existingProductName === product_name) {
-        errors.push({
-          name: "product_name",
-          success: false,
-          message: "Product name already exists",
-          status: 400,
-        });
+
+      if (
+        productCheckquery.recordset &&
+        productCheckquery.recordset.length > 0
+      ) {
+        const existingProductName = productCheckquery.recordset[0].product_name;
+        if (existingProductName === product_name) {
+          errors.push({
+            name: "product_name",
+            success: false,
+            message: "Product name already exists",
+            status: 400,
+          });
+        }
       }
     }
 
     if (errors.length > 0) {
-      return next(errors);
+      return res.status(400).json(errors);
     }
     next();
   } catch (error) {
+    console.error("Middleware error:", error);
     next(error);
   }
 };
