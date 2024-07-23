@@ -191,7 +191,7 @@ async function getOrderByUserId(user_id) {
       FROM Orders o JOIN Order_Items oi ON o.order_id = oi.order_id 
       JOIN Products p ON oi.product_id = p.product_id 
       WHERE o.user_id = @user_id AND o.order_id = @order_id
-      AND status = 'Completed'
+      AND o.status = 'Completed'
       `;
       const productResult = await productRequest.query(productQuery);
       const products = productResult.recordset;

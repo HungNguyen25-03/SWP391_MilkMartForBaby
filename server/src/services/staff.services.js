@@ -69,7 +69,7 @@ async function getAllProduct() {
     SELECT p.product_id, p.product_name, p.description, p.price, p.stock, b.brand_name, p.country_id, p.age_range,p.image_url 
     FROM Products p
      JOIN Brands b 
-     ON p.brand_id = b.brand_id
+     ON p.brand_id = b.brand_id WHERE status = 1
      
      `);
     const product = result.recordset;
@@ -244,15 +244,17 @@ async function exportProduct(product_id) {
     const pool = await poolPromise;
     const result = await pool.request().input("product_id", sql.Int, product_id)
       .query(`
-    DELETE From Products  WHERE product_id = @product_id;
-  `);
+        UPDATE Products
+        SET status = 0
+        WHERE product_id = @product_id;
+      `);
 
-    const product = result.rowsAffected[0];
+    const rowsAffected = result.rowsAffected[0];
 
-    if (product != 0) {
-      return { success: true, product };
+    if (rowsAffected != 0) {
+      return { success: true, rowsAffected };
     } else {
-      return { success: false, message: "Fail to delete Product" };
+      return { success: false, message: "Fail to update Product status" };
     }
   } catch (error) {
     console.error("Error exporting products", error);
@@ -309,7 +311,7 @@ async function editProduct(product_id, changeQuantity) {
     const pool = await poolPromise;
     const result = await pool.request().input("product_id", sql.Int, product_id)
       .query(`
-       Select stock From Products WHERE product_id = @product_id;
+       Select stock From Products WHERE product_id = @product_id WHERE status = 1;
      `);
 
     if (result.recordset.length === 0) {
@@ -802,7 +804,9 @@ async function getProductForPost() {
     const pool = await poolPromise;
     const result = await pool
       .request()
-      .query(`SELECT product_id as value, product_name as label FROM Products`);
+      .query(
+        `SELECT product_id as value, product_name as label FROM Products WHERE status = 1`
+      );
     const product = result.recordset;
 
     if (product) {

@@ -279,7 +279,7 @@ const addProductMiddlewares = async (req, res, next) => {
     const productNameCheck = await pool
       .request()
       .input("product_name", sql.NVarChar, product_name).query(`
-      SELECT product_name FROM Products WHERE product_name = @product_name;`);
+      SELECT product_name FROM Products WHERE product_name = @product_name AND status = 1;`);
 
     if (productNameCheck.recordset.length > 0) {
       errors.push({
@@ -526,7 +526,7 @@ const updateProductMiddlewares = async (req, res, next) => {
         .request()
         .input("product_name", sql.NVarChar, product_name)
         .input("product_id", sql.Int, product_id).query(`
-      SELECT * FROM Products WHERE product_name = @product_name AND product_id != @product_id`);
+      SELECT * FROM Products WHERE product_name = @product_name AND product_id != @product_id AND status = 1`);
     }
     console.log(productCheckquery.recordset);
     if (productCheckquery.recordset.length > 0) {
@@ -559,7 +559,7 @@ const deleteProductMiddlewares = async (req, res, next) => {
     const productCheckquery = await pool
       .request()
       .input("product_id", sql.Int, product_id).query(`
-      SELECT * FROM Products WHERE product_id = @product_id`);
+      SELECT * FROM Products WHERE product_id = @product_id AND status = 1`);
 
     if (productCheckquery.recordset.length === 0) {
       errors.push({
@@ -567,15 +567,6 @@ const deleteProductMiddlewares = async (req, res, next) => {
         success: false,
         message: "Product not found",
         status: 404,
-      });
-    }
-
-    if (productCheckquery.recordset[0].stock > 0) {
-      errors.push({
-        name: "product_id",
-        success: false,
-        message: "Product stock must be 0 to delete",
-        status: 400,
       });
     }
 
