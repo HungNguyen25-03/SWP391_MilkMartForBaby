@@ -12,15 +12,12 @@ export default function Edit() {
   const nav = useNavigate();
   const [user, setUser] = useState({
     username: "",
-    password: "",
     email: "",
-    role_id: "",
   });
   const [errors, setErrors] = useState([]);
 
   console.log(user);
   const [role, setRole] = useState("");
-  let passwordFromDb;
 
   useEffect(() => {
     fetch(`${MainAPI}/admin/getUser/${id}`, {
@@ -33,8 +30,6 @@ export default function Edit() {
         const result = data.user[0];
         setUser({
           username: result.username,
-          role_id: result.role_id,
-          password: result.password,
           email: result.email,
         });
         setRole(result.role_id);
@@ -44,11 +39,15 @@ export default function Edit() {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .put(`${MainAPI}/admin/update/${id}`, user, {
-        headers: {
-          "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
-        },
-      })
+      .put(
+        `${MainAPI}/admin/update/${id}`,
+        { ...user, role_id: role },
+        {
+          headers: {
+            "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
+          },
+        }
+      )
       .then((res) => {
         toast.success(res.data.message);
         setTimeout(() => {
