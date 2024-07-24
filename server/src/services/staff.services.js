@@ -525,7 +525,7 @@ async function updateProduct(
     }
 
     if (country_id) {
-      request.input("country_id", sql.Int, country_id);
+      request.input("country_id", sql.Char, country_id);
       updateFields.push("country_id = @country_id");
     }
 
