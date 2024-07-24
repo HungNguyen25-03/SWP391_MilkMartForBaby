@@ -34,6 +34,7 @@ export default function CreateUser() {
       })
       .catch((err) => {
         console.log(err);
+
         setErrors(err.response.data.errors);
       });
   }
@@ -135,11 +136,18 @@ export default function CreateUser() {
                     })
                   }
                 >
+                  <option>Choose role</option>
                   <option value="admin">Admin</option>
                   <option value="staff">Staff</option>
                   <option value="customer">Customer</option>
                 </select>
               </div>
+              {specificError("role_id") && (
+                <p className="text-danger fw-bold m-0">
+                  {specificError("role_id").message}
+                </p>
+              )}
+
               <br />
               <button
                 className="btn btn-light me-3"

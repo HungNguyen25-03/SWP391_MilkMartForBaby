@@ -1,5 +1,5 @@
 export const listBrand = [
-  { id: 1, title: "a2", img: "assest/images/banner/a2.png", atl: "a2" },
+  { id: 1, title: "a2", img: "assest/images/banner/a2.png", atl: "a2 Milk" },
   {
     id: 2,
     title: "Aptamil",
@@ -22,7 +22,7 @@ export const listBrand = [
     id: 5,
     title: "ensure",
     img: "assest/images/banner/ensure.png",
-    atl: "ensure",
+    atl: "Ensure",
   },
   {
     id: 6,
